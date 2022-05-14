@@ -18,9 +18,9 @@ public class GameManager : MonoBehaviour
         else if (PlayerNum == 2)
         {
             cam.rect = new Rect(0, 0.5f, 1f, 0.5f);
+            Logger.Log("cam.rect‚ğ•ÏX");
             return;
         }
             PlayerNum++;
-        Logger.Log(PlayerNum);
     }
 }
