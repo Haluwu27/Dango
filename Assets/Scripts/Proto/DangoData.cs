@@ -21,13 +21,10 @@ public class DangoData : MonoBehaviour
 {
     [SerializeField] GameObject dango;
 
-    DangoType dangoType;
-
-    Renderer rend;
+    public DangoType dangoType { get; private set; }
 
     private void Awake()
     {
-        rend = dango.GetComponent<Renderer>();
         for (int i = 0; i < 100; i++)
         {
             float x = Random.Range(-99.0f, 99.0f);
@@ -39,6 +36,7 @@ public class DangoData : MonoBehaviour
             //オブジェクトを生産
             GameObject a= Instantiate(dango, new Vector3(x, y, z), Quaternion.identity);
             a.name = "Dango" + i;
+            a.GetComponent<DangoManager>().SetDangoType(dangoType);
             a.GetComponent<Renderer>().material.color = dangoType switch
             {
                 DangoType.Red => Color.red,
