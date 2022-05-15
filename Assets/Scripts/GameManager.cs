@@ -5,6 +5,18 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     static private int PlayerNum = 1;
+    static public Plater1[] player = new Plater1[2];
+
+    public static void SetPlayer(Plater1 obj)
+    {
+        for (int i = 0; i < player.Length; i++) {
+            if (player[i] == null)
+            {
+                player[i] = obj;
+                break;
+            }
+        }
+    }
 
     public void AddPlayer(GameObject obj)
     {

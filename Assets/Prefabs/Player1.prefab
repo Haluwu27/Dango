@@ -17,7 +17,7 @@ GameObject:
   - component: {fileID: 6013245353808961043}
   m_Layer: 0
   m_Name: Player1
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -149,13 +149,13 @@ MonoBehaviour:
     m_ActionName: Player/Look[/Mouse/delta]
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 3952613918130635532}
-        m_TargetAssemblyTypeName: 
-        m_MethodName: 
-        m_Mode: 1
+      - m_Target: {fileID: 3952613918130635534}
+        m_TargetAssemblyTypeName: Plater1, Assembly-CSharp
+        m_MethodName: OnFire
+        m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: 
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -271,6 +271,11 @@ MonoBehaviour:
   _rigidbody: {fileID: 6013245353808961043}
   _moveSpeed: 30
   jumpPower: 10
+  _attackPower: 1
+  _attackSpeed: 1
+  _hitPoint: 100
+  _strength: 1
+  _Debuff: 1
   spitManager: {fileID: 4079021194536965440}
 --- !u!54 &6013245353808961043
 Rigidbody:
@@ -400,3 +405,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 3952613918130635534}
+  canStab: 0

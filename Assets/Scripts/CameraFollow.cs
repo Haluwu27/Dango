@@ -15,7 +15,8 @@ public class CameraFollow : MonoBehaviour
 
     private Vector3 velocity = Vector3.zero;
 
-    private void LateUpdate()
+    //ここの方式をプレイヤーの動きと一致させないとガクガクする。
+    private void FixedUpdate()
     {
         Vector3 desiredPosition = target.position + offset;
 
