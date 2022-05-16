@@ -144,7 +144,19 @@ MonoBehaviour:
     m_ActionId: a378fe75-28e5-444c-ab26-710f49a0de7e
     m_ActionName: Player/Move[/Keyboard/w,/Keyboard/upArrow,/Keyboard/s,/Keyboard/downArrow,/Keyboard/a,/Keyboard/leftArrow,/Keyboard/d,/Keyboard/rightArrow]
   - m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 3952613918130635534}
+        m_TargetAssemblyTypeName: Plater1, Assembly-CSharp
+        m_MethodName: OnRote
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_ActionId: 0b35bc9e-14ce-434c-a13f-73ba7cfd95ba
     m_ActionName: Player/Look[/Mouse/delta]
   - m_PersistentCalls:
@@ -269,6 +281,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _rigidbody: {fileID: 6013245353808961043}
+  PlayerCamera: {fileID: 0}
   _moveSpeed: 30
   jumpPower: 10
   _attackPower: 1
@@ -277,6 +290,7 @@ MonoBehaviour:
   _strength: 1
   _Debuff: 1
   spitManager: {fileID: 4079021194536965440}
+  enemy: {fileID: 0}
 --- !u!54 &6013245353808961043
 Rigidbody:
   m_ObjectHideFlags: 0
