@@ -8,8 +8,15 @@ public class Plater1 : MonoBehaviour
 {
     #region inputSystem
     private Vector2 moveAxis;
+    private Vector2 roteAxis;
     [SerializeField]
     private Rigidbody _rigidbody;
+    [SerializeField]
+    private GameObject PlayerCamera;
+    private Vector3 Cameraforward;
+    private Vector3 idou;
+    public float angle;
+
 
     //移動処理
     public void OnMove(InputAction.CallbackContext context)
@@ -170,6 +177,20 @@ public class Plater1 : MonoBehaviour
         }
     }
 
+    //回転
+    public void OnRote(InputAction.CallbackContext context)
+    {
+        if (context.phase == InputActionPhase.Performed)
+        {
+            roteAxis = context.ReadValue<Vector2>();
+        }
+        else if (context.phase == InputActionPhase.Canceled)
+        {
+            roteAxis = Vector2.zero;
+        }
+
+    }
+
     //圧縮（デバフ）発動
     public void OnCompression(InputAction.CallbackContext context)
     {
@@ -222,8 +243,18 @@ public class Plater1 : MonoBehaviour
 
     private void FixedUpdate()
     {
-        Vector3 move = new Vector3(moveAxis.x, 0, moveAxis.y);
+        //Vector3 move = new Vector3(moveAxis.x, 0, moveAxis.y);
+        Vector3 move;
+        angle = roteAxis.x;
+
+        //カメラの向きを確認、Cameraforwardに代入
+        Cameraforward = Vector3.Scale(PlayerCamera.transform.forward, new Vector3(1, 0, 1)).normalized;
+        //カメラの向きを元にベクトルの作成
+        move = moveAxis.y * Cameraforward * _moveSpeed + moveAxis.x * PlayerCamera.transform.right * _moveSpeed;
+
         if (_rigidbody.velocity.magnitude < 8f)
-            _rigidbody.AddForce(move * _moveSpeed);
+            _rigidbody.AddForce(move * _moveSpeed*Time.deltaTime);
+        //playerの向きをカメラの方向に
+        transform.rotation = Quaternion.Euler(0, PlayerCamera.transform.localEulerAngles.y+Time.deltaTime, 0);
     }
 }

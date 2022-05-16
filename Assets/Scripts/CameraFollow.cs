@@ -14,12 +14,22 @@ public class CameraFollow : MonoBehaviour
     private Vector3 offset = new Vector3(0f, 1f, -10f);
 
     private Vector3 velocity = Vector3.zero;
+    private Vector3 targetPos;
+    private Plater1 P1;
 
+    private void Start()
+    {
+        P1 = target.GetComponent<Plater1>();
+    }
     //ここの方式をプレイヤーの動きと一致させないとガクガクする。
     private void FixedUpdate()
     {
-        Vector3 desiredPosition = target.position + offset;
+        //Vector3 desiredPosition = target.position + offset;
 
-        transform.position = Vector3.SmoothDamp(transform.position, desiredPosition, ref velocity, smoothSpeed);
+        //transform.position = Vector3.SmoothDamp(transform.position, desiredPosition, ref velocity, smoothSpeed);
+        transform.position += target.position - targetPos;
+        targetPos = target.position;
+        transform.RotateAround(target.position, Vector3.up, P1.angle*Time.deltaTime);
+
     }
 }
