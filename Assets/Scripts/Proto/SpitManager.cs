@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class SpitManager : MonoBehaviour
 {
-    [SerializeField] Plater1 player;
+    [SerializeField] Player1 player;
     private DangoType dangoType;
     public bool canStab = false;
 
