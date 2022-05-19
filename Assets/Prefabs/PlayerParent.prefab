@@ -273,7 +273,7 @@ PrefabInstance:
     - target: {fileID: 1266330572475704521, guid: 306f682e3da8cda4d83aef30600b2d8a,
         type: 3}
       propertyPath: m_NormalizedViewPortRect.height
-      value: 0.5
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1266330572475704522, guid: 306f682e3da8cda4d83aef30600b2d8a,
         type: 3}

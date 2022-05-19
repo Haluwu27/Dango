@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -19,7 +20,7 @@ public class Player1 : MonoBehaviour
     private DangoType dangoType;
 
 
-    //ˆÚ“®ˆ—
+    //ï¿½Ú“ï¿½ï¿½ï¿½ï¿½ï¿½
     public void OnMove(InputAction.CallbackContext context)
     {
         if (context.phase == InputActionPhase.Performed)
@@ -29,153 +30,101 @@ public class Player1 : MonoBehaviour
         else if (context.phase == InputActionPhase.Canceled)
         {
             moveAxis = Vector2.zero;
-            //Œ¸‘¬ˆ—“ü‚ê‚é‚Æ—Ç‚³‚»‚¤
+            //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ—Ç‚ï¿½ï¿½ï¿½ï¿½ï¿½
         }
     }
 
-    //ƒWƒƒƒ“ƒvˆ—
+    //ï¿½Wï¿½ï¿½ï¿½ï¿½ï¿½vï¿½ï¿½ï¿½ï¿½
     public void OnJump(InputAction.CallbackContext context)
     {
         if (context.phase == InputActionPhase.Performed)
         {
-            _rigidbody.AddForce(Vector3.up * jumpPower, ForceMode.Impulse);
+            _rigidbody.AddForce(Vector3.up * _jumpPower, ForceMode.Impulse);
         }
     }
 
-    //’cq’e
+    //ï¿½cï¿½qï¿½e
     public void OnFire(InputAction.CallbackContext context)
     {
         if (context.phase == InputActionPhase.Performed)
         {
-            //Logger.Log("’cq’e");
-            for (int i = 0; i < Maxdango; i++)
-            {
-                //Logger.Log(i + "”Ô–Ú‚ÌF" + dangos[i]);
-            }
-            if (dangoNum != 0)
-            {
-                Logger.Log(dangos[dangoNum - 1]);
+            //ï¿½cï¿½qï¿½ï¿½ï¿½hï¿½ï¿½ï¿½ï¿½ï¿½Ä‚È‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½çƒŠï¿½^ï¿½[ï¿½ï¿½ï¿½B
+            if (dangos.Count == 0) return;
 
-                dangos[dangoNum - 1] = DangoType.None;
-                dangoNum--;
-                DangoUISC.DangoUISet(dangos);
+            //[UIï¿½oï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½]ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½æ“ªï¿½cï¿½qï¿½Ì•\ï¿½ï¿½
+            Logger.Log(dangos[dangos.Count - 1]);
 
-            }
+            //ï¿½æ“ªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+            dangos.RemoveAt(dangos.Count - 1);
+            DangoUISC.DangoUISet(dangos);
         }
     }
 
-    //“Ë‚«h‚µ
+    //ï¿½Ë‚ï¿½ï¿½hï¿½ï¿½
     public void OnAttack(InputAction.CallbackContext context)
     {
         if (context.phase == InputActionPhase.Performed)
         {
-            if (dangoNum >= Maxdango)
+            //ï¿½hï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½cï¿½qï¿½Ìï¿½ï¿½ï¿½ï¿½Aï¿½hï¿½ï¿½ï¿½ï¿½cï¿½qï¿½Ìï¿½ï¿½Æ“ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½çƒŠï¿½^ï¿½[ï¿½ï¿½ï¿½B
+            if (dangos.Count >= Maxdango)
             {
-                Logger.Warn("h‚¹‚é’cq‚Ì”‚ğ’´‚¦‚Ä‚¢‚Ü‚·B");
+                Logger.Warn("ï¿½hï¿½ï¿½ï¿½ï¿½cï¿½qï¿½Ìï¿½ï¿½ğ’´‚ï¿½ï¿½Ä‚ï¿½ï¿½Ü‚ï¿½ï¿½B");
                 return;
             }
-            //Logger.Log("“Ë‚«h‚µI");
+
+            //ï¿½Ë‚ï¿½ï¿½hï¿½ï¿½ï¿½Aï¿½jï¿½ï¿½ï¿½[ï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½B
+            //ï¿½ï¿½ï¿½Æ‚ï¿½ï¿½ï¿½boolï¿½^ï¿½ï¿½ï¿½ï¿½ï¿½á‚¤ï¿½H
             spitManager.canStab = true;
             spitManager.gameObject.transform.localPosition = new Vector3(0, 0, 2.2f);
             spitManager.gameObject.transform.localRotation = Quaternion.Euler(90f, 0, 0);
+
+            //ï¿½hï¿½ï¿½ï¿½ï¿½ï¿½cï¿½qï¿½ï¿½ï¿½æ“¾
+            var dangoType = spitManager.GetDangoType();
+
+            //ï¿½æ“¾ï¿½ï¿½ï¿½ï¿½ï¿½cï¿½qï¿½ï¿½Noneï¿½ï¿½ï¿½ï¿½È‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½É’Ç‰ï¿½ï¿½B
+            if (dangoType != DangoColor.None)
+            {
+                dangos.Add(dangoType);
+            }
         }
         if (context.phase == InputActionPhase.Canceled)
         {
+            //ï¿½Ë‚ï¿½ï¿½hï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ‚ÌƒAï¿½jï¿½ï¿½ï¿½[ï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½B
             spitManager.canStab = false;
             spitManager.gameObject.transform.rotation = Quaternion.identity;
             spitManager.gameObject.transform.localPosition = new Vector3(0, 0.4f, 1.1f);
         }
     }
 
-    //H‚×‚é
+    //ï¿½Hï¿½×‚ï¿½
     public void OnEatDango(InputAction.CallbackContext context)
     {
-        if (dangoNum == 0) return;
+        //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Éhï¿½ï¿½ï¿½ï¿½ï¿½Ä‚È‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½çƒŠï¿½^ï¿½[ï¿½ï¿½ï¿½B
+        if (dangos.Count == 0) return;
+
         switch (context.phase)
         {
             case InputActionPhase.Started:
-                Logger.Log("H‚×ƒ`ƒƒ[ƒWŠJnII");
+                Logger.Log("ï¿½Hï¿½×ƒ`ï¿½ï¿½ï¿½[ï¿½Wï¿½Jï¿½nï¿½Iï¿½I");
+                //ï¿½ï¿½ï¿½Ê‰ï¿½ï¿½Æ‚ï¿½ï¿½ï¿½ï¿½oï¿½Iï¿½È‚ï¿½ï¿½Ì‚ï¿½Ç‰ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½B
+
                 break;
             case InputActionPhase.Performed:
-                Logger.Log("H‚×‚½I");
-                float value;
-                var a = DangoRole.CheckRole(dangos, out value);
-                switch (a)
-                {
-                    case RoleType.None:
-                        break;
+                Logger.Log("ï¿½Hï¿½×‚ï¿½ï¿½I");
+                //ï¿½ï¿½ï¿½Ê‰ï¿½ï¿½Æ‚ï¿½ï¿½ï¿½ï¿½oï¿½Iï¿½È‚ï¿½ï¿½Ì‚ï¿½Ç‰ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½B
 
-                    case RoleType.Buff:
-                        BuffType type = (BuffType)dangos[0];
-                        switch (type)
-                        {
-                            case BuffType.AttackUp:
-                                _attackPower += value;
-                                break;
-                            case BuffType.MotionSpdUp:
-                                _attackSpeed += value;
-                                break;
-                            case BuffType.HpUp:
-                                _hitPoint += value;
-                                break;
-                            case BuffType.JumpPowerUp:
-                                jumpPower += value;
-                                break;
-                            case BuffType.MoveSpdUp:
-                                _moveSpeed += value;
-                                break;
-                            case BuffType.StrengthUp:
-                                _strength += value;
-                                break;
-                            case BuffType.DebuffUp:
-                                _Debuff += value;
-                                break;
+                //ï¿½ï¿½ï¿½Æ‚Å‚È‚ï¿½Æ‚ï¿½ï¿½ï¿½ï¿½Ä‚ËB
+                var tensuu = DangoRole.CheckRole(dangos);
+                Logger.Log("ï¿½_ï¿½ï¿½ï¿½F"+tensuu);
 
-                            default:
-                                break;
-                        }
-                        Logger.Log("ƒoƒt”­“®");
-                        Logger.Log(type + "‚ªã‚ª‚Á‚½");
-                        break;
-
-                    case RoleType.Debuff:
-                        DebuffType dtype = (DebuffType)Random.Range(1, 8);
-                        Logger.Log("ˆ³k’cq‚ğ¶¬‚µ‚Ü‚·...");
-
-                        for (int i = 0; i < 99; i++)
-                        {
-                            if (!debuffs[(int)dtype - 1, i])
-                            {
-                                debuffs[(int)dtype - 1, i] = true;
-                                break;
-                            }
-                        }
-                        break;
-
-                    case RoleType.Attack:
-                        Logger.Log("UŒ‚”­“®");
-
-                        if (enemy != null)
-                        {
-                            enemy._hitPoint -= value;
-                            Logger.Log(enemy._hitPoint);
-                        }
-                        break;
-
-                }
-
-                for (int i = 0; i < dangos.Length; i++)
-                {
-                    dangos[i] = DangoType.None;
-                }
+                //ï¿½ï¿½ï¿½ï¿½ï¿½cï¿½qï¿½ï¿½ï¿½ï¿½ï¿½Zï¿½bï¿½g
+                dangos.Clear();
                 DangoUISC.DangoUISet(dangos);
-
-                dangoNum = 0;
                 break;
         }
     }
 
-    //‰ñ“]
+    //ï¿½ï¿½]
     public void OnRote(InputAction.CallbackContext context)
     {
         if (context.phase == InputActionPhase.Performed)
@@ -189,7 +138,7 @@ public class Player1 : MonoBehaviour
 
     }
 
-    //ˆ³kiƒfƒoƒtj”­“®
+    //ï¿½ï¿½ï¿½kï¿½iï¿½fï¿½oï¿½tï¿½jï¿½ï¿½ï¿½ï¿½
     public void OnCompression(InputAction.CallbackContext context)
     {
         if (context.phase == InputActionPhase.Performed)
@@ -201,41 +150,55 @@ public class Player1 : MonoBehaviour
     #endregion
 
     [SerializeField] float _moveSpeed = 3f;
-    [SerializeField] float jumpPower = 10f;
+    [SerializeField] float _jumpPower = 10f;
     [SerializeField] float _attackPower = 1f;
     [SerializeField] float _attackSpeed = 1f;
     [SerializeField] float _hitPoint = 100f;
     [SerializeField] float _strength = 1f;
-    [SerializeField] float _Debuff = 1f;
 
     [SerializeField] SpitManager spitManager;
-    public DangoType[] dangos;
-    public int dangoNum = 0;
-    int Maxdango = 7;
-    [HideInInspector]
-    public Player1 enemy;
-    //7í‚ÌƒfƒoƒtAStock”99“I‚Èl‚¦B‚È‚ç\‘¢‘Ì‚ÅÀ‘•‚·‚ê‚Î‚¢‚¢àB
-    bool[,] debuffs = new bool[7, 99];
+
+    /// <summary>
+    /// ï¿½ï¿½ï¿½ï¿½ï¿½cï¿½qï¿½Ìƒï¿½ï¿½Xï¿½g
+    /// </summary>
+    private List<DangoColor> dangos = new List<DangoColor>();
+
+    /// <summary>
+    /// ï¿½hï¿½ï¿½ï¿½ï¿½cï¿½qï¿½ÌÅ‘å”
+    /// </summary>    
+    private int Maxdango = 3;
 
     private DangoUIScript DangoUISC;
 
+    public List<DangoColor> GetDangoType() => dangos;
+    public int GetMaxDango() => Maxdango;
+
+    //ï¿½Cï¿½ï¿½ï¿½Kï¿½vï¿½Hï¿½H
+    public DangoColor GetDangoType(int value)
+    {
+        try
+        {
+            return dangos[value];
+        }
+        catch (IndexOutOfRangeException e)
+        {
+            Logger.Error(e + "ï¿½cï¿½qï¿½Tï¿½Cï¿½Yï¿½Ì”ÍˆÍŠOï¿½ÉƒAï¿½Nï¿½Zï¿½Xï¿½ï¿½ï¿½Ä‚ï¿½ï¿½Ü‚ï¿½ï¿½B");
+            Logger.Error("ï¿½ï¿½ï¿½ï¿½ÉÅï¿½ï¿½Ìƒfï¿½[ï¿½^ï¿½ï¿½Ô‹pï¿½ï¿½ï¿½Ü‚ï¿½ï¿½B");
+            return dangos[0];
+        }
+    }
+
     private void OnEnable()
     {
-        dangos = new DangoType[Maxdango];
-        GameManager.SetPlayer(this.GetComponent<Player1>());
-        //Œã‚ë‚©‚ç’²‚×‚ÄAnull‚¾‚Á‚½‚ç‚È‚µBnull‚¶‚á‚È‚©‚Á‚½‚çenemy“o˜^
-        if (GameManager.player[1] == null) return;
-
-        enemy = GameManager.player[0];
-        enemy.enemy = gameObject.GetComponent<Player1>();
-
+        //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+        dangos.Clear();
     }
 
     private void Start()
     {
         DangoUISC = GameObject.Find("Canvas").transform.Find("DangoBackScreen").GetComponent<DangoUIScript>();
     }
-
+    
     private void Update()
     {
         if (_hitPoint <= 0) gameObject.SetActive(false);
@@ -245,7 +208,7 @@ public class Player1 : MonoBehaviour
             dangos[dangoNum] = dangoType;
             dangoNum++;
             DangoUISC.DangoUISet(dangos);
-            Logger.Log("’cq‚Ì’Ç‰Á");
+            Logger.Log("ï¿½cï¿½qï¿½Ì’Ç‰ï¿½");
         }
     }
 
@@ -254,15 +217,15 @@ public class Player1 : MonoBehaviour
         Vector3 move;
         angle = roteAxis.x;
 
-        //ƒJƒƒ‰‚ÌŒü‚«‚ğŠm”FACameraforward‚É‘ã“ü
+        //ï¿½Jï¿½ï¿½ï¿½ï¿½ï¿½ÌŒï¿½ï¿½ï¿½ï¿½ï¿½ï¿½mï¿½Fï¿½ACameraforwardï¿½É‘ï¿½ï¿½
         Cameraforward = Vector3.Scale(PlayerCamera.transform.forward, new Vector3(1, 0, 1)).normalized;
-        //ƒJƒƒ‰‚ÌŒü‚«‚ğŒ³‚ÉƒxƒNƒgƒ‹‚Ìì¬
+        //ï¿½Jï¿½ï¿½ï¿½ï¿½ï¿½ÌŒï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Éƒxï¿½Nï¿½gï¿½ï¿½ï¿½Ìì¬
         move = moveAxis.y * Cameraforward * _moveSpeed + moveAxis.x * PlayerCamera.transform.right * _moveSpeed;
 
         if (_rigidbody.velocity.magnitude < 8f)
             _rigidbody.AddForce(move * _moveSpeed);
 
-        //player‚ÌŒü‚«‚ğƒJƒƒ‰‚Ì•ûŒü‚É
+        //playerï¿½ÌŒï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Jï¿½ï¿½ï¿½ï¿½ï¿½Ì•ï¿½ï¿½ï¿½ï¿½ï¿½
         transform.rotation = Quaternion.Euler(0, PlayerCamera.transform.localEulerAngles.y , 0);
     }
 }

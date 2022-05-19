@@ -9,7 +9,7 @@ public class SpitManager : MonoBehaviour
     public bool canStab = false;
     DangoType temp;
 
-    public DangoType GetDangoType()
+    public DangoColor GetDangoType()
     {
         temp = dangoType;
         dangoType = DangoType.None;
