@@ -18,13 +18,13 @@ public enum DangoColor
 }
 
 /// <summary>
-/// 団子が持つデータを列挙したもの。
+/// 団子が持つデータを列挙したもの。団子にアタッチ禁止。無限ループします。
 /// </summary>
 public class DangoData : MonoBehaviour
 {
     [SerializeField] GameObject dango;
 
-    public DangoColor dangoType { get; private set; }
+    public DangoColor dangoColor { get; private set; }
 
     private void Awake()
     {
@@ -34,13 +34,13 @@ public class DangoData : MonoBehaviour
             float y = -4f;
             float z = Random.Range(-99.0f, 99.0f);
 
-            dangoType = (DangoColor)Random.Range(1, 8);
+            dangoColor = (DangoColor)Random.Range(1, 8);
 
             //オブジェクトを生産
-            GameObject a= Instantiate(dango, new Vector3(x, y, z), Quaternion.identity);
+            GameObject a = Instantiate(dango, new Vector3(x, y, z), Quaternion.identity);
             a.name = "Dango" + i;
-            a.GetComponent<DangoManager>().SetDangoType(dangoType);
-            a.GetComponent<Renderer>().material.color = dangoType switch
+            a.GetComponent<DangoManager>().SetDangoType(dangoColor);
+            a.GetComponent<Renderer>().material.color = dangoColor switch
             {
                 DangoColor.Red => Color.red,
                 DangoColor.Orange => new Color32(255, 155, 0, 255),
