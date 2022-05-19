@@ -5,13 +5,13 @@ using UnityEngine;
 public class SpitManager : MonoBehaviour
 {
     [SerializeField] Plater1 player;
-    private DangoType dangoType;
+    private DangoColor dangoType;
     public bool canStab = false;
 
-    public DangoType GetDangoType()
+    public DangoColor GetDangoType()
     {
         var temp = dangoType;
-        dangoType = DangoType.None;
+        dangoType = DangoColor.None;
         return temp;
     }
 

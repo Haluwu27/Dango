@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -37,7 +38,7 @@ public class Plater1 : MonoBehaviour
     {
         if (context.phase == InputActionPhase.Performed)
         {
-            _rigidbody.AddForce(Vector3.up * jumpPower, ForceMode.Impulse);
+            _rigidbody.AddForce(Vector3.up * _jumpPower, ForceMode.Impulse);
         }
     }
 
@@ -46,18 +47,14 @@ public class Plater1 : MonoBehaviour
     {
         if (context.phase == InputActionPhase.Performed)
         {
-            //Logger.Log("団子弾");
-            for (int i = 0; i < Maxdango; i++)
-            {
-                //Logger.Log(i + "番目の色" + dangos[i]);
-            }
-            if (dangoNum != 0)
-            {
-                Logger.Log(dangos[dangoNum - 1]);
+            //団子が刺さってなかったらリターン。
+            if (dangos.Count == 0) return;
 
-                dangos[dangoNum - 1] = DangoType.None;
-                dangoNum--;
-            }
+            //[UI出来たら消す]消した先頭団子の表示
+            Logger.Log(dangos[dangos.Count - 1]);
+
+            //先頭を消す
+            dangos.RemoveAt(dangos.Count - 1);
         }
     }
 
@@ -66,24 +63,31 @@ public class Plater1 : MonoBehaviour
     {
         if (context.phase == InputActionPhase.Performed)
         {
-            if (dangoNum >= Maxdango)
+            //刺さってる団子の数が、刺せる団子の数と同じだったらリターン。
+            if (dangos.Count >= Maxdango)
             {
                 Logger.Warn("刺せる団子の数を超えています。");
                 return;
             }
-            //Logger.Log("突き刺し！");
+
+            //突き刺しアニメーション推奨。
+            //あとこのbool型多分違う？
             spitManager.canStab = true;
             spitManager.gameObject.transform.localPosition = new Vector3(0, 0, 2.2f);
             spitManager.gameObject.transform.localRotation = Quaternion.Euler(90f, 0, 0);
+
+            //刺した団子を取得
             var dangoType = spitManager.GetDangoType();
-            if (dangoType != DangoType.None && dangoNum <= Maxdango)
+
+            //取得した団子がNoneじゃなかったら串に追加。
+            if (dangoType != DangoColor.None)
             {
-                dangos[dangoNum] = dangoType;
-                dangoNum++;
+                dangos.Add(dangoType);
             }
         }
         if (context.phase == InputActionPhase.Canceled)
         {
+            //突き刺したあとのアニメーション推奨。
             spitManager.canStab = false;
             spitManager.gameObject.transform.rotation = Quaternion.identity;
             spitManager.gameObject.transform.localPosition = new Vector3(0, 0.4f, 1.1f);
@@ -93,86 +97,26 @@ public class Plater1 : MonoBehaviour
     //食べる
     public void OnEatDango(InputAction.CallbackContext context)
     {
-        if (dangoNum == 0) return;
+        //何も串に刺さってなかったらリターン。
+        if (dangos.Count == 0) return;
+
         switch (context.phase)
         {
             case InputActionPhase.Started:
                 Logger.Log("食べチャージ開始！！");
+                //効果音とか視覚的なものを追加推奨。
+
                 break;
             case InputActionPhase.Performed:
                 Logger.Log("食べた！");
-                float value;
-                var a = DangoRole.CheckRole(dangos, out value);
-                switch (a)
-                {
-                    case RoleType.None:
-                        break;
+                //効果音とか視覚的なものを追加推奨。
 
-                    case RoleType.Buff:
-                        BuffType type = (BuffType)dangos[0];
-                        switch (type)
-                        {
-                            case BuffType.AttackUp:
-                                _attackPower += value;
-                                break;
-                            case BuffType.MotionSpdUp:
-                                _attackSpeed += value;
-                                break;
-                            case BuffType.HpUp:
-                                _hitPoint += value;
-                                break;
-                            case BuffType.JumpPowerUp:
-                                jumpPower += value;
-                                break;
-                            case BuffType.MoveSpdUp:
-                                _moveSpeed += value;
-                                break;
-                            case BuffType.StrengthUp:
-                                _strength += value;
-                                break;
-                            case BuffType.DebuffUp:
-                                _Debuff += value;
-                                break;
+                //あとでなんとかしてね。
+                var tensuu = DangoRole.CheckRole(dangos);
+                Logger.Log("点数："+tensuu);
 
-                            default:
-                                break;
-                        }
-                        Logger.Log("バフ発動");
-                        Logger.Log(type + "が上がった");
-                        break;
-
-                    case RoleType.Debuff:
-                        DebuffType dtype = (DebuffType)Random.Range(1, 8);
-                        Logger.Log("圧縮団子を生成します...");
-
-                        for (int i = 0; i < 99; i++)
-                        {
-                            if (!debuffs[(int)dtype - 1, i])
-                            {
-                                debuffs[(int)dtype - 1, i] = true;
-                                break;
-                            }
-                        }
-                        break;
-
-                    case RoleType.Attack:
-                        Logger.Log("攻撃発動");
-
-                        if (enemy != null)
-                        {
-                            enemy._hitPoint -= value;
-                            Logger.Log(enemy._hitPoint);
-                        }
-                        break;
-
-                }
-
-                for (int i = 0; i < dangos.Length; i++)
-                {
-                    dangos[i] = DangoType.None;
-                }
-
-                dangoNum = 0;
+                //所持団子をリセット
+                dangos.Clear();
                 break;
         }
     }
@@ -203,37 +147,46 @@ public class Plater1 : MonoBehaviour
     #endregion
 
     [SerializeField] float _moveSpeed = 3f;
-    [SerializeField] float jumpPower = 10f;
+    [SerializeField] float _jumpPower = 10f;
     [SerializeField] float _attackPower = 1f;
     [SerializeField] float _attackSpeed = 1f;
     [SerializeField] float _hitPoint = 100f;
     [SerializeField] float _strength = 1f;
-    [SerializeField] float _Debuff = 1f;
 
     [SerializeField] SpitManager spitManager;
-    DangoType[] dangos;
-    int dangoNum = 0;
-    int Maxdango = 7;
-    [HideInInspector]
-    public Plater1 enemy;
-    //7種のデバフ、Stock数99的な考え。なら構造体で実装すればいい説。
-    bool[,] debuffs = new bool[7, 99];
 
+    /// <summary>
+    /// 所持団子のリスト
+    /// </summary>
+    private List<DangoColor> dangos = new List<DangoColor>();
+
+    /// <summary>
+    /// 刺せる団子の最大数
+    /// </summary>    
+    private int Maxdango = 3;
+
+    public List<DangoColor> GetDangoType() => dangos;
+    public int GetMaxDango() => Maxdango;
+
+    //修正必要？？
+    public DangoColor GetDangoType(int value)
+    {
+        try
+        {
+            return dangos[value];
+        }
+        catch (IndexOutOfRangeException e)
+        {
+            Logger.Error(e + "団子サイズの範囲外にアクセスしています。");
+            Logger.Error("代わりに最初のデータを返却します。");
+            return dangos[0];
+        }
+    }
 
     private void OnEnable()
     {
-        dangos = new DangoType[Maxdango];
-        GameManager.SetPlayer(this.GetComponent<Plater1>());
-        //後ろから調べて、nullだったらなし。nullじゃなかったらenemy登録
-        if (GameManager.player[1] == null) return;
-
-        enemy = GameManager.player[0];
-        enemy.enemy = gameObject.GetComponent<Plater1>();
-
-    }
-
-    private void Start()
-    {
+        //初期化
+        dangos.Clear();
     }
 
     private void Update()
@@ -253,8 +206,8 @@ public class Plater1 : MonoBehaviour
         move = moveAxis.y * Cameraforward * _moveSpeed + moveAxis.x * PlayerCamera.transform.right * _moveSpeed;
 
         if (_rigidbody.velocity.magnitude < 8f)
-            _rigidbody.AddForce(move * _moveSpeed*Time.deltaTime);
+            _rigidbody.AddForce(move * _moveSpeed * Time.deltaTime);
         //playerの向きをカメラの方向に
-        transform.rotation = Quaternion.Euler(0, PlayerCamera.transform.localEulerAngles.y+Time.deltaTime, 0);
+        transform.rotation = Quaternion.Euler(0, PlayerCamera.transform.localEulerAngles.y + Time.deltaTime, 0);
     }
 }
