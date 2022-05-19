@@ -16,6 +16,7 @@ public class Player1 : MonoBehaviour
     private Vector3 Cameraforward;
     private Vector3 idou;
     public float angle;
+    private DangoType dangoType;
 
 
     //ˆÚ“®ˆ—
@@ -77,13 +78,6 @@ public class Player1 : MonoBehaviour
             spitManager.canStab = true;
             spitManager.gameObject.transform.localPosition = new Vector3(0, 0, 2.2f);
             spitManager.gameObject.transform.localRotation = Quaternion.Euler(90f, 0, 0);
-            var dangoType = spitManager.GetDangoType();
-            if (dangoType != DangoType.None && dangoNum <= Maxdango)
-            {
-                dangos[dangoNum] = dangoType;
-                dangoNum++;
-                DangoUISC.DangoUISet(dangos);
-            }
         }
         if (context.phase == InputActionPhase.Canceled)
         {
@@ -215,8 +209,8 @@ public class Player1 : MonoBehaviour
     [SerializeField] float _Debuff = 1f;
 
     [SerializeField] SpitManager spitManager;
-    DangoType[] dangos;
-    int dangoNum = 0;
+    public DangoType[] dangos;
+    public int dangoNum = 0;
     int Maxdango = 7;
     [HideInInspector]
     public Player1 enemy;
@@ -245,6 +239,14 @@ public class Player1 : MonoBehaviour
     private void Update()
     {
         if (_hitPoint <= 0) gameObject.SetActive(false);
+        dangoType = spitManager.GetDangoType();
+        if (dangoType != DangoType.None && dangoNum <= Maxdango)
+        {
+            dangos[dangoNum] = dangoType;
+            dangoNum++;
+            DangoUISC.DangoUISet(dangos);
+            Logger.Log("’cq‚Ì’Ç‰Á");
+        }
     }
 
     private void FixedUpdate()
