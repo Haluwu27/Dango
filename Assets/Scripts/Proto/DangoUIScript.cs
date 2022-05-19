@@ -23,7 +23,6 @@ public class DangoUIScript : MonoBehaviour
     public void DangoUISet(DangoType[] dangos)
     {
         PlayerDangos = dangos;
-        Debug.Log("‚¾‚ñ‚²‚ÌUI ‚ð•\Ž¦");
         for(int i = 0; i < PlayerDangos.Length; i++)
         {
             DangoImagObjs[i].gameObject.SetActive(true);
