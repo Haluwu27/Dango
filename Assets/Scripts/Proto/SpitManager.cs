@@ -5,14 +5,14 @@ using UnityEngine;
 public class SpitManager : MonoBehaviour
 {
     [SerializeField] Player1 player;
-    private DangoType dangoType=DangoType.None, oldDangoType=DangoType.None;
+    private DangoColor dangoType = DangoColor.None;
     public bool canStab = false;
-    DangoType temp;
+    DangoColor temp;
 
     public DangoColor GetDangoType()
     {
         temp = dangoType;
-        dangoType = DangoType.None;
+        dangoType = DangoColor.None;
         return temp;
     }
     private void OnTriggerStay(Collider other)

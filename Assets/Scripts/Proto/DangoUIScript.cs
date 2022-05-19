@@ -7,23 +7,17 @@ public class DangoUIScript : MonoBehaviour
 {
     // Start is called before the first frame update
     [SerializeField] Image[] DangoImagObjs;
-    private DangoType[] PlayerDangos;
+    private List<DangoColor> PlayerDangos;
     void Start()
     {
         for (int i = 0; i < DangoImagObjs.Length; i++)
             DangoImagObjs[i].gameObject.SetActive(false);
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
-    public void DangoUISet(DangoType[] dangos)
+    public void DangoUISet(List<DangoColor> dangos)
     {
         PlayerDangos = dangos;
-        for(int i = 0; i < PlayerDangos.Length; i++)
+        for(int i = 0; i < PlayerDangos.Count; i++)
         {
             DangoImagObjs[i].gameObject.SetActive(true);
             
@@ -31,28 +25,28 @@ public class DangoUIScript : MonoBehaviour
             //団子が刺さっていないものがあれば非アクティブに
             switch (PlayerDangos[i])
             {
-                case DangoType.Red:
+                case DangoColor.Red:
                     DangoImagObjs[i].color = Color.red;
                     break;
-                case DangoType.Orange:
+                case DangoColor.Orange:
                     DangoImagObjs[i].color = new Color(1,0.4f,0);
                     break;
-                case DangoType.Yellow:
+                case DangoColor.Yellow:
                     DangoImagObjs[i].color = Color.yellow;
                     break;
-                case DangoType.Green:
+                case DangoColor.Green:
                     DangoImagObjs[i].color = Color.green;
                     break;
-                case DangoType.Cyan:
+                case DangoColor.Cyan:
                     DangoImagObjs[i].color = Color.cyan;
                     break;
-                case DangoType.Blue:
+                case DangoColor.Blue:
                     DangoImagObjs[i].color = Color.blue;
                     break;
-                case DangoType.Purple:
+                case DangoColor.Purple:
                     DangoImagObjs[i].color = new Color(0.6f,0,0.6f);
                     break;
-                case DangoType.Other:
+                case DangoColor.Other:
                     DangoImagObjs[i].color = Color.gray;
                     break;
                 default:

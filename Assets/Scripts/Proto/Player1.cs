@@ -15,12 +15,11 @@ public class Player1 : MonoBehaviour
     [SerializeField]
     private GameObject PlayerCamera;
     private Vector3 Cameraforward;
-    private Vector3 idou;
     public float angle;
-    private DangoType dangoType;
+    private DangoColor dangoType;
 
 
-    //�ړ�����
+    //移動処理
     public void OnMove(InputAction.CallbackContext context)
     {
         if (context.phase == InputActionPhase.Performed)
@@ -30,11 +29,11 @@ public class Player1 : MonoBehaviour
         else if (context.phase == InputActionPhase.Canceled)
         {
             moveAxis = Vector2.zero;
-            //�������������Ɨǂ�����
+            //ここに減速処理を入れるの推奨
         }
     }
 
-    //�W�����v����
+    //ジャンプ処理
     public void OnJump(InputAction.CallbackContext context)
     {
         if (context.phase == InputActionPhase.Performed)
@@ -43,45 +42,49 @@ public class Player1 : MonoBehaviour
         }
     }
 
-    //�c�q�e
+    //団子弾
     public void OnFire(InputAction.CallbackContext context)
     {
         if (context.phase == InputActionPhase.Performed)
         {
-            //�c�q���h�����ĂȂ������烊�^�[���B
+            //串に何もなかったら実行しない。
             if (dangos.Count == 0) return;
 
-            //[UI�o���������]�������擪�c�q�̕\��
-            Logger.Log(dangos[dangos.Count - 1]);
+            //[Debug]何が消えたかわかるやつ
+            //今までは、dangos[dangos.Count - 1]としなければなりませんでしたが、
+            //C#8.0以降では以下のように省略できるようです。
+            //問題は、これを知らない人が読むとわけが分からない。
+            Logger.Log(dangos[^1]);
 
-            //�擪������
+            //消す処理。
             dangos.RemoveAt(dangos.Count - 1);
             DangoUISC.DangoUISet(dangos);
         }
     }
 
-    //�˂��h��
+    //突き刺し
     public void OnAttack(InputAction.CallbackContext context)
     {
         if (context.phase == InputActionPhase.Performed)
         {
-            //�h�����Ă�c�q�̐����A�h����c�q�̐��Ɠ����������烊�^�[���B
+            //突き刺せる数を超えていた場合、実行しない
             if (dangos.Count >= Maxdango)
             {
-                Logger.Warn("�h����c�q�̐��𒴂��Ă��܂��B");
+                //なんらかの突けないことを知らせる処理推奨。
+
+                Logger.Warn("突き刺せる数を超えています");
                 return;
             }
 
-            //�˂��h���A�j���[�V���������B
-            //���Ƃ���bool�^�����Ⴄ�H
+            //ここに突き刺しアニメーションを推奨。
             spitManager.canStab = true;
             spitManager.gameObject.transform.localPosition = new Vector3(0, 0, 2.2f);
             spitManager.gameObject.transform.localRotation = Quaternion.Euler(90f, 0, 0);
 
-            //�h�����c�q���擾
+            //団子を取得
             var dangoType = spitManager.GetDangoType();
 
-            //�擾�����c�q��None����Ȃ���������ɒǉ��B
+            //それを串に突き刺す処理
             if (dangoType != DangoColor.None)
             {
                 dangos.Add(dangoType);
@@ -89,42 +92,42 @@ public class Player1 : MonoBehaviour
         }
         if (context.phase == InputActionPhase.Canceled)
         {
-            //�˂��h�������Ƃ̃A�j���[�V���������B
+            //ここに突き刺し終わりのアニメーションを推奨。
             spitManager.canStab = false;
             spitManager.gameObject.transform.rotation = Quaternion.identity;
             spitManager.gameObject.transform.localPosition = new Vector3(0, 0.4f, 1.1f);
         }
     }
 
-    //�H�ׂ�
+    //食べる
     public void OnEatDango(InputAction.CallbackContext context)
     {
-        //�������Ɏh�����ĂȂ������烊�^�[���B
+        //串に刺さってなかったら実行しない。
         if (dangos.Count == 0) return;
 
         switch (context.phase)
         {
             case InputActionPhase.Started:
-                Logger.Log("�H�׃`���[�W�J�n�I�I");
-                //���ʉ��Ƃ����o�I�Ȃ��̂�ǉ������B
+                Logger.Log("食べチャージ開始！");
+                //SE推奨
 
                 break;
             case InputActionPhase.Performed:
-                Logger.Log("�H�ׂ��I");
-                //���ʉ��Ƃ����o�I�Ȃ��̂�ǉ������B
+                Logger.Log("食べた！！");
+                //SE推奨
 
-                //���ƂłȂ�Ƃ����ĂˁB
+                //この辺の処理はまだ手を付けていません。
                 var tensuu = DangoRole.CheckRole(dangos);
-                Logger.Log("�_���F"+tensuu);
+                Logger.Log("点数:" + tensuu);
 
-                //�����c�q�����Z�b�g
+                //串をクリア。
                 dangos.Clear();
                 DangoUISC.DangoUISet(dangos);
                 break;
         }
     }
 
-    //��]
+    //回転処理
     public void OnRote(InputAction.CallbackContext context)
     {
         if (context.phase == InputActionPhase.Performed)
@@ -138,7 +141,7 @@ public class Player1 : MonoBehaviour
 
     }
 
-    //���k�i�f�o�t�j����
+    //（現状使用しません）
     public void OnCompression(InputAction.CallbackContext context)
     {
         if (context.phase == InputActionPhase.Performed)
@@ -159,12 +162,14 @@ public class Player1 : MonoBehaviour
     [SerializeField] SpitManager spitManager;
 
     /// <summary>
-    /// �����c�q�̃��X�g
+    /// 串、持ってる団子
     /// </summary>
-    private List<DangoColor> dangos = new List<DangoColor>();
+    /// 今まではnew List<DangoColor>()としなければなりませんでしたが
+    /// C#9.0以降はこのように簡素化出来るそうです。
+    private List<DangoColor> dangos = new();
 
     /// <summary>
-    /// �h����c�q�̍ő吔
+    /// 刺せる数、徐々に増える
     /// </summary>    
     private int Maxdango = 3;
 
@@ -173,7 +178,7 @@ public class Player1 : MonoBehaviour
     public List<DangoColor> GetDangoType() => dangos;
     public int GetMaxDango() => Maxdango;
 
-    //�C���K�v�H�H
+    //刺さってる団子の1要素を取得
     public DangoColor GetDangoType(int value)
     {
         try
@@ -182,15 +187,15 @@ public class Player1 : MonoBehaviour
         }
         catch (IndexOutOfRangeException e)
         {
-            Logger.Error(e + "�c�q�T�C�Y�͈̔͊O�ɃA�N�Z�X���Ă��܂��B");
-            Logger.Error("����ɍŏ��̃f�[�^��ԋp���܂��B");
+            Logger.Error(e);
+            Logger.Error("代わりに先頭（配列の0番）を返します。");
             return dangos[0];
         }
     }
 
     private void OnEnable()
     {
-        //������
+        //初期化
         dangos.Clear();
     }
 
@@ -198,17 +203,16 @@ public class Player1 : MonoBehaviour
     {
         DangoUISC = GameObject.Find("Canvas").transform.Find("DangoBackScreen").GetComponent<DangoUIScript>();
     }
-    
+
     private void Update()
     {
         if (_hitPoint <= 0) gameObject.SetActive(false);
         dangoType = spitManager.GetDangoType();
-        if (dangoType != DangoType.None && dangoNum <= Maxdango)
+        if (dangoType != DangoColor.None && dangos.Count <= Maxdango)
         {
-            dangos[dangoNum] = dangoType;
-            dangoNum++;
+            dangos[dangos.Count - 1] = dangoType;
             DangoUISC.DangoUISet(dangos);
-            Logger.Log("�c�q�̒ǉ�");
+            Logger.Log("団子の追加");
         }
     }
 
@@ -217,15 +221,16 @@ public class Player1 : MonoBehaviour
         Vector3 move;
         angle = roteAxis.x;
 
-        //�J�����̌������m�F�ACameraforward�ɑ��
+        //カメラの向きを確認、Cameraforwardに代入
         Cameraforward = Vector3.Scale(PlayerCamera.transform.forward, new Vector3(1, 0, 1)).normalized;
-        //�J�����̌��������Ƀx�N�g���̍쐬
+
+        //カメラの向きを元にベクトルの作成
         move = moveAxis.y * Cameraforward * _moveSpeed + moveAxis.x * PlayerCamera.transform.right * _moveSpeed;
 
         if (_rigidbody.velocity.magnitude < 8f)
             _rigidbody.AddForce(move * _moveSpeed);
 
-        //player�̌������J�����̕�����
-        transform.rotation = Quaternion.Euler(0, PlayerCamera.transform.localEulerAngles.y , 0);
+        //playerの向きをカメラの方向に
+        transform.rotation = Quaternion.Euler(0, PlayerCamera.transform.localEulerAngles.y, 0);
     }
 }
