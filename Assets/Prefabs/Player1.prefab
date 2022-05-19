@@ -282,7 +282,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _rigidbody: {fileID: 6013245353808961043}
   PlayerCamera: {fileID: 0}
-  _moveSpeed: 30
+  angle: 0
+  _moveSpeed: 3
   jumpPower: 10
   _attackPower: 1
   _attackSpeed: 1

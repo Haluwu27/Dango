@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 
 [RequireComponent(typeof(Rigidbody))]
-public class Plater1 : MonoBehaviour
+public class Player1 : MonoBehaviour
 {
     #region inputSystem
     private Vector2 moveAxis;
@@ -16,6 +16,7 @@ public class Plater1 : MonoBehaviour
     private Vector3 Cameraforward;
     private Vector3 idou;
     public float angle;
+    private DangoType dangoType;
 
 
     //移動処理
@@ -57,6 +58,8 @@ public class Plater1 : MonoBehaviour
 
                 dangos[dangoNum - 1] = DangoType.None;
                 dangoNum--;
+                DangoUISC.DangoUISet(dangos);
+
             }
         }
     }
@@ -75,12 +78,6 @@ public class Plater1 : MonoBehaviour
             spitManager.canStab = true;
             spitManager.gameObject.transform.localPosition = new Vector3(0, 0, 2.2f);
             spitManager.gameObject.transform.localRotation = Quaternion.Euler(90f, 0, 0);
-            var dangoType = spitManager.GetDangoType();
-            if (dangoType != DangoType.None && dangoNum <= Maxdango)
-            {
-                dangos[dangoNum] = dangoType;
-                dangoNum++;
-            }
         }
         if (context.phase == InputActionPhase.Canceled)
         {
@@ -171,6 +168,7 @@ public class Plater1 : MonoBehaviour
                 {
                     dangos[i] = DangoType.None;
                 }
+                DangoUISC.DangoUISet(dangos);
 
                 dangoNum = 0;
                 break;
@@ -211,39 +209,48 @@ public class Plater1 : MonoBehaviour
     [SerializeField] float _Debuff = 1f;
 
     [SerializeField] SpitManager spitManager;
-    DangoType[] dangos;
-    int dangoNum = 0;
+    public DangoType[] dangos;
+    public int dangoNum = 0;
     int Maxdango = 7;
     [HideInInspector]
-    public Plater1 enemy;
+    public Player1 enemy;
     //7種のデバフ、Stock数99的な考え。なら構造体で実装すればいい説。
     bool[,] debuffs = new bool[7, 99];
 
+    private DangoUIScript DangoUISC;
 
     private void OnEnable()
     {
         dangos = new DangoType[Maxdango];
-        GameManager.SetPlayer(this.GetComponent<Plater1>());
+        GameManager.SetPlayer(this.GetComponent<Player1>());
         //後ろから調べて、nullだったらなし。nullじゃなかったらenemy登録
         if (GameManager.player[1] == null) return;
 
         enemy = GameManager.player[0];
-        enemy.enemy = gameObject.GetComponent<Plater1>();
+        enemy.enemy = gameObject.GetComponent<Player1>();
 
     }
 
     private void Start()
     {
+        DangoUISC = GameObject.Find("Canvas").transform.Find("DangoBackScreen").GetComponent<DangoUIScript>();
     }
 
     private void Update()
     {
         if (_hitPoint <= 0) gameObject.SetActive(false);
+        dangoType = spitManager.GetDangoType();
+        if (dangoType != DangoType.None && dangoNum <= Maxdango)
+        {
+            dangos[dangoNum] = dangoType;
+            dangoNum++;
+            DangoUISC.DangoUISet(dangos);
+            Logger.Log("団子の追加");
+        }
     }
 
     private void FixedUpdate()
     {
-        //Vector3 move = new Vector3(moveAxis.x, 0, moveAxis.y);
         Vector3 move;
         angle = roteAxis.x;
 
@@ -253,8 +260,9 @@ public class Plater1 : MonoBehaviour
         move = moveAxis.y * Cameraforward * _moveSpeed + moveAxis.x * PlayerCamera.transform.right * _moveSpeed;
 
         if (_rigidbody.velocity.magnitude < 8f)
-            _rigidbody.AddForce(move * _moveSpeed*Time.deltaTime);
+            _rigidbody.AddForce(move * _moveSpeed);
+
         //playerの向きをカメラの方向に
-        transform.rotation = Quaternion.Euler(0, PlayerCamera.transform.localEulerAngles.y+Time.deltaTime, 0);
+        transform.rotation = Quaternion.Euler(0, PlayerCamera.transform.localEulerAngles.y , 0);
     }
 }

@@ -4,17 +4,17 @@ using UnityEngine;
 
 public class SpitManager : MonoBehaviour
 {
-    [SerializeField] Plater1 player;
-    private DangoType dangoType;
+    [SerializeField] Player1 player;
+    private DangoType dangoType=DangoType.None, oldDangoType=DangoType.None;
     public bool canStab = false;
+    DangoType temp;
 
     public DangoType GetDangoType()
     {
-        var temp = dangoType;
+        temp = dangoType;
         dangoType = DangoType.None;
         return temp;
     }
-
     private void OnTriggerStay(Collider other)
     {
         if (!canStab) return;
