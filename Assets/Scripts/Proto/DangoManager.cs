@@ -9,6 +9,6 @@ public class DangoManager : MonoBehaviour
 {
     DangoColor dango=DangoColor.None;
 
-    public DangoColor GetDangoType() => dango;
+    public DangoColor GetDangoColor() => dango;
     public void SetDangoType(DangoColor type) => dango = type;
 }

@@ -25,21 +25,21 @@ public class Role<T>
 
 public class DangoRole
 {
-    static List<DangoColor> color = new List<DangoColor>();
+    static List<DangoColor> color = new();
 
-    private static List<Role<DangoColor>> specialRoles = new List<Role<DangoColor>>()
+    private static List<Role<DangoColor>> specialRoles = new()
+    {
+        new Role<DangoColor>(new DangoColor[]{DangoColor.Red,DangoColor.Yellow,DangoColor.Blue},"temp",30),
+
+    };
+
+    private static List<Role<DangoColor>> colorRoles = new()
     {
         new Role<DangoColor>(new DangoColor[]{DangoColor.Red,DangoColor.Orange},"temp",3),
 
     };
 
-    private static List<Role<DangoColor>> colorRoles = new List<Role<DangoColor>>()
-    {
-        new Role<DangoColor>(new DangoColor[]{DangoColor.Red,DangoColor.Orange},"temp",3),
-
-    };
-
-    private static List<Role<int>> posRoles = new List<Role<int>>()
+    private static List<Role<int>> posRoles = new()
     {
         new Role<int>(new int[]{0,0,0},"0,0,0",3),
         new Role<int>(new int[]{0,0,0,0},"0,0,0,0",4),
@@ -101,7 +101,7 @@ public class DangoRole
             List<DangoColor> specialRoleList = specialRole.GetData().ToList();
 
             //色と位置がロールと一致していたら
-            if (dangos == specialRoleList)
+            if (dangos.SequenceEqual(specialRoleList))
             {
                 //スコアを加算し抜ける
                 score += specialRole.GetScore();
@@ -134,7 +134,7 @@ public class DangoRole
             colorRoleList.Sort();
 
             //色がロールと一致していたら
-            if (color == colorRoleList)
+            if (color.SequenceEqual(colorRoleList))
             {
                 //スコアを加算し抜ける
                 score += colorRole.GetScore();
@@ -170,7 +170,7 @@ public class DangoRole
             List<int> posRoleList = posRole.GetData().ToList();
 
             //配置がロールと一致していたら
-            if (normalizeDangoList == posRoleList)
+            if (normalizeDangoList.SequenceEqual(posRoleList))
             {
                 //スコアを加算し抜ける
                 score += posRole.GetScore();

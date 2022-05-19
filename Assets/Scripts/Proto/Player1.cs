@@ -10,14 +10,18 @@ public class Player1 : MonoBehaviour
     #region inputSystem
     private Vector2 moveAxis;
     private Vector2 roteAxis;
+
     [SerializeField]
     private Rigidbody _rigidbody;
+
     [SerializeField]
     private GameObject PlayerCamera;
-    private Vector3 Cameraforward;
-    public float angle;
-    private DangoColor dangoType;
 
+    private Vector3 Cameraforward;
+
+    public float angle;
+
+    //private DangoColor dangoColor;
 
     //移動処理
     public void OnMove(InputAction.CallbackContext context)
@@ -62,7 +66,7 @@ public class Player1 : MonoBehaviour
         }
     }
 
-    //突き刺し
+    //突き刺しアニメーション
     public void OnAttack(InputAction.CallbackContext context)
     {
         if (context.phase == InputActionPhase.Performed)
@@ -77,23 +81,15 @@ public class Player1 : MonoBehaviour
             }
 
             //ここに突き刺しアニメーションを推奨。
-            spitManager.canStab = true;
+            spitManager.isSticking = true;
             spitManager.gameObject.transform.localPosition = new Vector3(0, 0, 2.2f);
             spitManager.gameObject.transform.localRotation = Quaternion.Euler(90f, 0, 0);
 
-            //団子を取得
-            var dangoType = spitManager.GetDangoType();
-
-            //それを串に突き刺す処理
-            if (dangoType != DangoColor.None)
-            {
-                dangos.Add(dangoType);
-            }
         }
         if (context.phase == InputActionPhase.Canceled)
         {
             //ここに突き刺し終わりのアニメーションを推奨。
-            spitManager.canStab = false;
+            spitManager.isSticking = false;
             spitManager.gameObject.transform.rotation = Quaternion.identity;
             spitManager.gameObject.transform.localPosition = new Vector3(0, 0.4f, 1.1f);
         }
@@ -152,14 +148,20 @@ public class Player1 : MonoBehaviour
 
     #endregion
 
-    [SerializeField] float _moveSpeed = 3f;
-    [SerializeField] float _jumpPower = 10f;
-    [SerializeField] float _attackPower = 1f;
-    [SerializeField] float _attackSpeed = 1f;
-    [SerializeField] float _hitPoint = 100f;
-    [SerializeField] float _strength = 1f;
+    [SerializeField] private float _moveSpeed = 3f;
+    [SerializeField] private float _jumpPower = 10f;
+    //[SerializeField] private float _attackPower = 1f;
+    //[SerializeField] private float _attackSpeed = 1f;
+    //[SerializeField] private float _hitPoint = 100f;
+    //[SerializeField] private float _strength = 1f;
+    [SerializeField] private SpitManager spitManager;
+    [SerializeField] private DangoUIScript DangoUISC;
 
-    [SerializeField] SpitManager spitManager;
+    /// <summary>
+    /// 満腹度、制限時間の代わり（単位:[sec]）
+    /// </summary>
+    /// フレーム数で管理しますが、ここでは秒管理で構いません。
+    private float _satiety = 100f;
 
     /// <summary>
     /// 串、持ってる団子
@@ -173,50 +175,37 @@ public class Player1 : MonoBehaviour
     /// </summary>    
     private int Maxdango = 3;
 
-    private DangoUIScript DangoUISC;
-
-    public List<DangoColor> GetDangoType() => dangos;
-    public int GetMaxDango() => Maxdango;
-
-    //刺さってる団子の1要素を取得
-    public DangoColor GetDangoType(int value)
-    {
-        try
-        {
-            return dangos[value];
-        }
-        catch (IndexOutOfRangeException e)
-        {
-            Logger.Error(e);
-            Logger.Error("代わりに先頭（配列の0番）を返します。");
-            return dangos[0];
-        }
-    }
-
     private void OnEnable()
     {
-        //初期化
-        dangos.Clear();
+        InitDangos();
     }
 
     private void Start()
     {
-        DangoUISC = GameObject.Find("Canvas").transform.Find("DangoBackScreen").GetComponent<DangoUIScript>();
-    }
-
-    private void Update()
-    {
-        if (_hitPoint <= 0) gameObject.SetActive(false);
-        dangoType = spitManager.GetDangoType();
-        if (dangoType != DangoColor.None && dangos.Count <= Maxdango)
+        if (DangoUISC == null)
         {
-            dangos[dangos.Count - 1] = dangoType;
-            DangoUISC.DangoUISet(dangos);
-            Logger.Log("団子の追加");
+            DangoUISC = GameObject.Find("Canvas").transform.Find("DangoBackScreen").GetComponent<DangoUIScript>();
         }
     }
 
     private void FixedUpdate()
+    {
+        PlayerMove();
+        DecreaseSatiety();
+    }
+
+    private void InitDangos()
+    {
+        if (dangos == null) return;
+
+        //初期化
+        dangos.Clear();
+    }
+
+    /// <summary>
+    /// Playerをカメラの方向に合わせて動かす関数。
+    /// </summary>
+    private void PlayerMove()
     {
         Vector3 move;
         angle = roteAxis.x;
@@ -233,4 +222,41 @@ public class Player1 : MonoBehaviour
         //playerの向きをカメラの方向に
         transform.rotation = Quaternion.Euler(0, PlayerCamera.transform.localEulerAngles.y, 0);
     }
+
+    /// <summary>
+    /// 満腹度をへらす関数、fixedUpdateに配置。
+    /// </summary>
+    private void DecreaseSatiety()
+    {
+        //満腹度を0.02秒(fixedUpdateの呼ばれる秒数)減らす
+        _satiety -= 0.02f;
+
+#if UNITY_EDITOR
+        //とりあえず0になったら実行終了させる。本来は終了画面に遷移？
+        if (_satiety <= 0) UnityEditor.EditorApplication.isPlaying = false;
+#else
+        if(_satiety <= 0) Application.Quit();
+#endif
+
+        //[debug]10秒おきにデバッグログを表示
+        if ((int)_satiety % 10 == 0) Logger.Log(_satiety);
+    }
+
+    public List<DangoColor> GetDangoType() => dangos;
+    public DangoColor GetDangoType(int value)
+    {
+        try
+        {
+            return dangos[value];
+        }
+        catch (IndexOutOfRangeException e)
+        {
+            Logger.Error(e);
+            Logger.Error("代わりに先頭（配列の0番）を返します。");
+            return dangos[0];
+        }
+    }
+    public int GetMaxDango() => Maxdango;
+    public List<DangoColor> GetDangos() => dangos;
+    public void AddDangos(DangoColor d) => dangos.Add(d);
 }

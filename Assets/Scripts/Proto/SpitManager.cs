@@ -5,22 +5,31 @@ using UnityEngine;
 public class SpitManager : MonoBehaviour
 {
     [SerializeField] Player1 player;
-    private DangoColor dangoType = DangoColor.None;
-    public bool canStab = false;
-    DangoColor temp;
+    [SerializeField] private DangoUIScript DangoUISC;
 
-    public DangoColor GetDangoType()
+    private void Awake()
     {
-        temp = dangoType;
-        dangoType = DangoColor.None;
-        return temp;
+        if (DangoUISC == null)
+        {
+            DangoUISC = GameObject.Find("Canvas").transform.Find("DangoBackScreen").GetComponent<DangoUIScript>();
+        }
     }
+
+    /// <summary>
+    /// 突き刺しボタンが押されたときにtrueになる。
+    /// </summary>
+    public bool isSticking = false;
+    
     private void OnTriggerStay(Collider other)
     {
-        if (!canStab) return;
+        //刺せる状態ではないなら実行しない
+        if (!isSticking) return;
+
         if (other.gameObject.TryGetComponent(out DangoManager dango))
         {
-            dangoType = dango.GetDangoType();
+            player.AddDangos(dango.GetDangoColor());
+            DangoUISC.DangoUISet(player.GetDangos());
+
             other.gameObject.SetActive(false);
         }
     }

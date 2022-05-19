@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    static private int PlayerNum = 1;
+    //static private int PlayerNum = 1;
     static public Player1[] player = new Player1[2];
 
     public static void SetPlayer(Player1 obj)
