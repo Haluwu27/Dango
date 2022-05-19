@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 
 [RequireComponent(typeof(Rigidbody))]
-public class Plater1 : MonoBehaviour
+public class Player1 : MonoBehaviour
 {
     #region inputSystem
     private Vector2 moveAxis;
@@ -17,9 +17,10 @@ public class Plater1 : MonoBehaviour
     private Vector3 Cameraforward;
     private Vector3 idou;
     public float angle;
+    private DangoType dangoType;
 
 
-    //ˆÚ“®ˆ—
+    //ï¿½Ú“ï¿½ï¿½ï¿½ï¿½ï¿½
     public void OnMove(InputAction.CallbackContext context)
     {
         if (context.phase == InputActionPhase.Performed)
@@ -29,11 +30,11 @@ public class Plater1 : MonoBehaviour
         else if (context.phase == InputActionPhase.Canceled)
         {
             moveAxis = Vector2.zero;
-            //Œ¸‘¬ˆ—“ü‚ê‚é‚Æ—Ç‚³‚»‚¤
+            //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ—Ç‚ï¿½ï¿½ï¿½ï¿½ï¿½
         }
     }
 
-    //ƒWƒƒƒ“ƒvˆ—
+    //ï¿½Wï¿½ï¿½ï¿½ï¿½ï¿½vï¿½ï¿½ï¿½ï¿½
     public void OnJump(InputAction.CallbackContext context)
     {
         if (context.phase == InputActionPhase.Performed)
@@ -42,44 +43,45 @@ public class Plater1 : MonoBehaviour
         }
     }
 
-    //’cq’e
+    //ï¿½cï¿½qï¿½e
     public void OnFire(InputAction.CallbackContext context)
     {
         if (context.phase == InputActionPhase.Performed)
         {
-            //’cq‚ªh‚³‚Á‚Ä‚È‚©‚Á‚½‚çƒŠƒ^[ƒ“B
+            //ï¿½cï¿½qï¿½ï¿½ï¿½hï¿½ï¿½ï¿½ï¿½ï¿½Ä‚È‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½çƒŠï¿½^ï¿½[ï¿½ï¿½ï¿½B
             if (dangos.Count == 0) return;
 
-            //[UIo—ˆ‚½‚çÁ‚·]Á‚µ‚½æ“ª’cq‚Ì•\¦
+            //[UIï¿½oï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½]ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½æ“ªï¿½cï¿½qï¿½Ì•\ï¿½ï¿½
             Logger.Log(dangos[dangos.Count - 1]);
 
-            //æ“ª‚ğÁ‚·
+            //ï¿½æ“ªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
             dangos.RemoveAt(dangos.Count - 1);
+            DangoUISC.DangoUISet(dangos);
         }
     }
 
-    //“Ë‚«h‚µ
+    //ï¿½Ë‚ï¿½ï¿½hï¿½ï¿½
     public void OnAttack(InputAction.CallbackContext context)
     {
         if (context.phase == InputActionPhase.Performed)
         {
-            //h‚³‚Á‚Ä‚é’cq‚Ì”‚ªAh‚¹‚é’cq‚Ì”‚Æ“¯‚¶‚¾‚Á‚½‚çƒŠƒ^[ƒ“B
+            //ï¿½hï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½cï¿½qï¿½Ìï¿½ï¿½ï¿½ï¿½Aï¿½hï¿½ï¿½ï¿½ï¿½cï¿½qï¿½Ìï¿½ï¿½Æ“ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½çƒŠï¿½^ï¿½[ï¿½ï¿½ï¿½B
             if (dangos.Count >= Maxdango)
             {
-                Logger.Warn("h‚¹‚é’cq‚Ì”‚ğ’´‚¦‚Ä‚¢‚Ü‚·B");
+                Logger.Warn("ï¿½hï¿½ï¿½ï¿½ï¿½cï¿½qï¿½Ìï¿½ï¿½ğ’´‚ï¿½ï¿½Ä‚ï¿½ï¿½Ü‚ï¿½ï¿½B");
                 return;
             }
 
-            //“Ë‚«h‚µƒAƒjƒ[ƒVƒ‡ƒ“„§B
-            //‚ ‚Æ‚±‚ÌboolŒ^‘½•ªˆá‚¤H
+            //ï¿½Ë‚ï¿½ï¿½hï¿½ï¿½ï¿½Aï¿½jï¿½ï¿½ï¿½[ï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½B
+            //ï¿½ï¿½ï¿½Æ‚ï¿½ï¿½ï¿½boolï¿½^ï¿½ï¿½ï¿½ï¿½ï¿½á‚¤ï¿½H
             spitManager.canStab = true;
             spitManager.gameObject.transform.localPosition = new Vector3(0, 0, 2.2f);
             spitManager.gameObject.transform.localRotation = Quaternion.Euler(90f, 0, 0);
 
-            //h‚µ‚½’cq‚ğæ“¾
+            //ï¿½hï¿½ï¿½ï¿½ï¿½ï¿½cï¿½qï¿½ï¿½ï¿½æ“¾
             var dangoType = spitManager.GetDangoType();
 
-            //æ“¾‚µ‚½’cq‚ªNone‚¶‚á‚È‚©‚Á‚½‚ç‹ø‚É’Ç‰ÁB
+            //ï¿½æ“¾ï¿½ï¿½ï¿½ï¿½ï¿½cï¿½qï¿½ï¿½Noneï¿½ï¿½ï¿½ï¿½È‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½É’Ç‰ï¿½ï¿½B
             if (dangoType != DangoColor.None)
             {
                 dangos.Add(dangoType);
@@ -87,41 +89,42 @@ public class Plater1 : MonoBehaviour
         }
         if (context.phase == InputActionPhase.Canceled)
         {
-            //“Ë‚«h‚µ‚½‚ ‚Æ‚ÌƒAƒjƒ[ƒVƒ‡ƒ“„§B
+            //ï¿½Ë‚ï¿½ï¿½hï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ‚ÌƒAï¿½jï¿½ï¿½ï¿½[ï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½B
             spitManager.canStab = false;
             spitManager.gameObject.transform.rotation = Quaternion.identity;
             spitManager.gameObject.transform.localPosition = new Vector3(0, 0.4f, 1.1f);
         }
     }
 
-    //H‚×‚é
+    //ï¿½Hï¿½×‚ï¿½
     public void OnEatDango(InputAction.CallbackContext context)
     {
-        //‰½‚à‹ø‚Éh‚³‚Á‚Ä‚È‚©‚Á‚½‚çƒŠƒ^[ƒ“B
+        //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Éhï¿½ï¿½ï¿½ï¿½ï¿½Ä‚È‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½çƒŠï¿½^ï¿½[ï¿½ï¿½ï¿½B
         if (dangos.Count == 0) return;
 
         switch (context.phase)
         {
             case InputActionPhase.Started:
-                Logger.Log("H‚×ƒ`ƒƒ[ƒWŠJnII");
-                //Œø‰Ê‰¹‚Æ‚©‹Šo“I‚È‚à‚Ì‚ğ’Ç‰Á„§B
+                Logger.Log("ï¿½Hï¿½×ƒ`ï¿½ï¿½ï¿½[ï¿½Wï¿½Jï¿½nï¿½Iï¿½I");
+                //ï¿½ï¿½ï¿½Ê‰ï¿½ï¿½Æ‚ï¿½ï¿½ï¿½ï¿½oï¿½Iï¿½È‚ï¿½ï¿½Ì‚ï¿½Ç‰ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½B
 
                 break;
             case InputActionPhase.Performed:
-                Logger.Log("H‚×‚½I");
-                //Œø‰Ê‰¹‚Æ‚©‹Šo“I‚È‚à‚Ì‚ğ’Ç‰Á„§B
+                Logger.Log("ï¿½Hï¿½×‚ï¿½ï¿½I");
+                //ï¿½ï¿½ï¿½Ê‰ï¿½ï¿½Æ‚ï¿½ï¿½ï¿½ï¿½oï¿½Iï¿½È‚ï¿½ï¿½Ì‚ï¿½Ç‰ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½B
 
-                //‚ ‚Æ‚Å‚È‚ñ‚Æ‚©‚µ‚Ä‚ËB
+                //ï¿½ï¿½ï¿½Æ‚Å‚È‚ï¿½Æ‚ï¿½ï¿½ï¿½ï¿½Ä‚ËB
                 var tensuu = DangoRole.CheckRole(dangos);
-                Logger.Log("“_”F"+tensuu);
+                Logger.Log("ï¿½_ï¿½ï¿½ï¿½F"+tensuu);
 
-                //Š’cq‚ğƒŠƒZƒbƒg
+                //ï¿½ï¿½ï¿½ï¿½ï¿½cï¿½qï¿½ï¿½ï¿½ï¿½ï¿½Zï¿½bï¿½g
                 dangos.Clear();
+                DangoUISC.DangoUISet(dangos);
                 break;
         }
     }
 
-    //‰ñ“]
+    //ï¿½ï¿½]
     public void OnRote(InputAction.CallbackContext context)
     {
         if (context.phase == InputActionPhase.Performed)
@@ -135,7 +138,7 @@ public class Plater1 : MonoBehaviour
 
     }
 
-    //ˆ³kiƒfƒoƒtj”­“®
+    //ï¿½ï¿½ï¿½kï¿½iï¿½fï¿½oï¿½tï¿½jï¿½ï¿½ï¿½ï¿½
     public void OnCompression(InputAction.CallbackContext context)
     {
         if (context.phase == InputActionPhase.Performed)
@@ -156,19 +159,21 @@ public class Plater1 : MonoBehaviour
     [SerializeField] SpitManager spitManager;
 
     /// <summary>
-    /// Š’cq‚ÌƒŠƒXƒg
+    /// ï¿½ï¿½ï¿½ï¿½ï¿½cï¿½qï¿½Ìƒï¿½ï¿½Xï¿½g
     /// </summary>
     private List<DangoColor> dangos = new List<DangoColor>();
 
     /// <summary>
-    /// h‚¹‚é’cq‚ÌÅ‘å”
+    /// ï¿½hï¿½ï¿½ï¿½ï¿½cï¿½qï¿½ÌÅ‘å”
     /// </summary>    
     private int Maxdango = 3;
+
+    private DangoUIScript DangoUISC;
 
     public List<DangoColor> GetDangoType() => dangos;
     public int GetMaxDango() => Maxdango;
 
-    //C³•K—vHH
+    //ï¿½Cï¿½ï¿½ï¿½Kï¿½vï¿½Hï¿½H
     public DangoColor GetDangoType(int value)
     {
         try
@@ -177,37 +182,50 @@ public class Plater1 : MonoBehaviour
         }
         catch (IndexOutOfRangeException e)
         {
-            Logger.Error(e + "’cqƒTƒCƒY‚Ì”ÍˆÍŠO‚ÉƒAƒNƒZƒX‚µ‚Ä‚¢‚Ü‚·B");
-            Logger.Error("‘ã‚í‚è‚ÉÅ‰‚Ìƒf[ƒ^‚ğ•Ô‹p‚µ‚Ü‚·B");
+            Logger.Error(e + "ï¿½cï¿½qï¿½Tï¿½Cï¿½Yï¿½Ì”ÍˆÍŠOï¿½ÉƒAï¿½Nï¿½Zï¿½Xï¿½ï¿½ï¿½Ä‚ï¿½ï¿½Ü‚ï¿½ï¿½B");
+            Logger.Error("ï¿½ï¿½ï¿½ï¿½ÉÅï¿½ï¿½Ìƒfï¿½[ï¿½^ï¿½ï¿½Ô‹pï¿½ï¿½ï¿½Ü‚ï¿½ï¿½B");
             return dangos[0];
         }
     }
 
     private void OnEnable()
     {
-        //‰Šú‰»
+        //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         dangos.Clear();
     }
 
+    private void Start()
+    {
+        DangoUISC = GameObject.Find("Canvas").transform.Find("DangoBackScreen").GetComponent<DangoUIScript>();
+    }
+    
     private void Update()
     {
         if (_hitPoint <= 0) gameObject.SetActive(false);
+        dangoType = spitManager.GetDangoType();
+        if (dangoType != DangoType.None && dangoNum <= Maxdango)
+        {
+            dangos[dangoNum] = dangoType;
+            dangoNum++;
+            DangoUISC.DangoUISet(dangos);
+            Logger.Log("ï¿½cï¿½qï¿½Ì’Ç‰ï¿½");
+        }
     }
 
     private void FixedUpdate()
     {
-        //Vector3 move = new Vector3(moveAxis.x, 0, moveAxis.y);
         Vector3 move;
         angle = roteAxis.x;
 
-        //ƒJƒƒ‰‚ÌŒü‚«‚ğŠm”FACameraforward‚É‘ã“ü
+        //ï¿½Jï¿½ï¿½ï¿½ï¿½ï¿½ÌŒï¿½ï¿½ï¿½ï¿½ï¿½ï¿½mï¿½Fï¿½ACameraforwardï¿½É‘ï¿½ï¿½
         Cameraforward = Vector3.Scale(PlayerCamera.transform.forward, new Vector3(1, 0, 1)).normalized;
-        //ƒJƒƒ‰‚ÌŒü‚«‚ğŒ³‚ÉƒxƒNƒgƒ‹‚Ìì¬
+        //ï¿½Jï¿½ï¿½ï¿½ï¿½ï¿½ÌŒï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Éƒxï¿½Nï¿½gï¿½ï¿½ï¿½Ìì¬
         move = moveAxis.y * Cameraforward * _moveSpeed + moveAxis.x * PlayerCamera.transform.right * _moveSpeed;
 
         if (_rigidbody.velocity.magnitude < 8f)
-            _rigidbody.AddForce(move * _moveSpeed * Time.deltaTime);
-        //player‚ÌŒü‚«‚ğƒJƒƒ‰‚Ì•ûŒü‚É
-        transform.rotation = Quaternion.Euler(0, PlayerCamera.transform.localEulerAngles.y + Time.deltaTime, 0);
+            _rigidbody.AddForce(move * _moveSpeed);
+
+        //playerï¿½ÌŒï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Jï¿½ï¿½ï¿½ï¿½ï¿½Ì•ï¿½ï¿½ï¿½ï¿½ï¿½
+        transform.rotation = Quaternion.Euler(0, PlayerCamera.transform.localEulerAngles.y , 0);
     }
 }
