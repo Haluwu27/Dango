@@ -180,7 +180,8 @@ public class Player1 : MonoBehaviour
     /// <summary>
     /// 刺せる数、徐々に増える
     /// </summary>    
-    private int Maxdango = 4;
+    private int Maxdango = 3;
+    private float time = 0;
 
     private void OnEnable()
     {
@@ -199,6 +200,7 @@ public class Player1 : MonoBehaviour
     {
         PlayerMove();
         DecreaseSatiety();
+        GrowStab();
     }
 
     private void InitDangos()
@@ -244,6 +246,26 @@ public class Player1 : MonoBehaviour
 
         //[debug]10秒おきにデバッグログを表示
         if ((int)_satiety % 10 == 0) Logger.Log(_satiety);
+    }
+
+    /// <summary>
+    /// 串が一定時間で伸びる処理
+    /// </summary>
+    private void GrowStab()
+    {
+        //刺せる団子の数が7だったら実行しない。
+        if (Maxdango == 7) return;
+
+        float growTime = 10f;
+
+        time += Time.fixedDeltaTime;
+
+        if (time >= growTime)
+        {
+            Maxdango++;
+            Logger.Log("させる団子の数が増えた！"+Maxdango);
+            time = 0;
+        }
     }
 
     private void FinishGame()
