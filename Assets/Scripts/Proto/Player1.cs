@@ -112,12 +112,19 @@ public class Player1 : MonoBehaviour
                 Logger.Log("食べた！！");
                 //SE推奨
 
-                //この辺の処理はまだ手を付けていません。
-                var tensuu = DangoRole.CheckRole(dangos);
-                Logger.Log("点数:" + tensuu);
+                //食べた団子の点数を取得
+                var score = DangoRole.CheckRole(dangos);
+
+                //満腹度を上昇
+                _satiety += score;
+
+                //スコアを上昇
+                GameManager.gameScore += score * 100f;
 
                 //串をクリア。
                 dangos.Clear();
+
+                //UI更新
                 DangoUISC.DangoUISet(dangos);
                 break;
         }
@@ -173,7 +180,7 @@ public class Player1 : MonoBehaviour
     /// <summary>
     /// 刺せる数、徐々に増える
     /// </summary>    
-    private int Maxdango = 3;
+    private int Maxdango = 4;
 
     private void OnEnable()
     {
@@ -229,17 +236,31 @@ public class Player1 : MonoBehaviour
     private void DecreaseSatiety()
     {
         //満腹度を0.02秒(fixedUpdateの呼ばれる秒数)減らす
-        _satiety -= 0.02f;
+        _satiety -= Time.fixedDeltaTime;
 
-#if UNITY_EDITOR
-        //とりあえず0になったら実行終了させる。本来は終了画面に遷移？
-        if (_satiety <= 0) UnityEditor.EditorApplication.isPlaying = false;
-#else
-        if(_satiety <= 0) Application.Quit();
-#endif
+        //ゲームマネージャー管理のほうがいいと思うけど
+        //とりあえずここに置いておきます。
+        FinishGame();
 
         //[debug]10秒おきにデバッグログを表示
         if ((int)_satiety % 10 == 0) Logger.Log(_satiety);
+    }
+
+    private void FinishGame()
+    {
+        var madeCount = 0;
+        if (_satiety <= 0)
+        {
+            var posRoles = DangoRole.GetPosRoles();
+            foreach (var posRole in posRoles)
+            {
+                if (posRole.GetMadeCount() > 0)
+                {
+                    madeCount++;
+                }
+            }
+            Logger.Log("満足度：" + GameManager.gameScore * madeCount);
+        }
     }
 
     public List<DangoColor> GetDangoType() => dangos;

@@ -7,6 +7,7 @@ public class Role<T>
     private T[] m_role;
     private string m_rolename;
     private float m_score;
+    private int m_madeCount = 0;
 
     /// <param name="t">役の配列</param>
     /// <param name="n">役名</param>
@@ -21,6 +22,8 @@ public class Role<T>
     public T[] GetData() => m_role;
     public string GetRolename() => m_rolename;
     public float GetScore() => m_score;
+    public int GetMadeCount() => m_madeCount;
+    public void AddMadeCount() => m_madeCount++;
 }
 
 public class DangoRole
@@ -79,9 +82,12 @@ public class DangoRole
         }
 
         //その他役の判定
-        CheckColorRole(ref score);
         CheckPosRole(dangos, ref score);
-
+        CheckColorRole(ref score);//処理内部にソートを含むため、位置役より下に配置。
+        
+        //全体的な点数計算（この処理は役の有無に関わらず実行される）
+        score += (8 - color.Count) * dangos.Count();
+        
         return score;
     }
 
@@ -103,6 +109,9 @@ public class DangoRole
             //色と位置がロールと一致していたら
             if (dangos.SequenceEqual(specialRoleList))
             {
+                //作った回数を増やし
+                specialRole.AddMadeCount();
+
                 //スコアを加算し抜ける
                 score += specialRole.GetScore();
                 return true;
@@ -136,6 +145,9 @@ public class DangoRole
             //色がロールと一致していたら
             if (color.SequenceEqual(colorRoleList))
             {
+                //作った回数を増やし
+                colorRole.AddMadeCount();
+
                 //スコアを加算し抜ける
                 score += colorRole.GetScore();
                 return true;
@@ -172,7 +184,10 @@ public class DangoRole
             //配置がロールと一致していたら
             if (normalizeDangoList.SequenceEqual(posRoleList))
             {
-                //スコアを加算し抜ける
+                //作った回数を増やし・・・
+                posRole.AddMadeCount();
+
+                //さらにスコアを加算し抜ける
                 score += posRole.GetScore();
 
                 //[Debug]役名の表示
@@ -184,4 +199,6 @@ public class DangoRole
         //役が何もなかったらfalseを返し、抜ける
         return false;
     }
+
+    public static List<Role<int>> GetPosRoles() => posRoles;
 }
