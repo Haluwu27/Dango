@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -77,6 +78,7 @@ public class Player1 : MonoBehaviour
                 //なんらかの突けないことを知らせる処理推奨。
 
                 Logger.Warn("突き刺せる数を超えています");
+                _event.text = "それ以上させないよ！";
                 return;
             }
 
@@ -105,6 +107,7 @@ public class Player1 : MonoBehaviour
         {
             case InputActionPhase.Started:
                 Logger.Log("食べチャージ開始！");
+                _event.text = "食べチャージ中！";
                 //SE推奨
 
                 break;
@@ -114,6 +117,8 @@ public class Player1 : MonoBehaviour
 
                 //食べた団子の点数を取得
                 var score = DangoRole.CheckRole(dangos);
+
+                _event.text = "食べた！" + (int)score + "点！";
 
                 //満腹度を上昇
                 _satiety += score;
@@ -164,6 +169,12 @@ public class Player1 : MonoBehaviour
     [SerializeField] private SpitManager spitManager;
     [SerializeField] private DangoUIScript DangoUISC;
 
+
+    //仮UI用加筆分
+    private TextMeshProUGUI _time;
+    private TextMeshProUGUI _event;
+    private TextMeshProUGUI _role;
+
     /// <summary>
     /// 満腹度、制限時間の代わり（単位:[sec]）
     /// </summary>
@@ -194,6 +205,21 @@ public class Player1 : MonoBehaviour
         {
             DangoUISC = GameObject.Find("Canvas").transform.Find("DangoBackScreen").GetComponent<DangoUIScript>();
         }
+
+        if(_time == null)
+        {
+            _time = GameObject.Find("Canvas").transform.Find("Time").GetComponent<TextMeshProUGUI>();
+        }
+
+        if (_event == null)
+        {
+            _event = GameObject.Find("Canvas").transform.Find("Event").GetComponent<TextMeshProUGUI>();
+        }
+
+        if (_role == null)
+        {
+            _role = GameObject.Find("Canvas").transform.Find("Role").GetComponent<TextMeshProUGUI>();
+        }
     }
 
     private void FixedUpdate()
@@ -201,6 +227,11 @@ public class Player1 : MonoBehaviour
         PlayerMove();
         DecreaseSatiety();
         GrowStab();
+
+        //仮でここに
+        _time.text = "残り時間：" + (int)_satiety + "秒";
+        _role.text = GameManager.NowRoleList;
+
     }
 
     private void InitDangos()
@@ -264,6 +295,7 @@ public class Player1 : MonoBehaviour
         {
             Maxdango++;
             Logger.Log("させる団子の数が増えた！"+Maxdango);
+            _event.text = "させる団子の数が増えた！(" + Maxdango + "個)";
             time = 0;
         }
     }

@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
+
+    public static string NowRoleList = "null";
+
     static public float gameScore = 0;
 
     //static private int PlayerNum = 1;

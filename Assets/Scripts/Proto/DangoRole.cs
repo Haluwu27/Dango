@@ -64,6 +64,9 @@ public class DangoRole
     /// <returns>float:点数</returns>
     public static float CheckRole(List<DangoColor> dangos)
     {
+
+        GameManager.NowRoleList = "";
+
         //返り値の得点
         float score = 0;
 
@@ -109,6 +112,10 @@ public class DangoRole
             //色と位置がロールと一致していたら
             if (dangos.SequenceEqual(specialRoleList))
             {
+
+                //表示
+                GameManager.NowRoleList = "「" + specialRole.GetRolename() + "」！" + specialRole.GetScore() + "点！";
+
                 //作った回数を増やし
                 specialRole.AddMadeCount();
 
@@ -145,6 +152,10 @@ public class DangoRole
             //色がロールと一致していたら
             if (color.SequenceEqual(colorRoleList))
             {
+
+                //表示
+                GameManager.NowRoleList = GameManager.NowRoleList + "「" + colorRole.GetRolename() + "」！" + colorRole.GetScore() + "点！";
+
                 //作った回数を増やし
                 colorRole.AddMadeCount();
 
@@ -184,6 +195,10 @@ public class DangoRole
             //配置がロールと一致していたら
             if (normalizeDangoList.SequenceEqual(posRoleList))
             {
+
+                //表示
+                GameManager.NowRoleList = GameManager.NowRoleList + "「" + posRole.GetRolename() + "」！" + posRole.GetScore() + "点！";
+
                 //作った回数を増やし・・・
                 posRole.AddMadeCount();
 
