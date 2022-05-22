@@ -5,7 +5,7 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
 
-    public static string NowRoleList = "null";
+    public static string NowRoleList = "";
 
     static public float gameScore = 0;
 

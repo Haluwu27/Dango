@@ -28,7 +28,7 @@ public class Role<T>
 
 public class DangoRole
 {
-    static List<DangoColor> color = new();
+    static List<DangoColor> color = new List<DangoColor>();
 
     private static List<Role<DangoColor>> specialRoles = new()
     {
@@ -64,6 +64,8 @@ public class DangoRole
     /// <returns>float:点数</returns>
     public static float CheckRole(List<DangoColor> dangos)
     {
+        //カラーの初期化
+        color.Clear();
 
         GameManager.NowRoleList = "";
 
@@ -154,7 +156,7 @@ public class DangoRole
             {
 
                 //表示
-                GameManager.NowRoleList = GameManager.NowRoleList + "「" + colorRole.GetRolename() + "」！" + colorRole.GetScore() + "点！";
+                GameManager.NowRoleList += "「" + colorRole.GetRolename() + "」！" + colorRole.GetScore() + "点！";
 
                 //作った回数を増やし
                 colorRole.AddMadeCount();
@@ -197,7 +199,7 @@ public class DangoRole
             {
 
                 //表示
-                GameManager.NowRoleList = GameManager.NowRoleList + "「" + posRole.GetRolename() + "」！" + posRole.GetScore() + "点！";
+                GameManager.NowRoleList += "「" + posRole.GetRolename() + "」！" + posRole.GetScore() + "点！";
 
                 //作った回数を増やし・・・
                 posRole.AddMadeCount();
