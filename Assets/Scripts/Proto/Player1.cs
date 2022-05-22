@@ -43,7 +43,10 @@ public class Player1 : MonoBehaviour
     {
         if (context.phase == InputActionPhase.Performed)
         {
-            _rigidbody.AddForce(Vector3.up * _jumpPower, ForceMode.Impulse);
+            if (isGround)
+            {
+                _rigidbody.AddForce(Vector3.up * (_jumpPower + (Maxdango)), ForceMode.Impulse);
+            }
         }
     }
 
@@ -192,7 +195,9 @@ public class Player1 : MonoBehaviour
     /// 刺せる数、徐々に増える
     /// </summary>    
     private int Maxdango = 3;
+
     private float time = 0;
+    private bool isGround;
 
     private void OnEnable()
     {
@@ -206,7 +211,7 @@ public class Player1 : MonoBehaviour
             DangoUISC = GameObject.Find("Canvas").transform.Find("DangoBackScreen").GetComponent<DangoUIScript>();
         }
 
-        if(_time == null)
+        if (_time == null)
         {
             _time = GameObject.Find("Canvas").transform.Find("Time").GetComponent<TextMeshProUGUI>();
         }
@@ -220,6 +225,11 @@ public class Player1 : MonoBehaviour
         {
             _role = GameObject.Find("Canvas").transform.Find("Role").GetComponent<TextMeshProUGUI>();
         }
+    }
+
+    private void Update()
+    {
+        IsGround();
     }
 
     private void FixedUpdate()
@@ -240,6 +250,12 @@ public class Player1 : MonoBehaviour
 
         //初期化
         dangos.Clear();
+    }
+
+    private void IsGround()
+    {
+        var ray = new Ray(transform.position, Vector3.down);
+        isGround = Physics.Raycast(ray, 1f);
     }
 
     /// <summary>
@@ -294,7 +310,7 @@ public class Player1 : MonoBehaviour
         if (time >= growTime)
         {
             Maxdango++;
-            Logger.Log("させる団子の数が増えた！"+Maxdango);
+            Logger.Log("させる団子の数が増えた！" + Maxdango);
             _event.text = "させる団子の数が増えた！(" + Maxdango + "個)";
             time = 0;
         }
