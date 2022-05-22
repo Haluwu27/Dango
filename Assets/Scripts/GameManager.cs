@@ -41,7 +41,7 @@ public class GameManager : MonoBehaviour
         //Žæ“¾‚µ‚½’iŠK‚Å’cŽq‚ÌF‚ðÝ’è
         dango.SetDangoType((DangoColor)_poolCount + 1);
         _poolCount++;
-        if (_poolCount > 7) _poolCount = 0;
+        if (_poolCount > 6) _poolCount = 0;
 
         dango.GetComponent<Renderer>().material.color = dango.GetDangoColor() switch
         {
