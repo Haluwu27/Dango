@@ -18,12 +18,6 @@ public class Player1 : MonoBehaviour
     [SerializeField]
     private GameObject PlayerCamera;
 
-    private Vector3 Cameraforward;
-
-    public float angle;
-
-    //private DangoColor dangoColor;
-
     //移動処理
     public void OnMove(InputAction.CallbackContext context)
     {
@@ -263,20 +257,14 @@ public class Player1 : MonoBehaviour
     /// </summary>
     private void PlayerMove()
     {
-        Vector3 move;
-        angle = roteAxis.x;
-
         //カメラの向きを確認、Cameraforwardに代入
-        Cameraforward = Vector3.Scale(PlayerCamera.transform.forward, new Vector3(1, 0, 1)).normalized;
+        var Cameraforward = Vector3.Scale(PlayerCamera.transform.forward, new Vector3(1, 0, 1)).normalized;
 
         //カメラの向きを元にベクトルの作成
-        move = moveAxis.y * Cameraforward * _moveSpeed + moveAxis.x * PlayerCamera.transform.right * _moveSpeed;
+        Vector3 move = moveAxis.y * Cameraforward * _moveSpeed + moveAxis.x * PlayerCamera.transform.right * _moveSpeed;
 
         if (_rigidbody.velocity.magnitude < 8f)
             _rigidbody.AddForce(move * _moveSpeed);
-
-        //playerの向きをカメラの方向に
-        transform.rotation = Quaternion.Euler(0, PlayerCamera.transform.localEulerAngles.y, 0);
     }
 
     /// <summary>
@@ -333,6 +321,7 @@ public class Player1 : MonoBehaviour
         }
     }
 
+    public Vector2 GetRoteAxis() => roteAxis;
     public List<DangoColor> GetDangoType() => dangos;
     public DangoColor GetDangoType(int value)
     {
