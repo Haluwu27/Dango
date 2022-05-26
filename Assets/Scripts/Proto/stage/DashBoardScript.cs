@@ -7,9 +7,9 @@ public class DashBoardScript : MonoBehaviour
     [SerializeField] float speed;
     private void OnTriggerEnter(Collider col)
     {
-        if (col.gameObject.tag == "Player")
+        if (col.CompareTag("Player"))
         {
-            col.GetComponent<Rigidbody>().AddForce(col.GetComponent<Player1>().move * speed);
+            col.GetComponent<Rigidbody>().AddForce(col.GetComponent<Player1>().moveVec * speed);
         }
     }
 }

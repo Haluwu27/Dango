@@ -191,9 +191,10 @@ public class Player1 : MonoBehaviour
     private int Maxdango = 3;
 
     private float time = 0;
-    internal bool isGround;
 
-    internal Vector3 move;
+    //internalでは安全性が低いためプロパティをつけています。
+    public bool isGround { get; private set; }
+    public Vector3 moveVec { get; private set; }
 
     private void OnEnable()
     {
@@ -259,16 +260,14 @@ public class Player1 : MonoBehaviour
     /// </summary>
     private void PlayerMove()
     {
-        angle = roteAxis.x;
-
         //カメラの向きを確認、Cameraforwardに代入
         var Cameraforward = Vector3.Scale(PlayerCamera.transform.forward, new Vector3(1, 0, 1)).normalized;
 
         //カメラの向きを元にベクトルの作成
-        Vector3 move = moveAxis.y * Cameraforward * _moveSpeed + moveAxis.x * PlayerCamera.transform.right * _moveSpeed;
+        moveVec = moveAxis.y * Cameraforward * _moveSpeed + moveAxis.x * PlayerCamera.transform.right * _moveSpeed;
 
         if (_rigidbody.velocity.magnitude < 8f)
-            _rigidbody.AddForce(move * _moveSpeed);
+            _rigidbody.AddForce(moveVec * _moveSpeed);
     }
 
     /// <summary>
