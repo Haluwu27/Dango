@@ -197,7 +197,9 @@ public class Player1 : MonoBehaviour
     private int Maxdango = 3;
 
     private float time = 0;
-    private bool isGround;
+    internal bool isGround;
+
+    internal Vector3 move;
 
     private void OnEnable()
     {
@@ -263,7 +265,6 @@ public class Player1 : MonoBehaviour
     /// </summary>
     private void PlayerMove()
     {
-        Vector3 move;
         angle = roteAxis.x;
 
         //カメラの向きを確認、Cameraforwardに代入

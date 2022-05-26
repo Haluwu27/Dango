@@ -20,6 +20,7 @@ public class CameraFollow : MonoBehaviour
     private void Start()
     {
         P1 = target.GetComponent<Player1>();
+        transform.parent = null;//“®‚­‚à‚Ì‚Éæ‚é‚Æ‚»‚ê‚É’Ç]‚µ‚¾‚·‚©‚çeqŠÖŒW‚ğ–³‚­‚·
     }
 
     private void Update()
