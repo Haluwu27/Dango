@@ -20,6 +20,7 @@ public class CameraFollow : MonoBehaviour
     private void Start()
     {
         P1 = target.GetComponent<Player1>();
+        transform.parent = null;//動くものに乗るとそれに追従しだすから親子関係を無くす
     }
 
     //Playerが動いたあとに実行するため、LateUpdateで行う。

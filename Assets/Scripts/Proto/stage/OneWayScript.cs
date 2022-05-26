@@ -15,14 +15,4 @@ public class OneWayScript : MonoBehaviour
     {
         bloc.isTrigger = false;
     }
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }
