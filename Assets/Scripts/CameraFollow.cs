@@ -16,7 +16,7 @@ public class CameraFollow : MonoBehaviour
     //private Vector3 velocity = Vector3.zero;
     private Vector3 targetPos = Vector3.zero;
     private Player1 P1;
-
+    private float roteYSpeed=-10f;
     private void Start()
     {
         P1 = target.GetComponent<Player1>();
@@ -32,7 +32,9 @@ public class CameraFollow : MonoBehaviour
 
         //カメラをroteAxis.xに合わせて回転させる。
         transform.RotateAround(target.position, Vector3.up, P1.GetRoteAxis().x * Time.deltaTime);
-        
+        transform.RotateAround(target.position, transform.right, P1.GetRoteAxis().y * Time.deltaTime * roteYSpeed);
+        Logger.Log(P1.GetRoteAxis().y);
+
         //カメラの位置が決定してからプレイヤーの向きを決めることで、カクつきをなくす。
         target.transform.rotation = Quaternion.Euler(0, transform.localEulerAngles.y, 0);
     }
