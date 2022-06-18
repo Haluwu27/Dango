@@ -6,6 +6,9 @@ public class CameraFollow : MonoBehaviour
 {
     [Tooltip("追従したいターゲット")]
     public Transform target = default!;
+    [SerializeField]private float MinAngle;
+
+    [SerializeField]private float MaxAngle;
 
     ////[SerializeField, Range(0.01f, 1f),Tooltip("カメラの追従度")]
     //private float smoothSpeed = 0.125f;
@@ -17,6 +20,7 @@ public class CameraFollow : MonoBehaviour
     private Vector3 targetPos = Vector3.zero;
     private Player1 P1;
     private float roteYSpeed=-10f;
+    private Vector3 oldRote=new Vector3(0,0,0);
     private void Start()
     {
         P1 = target.GetComponent<Player1>();
@@ -32,10 +36,23 @@ public class CameraFollow : MonoBehaviour
 
         //カメラをroteAxis.xに合わせて回転させる。
         transform.RotateAround(target.position, Vector3.up, P1.GetRoteAxis().x * Time.deltaTime);
-        transform.RotateAround(target.position, transform.right, P1.GetRoteAxis().y * Time.deltaTime * roteYSpeed);
-        Logger.Log(P1.GetRoteAxis().y);
+
+        //X軸回転の角度を所得
+        float currentYAngle = transform.eulerAngles.x;
+        //X軸が0～360の値しか返さないので調整
+        if (currentYAngle > 180)
+        {
+            currentYAngle = currentYAngle - 360;
+        }
+
+        //縦軸の制限
+        if ((currentYAngle >= MinAngle&&P1.GetRoteAxis().y>0) || (currentYAngle <= MaxAngle&&P1.GetRoteAxis().y < 0))
+        {
+            transform.RotateAround(target.position, transform.right, P1.GetRoteAxis().y * Time.deltaTime * roteYSpeed);
+        }
 
         //カメラの位置が決定してからプレイヤーの向きを決めることで、カクつきをなくす。
         target.transform.rotation = Quaternion.Euler(0, transform.localEulerAngles.y, 0);
+
     }
 }
