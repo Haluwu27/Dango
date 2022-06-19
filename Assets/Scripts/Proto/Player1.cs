@@ -9,6 +9,12 @@ using UnityEngine.InputSystem;
 public class Player1 : MonoBehaviour
 {
     #region inputSystem
+    const int FALLACTION_STAY_AIR_FRAME = 50;
+    const int FALLACTION_FALL_POWER = 30;
+    const int FALLACTION_MOVE_POWER = 10;
+
+    private bool isFallAction = false;
+
     private Vector2 moveAxis;
     private Vector2 roteAxis;
 
@@ -28,7 +34,6 @@ public class Player1 : MonoBehaviour
         else if (context.phase == InputActionPhase.Canceled)
         {
             moveAxis = Vector2.zero;
-            //ここに減速処理を入れるの推奨
         }
     }
 
@@ -69,6 +74,8 @@ public class Player1 : MonoBehaviour
     {
         if (context.phase == InputActionPhase.Performed)
         {
+            FallAction();
+
             //突き刺せる数を超えていた場合、実行しない
             if (dangos.Count >= Maxdango)
             {
@@ -155,6 +162,40 @@ public class Player1 : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// 刺突アクション
+    /// </summary>
+    /// <returns>可能かどうか</returns>
+    private bool FallAction()
+    {
+        //接地していたら実行しない
+        if (isGround) return false;
+        //既にアクション中なら実行しない
+        if (isFallAction) return false;
+        //させる数を超えていたら実行しない
+        if (dangos.Count >= Maxdango) return false;
+
+        StartCoroutine(StayAir());
+
+        return true;
+    }
+
+    private IEnumerator StayAir()
+    {
+        int time = FALLACTION_STAY_AIR_FRAME;
+
+        isFallAction = true;
+        while (--time > 0)
+        {
+            yield return new WaitForFixedUpdate();
+
+            //滞空処理
+            _rigidbody.velocity = new Vector3(_rigidbody.velocity.x / FALLACTION_MOVE_POWER, 0, _rigidbody.velocity.z / FALLACTION_MOVE_POWER);
+        }
+
+        _rigidbody.AddForce(Vector3.down * FALLACTION_FALL_POWER, ForceMode.Impulse);
+    }
+
     #endregion
 
     [SerializeField] private float _moveSpeed = 3f;
@@ -165,6 +206,8 @@ public class Player1 : MonoBehaviour
     //[SerializeField] private float _strength = 1f;
     [SerializeField] private SpitManager spitManager;
     [SerializeField] private DangoUIScript DangoUISC;
+    [SerializeField] private GameObject maker = default!;
+    GameObject _maker = null;
 
 
     //仮UI用加筆分
@@ -192,8 +235,23 @@ public class Player1 : MonoBehaviour
 
     private float time = 0;
 
-    //internalでは安全性が低いためプロパティをつけています。
-    public bool isGround { get; private set; }
+    public bool IsGround
+    {
+        get => isGround;
+        private set
+        {
+            if (value)
+            {
+                isFallAction = false;
+                _maker.SetActive(false);
+            }
+
+            isGround = value;
+        }
+    }
+
+    private bool isGround = false;
+
     public Vector3 moveVec { get; private set; }
 
     private void OnEnable()
@@ -222,11 +280,15 @@ public class Player1 : MonoBehaviour
         {
             _role = GameObject.Find("Canvas").transform.Find("Role").GetComponent<TextMeshProUGUI>();
         }
+
+        _maker = Instantiate(maker);
+        _maker.SetActive(false);
     }
 
     private void Update()
     {
-        IsGround();
+        IsGrounded();
+        FallActionMaker();
     }
 
     private void FixedUpdate()
@@ -249,10 +311,21 @@ public class Player1 : MonoBehaviour
         dangos.Clear();
     }
 
-    private void IsGround()
+    private void FallActionMaker()
+    {
+        if (IsGround) return;
+        var ray = new Ray(transform.position, Vector3.down);
+        if (Physics.Raycast(ray, out RaycastHit hit, 10f))
+        {
+            _maker.transform.position = hit.point;
+            _maker.SetActive(true);
+        }
+    }
+
+    private void IsGrounded()
     {
         var ray = new Ray(transform.position, Vector3.down);
-        isGround = Physics.Raycast(ray, 1f);
+        IsGround = Physics.Raycast(ray, 1f);
     }
 
     /// <summary>
@@ -283,7 +356,7 @@ public class Player1 : MonoBehaviour
         FinishGame();
 
         //[debug]10秒おきにデバッグログを表示
-        if ((int)_satiety % 10 == 0) Logger.Log(_satiety);
+        //if ((int)_satiety % 10 == 0) Logger.Log(_satiety);
     }
 
     /// <summary>
