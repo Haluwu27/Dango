@@ -32,29 +32,50 @@ public class DangoRole
 
     private static List<Role<DangoColor>> specialRoles = new()
     {
-        new Role<DangoColor>(new DangoColor[]{DangoColor.Red,DangoColor.Yellow,DangoColor.Blue},"temp",30),
-
     };
 
     private static List<Role<DangoColor>> colorRoles = new()
     {
-        new Role<DangoColor>(new DangoColor[]{DangoColor.Red,DangoColor.Orange},"temp",3),
-
     };
 
     private static List<Role<int>> posRoles = new()
     {
-        new Role<int>(new int[]{0,0,0},"0,0,0",3),
-        new Role<int>(new int[]{0,0,0,0},"0,0,0,0",4),
-        new Role<int>(new int[]{0,0,1,1},"0,0,1,1",4),
-        new Role<int>(new int[]{0,1,0,1},"0,1,0,1",4),
-        new Role<int>(new int[]{0,0,0,0,0},"0,0,0,0,0",5),
-        new Role<int>(new int[]{0,1,0,1,0},"0,1,0,1,0",5),
-        new Role<int>(new int[]{0,0,1,0,0},"0,0,1,0,0",5),
-        new Role<int>(new int[]{0,1,2,3,2,1,0},"0,1,2,3,2,1,0",7),
-        new Role<int>(new int[]{0,1,0,1,0,1,0},"0,1,0,1,0,1,0",7),
-        new Role<int>(new int[]{0,0,0,0,0,0,0},"0,0,0,0,0,0,0",7),
-        new Role<int>(new int[]{0,1,2,3,4,5,6},"0,1,2,3,4,5,6",7),
+        new Role<int>(new int[]{0,0,0},"単色役",3),
+        new Role<int>(new int[]{0,0,0,0},"単色役",4),
+        new Role<int>(new int[]{0,0,0,0,0},"単色役",5),
+        new Role<int>(new int[]{0,0,0,0,0,0},"単色役",6),
+        new Role<int>(new int[]{0,0,0,0,0,0,0},"単色役",7),
+        new Role<int>(new int[]{0,1,0},"線対称",3),
+        new Role<int>(new int[]{0,1,1,0},"線対称",4),
+        new Role<int>(new int[]{0,0,1,0,0},"線対称",5),
+        new Role<int>(new int[]{0,1,0,1,0},"線対称",5),
+        new Role<int>(new int[]{0,1,1,1,0},"線対称",5),
+        new Role<int>(new int[]{0,1,2,1,0},"線対称",5),
+        new Role<int>(new int[]{0,0,1,1,0,0},"線対称",6),
+        new Role<int>(new int[]{0,1,0,0,1,0},"線対称",6),
+        new Role<int>(new int[]{0,1,1,1,1,0},"線対称",6),
+        new Role<int>(new int[]{0,1,2,2,1,0},"線対称",6),
+        new Role<int>(new int[]{0,0,0,1,0,0,0},"線対称",7),
+        new Role<int>(new int[]{0,0,1,0,1,0,0},"線対称",7),
+        new Role<int>(new int[]{0,0,1,1,1,0,0},"線対称",7),
+        new Role<int>(new int[]{0,0,1,2,1,0,0},"線対称",7),
+        new Role<int>(new int[]{0,1,0,0,0,1,0},"線対称",7),
+        new Role<int>(new int[]{0,1,0,1,0,1,0},"線対称",7),
+        new Role<int>(new int[]{0,1,0,2,0,1,0},"線対称",7),
+        new Role<int>(new int[]{0,1,1,0,1,1,0},"線対称",7),
+        new Role<int>(new int[]{0,1,1,1,1,1,0},"線対称",7),
+        new Role<int>(new int[]{0,1,1,2,1,1,0},"線対称",7),
+        new Role<int>(new int[]{0,1,2,0,2,1,0},"線対称",7),
+        new Role<int>(new int[]{0,1,2,1,2,1,0},"線対称",7),
+        new Role<int>(new int[]{0,1,2,2,2,1,0},"線対称",7),
+        new Role<int>(new int[]{0,1,2,3,2,1,0},"線対称",7),
+        new Role<int>(new int[]{0,1,0,1},"ループ",4),
+        new Role<int>(new int[]{0,0,1,0,0,1},"ループ",6),
+        new Role<int>(new int[]{0,1,1,0,1,1},"ループ",6),
+        new Role<int>(new int[]{0,1,2,0,1,2},"ループ",6),
+        new Role<int>(new int[]{0,1,0,1,0,1},"ループ",6),
+        new Role<int>(new int[]{0,0,1,1},"二分割",4),
+        new Role<int>(new int[]{0,0,0,1,1,1},"二分割",6),
     };
 
     /// <summary>
@@ -73,7 +94,7 @@ public class DangoRole
         float score = 0;
 
         //特殊役の判定、trueならここで判定終了。
-        if (CheckSpecialRole(dangos, ref score)) return score;
+        //if (CheckSpecialRole(dangos, ref score)) return score;
 
         //特殊役がなかったら・・・
         foreach (DangoColor c in dangos)
@@ -88,11 +109,11 @@ public class DangoRole
 
         //その他役の判定
         CheckPosRole(dangos, ref score);
-        CheckColorRole(ref score);//処理内部にソートを含むため、位置役より下に配置。
-        
+        //CheckColorRole(ref score);//処理内部にソートを含むため、位置役より下に配置。
+
         //全体的な点数計算（この処理は役の有無に関わらず実行される）
         score += (8 - color.Count) * dangos.Count();
-        
+
         return score;
     }
 
