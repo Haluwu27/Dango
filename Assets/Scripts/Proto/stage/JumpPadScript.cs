@@ -10,7 +10,7 @@ public class JumpPadScript : MonoBehaviour
     {
         if (col.gameObject.tag == "Player")
         {
-            if (col.GetComponent<Player1>().isGround)
+            if (col.GetComponent<Player1>().IsGround)
                 col.GetComponent<Rigidbody>().AddForce(Vector3.up * jumpPower, ForceMode.Impulse);
         }
     }
