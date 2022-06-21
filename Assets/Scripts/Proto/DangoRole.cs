@@ -76,6 +76,7 @@ public class DangoRole
         new Role<int>(new int[]{0,1,0,1,0,1},"ƒ‹[ƒv",6),
         new Role<int>(new int[]{0,0,1,1},"“ñ•ªŠ„",4),
         new Role<int>(new int[]{0,0,0,1,1,1},"“ñ•ªŠ„",6),
+        new Role<int>(new int[]{0,0,1,1,2,2},"O•ªŠ„",6),
     };
 
     /// <summary>
