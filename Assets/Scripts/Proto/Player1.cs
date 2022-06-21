@@ -13,6 +13,8 @@ public class Player1 : MonoBehaviour
     const int FALLACTION_FALL_POWER = 30;
     const int FALLACTION_MOVE_POWER = 10;
 
+    const float SCORE_TIME_RATE = 0.2f;
+
     private bool isFallAction = false;
 
     private Vector2 moveAxis;
@@ -125,7 +127,7 @@ public class Player1 : MonoBehaviour
                 _event.text = "食べた！" + (int)score + "点！";
 
                 //満腹度を上昇
-                _satiety += score;
+                _satiety += score * SCORE_TIME_RATE;
 
                 //スコアを上昇
                 GameManager.gameScore += score * 100f;
