@@ -27,10 +27,18 @@ public class SpitManager : MonoBehaviour
 
         if (other.gameObject.TryGetComponent(out DangoManager dango))
         {
+            CheckIsFallAction();
             player.AddDangos(dango.GetDangoColor());
             DangoUISC.DangoUISet(player.GetDangos());
 
             other.gameObject.SetActive(false);
         }
+    }
+
+    private void CheckIsFallAction()
+    {
+        if (!player.IsFallAction) return;
+
+        Logger.Log("落下アクション中に刺した！");
     }
 }

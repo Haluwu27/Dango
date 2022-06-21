@@ -15,7 +15,7 @@ public class Player1 : MonoBehaviour
 
     const float SCORE_TIME_RATE = 0.2f;
 
-    private bool isFallAction = false;
+    public bool IsFallAction { get; private set; }
 
     private Vector2 moveAxis;
     private Vector2 roteAxis;
@@ -173,7 +173,7 @@ public class Player1 : MonoBehaviour
         //接地していたら実行しない
         if (isGround) return false;
         //既にアクション中なら実行しない
-        if (isFallAction) return false;
+        if (IsFallAction) return false;
         //させる数を超えていたら実行しない
         if (dangos.Count >= Maxdango) return false;
 
@@ -186,7 +186,7 @@ public class Player1 : MonoBehaviour
     {
         int time = FALLACTION_STAY_AIR_FRAME;
 
-        isFallAction = true;
+        IsFallAction = true;
         while (--time > 0)
         {
             yield return new WaitForFixedUpdate();
@@ -244,7 +244,7 @@ public class Player1 : MonoBehaviour
         {
             if (value)
             {
-                isFallAction = false;
+                IsFallAction = false;
                 _maker.SetActive(false);
             }
 
