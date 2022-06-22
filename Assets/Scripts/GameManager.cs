@@ -16,6 +16,9 @@ public class GameManager : MonoBehaviour
     //static private int PlayerNum = 1;
     static public Player1[] player = new Player1[2];
 
+    QuestManager _questManager;
+    Queue<QuestData> quests;
+
     private void Awake()
     {
         dangoPool = new ObjectPool<DangoManager>(
@@ -27,6 +30,14 @@ public class GameManager : MonoBehaviour
             7 * 30,
             7 * 150
             );
+
+        quests.Enqueue(_questManager.CreateQuest(QuestType.CreateRole));
+        quests.Enqueue(_questManager.CreateQuest(QuestType.CreateRole));
+
+        foreach (var quest in quests)
+        {
+            Logger.Log(quest.Name);
+        }
     }
 
     private DangoManager OnCreateDango()

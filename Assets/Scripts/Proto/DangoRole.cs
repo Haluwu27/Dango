@@ -30,6 +30,12 @@ public class DangoRole
 {
     static List<DangoColor> color = new List<DangoColor>();
 
+    public const string POSROLE_MONOCOLOR = "単色役";
+    public const string POSROLE_LINE_SYMMETRY = "線対称";
+    public const string POSROLE_LOOP = "ループ";
+    public const string POSROLE_DIVIDED_INTO_TWO = "二分割";
+    public const string POSROLE_DIVIDED_INTO_THREE = "三分割";
+
     private static List<Role<DangoColor>> specialRoles = new()
     {
     };
@@ -40,43 +46,43 @@ public class DangoRole
 
     private static List<Role<int>> posRoles = new()
     {
-        new Role<int>(new int[]{0,0,0},"単色役",3),
-        new Role<int>(new int[]{0,0,0,0},"単色役",4),
-        new Role<int>(new int[]{0,0,0,0,0},"単色役",5),
-        new Role<int>(new int[]{0,0,0,0,0,0},"単色役",6),
-        new Role<int>(new int[]{0,0,0,0,0,0,0},"単色役",7),
-        new Role<int>(new int[]{0,1,0},"線対称",3),
-        new Role<int>(new int[]{0,1,1,0},"線対称",4),
-        new Role<int>(new int[]{0,0,1,0,0},"線対称",5),
-        new Role<int>(new int[]{0,1,0,1,0},"線対称",5),
-        new Role<int>(new int[]{0,1,1,1,0},"線対称",5),
-        new Role<int>(new int[]{0,1,2,1,0},"線対称",5),
-        new Role<int>(new int[]{0,0,1,1,0,0},"線対称",6),
-        new Role<int>(new int[]{0,1,0,0,1,0},"線対称",6),
-        new Role<int>(new int[]{0,1,1,1,1,0},"線対称",6),
-        new Role<int>(new int[]{0,1,2,2,1,0},"線対称",6),
-        new Role<int>(new int[]{0,0,0,1,0,0,0},"線対称",7),
-        new Role<int>(new int[]{0,0,1,0,1,0,0},"線対称",7),
-        new Role<int>(new int[]{0,0,1,1,1,0,0},"線対称",7),
-        new Role<int>(new int[]{0,0,1,2,1,0,0},"線対称",7),
-        new Role<int>(new int[]{0,1,0,0,0,1,0},"線対称",7),
-        new Role<int>(new int[]{0,1,0,1,0,1,0},"線対称",7),
-        new Role<int>(new int[]{0,1,0,2,0,1,0},"線対称",7),
-        new Role<int>(new int[]{0,1,1,0,1,1,0},"線対称",7),
-        new Role<int>(new int[]{0,1,1,1,1,1,0},"線対称",7),
-        new Role<int>(new int[]{0,1,1,2,1,1,0},"線対称",7),
-        new Role<int>(new int[]{0,1,2,0,2,1,0},"線対称",7),
-        new Role<int>(new int[]{0,1,2,1,2,1,0},"線対称",7),
-        new Role<int>(new int[]{0,1,2,2,2,1,0},"線対称",7),
-        new Role<int>(new int[]{0,1,2,3,2,1,0},"線対称",7),
-        new Role<int>(new int[]{0,1,0,1},"ループ",4),
-        new Role<int>(new int[]{0,0,1,0,0,1},"ループ",6),
-        new Role<int>(new int[]{0,1,1,0,1,1},"ループ",6),
-        new Role<int>(new int[]{0,1,2,0,1,2},"ループ",6),
-        new Role<int>(new int[]{0,1,0,1,0,1},"ループ",6),
-        new Role<int>(new int[]{0,0,1,1},"二分割",4),
-        new Role<int>(new int[]{0,0,0,1,1,1},"二分割",6),
-        new Role<int>(new int[]{0,0,1,1,2,2},"三分割",6),
+        new Role<int>(new int[]{0,0,0},POSROLE_MONOCOLOR,3),
+        new Role<int>(new int[]{0,0,0,0},POSROLE_MONOCOLOR,4),
+        new Role<int>(new int[]{0,0,0,0,0},POSROLE_MONOCOLOR,5),
+        new Role<int>(new int[]{0,0,0,0,0,0},POSROLE_MONOCOLOR,6),
+        new Role<int>(new int[]{0,0,0,0,0,0,0},POSROLE_MONOCOLOR,7),
+        new Role<int>(new int[]{0,1,0},POSROLE_LINE_SYMMETRY,3),
+        new Role<int>(new int[]{0,1,1,0},POSROLE_LINE_SYMMETRY,4),
+        new Role<int>(new int[]{0,0,1,0,0},POSROLE_LINE_SYMMETRY,5),
+        new Role<int>(new int[]{0,1,0,1,0},POSROLE_LINE_SYMMETRY,5),
+        new Role<int>(new int[]{0,1,1,1,0},POSROLE_LINE_SYMMETRY,5),
+        new Role<int>(new int[]{0,1,2,1,0},POSROLE_LINE_SYMMETRY,5),
+        new Role<int>(new int[]{0,0,1,1,0,0},POSROLE_LINE_SYMMETRY,6),
+        new Role<int>(new int[]{0,1,0,0,1,0},POSROLE_LINE_SYMMETRY,6),
+        new Role<int>(new int[]{0,1,1,1,1,0},POSROLE_LINE_SYMMETRY,6),
+        new Role<int>(new int[]{0,1,2,2,1,0},POSROLE_LINE_SYMMETRY,6),
+        new Role<int>(new int[]{0,0,0,1,0,0,0},POSROLE_LINE_SYMMETRY,7),
+        new Role<int>(new int[]{0,0,1,0,1,0,0},POSROLE_LINE_SYMMETRY,7),
+        new Role<int>(new int[]{0,0,1,1,1,0,0},POSROLE_LINE_SYMMETRY,7),
+        new Role<int>(new int[]{0,0,1,2,1,0,0},POSROLE_LINE_SYMMETRY,7),
+        new Role<int>(new int[]{0,1,0,0,0,1,0},POSROLE_LINE_SYMMETRY,7),
+        new Role<int>(new int[]{0,1,0,1,0,1,0},POSROLE_LINE_SYMMETRY,7),
+        new Role<int>(new int[]{0,1,0,2,0,1,0},POSROLE_LINE_SYMMETRY,7),
+        new Role<int>(new int[]{0,1,1,0,1,1,0},POSROLE_LINE_SYMMETRY,7),
+        new Role<int>(new int[]{0,1,1,1,1,1,0},POSROLE_LINE_SYMMETRY,7),
+        new Role<int>(new int[]{0,1,1,2,1,1,0},POSROLE_LINE_SYMMETRY,7),
+        new Role<int>(new int[]{0,1,2,0,2,1,0},POSROLE_LINE_SYMMETRY,7),
+        new Role<int>(new int[]{0,1,2,1,2,1,0},POSROLE_LINE_SYMMETRY,7),
+        new Role<int>(new int[]{0,1,2,2,2,1,0},POSROLE_LINE_SYMMETRY,7),
+        new Role<int>(new int[]{0,1,2,3,2,1,0},POSROLE_LINE_SYMMETRY,7),
+        new Role<int>(new int[]{0,1,0,1},POSROLE_LOOP,4),
+        new Role<int>(new int[]{0,0,1,0,0,1},POSROLE_LOOP,6),
+        new Role<int>(new int[]{0,1,1,0,1,1},POSROLE_LOOP,6),
+        new Role<int>(new int[]{0,1,2,0,1,2},POSROLE_LOOP,6),
+        new Role<int>(new int[]{0,1,0,1,0,1},POSROLE_LOOP,6),
+        new Role<int>(new int[]{0,0,1,1},POSROLE_DIVIDED_INTO_TWO,4),
+        new Role<int>(new int[]{0,0,0,1,1,1},POSROLE_DIVIDED_INTO_TWO,6),
+        new Role<int>(new int[]{0,0,1,1,2,2},POSROLE_DIVIDED_INTO_THREE,6),
     };
 
     /// <summary>
