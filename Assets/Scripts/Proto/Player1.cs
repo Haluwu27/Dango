@@ -26,6 +26,8 @@ public class Player1 : MonoBehaviour
     [SerializeField]
     private GameObject PlayerCamera;
 
+    private DangoRole dangoRole = new();
+
     //移動処理
     public void OnMove(InputAction.CallbackContext context)
     {
@@ -122,7 +124,7 @@ public class Player1 : MonoBehaviour
                 //SE推奨
 
                 //食べた団子の点数を取得
-                var score = DangoRole.CheckRole(dangos);
+                var score = dangoRole.CheckRole(dangos);
 
                 _event.text = "食べた！" + (int)score + "点！";
 
@@ -387,7 +389,7 @@ public class Player1 : MonoBehaviour
         var madeCount = 0;
         if (_satiety <= 0)
         {
-            var posRoles = DangoRole.GetPosRoles();
+            var posRoles = dangoRole.GetPosRoles();
             foreach (var posRole in posRoles)
             {
                 if (posRole.GetMadeCount() > 0)

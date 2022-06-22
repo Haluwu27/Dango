@@ -28,7 +28,7 @@ public class Role<T>
 
 public class DangoRole
 {
-    static List<DangoColor> color = new List<DangoColor>();
+    List<DangoColor> color = new List<DangoColor>();
 
     public const string POSROLE_MONOCOLOR = "単色役";
     public const string POSROLE_LINE_SYMMETRY = "線対称";
@@ -36,15 +36,15 @@ public class DangoRole
     public const string POSROLE_DIVIDED_INTO_TWO = "二分割";
     public const string POSROLE_DIVIDED_INTO_THREE = "三分割";
 
-    private static List<Role<DangoColor>> specialRoles = new()
+    private List<Role<DangoColor>> specialRoles = new()
     {
     };
 
-    private static List<Role<DangoColor>> colorRoles = new()
+    private List<Role<DangoColor>> colorRoles = new()
     {
     };
 
-    private static List<Role<int>> posRoles = new()
+    private List<Role<int>> posRoles = new()
     {
         new Role<int>(new int[]{0,0,0},POSROLE_MONOCOLOR,3),
         new Role<int>(new int[]{0,0,0,0},POSROLE_MONOCOLOR,4),
@@ -90,7 +90,7 @@ public class DangoRole
     /// </summary>
     /// <param name="dangos">食べた団子</param>
     /// <returns>float:点数</returns>
-    public static float CheckRole(List<DangoColor> dangos)
+    public float CheckRole(List<DangoColor> dangos)
     {
         //カラーの初期化
         color.Clear();
@@ -132,7 +132,7 @@ public class DangoRole
     /// <para>true : あり</para>
     /// <para>false : なし</para>
     /// </returns>
-    private static bool CheckSpecialRole(List<DangoColor> dangos, ref float score)
+    private bool CheckSpecialRole(List<DangoColor> dangos, ref float score)
     {
         foreach (var specialRole in specialRoles)
         {
@@ -166,7 +166,7 @@ public class DangoRole
     /// <para>true : あり</para>
     /// <para>false : なし</para>
     /// </returns>
-    private static bool CheckColorRole(ref float score)
+    private bool CheckColorRole(ref float score)
     {
         //昇順ソート
         color.Sort();
@@ -206,7 +206,7 @@ public class DangoRole
     /// <para>true : あり</para>
     /// <para>false : なし</para>
     /// </returns>
-    private static bool CheckPosRole(List<DangoColor> dangos, ref float score)
+    private bool CheckPosRole(List<DangoColor> dangos, ref float score)
     {
         //色に応じたインデックスを割り振った配列を作成
         var normalizeDangoList = new List<int>();
@@ -245,5 +245,5 @@ public class DangoRole
         return false;
     }
 
-    public static List<Role<int>> GetPosRoles() => posRoles;
+    public List<Role<int>> GetPosRoles() => posRoles;
 }

@@ -6,13 +6,14 @@ using Dango.Quest;
 class QuestManager
 {
     int count = 1;
+    DangoRole dangoRole = new();
 
     public QuestData CreateQuest(QuestType type)
     {
         switch (type)
         {
             case QuestType.CreateRole:
-                return new QuestCreateRole(DangoRole.GetPosRoles()[0], count, "–ğ" + DangoRole.GetPosRoles()[0] + "‚ğ" + count + "ŒÂì‚ê");
+                return new QuestCreateRole(dangoRole.GetPosRoles()[0], count, "–ğ" + dangoRole.GetPosRoles()[0] + "‚ğ" + count + "ŒÂì‚ê");
 
             case QuestType.IncludeColor:
                 return new QuestIncludeColor(DangoColor.Red, 3);
