@@ -9,12 +9,22 @@ public class RoleDirectingScript : MonoBehaviour
     // Start is called before the first frame update
     //private TextMeshProUGUI _role;
     public static RoleDirectingScript instance = new RoleDirectingScript();
+    [SerializeField] GameObject[] imageobj;
+    private Image[] images;
     void Start()
     {
         //if (_role == null)
         //{
         //    _role = GameObject.Find("Canvas").transform.Find("Role").GetComponent<TextMeshProUGUI>();
         //}
+        images = new Image[imageobj.Length];
+        for (int i = 0; i < imageobj.Length; i++)
+        {
+            images[i] = imageobj[i].GetComponent<Image>();
+            imageobj[i].SetActive(false);
+        }
+        instance.imageobj = imageobj;
+        instance.images = images;
     }
 
     // Update is called once per frame
@@ -48,31 +58,46 @@ public class RoleDirectingScript : MonoBehaviour
     //色の演出
     public void ColorDirecting(List<DangoColor> color)
     {
-        for (int i = color.Count-1; i > -1; i--)
+        for (int i = 6; i > -1; i--)
         {
-            switch (color[i])
+            if (color.Count > i) {
+                instance.imageobj[i].SetActive(true);
+                switch (color[i])
+                {
+                    case DangoColor.Red:
+                        Logger.Log("赤");
+                        instance.images[i].color = Color.red;
+                        break;
+                    case DangoColor.Orange:
+                        Logger.Log("橙");
+                        instance.images[i].color = new Color32(255, 155, 0, 255);
+                        break;
+                    case DangoColor.Yellow:
+                        Logger.Log("黄色");
+                        instance.images[i].color = Color.yellow;
+                        break;
+                    case DangoColor.Green:
+                        Logger.Log("緑");
+                        instance.images[i].color = Color.green;
+                        break;
+                    case DangoColor.Blue:
+                        Logger.Log("青");
+                        instance.images[i].color = Color.blue;
+                        break;
+                    case DangoColor.Purple:
+                        Logger.Log("紫");
+                        instance.images[i].color = new Color32(200, 0, 255, 255);
+                        break;
+                    case DangoColor.Cyan:
+                        Logger.Log("水色");
+                        instance.images[i].color = Color.cyan;
+                        break;
+                }
+            }
+            else
             {
-                case DangoColor.Red:
-                    Logger.Log("赤");
-                    break;
-                case DangoColor.Orange:
-                    Logger.Log("橙");
-                    break;
-                case DangoColor.Yellow:
-                    Logger.Log("黄色");
-                    break;
-                case DangoColor.Green:
-                    Logger.Log("緑");
-                    break;
-                case DangoColor.Blue:
-                    Logger.Log("青");
-                    break;
-                case DangoColor.Purple:
-                    Logger.Log("紫");
-                    break;
-                case DangoColor.Cyan:
-                    Logger.Log("水色");
-                    break;
+                    Logger.Log("なし");
+                instance.imageobj[i].SetActive(false);
             }
         }
     }
