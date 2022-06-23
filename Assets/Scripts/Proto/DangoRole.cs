@@ -26,65 +26,84 @@ public class Role<T>
     public void AddMadeCount() => m_madeCount++;
 }
 
-public class DangoRole
+class DangoRole
 {
-    static List<DangoColor> color = new List<DangoColor>();
+    //静的な役名
+    //注）この処理をインスタンス生成以下に書くと実行順的に役名がnullになります。
+    public static readonly string POSROLE_MONOCOLOR = "単色役";
+    public static readonly string POSROLE_LINE_SYMMETRY = "線対称";
+    public static readonly string POSROLE_LOOP = "ループ";
+    public static readonly string POSROLE_DIVIDED_INTO_TWO = "二分割";
+    public static readonly string POSROLE_DIVIDED_INTO_THREE = "三分割";
 
-    private static List<Role<DangoColor>> specialRoles = new()
+    //インスタンス生成
+    //多数生成すると、スタックオーバーフローを起こしたためシングルトンパターンで行います
+    public static readonly DangoRole instance = new();
+
+    private DangoRole()
+    {
+        posRoles = new()
+    {
+        new Role<int>(new int[]{0,0,0},POSROLE_MONOCOLOR,3),
+        new Role<int>(new int[]{0,0,0,0},POSROLE_MONOCOLOR,4),
+        new Role<int>(new int[]{0,0,0,0,0},POSROLE_MONOCOLOR,5),
+        new Role<int>(new int[]{0,0,0,0,0,0},POSROLE_MONOCOLOR,6),
+        new Role<int>(new int[]{0,0,0,0,0,0,0},POSROLE_MONOCOLOR,7),
+        new Role<int>(new int[]{0,1,0},POSROLE_LINE_SYMMETRY,3),
+        new Role<int>(new int[]{0,1,1,0},POSROLE_LINE_SYMMETRY,4),
+        new Role<int>(new int[]{0,0,1,0,0},POSROLE_LINE_SYMMETRY,5),
+        new Role<int>(new int[]{0,1,0,1,0},POSROLE_LINE_SYMMETRY,5),
+        new Role<int>(new int[]{0,1,1,1,0},POSROLE_LINE_SYMMETRY,5),
+        new Role<int>(new int[]{0,1,2,1,0},POSROLE_LINE_SYMMETRY,5),
+        new Role<int>(new int[]{0,0,1,1,0,0},POSROLE_LINE_SYMMETRY,6),
+        new Role<int>(new int[]{0,1,0,0,1,0},POSROLE_LINE_SYMMETRY,6),
+        new Role<int>(new int[]{0,1,1,1,1,0},POSROLE_LINE_SYMMETRY,6),
+        new Role<int>(new int[]{0,1,2,2,1,0},POSROLE_LINE_SYMMETRY,6),
+        new Role<int>(new int[]{0,0,0,1,0,0,0},POSROLE_LINE_SYMMETRY,7),
+        new Role<int>(new int[]{0,0,1,0,1,0,0},POSROLE_LINE_SYMMETRY,7),
+        new Role<int>(new int[]{0,0,1,1,1,0,0},POSROLE_LINE_SYMMETRY,7),
+        new Role<int>(new int[]{0,0,1,2,1,0,0},POSROLE_LINE_SYMMETRY,7),
+        new Role<int>(new int[]{0,1,0,0,0,1,0},POSROLE_LINE_SYMMETRY,7),
+        new Role<int>(new int[]{0,1,0,1,0,1,0},POSROLE_LINE_SYMMETRY,7),
+        new Role<int>(new int[]{0,1,0,2,0,1,0},POSROLE_LINE_SYMMETRY,7),
+        new Role<int>(new int[]{0,1,1,0,1,1,0},POSROLE_LINE_SYMMETRY,7),
+        new Role<int>(new int[]{0,1,1,1,1,1,0},POSROLE_LINE_SYMMETRY,7),
+        new Role<int>(new int[]{0,1,1,2,1,1,0},POSROLE_LINE_SYMMETRY,7),
+        new Role<int>(new int[]{0,1,2,0,2,1,0},POSROLE_LINE_SYMMETRY,7),
+        new Role<int>(new int[]{0,1,2,1,2,1,0},POSROLE_LINE_SYMMETRY,7),
+        new Role<int>(new int[]{0,1,2,2,2,1,0},POSROLE_LINE_SYMMETRY,7),
+        new Role<int>(new int[]{0,1,2,3,2,1,0},POSROLE_LINE_SYMMETRY,7),
+        new Role<int>(new int[]{0,1,0,1},POSROLE_LOOP,4),
+        new Role<int>(new int[]{0,0,1,0,0,1},POSROLE_LOOP,6),
+        new Role<int>(new int[]{0,1,1,0,1,1},POSROLE_LOOP,6),
+        new Role<int>(new int[]{0,1,2,0,1,2},POSROLE_LOOP,6),
+        new Role<int>(new int[]{0,1,0,1,0,1},POSROLE_LOOP,6),
+        new Role<int>(new int[]{0,0,1,1},POSROLE_DIVIDED_INTO_TWO,4),
+        new Role<int>(new int[]{0,0,0,1,1,1},POSROLE_DIVIDED_INTO_TWO,6),
+        new Role<int>(new int[]{0,0,1,1,2,2},POSROLE_DIVIDED_INTO_THREE,6),
+    };
+    }
+
+    List<DangoColor> color = new();
+    QuestManager questManager = new();
+
+
+    private List<Role<DangoColor>> specialRoles = new()
     {
     };
 
-    private static List<Role<DangoColor>> colorRoles = new()
+    private List<Role<DangoColor>> colorRoles = new()
     {
     };
 
-    private static List<Role<int>> posRoles = new()
-    {
-        new Role<int>(new int[]{0,0,0},"単色役",3),
-        new Role<int>(new int[]{0,0,0,0},"単色役",4),
-        new Role<int>(new int[]{0,0,0,0,0},"単色役",5),
-        new Role<int>(new int[]{0,0,0,0,0,0},"単色役",6),
-        new Role<int>(new int[]{0,0,0,0,0,0,0},"単色役",7),
-        new Role<int>(new int[]{0,1,0},"線対称",3),
-        new Role<int>(new int[]{0,1,1,0},"線対称",4),
-        new Role<int>(new int[]{0,0,1,0,0},"線対称",5),
-        new Role<int>(new int[]{0,1,0,1,0},"線対称",5),
-        new Role<int>(new int[]{0,1,1,1,0},"線対称",5),
-        new Role<int>(new int[]{0,1,2,1,0},"線対称",5),
-        new Role<int>(new int[]{0,0,1,1,0,0},"線対称",6),
-        new Role<int>(new int[]{0,1,0,0,1,0},"線対称",6),
-        new Role<int>(new int[]{0,1,1,1,1,0},"線対称",6),
-        new Role<int>(new int[]{0,1,2,2,1,0},"線対称",6),
-        new Role<int>(new int[]{0,0,0,1,0,0,0},"線対称",7),
-        new Role<int>(new int[]{0,0,1,0,1,0,0},"線対称",7),
-        new Role<int>(new int[]{0,0,1,1,1,0,0},"線対称",7),
-        new Role<int>(new int[]{0,0,1,2,1,0,0},"線対称",7),
-        new Role<int>(new int[]{0,1,0,0,0,1,0},"線対称",7),
-        new Role<int>(new int[]{0,1,0,1,0,1,0},"線対称",7),
-        new Role<int>(new int[]{0,1,0,2,0,1,0},"線対称",7),
-        new Role<int>(new int[]{0,1,1,0,1,1,0},"線対称",7),
-        new Role<int>(new int[]{0,1,1,1,1,1,0},"線対称",7),
-        new Role<int>(new int[]{0,1,1,2,1,1,0},"線対称",7),
-        new Role<int>(new int[]{0,1,2,0,2,1,0},"線対称",7),
-        new Role<int>(new int[]{0,1,2,1,2,1,0},"線対称",7),
-        new Role<int>(new int[]{0,1,2,2,2,1,0},"線対称",7),
-        new Role<int>(new int[]{0,1,2,3,2,1,0},"線対称",7),
-        new Role<int>(new int[]{0,1,0,1},"ループ",4),
-        new Role<int>(new int[]{0,0,1,0,0,1},"ループ",6),
-        new Role<int>(new int[]{0,1,1,0,1,1},"ループ",6),
-        new Role<int>(new int[]{0,1,2,0,1,2},"ループ",6),
-        new Role<int>(new int[]{0,1,0,1,0,1},"ループ",6),
-        new Role<int>(new int[]{0,0,1,1},"二分割",4),
-        new Role<int>(new int[]{0,0,0,1,1,1},"二分割",6),
-        new Role<int>(new int[]{0,0,1,1,2,2},"三分割",6),
-    };
+    private List<Role<int>> posRoles;
 
     /// <summary>
     /// 食べた団子に役があるか判定して点数を返す関数
     /// </summary>
     /// <param name="dangos">食べた団子</param>
     /// <returns>float:点数</returns>
-    public static float CheckRole(List<DangoColor> dangos)
+    public float CheckRole(List<DangoColor> dangos)
     {
         //カラーの初期化
         color.Clear();
@@ -113,7 +132,16 @@ public class DangoRole
         }
         RoleDirectingScript.instance.ColorDirecting(directingcolor);
         //その他役の判定
-        CheckPosRole(dangos, ref score);
+        if (CheckPosRole(dangos, ref score))
+        {
+            foreach (var quest in GameManager.Quests)
+            {
+                //キャスト可能かを確認（不可能な場合エラーが起こるためこの処理は必須）
+                if (quest is Dango.Quest.QuestIncludeColor)
+                    questManager.CheckQuestSucceed((Dango.Quest.QuestIncludeColor)quest, color);
+            }
+        }
+
         //CheckColorRole(ref score);//処理内部にソートを含むため、位置役より下に配置。
 
         //全体的な点数計算（この処理は役の有無に関わらず実行される）
@@ -130,7 +158,7 @@ public class DangoRole
     /// <para>true : あり</para>
     /// <para>false : なし</para>
     /// </returns>
-    private static bool CheckSpecialRole(List<DangoColor> dangos, ref float score)
+    private bool CheckSpecialRole(List<DangoColor> dangos, ref float score)
     {
         foreach (var specialRole in specialRoles)
         {
@@ -164,7 +192,7 @@ public class DangoRole
     /// <para>true : あり</para>
     /// <para>false : なし</para>
     /// </returns>
-    private static bool CheckColorRole(ref float score)
+    private bool CheckColorRole(ref float score)
     {
         //昇順ソート
         color.Sort();
@@ -204,7 +232,7 @@ public class DangoRole
     /// <para>true : あり</para>
     /// <para>false : なし</para>
     /// </returns>
-    private static bool CheckPosRole(List<DangoColor> dangos, ref float score)
+    private bool CheckPosRole(List<DangoColor> dangos, ref float score)
     {
         //色に応じたインデックスを割り振った配列を作成
         var normalizeDangoList = new List<int>();
@@ -233,6 +261,14 @@ public class DangoRole
                 //さらにスコアを加算し抜ける
                 score += posRole.GetScore();
 
+                //クエストの確認も行う
+                foreach (var quest in GameManager.Quests)
+                {
+                    //キャスト可能かを確認（不可能な場合エラーが起こるためこの処理は必須）
+                    if (quest is Dango.Quest.QuestCreateRole)
+                        questManager.CheckQuestSucceed((Dango.Quest.QuestCreateRole)quest, posRole);
+                }
+
                 //[Debug]役名の表示
                 Logger.Log(posRole.GetRolename());
                 return true;
@@ -243,5 +279,5 @@ public class DangoRole
         return false;
     }
 
-    public static List<Role<int>> GetPosRoles() => posRoles;
+    public List<Role<int>> GetPosRoles() => posRoles;
 }
