@@ -88,8 +88,11 @@ public class DangoRole
     {
         //カラーの初期化
         color.Clear();
-
         GameManager.NowRoleList = "";
+
+        //演出用に全部の色が入ったリストを作成
+        List<DangoColor> directingcolor=new List<DangoColor>();
+        directingcolor.Clear();
 
         //返り値の得点
         float score = 0;
@@ -106,8 +109,9 @@ public class DangoRole
                 //所持カラーのリストに追加
                 color.Add(c);
             }
+            directingcolor.Add(c);
         }
-
+        RoleDirectingScript.instance.ColorDirecting(directingcolor);
         //その他役の判定
         CheckPosRole(dangos, ref score);
         //CheckColorRole(ref score);//処理内部にソートを含むため、位置役より下に配置。
