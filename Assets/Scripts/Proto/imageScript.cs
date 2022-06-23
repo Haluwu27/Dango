@@ -13,9 +13,9 @@ public class imageScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        StartCoroutine(setfalse(3));
+        StartCoroutine(Setfalse(3));
     }
-    IEnumerator setfalse(float a)
+    IEnumerator Setfalse(float a)
     {
         yield return new WaitForSeconds(a);
         gameObject.SetActive(false);

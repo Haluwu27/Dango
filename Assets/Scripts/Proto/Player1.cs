@@ -25,6 +25,7 @@ public class Player1 : MonoBehaviour
 
     [SerializeField]
     private GameObject PlayerCamera;
+    private RoleDirectingScript directing;
 
     private DangoRole dangoRole = DangoRole.instance;
 
@@ -125,6 +126,11 @@ public class Player1 : MonoBehaviour
 
                 //食べた団子の点数を取得
                 var score = dangoRole.CheckRole(dangos);
+                //演出関数
+                _directing.Dirrecting(dangos);
+
+                //演出関数の呼び出し
+                _directing.Dirrecting(dangos);
 
                 _event.text = "食べた！" + (int)score + "点！";
 
@@ -212,12 +218,11 @@ public class Player1 : MonoBehaviour
     [SerializeField] private DangoUIScript DangoUISC;
     [SerializeField] private GameObject maker = default!;
     GameObject _maker = null;
-
+    RoleDirectingScript _directing;
 
     //仮UI用加筆分
     private TextMeshProUGUI _time;
     private TextMeshProUGUI _event;
-    private TextMeshProUGUI _role;
 
     /// <summary>
     /// 満腹度、制限時間の代わり（単位:[sec]）
@@ -280,10 +285,7 @@ public class Player1 : MonoBehaviour
             _event = GameObject.Find("Canvas").transform.Find("Event").GetComponent<TextMeshProUGUI>();
         }
 
-        if (_role == null)
-        {
-            _role = GameObject.Find("Canvas").transform.Find("Role").GetComponent<TextMeshProUGUI>();
-        }
+        _directing = GameObject.Find("Canvas").transform.Find("DirectingObj").GetComponent<RoleDirectingScript>();
 
         _maker = Instantiate(maker);
         _maker.SetActive(false);
@@ -303,7 +305,6 @@ public class Player1 : MonoBehaviour
 
         //仮でここに
         _time.text = "残り時間：" + (int)_satiety + "秒";
-        _role.text = GameManager.NowRoleList;
 
     }
 
