@@ -79,8 +79,7 @@ public class RoleDirectingScript : MonoBehaviour
     {
         for (int i = 6; i > -1; i--)
         {
-            if (color.Count > i)
-            {
+            if (color.Count > i) {
                 imageobj[i].SetActive(true);
                 switch (color[i])
                 {
@@ -116,7 +115,6 @@ public class RoleDirectingScript : MonoBehaviour
             }
             else
             {
-                Logger.Log("‚È‚µ");
                 imageobj[i].SetActive(false);
             }
         }

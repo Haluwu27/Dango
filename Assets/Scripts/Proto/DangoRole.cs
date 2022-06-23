@@ -109,7 +109,6 @@ class DangoRole
         color.Clear();
         GameManager.NowRoleList = "";
 
-
         //返り値の得点
         float score = 0;
 
@@ -164,8 +163,9 @@ class DangoRole
             if (dangos.SequenceEqual(specialRoleList))
             {
 
-                //表示
+                // 表示
                 GameManager.NowRoleList = "「" + specialRole.GetRolename() + "」！" + specialRole.GetScore() + "点！";
+
 
                 //作った回数を増やし
                 specialRole.AddMadeCount();
@@ -204,7 +204,7 @@ class DangoRole
             if (color.SequenceEqual(colorRoleList))
             {
 
-                //表示
+                // 表示
                 GameManager.NowRoleList += "「" + colorRole.GetRolename() + "」！" + colorRole.GetScore() + "点！";
 
                 //作った回数を増やし
@@ -259,7 +259,7 @@ class DangoRole
                 //クエストの確認も行う
                 foreach (var quest in GameManager.Quests)
                 {
-                    //キャスト可能かを確認（不可能な場合エラーが起こるためこの処理は必須）
+                    // キャスト可能かを確認（不可能な場合エラーが起こるためこの処理は必須）
                     if (quest is Dango.Quest.QuestCreateRole)
                         questManager.CheckQuestSucceed((Dango.Quest.QuestCreateRole)quest, posRole);
                 }
