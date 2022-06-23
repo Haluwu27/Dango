@@ -7,36 +7,55 @@ using UnityEngine.UI;
 public class RoleDirectingScript : MonoBehaviour
 {
     // Start is called before the first frame update
-    //private TextMeshProUGUI _role;
-    public static RoleDirectingScript instance = new RoleDirectingScript();
+    private TextMeshProUGUI _role;
+    //public static RoleDirectingScript instance = new RoleDirectingScript();
     [SerializeField] GameObject[] imageobj;
     private Image[] images;
     void Start()
     {
-        //if (_role == null)
-        //{
-        //    _role = GameObject.Find("Canvas").transform.Find("Role").GetComponent<TextMeshProUGUI>();
-        //}
+        if (_role == null)
+        {
+            _role = GameObject.Find("Canvas").transform.Find("Role").GetComponent<TextMeshProUGUI>();
+        }
         images = new Image[imageobj.Length];
         for (int i = 0; i < imageobj.Length; i++)
         {
             images[i] = imageobj[i].GetComponent<Image>();
             imageobj[i].SetActive(false);
         }
-        instance.imageobj = imageobj;
-        instance.images = images;
     }
 
     // Update is called once per frame
     void Update()
     {
-        //_role.text = GameManager.NowRoleList;
+        _role.text = GameManager.NowRoleList;
     }
 
-    public void PosDirecting(Role<int> dangos)
+    public void Dirrecting(List<DangoColor> dangos)
+    {
+        float i = 0;
+        //色は多分確定
+        ColorDirecting(dangos);
+
+        //役が存在するかどうかだけ知りたいからスコアには適当な関数入れてます
+        if (DangoRole.CheckPosRole(dangos, ref i))
+        {
+            PosRoleDirecting();
+        }
+        if (DangoRole.CheckSpecialRole(dangos, ref i))
+        {
+            SpecialRoleDirecting();
+        }
+        if (DangoRole.CheckColorRole(ref i))
+        {
+            ColorRoleDirecting();
+        }
+    }
+
+    private void PosRoleDirecting()
     {
         //位置役の演出
-        switch (dangos.GetRolename())
+        switch (GameManager.NowRoleList)
         {
             case "単色役":
                 Logger.Log("単色役");
@@ -56,57 +75,69 @@ public class RoleDirectingScript : MonoBehaviour
     }
 
     //色の演出
-    public void ColorDirecting(List<DangoColor> color)
+    private void ColorDirecting(List<DangoColor> color)
     {
         for (int i = 6; i > -1; i--)
         {
-            if (color.Count > i) {
-                instance.imageobj[i].SetActive(true);
+            if (color.Count > i)
+            {
+                imageobj[i].SetActive(true);
                 switch (color[i])
                 {
                     case DangoColor.Red:
                         Logger.Log("赤");
-                        instance.images[i].color = Color.red;
+                        images[i].color = Color.red;
                         break;
                     case DangoColor.Orange:
                         Logger.Log("橙");
-                        instance.images[i].color = new Color32(255, 155, 0, 255);
+                        images[i].color = new Color32(255, 155, 0, 255);
                         break;
                     case DangoColor.Yellow:
                         Logger.Log("黄色");
-                        instance.images[i].color = Color.yellow;
+                        images[i].color = Color.yellow;
                         break;
                     case DangoColor.Green:
                         Logger.Log("緑");
-                        instance.images[i].color = Color.green;
+                        images[i].color = Color.green;
                         break;
                     case DangoColor.Blue:
                         Logger.Log("青");
-                        instance.images[i].color = Color.blue;
+                        images[i].color = Color.blue;
                         break;
                     case DangoColor.Purple:
                         Logger.Log("紫");
-                        instance.images[i].color = new Color32(200, 0, 255, 255);
+                        images[i].color = new Color32(200, 0, 255, 255);
                         break;
                     case DangoColor.Cyan:
                         Logger.Log("水色");
-                        instance.images[i].color = Color.cyan;
+                        images[i].color = Color.cyan;
                         break;
                 }
             }
             else
             {
-                    Logger.Log("なし");
-                instance.imageobj[i].SetActive(false);
+                Logger.Log("なし");
+                imageobj[i].SetActive(false);
             }
+        }
+    }
+    private void ColorRoleDirecting()
+    {
+        switch (GameManager.NowRoleList)
+        {
+            case "temp":
+                break;
+            case "test2":
+                break;
+            case "test3":
+                break;
         }
     }
 
     //スペシャル役の演出
-    private void SpecialDirecting(Role<DangoColor> dangos)
+    private void SpecialRoleDirecting()
     {
-        //スペシャル役がどの基準で判断するかわからないから仮でRolenameで取ってます
-        switch (dangos.GetRolename())
+        switch (GameManager.NowRoleList)
         {
             case "temp":
                 break;

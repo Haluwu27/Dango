@@ -90,10 +90,6 @@ public class DangoRole
         color.Clear();
         GameManager.NowRoleList = "";
 
-        //演出用に全部の色が入ったリストを作成
-        List<DangoColor> directingcolor=new List<DangoColor>();
-        directingcolor.Clear();
-
         //返り値の得点
         float score = 0;
 
@@ -109,9 +105,7 @@ public class DangoRole
                 //所持カラーのリストに追加
                 color.Add(c);
             }
-            directingcolor.Add(c);
         }
-        RoleDirectingScript.instance.ColorDirecting(directingcolor);
         //その他役の判定
         CheckPosRole(dangos, ref score);
         //CheckColorRole(ref score);//処理内部にソートを含むため、位置役より下に配置。
@@ -130,7 +124,7 @@ public class DangoRole
     /// <para>true : あり</para>
     /// <para>false : なし</para>
     /// </returns>
-    private static bool CheckSpecialRole(List<DangoColor> dangos, ref float score)
+    public static bool CheckSpecialRole(List<DangoColor> dangos, ref float score)
     {
         foreach (var specialRole in specialRoles)
         {
@@ -164,7 +158,7 @@ public class DangoRole
     /// <para>true : あり</para>
     /// <para>false : なし</para>
     /// </returns>
-    private static bool CheckColorRole(ref float score)
+    public static bool CheckColorRole(ref float score)
     {
         //昇順ソート
         color.Sort();
@@ -204,7 +198,7 @@ public class DangoRole
     /// <para>true : あり</para>
     /// <para>false : なし</para>
     /// </returns>
-    private static bool CheckPosRole(List<DangoColor> dangos, ref float score)
+    public static bool CheckPosRole(List<DangoColor> dangos, ref float score)
     {
         //色に応じたインデックスを割り振った配列を作成
         var normalizeDangoList = new List<int>();
