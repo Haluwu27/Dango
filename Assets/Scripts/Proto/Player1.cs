@@ -25,6 +25,7 @@ public class Player1 : MonoBehaviour
 
     [SerializeField]
     private GameObject PlayerCamera;
+    private RoleDirectingScript directing;
 
     //移動処理
     public void OnMove(InputAction.CallbackContext context)
@@ -283,6 +284,8 @@ public class Player1 : MonoBehaviour
         }
 
         _directing = GameObject.Find("Canvas").transform.Find("DirectingObj").GetComponent<RoleDirectingScript>();
+
+        directing = GameObject.Find("Canvas").transform.Find("DirectingObj").GetComponent<RoleDirectingScript>();
 
         _maker = Instantiate(maker);
         _maker.SetActive(false);

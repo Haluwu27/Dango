@@ -40,7 +40,7 @@ public class RoleDirectingScript : MonoBehaviour
         //役が存在するかどうかだけ知りたいからスコアには適当な関数入れてます
         if (DangoRole.CheckPosRole(dangos, ref i))
         {
-            PosRoleDirecting();
+            PosRoleDirecting(dangos ,ref i);
         }
         if (DangoRole.CheckSpecialRole(dangos, ref i))
         {
@@ -52,7 +52,14 @@ public class RoleDirectingScript : MonoBehaviour
         }
     }
 
-    private void PosRoleDirecting()
+    private void PosRoleDirecting(List<DangoColor> dangos,ref float i) { 
+        if(DangoRole.CheckPosRole(dangos,ref i))
+        {
+            PosDirecting();
+        }
+    }
+
+    private void PosDirecting()
     {
         //位置役の演出
         switch (GameManager.NowRoleList)
@@ -79,8 +86,7 @@ public class RoleDirectingScript : MonoBehaviour
     {
         for (int i = 6; i > -1; i--)
         {
-            if (color.Count > i)
-            {
+            if (color.Count > i) {
                 imageobj[i].SetActive(true);
                 switch (color[i])
                 {
@@ -116,7 +122,7 @@ public class RoleDirectingScript : MonoBehaviour
             }
             else
             {
-                Logger.Log("なし");
+                    Logger.Log("なし");
                 imageobj[i].SetActive(false);
             }
         }
