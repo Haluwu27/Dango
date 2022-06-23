@@ -26,25 +26,23 @@ public class Role<T>
     public void AddMadeCount() => m_madeCount++;
 }
 
-public class DangoRole
+class DangoRole
 {
-    List<DangoColor> color = new List<DangoColor>();
+    //静的な役名
+    //注）この処理をインスタンス生成以下に書くと実行順的に役名がnullになります。
+    public static readonly string POSROLE_MONOCOLOR = "単色役";
+    public static readonly string POSROLE_LINE_SYMMETRY = "線対称";
+    public static readonly string POSROLE_LOOP = "ループ";
+    public static readonly string POSROLE_DIVIDED_INTO_TWO = "二分割";
+    public static readonly string POSROLE_DIVIDED_INTO_THREE = "三分割";
 
-    public const string POSROLE_MONOCOLOR = "単色役";
-    public const string POSROLE_LINE_SYMMETRY = "線対称";
-    public const string POSROLE_LOOP = "ループ";
-    public const string POSROLE_DIVIDED_INTO_TWO = "二分割";
-    public const string POSROLE_DIVIDED_INTO_THREE = "三分割";
+    //インスタンス生成
+    //多数生成すると、スタックオーバーフローを起こしたためシングルトンパターンで行います
+    public static readonly DangoRole instance = new();
 
-    private List<Role<DangoColor>> specialRoles = new()
+    private DangoRole()
     {
-    };
-
-    private List<Role<DangoColor>> colorRoles = new()
-    {
-    };
-
-    private List<Role<int>> posRoles = new()
+        posRoles = new()
     {
         new Role<int>(new int[]{0,0,0},POSROLE_MONOCOLOR,3),
         new Role<int>(new int[]{0,0,0,0},POSROLE_MONOCOLOR,4),
@@ -84,6 +82,21 @@ public class DangoRole
         new Role<int>(new int[]{0,0,0,1,1,1},POSROLE_DIVIDED_INTO_TWO,6),
         new Role<int>(new int[]{0,0,1,1,2,2},POSROLE_DIVIDED_INTO_THREE,6),
     };
+    }
+
+    List<DangoColor> color = new();
+    QuestManager questManager = new();
+
+
+    private List<Role<DangoColor>> specialRoles = new()
+    {
+    };
+
+    private List<Role<DangoColor>> colorRoles = new()
+    {
+    };
+
+    private List<Role<int>> posRoles;
 
     /// <summary>
     /// 食べた団子に役があるか判定して点数を返す関数
@@ -115,7 +128,16 @@ public class DangoRole
         }
 
         //その他役の判定
-        CheckPosRole(dangos, ref score);
+        if (CheckPosRole(dangos, ref score))
+        {
+            foreach (var quest in GameManager.Quests)
+            {
+                //キャスト可能かを確認（不可能な場合エラーが起こるためこの処理は必須）
+                if (quest is Dango.Quest.QuestIncludeColor)
+                    questManager.CheckQuestSucceed((Dango.Quest.QuestIncludeColor)quest, color);
+            }
+        }
+
         //CheckColorRole(ref score);//処理内部にソートを含むため、位置役より下に配置。
 
         //全体的な点数計算（この処理は役の有無に関わらず実行される）
@@ -234,6 +256,14 @@ public class DangoRole
 
                 //さらにスコアを加算し抜ける
                 score += posRole.GetScore();
+
+                //クエストの確認も行う
+                foreach (var quest in GameManager.Quests)
+                {
+                    //キャスト可能かを確認（不可能な場合エラーが起こるためこの処理は必須）
+                    if (quest is Dango.Quest.QuestCreateRole)
+                        questManager.CheckQuestSucceed((Dango.Quest.QuestCreateRole)quest, posRole);
+                }
 
                 //[Debug]役名の表示
                 Logger.Log(posRole.GetRolename());

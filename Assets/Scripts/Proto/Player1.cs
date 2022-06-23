@@ -26,7 +26,7 @@ public class Player1 : MonoBehaviour
     [SerializeField]
     private GameObject PlayerCamera;
 
-    private DangoRole dangoRole = new();
+    private DangoRole dangoRole = DangoRole.instance;
 
     //移動処理
     public void OnMove(InputAction.CallbackContext context)
@@ -256,7 +256,7 @@ public class Player1 : MonoBehaviour
 
     private bool isGround = false;
 
-    public Vector3 moveVec { get; private set; }
+    public Vector3 MoveVec { get; private set; }
 
     private void OnEnable()
     {
@@ -341,10 +341,10 @@ public class Player1 : MonoBehaviour
         var Cameraforward = Vector3.Scale(PlayerCamera.transform.forward, new Vector3(1, 0, 1)).normalized;
 
         //カメラの向きを元にベクトルの作成
-        moveVec = moveAxis.y * Cameraforward * _moveSpeed + moveAxis.x * PlayerCamera.transform.right * _moveSpeed;
+        MoveVec = moveAxis.y * Cameraforward * _moveSpeed + moveAxis.x * PlayerCamera.transform.right * _moveSpeed;
 
         if (_rigidbody.velocity.magnitude < 8f)
-            _rigidbody.AddForce(moveVec * _moveSpeed);
+            _rigidbody.AddForce(MoveVec * _moveSpeed);
     }
 
     /// <summary>

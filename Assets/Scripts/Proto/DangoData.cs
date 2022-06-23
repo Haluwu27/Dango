@@ -24,7 +24,7 @@ public class DangoData : MonoBehaviour
 {
     [SerializeField] GameObject dango;
 
-    public DangoColor dangoColor { get; private set; }
+    public DangoColor DangoColor { get; private set; }
 
     private void Awake()
     {
@@ -60,7 +60,6 @@ public class DangoData : MonoBehaviour
     private void Start()
     {
         for(int i = 0; i < 100; i++)
-        GameManager.dangoPool.Get();
-
+        GameManager.DangoPool.Get();
     }
 }

@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Pool;
 
-public class GameManager : MonoBehaviour
+internal class GameManager : MonoBehaviour
 {
-    [SerializeField] private GameObject _dango;
-    public static ObjectPool<DangoManager> dangoPool { get; private set; }
+    [SerializeField] private GameObject _dango = default!;
+    public static ObjectPool<DangoManager> DangoPool { get; private set; }
     private static int _poolCount = 0;
 
     public static string NowRoleList = "";
@@ -16,12 +16,13 @@ public class GameManager : MonoBehaviour
     //static private int PlayerNum = 1;
     static public Player1[] player = new Player1[2];
 
-    QuestManager _questManager;
-    Queue<QuestData> quests;
+    QuestManager _questManager = new();
+    static List<QuestData> quests = new();
+    public static List<QuestData> Quests => quests;
 
     private void Awake()
     {
-        dangoPool = new ObjectPool<DangoManager>(
+        DangoPool = new ObjectPool<DangoManager>(
             OnCreateDango,
             OnTakeFromPool,
             OnReturnedToPool,
@@ -31,13 +32,18 @@ public class GameManager : MonoBehaviour
             7 * 150
             );
 
-        quests.Enqueue(_questManager.CreateQuest(QuestType.CreateRole));
-        quests.Enqueue(_questManager.CreateQuest(QuestType.CreateRole));
+    }
 
+    private void Start()
+    {
+
+        quests.Add(_questManager.CreateQuestCreateRole(DangoRole.POSROLE_DIVIDED_INTO_TWO, 1, "役「二分割」を1個作れ"));
+        quests.Add(_questManager.CreateQuestIncludeColor(DangoColor.Red, 3, "赤色を含めて役を3個作れ！"));
         foreach (var quest in quests)
         {
-            Logger.Log(quest.Name);
+            Logger.Log(quest.QuestName);
         }
+
     }
 
     private DangoManager OnCreateDango()
@@ -47,7 +53,7 @@ public class GameManager : MonoBehaviour
 
         //取得した団子からDangoManagerを取得
         var dango = gameObject.GetComponent<DangoManager>()
-            ?? gameObject.AddComponent<DangoManager>();
+                    ?? gameObject.AddComponent<DangoManager>();
 
         //取得した段階で団子の色を設定
         dango.SetDangoType((DangoColor)_poolCount + 1);
@@ -78,8 +84,7 @@ public class GameManager : MonoBehaviour
     private void OnReturnedToPool(DangoManager dango)
     {
         dango.gameObject.SetActive(false);
-        dango.gameObject.transform.position = Vector3.zero;
-        dango.gameObject.transform.rotation = Quaternion.identity;
+        dango.gameObject.transform.SetPositionAndRotation(Vector3.zero, Quaternion.identity);
         dango.gameObject.transform.localScale = Vector3.one;
         dango.SetDangoType(DangoColor.None);
     }
