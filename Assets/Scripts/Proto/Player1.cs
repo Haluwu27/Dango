@@ -27,6 +27,8 @@ public class Player1 : MonoBehaviour
     private GameObject PlayerCamera;
     private RoleDirectingScript directing;
 
+    private DangoRole dangoRole = DangoRole.instance;
+
     //移動処理
     public void OnMove(InputAction.CallbackContext context)
     {
@@ -123,7 +125,7 @@ public class Player1 : MonoBehaviour
                 //SE推奨
 
                 //食べた団子の点数を取得
-                var score = DangoRole.CheckRole(dangos);
+                var score = dangoRole.CheckRole(dangos);
 
                 //演出関数の呼び出し
                 _directing.Dirrecting(dangos);
@@ -259,7 +261,7 @@ public class Player1 : MonoBehaviour
 
     private bool isGround = false;
 
-    public Vector3 moveVec { get; private set; }
+    public Vector3 MoveVec { get; private set; }
 
     private void OnEnable()
     {
@@ -342,10 +344,10 @@ public class Player1 : MonoBehaviour
         var Cameraforward = Vector3.Scale(PlayerCamera.transform.forward, new Vector3(1, 0, 1)).normalized;
 
         //カメラの向きを元にベクトルの作成
-        moveVec = moveAxis.y * Cameraforward * _moveSpeed + moveAxis.x * PlayerCamera.transform.right * _moveSpeed;
+        MoveVec = moveAxis.y * Cameraforward * _moveSpeed + moveAxis.x * PlayerCamera.transform.right * _moveSpeed;
 
         if (_rigidbody.velocity.magnitude < 8f)
-            _rigidbody.AddForce(moveVec * _moveSpeed);
+            _rigidbody.AddForce(MoveVec * _moveSpeed);
     }
 
     /// <summary>
@@ -390,7 +392,7 @@ public class Player1 : MonoBehaviour
         var madeCount = 0;
         if (_satiety <= 0)
         {
-            var posRoles = DangoRole.GetPosRoles();
+            var posRoles = dangoRole.GetPosRoles();
             foreach (var posRole in posRoles)
             {
                 if (posRole.GetMadeCount() > 0)

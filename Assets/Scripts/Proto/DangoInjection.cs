@@ -21,7 +21,7 @@ public class DangoInjection : MonoBehaviour
 
             for (int j = 0; j < 20; j++)
             {
-                GameManager.dangoPool.Get();
+                GameManager.DangoPool.Get();
             }
         }
     }
