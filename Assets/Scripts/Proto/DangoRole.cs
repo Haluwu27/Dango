@@ -9,9 +9,9 @@ public class Role<T>
     private float m_score;
     private int m_madeCount = 0;
 
-    /// <param name="t">–ğ‚Ì”z—ñ</param>
-    /// <param name="n">–ğ–¼</param>
-    /// <param name="s">ƒXƒRƒA</param>
+    /// <param name="t">å½¹ã®é…åˆ—</param>
+    /// <param name="n">å½¹å</param>
+    /// <param name="s">ã‚¹ã‚³ã‚¢</param>
     public Role(T[] t, string n, float s)
     {
         m_role = t;
@@ -26,184 +26,212 @@ public class Role<T>
     public void AddMadeCount() => m_madeCount++;
 }
 
-public class DangoRole
+class DangoRole
 {
-    static List<DangoColor> color = new List<DangoColor>();
+    //é™çš„ãªå½¹å
+    //æ³¨ï¼‰ã“ã®å‡¦ç†ã‚’ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ç”Ÿæˆä»¥ä¸‹ã«æ›¸ãã¨å®Ÿè¡Œé †çš„ã«å½¹åãŒnullã«ãªã‚Šã¾ã™ã€‚
+    public static readonly string POSROLE_MONOCOLOR = "å˜è‰²å½¹";
+    public static readonly string POSROLE_LINE_SYMMETRY = "ç·šå¯¾ç§°";
+    public static readonly string POSROLE_LOOP = "ãƒ«ãƒ¼ãƒ—";
+    public static readonly string POSROLE_DIVIDED_INTO_TWO = "äºŒåˆ†å‰²";
+    public static readonly string POSROLE_DIVIDED_INTO_THREE = "ä¸‰åˆ†å‰²";
 
-    private static List<Role<DangoColor>> specialRoles = new()
+    //ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ç”Ÿæˆ
+    //å¤šæ•°ç”Ÿæˆã™ã‚‹ã¨ã€ã‚¹ã‚¿ãƒƒã‚¯ã‚ªãƒ¼ãƒãƒ¼ãƒ•ãƒ­ãƒ¼ã‚’èµ·ã“ã—ãŸãŸã‚ã‚·ãƒ³ã‚°ãƒ«ãƒˆãƒ³ãƒ‘ã‚¿ãƒ¼ãƒ³ã§è¡Œã„ã¾ã™
+    public static readonly DangoRole instance = new();
+
+    private DangoRole()
+    {
+        posRoles = new()
+    {
+        new Role<int>(new int[]{0,0,0},POSROLE_MONOCOLOR,3),
+        new Role<int>(new int[]{0,0,0,0},POSROLE_MONOCOLOR,4),
+        new Role<int>(new int[]{0,0,0,0,0},POSROLE_MONOCOLOR,5),
+        new Role<int>(new int[]{0,0,0,0,0,0},POSROLE_MONOCOLOR,6),
+        new Role<int>(new int[]{0,0,0,0,0,0,0},POSROLE_MONOCOLOR,7),
+        new Role<int>(new int[]{0,1,0},POSROLE_LINE_SYMMETRY,3),
+        new Role<int>(new int[]{0,1,1,0},POSROLE_LINE_SYMMETRY,4),
+        new Role<int>(new int[]{0,0,1,0,0},POSROLE_LINE_SYMMETRY,5),
+        new Role<int>(new int[]{0,1,0,1,0},POSROLE_LINE_SYMMETRY,5),
+        new Role<int>(new int[]{0,1,1,1,0},POSROLE_LINE_SYMMETRY,5),
+        new Role<int>(new int[]{0,1,2,1,0},POSROLE_LINE_SYMMETRY,5),
+        new Role<int>(new int[]{0,0,1,1,0,0},POSROLE_LINE_SYMMETRY,6),
+        new Role<int>(new int[]{0,1,0,0,1,0},POSROLE_LINE_SYMMETRY,6),
+        new Role<int>(new int[]{0,1,1,1,1,0},POSROLE_LINE_SYMMETRY,6),
+        new Role<int>(new int[]{0,1,2,2,1,0},POSROLE_LINE_SYMMETRY,6),
+        new Role<int>(new int[]{0,0,0,1,0,0,0},POSROLE_LINE_SYMMETRY,7),
+        new Role<int>(new int[]{0,0,1,0,1,0,0},POSROLE_LINE_SYMMETRY,7),
+        new Role<int>(new int[]{0,0,1,1,1,0,0},POSROLE_LINE_SYMMETRY,7),
+        new Role<int>(new int[]{0,0,1,2,1,0,0},POSROLE_LINE_SYMMETRY,7),
+        new Role<int>(new int[]{0,1,0,0,0,1,0},POSROLE_LINE_SYMMETRY,7),
+        new Role<int>(new int[]{0,1,0,1,0,1,0},POSROLE_LINE_SYMMETRY,7),
+        new Role<int>(new int[]{0,1,0,2,0,1,0},POSROLE_LINE_SYMMETRY,7),
+        new Role<int>(new int[]{0,1,1,0,1,1,0},POSROLE_LINE_SYMMETRY,7),
+        new Role<int>(new int[]{0,1,1,1,1,1,0},POSROLE_LINE_SYMMETRY,7),
+        new Role<int>(new int[]{0,1,1,2,1,1,0},POSROLE_LINE_SYMMETRY,7),
+        new Role<int>(new int[]{0,1,2,0,2,1,0},POSROLE_LINE_SYMMETRY,7),
+        new Role<int>(new int[]{0,1,2,1,2,1,0},POSROLE_LINE_SYMMETRY,7),
+        new Role<int>(new int[]{0,1,2,2,2,1,0},POSROLE_LINE_SYMMETRY,7),
+        new Role<int>(new int[]{0,1,2,3,2,1,0},POSROLE_LINE_SYMMETRY,7),
+        new Role<int>(new int[]{0,1,0,1},POSROLE_LOOP,4),
+        new Role<int>(new int[]{0,0,1,0,0,1},POSROLE_LOOP,6),
+        new Role<int>(new int[]{0,1,1,0,1,1},POSROLE_LOOP,6),
+        new Role<int>(new int[]{0,1,2,0,1,2},POSROLE_LOOP,6),
+        new Role<int>(new int[]{0,1,0,1,0,1},POSROLE_LOOP,6),
+        new Role<int>(new int[]{0,0,1,1},POSROLE_DIVIDED_INTO_TWO,4),
+        new Role<int>(new int[]{0,0,0,1,1,1},POSROLE_DIVIDED_INTO_TWO,6),
+        new Role<int>(new int[]{0,0,1,1,2,2},POSROLE_DIVIDED_INTO_THREE,6),
+    };
+    }
+
+    List<DangoColor> color = new();
+    QuestManager questManager = new();
+
+
+    private List<Role<DangoColor>> specialRoles = new()
     {
     };
 
-    private static List<Role<DangoColor>> colorRoles = new()
+    private List<Role<DangoColor>> colorRoles = new()
     {
     };
 
-    private static List<Role<int>> posRoles = new()
-    {
-        new Role<int>(new int[]{0,0,0},"’PF–ğ",3),
-        new Role<int>(new int[]{0,0,0,0},"’PF–ğ",4),
-        new Role<int>(new int[]{0,0,0,0,0},"’PF–ğ",5),
-        new Role<int>(new int[]{0,0,0,0,0,0},"’PF–ğ",6),
-        new Role<int>(new int[]{0,0,0,0,0,0,0},"’PF–ğ",7),
-        new Role<int>(new int[]{0,1,0},"ü‘ÎÌ",3),
-        new Role<int>(new int[]{0,1,1,0},"ü‘ÎÌ",4),
-        new Role<int>(new int[]{0,0,1,0,0},"ü‘ÎÌ",5),
-        new Role<int>(new int[]{0,1,0,1,0},"ü‘ÎÌ",5),
-        new Role<int>(new int[]{0,1,1,1,0},"ü‘ÎÌ",5),
-        new Role<int>(new int[]{0,1,2,1,0},"ü‘ÎÌ",5),
-        new Role<int>(new int[]{0,0,1,1,0,0},"ü‘ÎÌ",6),
-        new Role<int>(new int[]{0,1,0,0,1,0},"ü‘ÎÌ",6),
-        new Role<int>(new int[]{0,1,1,1,1,0},"ü‘ÎÌ",6),
-        new Role<int>(new int[]{0,1,2,2,1,0},"ü‘ÎÌ",6),
-        new Role<int>(new int[]{0,0,0,1,0,0,0},"ü‘ÎÌ",7),
-        new Role<int>(new int[]{0,0,1,0,1,0,0},"ü‘ÎÌ",7),
-        new Role<int>(new int[]{0,0,1,1,1,0,0},"ü‘ÎÌ",7),
-        new Role<int>(new int[]{0,0,1,2,1,0,0},"ü‘ÎÌ",7),
-        new Role<int>(new int[]{0,1,0,0,0,1,0},"ü‘ÎÌ",7),
-        new Role<int>(new int[]{0,1,0,1,0,1,0},"ü‘ÎÌ",7),
-        new Role<int>(new int[]{0,1,0,2,0,1,0},"ü‘ÎÌ",7),
-        new Role<int>(new int[]{0,1,1,0,1,1,0},"ü‘ÎÌ",7),
-        new Role<int>(new int[]{0,1,1,1,1,1,0},"ü‘ÎÌ",7),
-        new Role<int>(new int[]{0,1,1,2,1,1,0},"ü‘ÎÌ",7),
-        new Role<int>(new int[]{0,1,2,0,2,1,0},"ü‘ÎÌ",7),
-        new Role<int>(new int[]{0,1,2,1,2,1,0},"ü‘ÎÌ",7),
-        new Role<int>(new int[]{0,1,2,2,2,1,0},"ü‘ÎÌ",7),
-        new Role<int>(new int[]{0,1,2,3,2,1,0},"ü‘ÎÌ",7),
-        new Role<int>(new int[]{0,1,0,1},"ƒ‹[ƒv",4),
-        new Role<int>(new int[]{0,0,1,0,0,1},"ƒ‹[ƒv",6),
-        new Role<int>(new int[]{0,1,1,0,1,1},"ƒ‹[ƒv",6),
-        new Role<int>(new int[]{0,1,2,0,1,2},"ƒ‹[ƒv",6),
-        new Role<int>(new int[]{0,1,0,1,0,1},"ƒ‹[ƒv",6),
-        new Role<int>(new int[]{0,0,1,1},"“ñ•ªŠ„",4),
-        new Role<int>(new int[]{0,0,0,1,1,1},"“ñ•ªŠ„",6),
-        new Role<int>(new int[]{0,0,1,1,2,2},"O•ªŠ„",6),
-    };
+    private List<Role<int>> posRoles;
 
     /// <summary>
-    /// H‚×‚½’cq‚É–ğ‚ª‚ ‚é‚©”»’è‚µ‚Ä“_”‚ğ•Ô‚·ŠÖ”
+    /// é£Ÿã¹ãŸå›£å­ã«å½¹ãŒã‚ã‚‹ã‹åˆ¤å®šã—ã¦ç‚¹æ•°ã‚’è¿”ã™é–¢æ•°
     /// </summary>
-    /// <param name="dangos">H‚×‚½’cq</param>
-    /// <returns>float:“_”</returns>
-    public static float CheckRole(List<DangoColor> dangos)
+    /// <param name="dangos">é£Ÿã¹ãŸå›£å­</param>
+    /// <returns>float:ç‚¹æ•°</returns>
+    public float CheckRole(List<DangoColor> dangos)
     {
-        //ƒJƒ‰[‚Ì‰Šú‰»
+        //ã‚«ãƒ©ãƒ¼ã®åˆæœŸåŒ–
         color.Clear();
         GameManager.NowRoleList = "";
 
-        //•Ô‚è’l‚Ì“¾“_
+        //è¿”ã‚Šå€¤ã®å¾—ç‚¹
         float score = 0;
 
-        //“Áê–ğ‚Ì”»’èAtrue‚È‚ç‚±‚±‚Å”»’èI—¹B
+        //ç‰¹æ®Šå½¹ã®åˆ¤å®šã€trueãªã‚‰ã“ã“ã§åˆ¤å®šçµ‚äº†ã€‚
         //if (CheckSpecialRole(dangos, ref score)) return score;
 
-        //“Áê–ğ‚ª‚È‚©‚Á‚½‚çEEE
+        //ç‰¹æ®Šå½¹ãŒãªã‹ã£ãŸã‚‰ãƒ»ãƒ»ãƒ»
         foreach (DangoColor c in dangos)
         {
-            //d•¡‚ğ–h‚¢‚ÅEEE
+            //é‡è¤‡ã‚’é˜²ã„ã§ãƒ»ãƒ»ãƒ»
             if (!color.Contains(c))
             {
-                //ŠƒJƒ‰[‚ÌƒŠƒXƒg‚É’Ç‰Á
+                //æ‰€æŒã‚«ãƒ©ãƒ¼ã®ãƒªã‚¹ãƒˆã«è¿½åŠ 
                 color.Add(c);
             }
         }
-        //‚»‚Ì‘¼–ğ‚Ì”»’è
-        CheckPosRole(dangos, ref score);
-        //CheckColorRole(ref score);//ˆ—“à•”‚Éƒ\[ƒg‚ğŠÜ‚Ş‚½‚ßAˆÊ’u–ğ‚æ‚è‰º‚É”z’uB
+        //ãã®ä»–å½¹ã®åˆ¤å®š
+        if (CheckPosRole(dangos, ref score))
+        {
+            foreach (var quest in GameManager.Quests)
+            {
+                //ã‚­ãƒ£ã‚¹ãƒˆå¯èƒ½ã‹ã‚’ç¢ºèªï¼ˆä¸å¯èƒ½ãªå ´åˆã‚¨ãƒ©ãƒ¼ãŒèµ·ã“ã‚‹ãŸã‚ã“ã®å‡¦ç†ã¯å¿…é ˆï¼‰
+                if (quest is Dango.Quest.QuestIncludeColor)
+                    questManager.CheckQuestSucceed((Dango.Quest.QuestIncludeColor)quest, color);
+            }
+        }
 
-        //‘S‘Ì“I‚È“_”ŒvZi‚±‚Ìˆ—‚Í–ğ‚Ì—L–³‚ÉŠÖ‚í‚ç‚¸Às‚³‚ê‚éj
+        //CheckColorRole(ref score);//å‡¦ç†å†…éƒ¨ã«ã‚½ãƒ¼ãƒˆã‚’å«ã‚€ãŸã‚ã€ä½ç½®å½¹ã‚ˆã‚Šä¸‹ã«é…ç½®ã€‚
+
+        //å…¨ä½“çš„ãªç‚¹æ•°è¨ˆç®—ï¼ˆã“ã®å‡¦ç†ã¯å½¹ã®æœ‰ç„¡ã«é–¢ã‚ã‚‰ãšå®Ÿè¡Œã•ã‚Œã‚‹ï¼‰
         score += (8 - color.Count) * dangos.Count();
 
         return score;
     }
 
     /// <summary>
-    /// “Áê–ğ‚Ì”»’è
+    /// ç‰¹æ®Šå½¹ã®åˆ¤å®š
     /// </summary>
-    /// <param name="value">“_”‚Ìo—Í</param>
+    /// <param name="value">ç‚¹æ•°ã®å‡ºåŠ›</param>
     /// <returns>
-    /// <para>true : ‚ ‚è</para>
-    /// <para>false : ‚È‚µ</para>
+    /// <para>true : ã‚ã‚Š</para>
+    /// <para>false : ãªã—</para>
     /// </returns>
     public static bool CheckSpecialRole(List<DangoColor> dangos, ref float score)
     {
         foreach (var specialRole in specialRoles)
         {
-            //”z—ñ‚ğƒŠƒXƒg‚É•ÏŠ·
+            //é…åˆ—ã‚’ãƒªã‚¹ãƒˆã«å¤‰æ›
             List<DangoColor> specialRoleList = specialRole.GetData().ToList();
 
-            //F‚ÆˆÊ’u‚ªƒ[ƒ‹‚Æˆê’v‚µ‚Ä‚¢‚½‚ç
+            //è‰²ã¨ä½ç½®ãŒãƒ­ãƒ¼ãƒ«ã¨ä¸€è‡´ã—ã¦ã„ãŸã‚‰
             if (dangos.SequenceEqual(specialRoleList))
             {
 
-                //•\¦
-                GameManager.NowRoleList = "u" + specialRole.GetRolename() + "vI" + specialRole.GetScore() + "“_I";
+                //è¡¨ç¤º
+                GameManager.NowRoleList = "ã€Œ" + specialRole.GetRolename() + "ã€ï¼" + specialRole.GetScore() + "ç‚¹ï¼";
 
-                //ì‚Á‚½‰ñ”‚ğ‘‚â‚µ
+                //ä½œã£ãŸå›æ•°ã‚’å¢—ã‚„ã—
                 specialRole.AddMadeCount();
 
-                //ƒXƒRƒA‚ğ‰ÁZ‚µ”²‚¯‚é
+                //ã‚¹ã‚³ã‚¢ã‚’åŠ ç®—ã—æŠœã‘ã‚‹
                 score += specialRole.GetScore();
                 return true;
             }
         }
 
-        //–ğ‚ª‰½‚à‚È‚©‚Á‚½‚çfalse‚ğ•Ô‚µA”²‚¯‚é
+        //å½¹ãŒä½•ã‚‚ãªã‹ã£ãŸã‚‰falseã‚’è¿”ã—ã€æŠœã‘ã‚‹
         return false;
     }
 
     /// <summary>
-    /// F–ğ‚Ì”»’è
+    /// è‰²å½¹ã®åˆ¤å®š
     /// </summary>
     /// <returns>
-    /// <para>true : ‚ ‚è</para>
-    /// <para>false : ‚È‚µ</para>
+    /// <para>true : ã‚ã‚Š</para>
+    /// <para>false : ãªã—</para>
     /// </returns>
     public static bool CheckColorRole(ref float score)
     {
-        //¸‡ƒ\[ƒg
+        //æ˜‡é †ã‚½ãƒ¼ãƒˆ
         color.Sort();
 
         foreach (var colorRole in colorRoles)
         {
-            //”z—ñ‚ğƒŠƒXƒg‚É•ÏŠ·
+            //é…åˆ—ã‚’ãƒªã‚¹ãƒˆã«å¤‰æ›
             List<DangoColor> colorRoleList = colorRole.GetData().ToList();
 
-            //”O‚Ì‚½‚ß‚±‚¿‚ç‚àƒ\[ƒg
+            //å¿µã®ãŸã‚ã“ã¡ã‚‰ã‚‚ã‚½ãƒ¼ãƒˆ
             colorRoleList.Sort();
 
-            //F‚ªƒ[ƒ‹‚Æˆê’v‚µ‚Ä‚¢‚½‚ç
+            //è‰²ãŒãƒ­ãƒ¼ãƒ«ã¨ä¸€è‡´ã—ã¦ã„ãŸã‚‰
             if (color.SequenceEqual(colorRoleList))
             {
 
-                //•\¦
-                GameManager.NowRoleList += "u" + colorRole.GetRolename() + "vI" + colorRole.GetScore() + "“_I";
+                //è¡¨ç¤º
+                GameManager.NowRoleList += "ã€Œ" + colorRole.GetRolename() + "ã€ï¼" + colorRole.GetScore() + "ç‚¹ï¼";
 
-                //ì‚Á‚½‰ñ”‚ğ‘‚â‚µ
+                //ä½œã£ãŸå›æ•°ã‚’å¢—ã‚„ã—
                 colorRole.AddMadeCount();
 
-                //ƒXƒRƒA‚ğ‰ÁZ‚µ”²‚¯‚é
+                //ã‚¹ã‚³ã‚¢ã‚’åŠ ç®—ã—æŠœã‘ã‚‹
                 score += colorRole.GetScore();
                 return true;
             }
         }
 
-        //–ğ‚ª‰½‚à‚È‚©‚Á‚½‚çfalse‚ğ•Ô‚µA”²‚¯‚é
+        //å½¹ãŒä½•ã‚‚ãªã‹ã£ãŸã‚‰falseã‚’è¿”ã—ã€æŠœã‘ã‚‹
         return false;
     }
 
     /// <summary>
-    /// ˆÊ’u–ğ‚Ì”»’è
+    /// ä½ç½®å½¹ã®åˆ¤å®š
     /// </summary>
     /// <returns>
-    /// <para>true : ‚ ‚è</para>
-    /// <para>false : ‚È‚µ</para>
+    /// <para>true : ã‚ã‚Š</para>
+    /// <para>false : ãªã—</para>
     /// </returns>
     public static bool CheckPosRole(List<DangoColor> dangos, ref float score)
     {
-        //F‚É‰‚¶‚½ƒCƒ“ƒfƒbƒNƒX‚ğŠ„‚èU‚Á‚½”z—ñ‚ğì¬
+        //è‰²ã«å¿œã˜ãŸã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ã‚’å‰²ã‚ŠæŒ¯ã£ãŸé…åˆ—ã‚’ä½œæˆ
         var normalizeDangoList = new List<int>();
 
-        //’cq‚ÌFƒf[ƒ^‚ğ³‹K‰»‚·‚é
+        //å›£å­ã®è‰²ãƒ‡ãƒ¼ã‚¿ã‚’æ­£è¦åŒ–ã™ã‚‹
         foreach (DangoColor d in dangos)
         {
             normalizeDangoList.Add(color.IndexOf(d));
@@ -211,31 +239,39 @@ public class DangoRole
 
         foreach (var posRole in posRoles)
         {
-            //”z—ñ‚ğƒŠƒXƒg‚É•ÏŠ·
+            //é…åˆ—ã‚’ãƒªã‚¹ãƒˆã«å¤‰æ›
             List<int> posRoleList = posRole.GetData().ToList();
 
-            //”z’u‚ªƒ[ƒ‹‚Æˆê’v‚µ‚Ä‚¢‚½‚ç
+            //é…ç½®ãŒãƒ­ãƒ¼ãƒ«ã¨ä¸€è‡´ã—ã¦ã„ãŸã‚‰
             if (normalizeDangoList.SequenceEqual(posRoleList))
             {
 
-                //•\¦
-                GameManager.NowRoleList += "u" + posRole.GetRolename() + "vI" + posRole.GetScore() + "“_I";
+                //è¡¨ç¤º
+                GameManager.NowRoleList += "ã€Œ" + posRole.GetRolename() + "ã€ï¼" + posRole.GetScore() + "ç‚¹ï¼";
 
-                //ì‚Á‚½‰ñ”‚ğ‘‚â‚µEEE
+                //ä½œã£ãŸå›æ•°ã‚’å¢—ã‚„ã—ãƒ»ãƒ»ãƒ»
                 posRole.AddMadeCount();
 
-                //‚³‚ç‚ÉƒXƒRƒA‚ğ‰ÁZ‚µ”²‚¯‚é
+                //ã•ã‚‰ã«ã‚¹ã‚³ã‚¢ã‚’åŠ ç®—ã—æŠœã‘ã‚‹
                 score += posRole.GetScore();
 
-                //[Debug]–ğ–¼‚Ì•\¦
+                //ã‚¯ã‚¨ã‚¹ãƒˆã®ç¢ºèªã‚‚è¡Œã†
+                foreach (var quest in GameManager.Quests)
+                {
+                    //ã‚­ãƒ£ã‚¹ãƒˆå¯èƒ½ã‹ã‚’ç¢ºèªï¼ˆä¸å¯èƒ½ãªå ´åˆã‚¨ãƒ©ãƒ¼ãŒèµ·ã“ã‚‹ãŸã‚ã“ã®å‡¦ç†ã¯å¿…é ˆï¼‰
+                    if (quest is Dango.Quest.QuestCreateRole)
+                        questManager.CheckQuestSucceed((Dango.Quest.QuestCreateRole)quest, posRole);
+                }
+
+                //[Debug]å½¹åã®è¡¨ç¤º
                 Logger.Log(posRole.GetRolename());
                 return true;
             }
         }
 
-        //–ğ‚ª‰½‚à‚È‚©‚Á‚½‚çfalse‚ğ•Ô‚µA”²‚¯‚é
+        //å½¹ãŒä½•ã‚‚ãªã‹ã£ãŸã‚‰falseã‚’è¿”ã—ã€æŠœã‘ã‚‹
         return false;
     }
 
-    public static List<Role<int>> GetPosRoles() => posRoles;
+    public List<Role<int>> GetPosRoles() => posRoles;
 }

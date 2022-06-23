@@ -9,7 +9,7 @@ public class DashBoardScript : MonoBehaviour
     {
         if (col.CompareTag("Player"))
         {
-            col.GetComponent<Rigidbody>().AddForce(col.GetComponent<Player1>().moveVec * speed);
+            col.GetComponent<Rigidbody>().AddForce(col.GetComponent<Player1>().MoveVec * speed);
         }
     }
 }
