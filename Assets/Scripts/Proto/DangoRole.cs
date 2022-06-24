@@ -131,8 +131,8 @@ class DangoRole
             foreach (var quest in GameManager.Quests)
             {
                 //キャスト可能かを確認（不可能な場合エラーが起こるためこの処理は必須）
-                if (quest is Dango.Quest.QuestIncludeColor)
-                    questManager.CheckQuestSucceed((Dango.Quest.QuestIncludeColor)quest, color);
+                if (quest is Dango.Quest.QuestIncludeColor questInc)
+                    questManager.CheckQuestSucceed(questInc, color);
             }
         }
 
@@ -260,8 +260,8 @@ class DangoRole
                 foreach (var quest in GameManager.Quests)
                 {
                     // キャスト可能かを確認（不可能な場合エラーが起こるためこの処理は必須）
-                    if (quest is Dango.Quest.QuestCreateRole)
-                        questManager.CheckQuestSucceed((Dango.Quest.QuestCreateRole)quest, posRole);
+                    if (quest is Dango.Quest.QuestCreateRole questCr)
+                        questManager.CheckQuestSucceed(questCr, posRole);
                 }
 
                 //[Debug]役名の表示

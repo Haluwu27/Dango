@@ -8,9 +8,9 @@ public class DangoUIScript : MonoBehaviour
     // Start is called before the first frame update
     [SerializeField] Image[] DangoImagObjs;
 
-    public void DangoUISet(List<DangoColor> dangos)
+    public void DangoUISet(List<DangoColor> dangos,int max)
     {
-        for (int i = 0; i < dangos.Count; i++)
+        for (int i = 0; i < max; i++)
         {
             //団子の種類をみてマテリアルに色を付ける、画像が出来たらimagを切り替える。
             //団子が刺さっていないものがあれば非アクティブに

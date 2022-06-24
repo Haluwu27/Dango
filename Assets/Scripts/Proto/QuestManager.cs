@@ -5,11 +5,6 @@ using Dango.Quest;
 
 class QuestManager
 {
-    /// <summary>
-    /// クエストを作って返却する関数
-    /// </summary>
-    /// <param name="type">クエストの種類</param>
-    /// <returns>クエスト</returns>
     public QuestCreateRole CreateQuestCreateRole(string role_name, int count, string quest_name)
     {
         return new(role_name, count, quest_name);
