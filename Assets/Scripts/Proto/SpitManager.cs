@@ -24,13 +24,15 @@ public class SpitManager : MonoBehaviour
     {
         //Žh‚¹‚éó‘Ô‚Å‚Í‚È‚¢‚È‚çŽÀs‚µ‚È‚¢
         if (!isSticking) return;
-        if (player.GetDangos().Count > player.GetMaxDango()) return;
+        if (player.GetDangos().Count >= player.GetMaxDango()) return;
 
         if (other.gameObject.TryGetComponent(out DangoManager dango))
         {
             CheckIsFallAction();
             player.AddDangos(dango.GetDangoColor());
-            DangoUISC.DangoUISet(player.GetDangos(), player.GetMaxDango());
+            DangoUISC.DangoUISet(player.GetDangos());
+            
+            isSticking = false;
 
             other.gameObject.SetActive(false);
         }

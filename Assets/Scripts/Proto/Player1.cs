@@ -70,7 +70,7 @@ public class Player1 : MonoBehaviour
 
             //消す処理。
             dangos.RemoveAt(dangos.Count - 1);
-            DangoUISC.DangoUISet(dangos,Maxdango);
+            DangoUISC.DangoUISet(dangos);
         }
     }
 
@@ -144,7 +144,7 @@ public class Player1 : MonoBehaviour
                 dangos.Clear();
 
                 //UI更新
-                DangoUISC.DangoUISet(dangos, Maxdango);
+                DangoUISC.DangoUISet(dangos);
                 break;
         }
     }
