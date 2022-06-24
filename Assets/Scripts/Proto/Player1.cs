@@ -70,7 +70,7 @@ public class Player1 : MonoBehaviour
 
             //消す処理。
             dangos.RemoveAt(dangos.Count - 1);
-            DangoUISC.DangoUISet(dangos);
+            DangoUISC.DangoUISet(dangos,Maxdango);
         }
     }
 
@@ -79,7 +79,7 @@ public class Player1 : MonoBehaviour
     {
         if (context.phase == InputActionPhase.Performed)
         {
-            FallAction();
+            if (FallAction()) return;
 
             //突き刺せる数を超えていた場合、実行しない
             if (dangos.Count >= Maxdango)
@@ -144,7 +144,7 @@ public class Player1 : MonoBehaviour
                 dangos.Clear();
 
                 //UI更新
-                DangoUISC.DangoUISet(dangos);
+                DangoUISC.DangoUISet(dangos, Maxdango);
                 break;
         }
     }
@@ -182,8 +182,14 @@ public class Player1 : MonoBehaviour
         if (isGround) return false;
         //既にアクション中なら実行しない
         if (IsFallAction) return false;
-        //させる数を超えていたら実行しない
-        if (dangos.Count >= Maxdango) return false;
+
+        //マックスまで刺してなかったら急降下突き刺しモーションに移行
+        if (dangos.Count < Maxdango)
+        {
+            spitManager.isSticking = true;
+            spitManager.gameObject.transform.localPosition = new Vector3(0, -2f, 0);
+            spitManager.gameObject.transform.localRotation = Quaternion.Euler(0, 0, 0);
+        }
 
         StartCoroutine(StayAir());
 
