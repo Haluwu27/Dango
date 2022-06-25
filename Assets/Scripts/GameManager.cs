@@ -22,6 +22,10 @@ internal class GameManager : MonoBehaviour
 
     private void Awake()
     {
+        //マウスカーソルのやつ。
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
+
         DangoPool = new ObjectPool<DangoManager>(
             OnCreateDango,
             OnTakeFromPool,

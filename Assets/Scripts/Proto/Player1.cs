@@ -15,7 +15,16 @@ public class Player1 : MonoBehaviour
 
     const float SCORE_TIME_RATE = 0.2f;
 
-    public bool IsFallAction { get; private set; }
+    private bool _isFallAction;
+    public bool IsFallAction
+    {
+        get => _isFallAction;
+        private set
+        {
+            if (!value) ResetSpit();
+            _isFallAction = value;
+        }
+    }
 
     private Vector2 moveAxis;
     private Vector2 roteAxis;
@@ -77,6 +86,9 @@ public class Player1 : MonoBehaviour
     //突き刺しアニメーション
     public void OnAttack(InputAction.CallbackContext context)
     {
+        //落下アクション中受け付けない。
+        if (IsFallAction) return;
+
         if (context.phase == InputActionPhase.Performed)
         {
             if (FallAction()) return;
@@ -99,11 +111,15 @@ public class Player1 : MonoBehaviour
         }
         if (context.phase == InputActionPhase.Canceled)
         {
-            //ここに突き刺し終わりのアニメーションを推奨。
-            spitManager.isSticking = false;
-            spitManager.gameObject.transform.rotation = Quaternion.identity;
-            spitManager.gameObject.transform.localPosition = new Vector3(0, 0.4f, 1.1f);
+            ResetSpit();
         }
+    }
+
+    private void ResetSpit()
+    {
+        spitManager.isSticking = false;
+        spitManager.gameObject.transform.localRotation = Quaternion.identity;
+        spitManager.gameObject.transform.localPosition = new Vector3(0, 0.4f, 1.1f);
     }
 
     //食べる
@@ -126,7 +142,7 @@ public class Player1 : MonoBehaviour
 
                 //食べた団子の点数を取得
                 var score = dangoRole.CheckRole(dangos);
-                
+
                 //演出関数の呼び出し
                 _directing.Dirrecting(dangos);
 
@@ -196,9 +212,9 @@ public class Player1 : MonoBehaviour
 
     private IEnumerator StayAir()
     {
+        IsFallAction = true;
         int time = FALLACTION_STAY_AIR_FRAME;
 
-        IsFallAction = true;
         while (--time > 0)
         {
             yield return new WaitForFixedUpdate();
@@ -218,8 +234,8 @@ public class Player1 : MonoBehaviour
     //[SerializeField] private float _attackSpeed = 1f;
     //[SerializeField] private float _hitPoint = 100f;
     //[SerializeField] private float _strength = 1f;
-    [SerializeField] private SpitManager spitManager;
-    [SerializeField] private DangoUIScript DangoUISC;
+    [SerializeField] private SpitManager spitManager = default!;
+    [SerializeField] private DangoUIScript DangoUISC = default!;
     [SerializeField] private GameObject maker = default!;
     GameObject _maker = null;
     RoleDirectingScript _directing;
