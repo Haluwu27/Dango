@@ -57,18 +57,39 @@ namespace Dango.Quest
 
     class QuestPlayAction : QuestData
     {
-        public QuestPlayAction()
+        //–¢Š®¬
+
+        int _specifyCount;
+        int _madeCount;
+
+        public QuestPlayAction(int count, string quest_name)
         {
             questType = QuestType.PlayAction;
+            questName = quest_name;
+            _specifyCount = count;
         }
+
+        public int SpecifyCount => _specifyCount;
+        public int MadeCount => _madeCount;
+        public void AddMadeCount() => _madeCount++;
     }
 
     class QuestGetScore : QuestData
     {
-        public QuestGetScore()
+        int _score;
+        int _clearScore;
+
+        public QuestGetScore(int clearScore, string quest_name)
         {
             questType = QuestType.GetScore;
+            questName = quest_name;
+            _score = 0;
+            _clearScore = clearScore;
         }
+
+        public int Score => _score;
+        public int ClearScore => _clearScore;
+        public void AddScore(int score) => _score += score;
     }
 
     class QuestEatSpecialDango : QuestData

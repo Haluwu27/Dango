@@ -126,9 +126,7 @@ public class Player1 : MonoBehaviour
 
                 //食べた団子の点数を取得
                 var score = dangoRole.CheckRole(dangos);
-                //演出関数
-                _directing.Dirrecting(dangos);
-
+                
                 //演出関数の呼び出し
                 _directing.Dirrecting(dangos);
 

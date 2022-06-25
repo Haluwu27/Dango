@@ -32,17 +32,9 @@ internal class GameManager : MonoBehaviour
             7 * 150
             );
 
-    }
-
-    private void Start()
-    {
-
+        //最初のクエストを仮置き。
         quests.Add(_questManager.CreateQuestCreateRole(DangoRole.POSROLE_DIVIDED_INTO_TWO, 1, "役「二分割」を1個作れ"));
         quests.Add(_questManager.CreateQuestIncludeColor(DangoColor.Red, 3, "赤色を含めて役を3個作れ！"));
-        foreach (var quest in quests)
-        {
-            Logger.Log(quest.QuestName);
-        }
 
     }
 

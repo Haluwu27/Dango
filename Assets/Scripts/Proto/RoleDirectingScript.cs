@@ -33,23 +33,24 @@ public class RoleDirectingScript : MonoBehaviour
 
     public void Dirrecting(List<DangoColor> dangos)
     {
-        float i = 0;
+        //float i = 0;
         //色は多分確定
         ColorDirecting(dangos);
 
+        //2022/6/26追記：この処理は想定されていない使い方のためコメントアウトしています。
         //役が存在するかどうかだけ知りたいからスコアには適当な関数入れてます
-        if (DangoRole.instance.CheckPosRole(dangos, ref i))
-        {
-            PosRoleDirecting();
-        }
-        if (DangoRole.instance.CheckSpecialRole(dangos, ref i))
-        {
-            SpecialRoleDirecting();
-        }
-        if (DangoRole.instance.CheckColorRole(ref i))
-        {
-            ColorRoleDirecting();
-        }
+        //if (DangoRole.instance.CheckPosRole(dangos, ref i))
+        //{
+        //    PosRoleDirecting();
+        //}
+        //if (DangoRole.instance.CheckSpecialRole(dangos, ref i))
+        //{
+        //    SpecialRoleDirecting();
+        //}
+        //if (DangoRole.instance.CheckColorRole(ref i))
+        //{
+        //    ColorRoleDirecting();
+        //}
     }
 
     private void PosRoleDirecting()
@@ -84,31 +85,31 @@ public class RoleDirectingScript : MonoBehaviour
                 switch (color[i])
                 {
                     case DangoColor.Red:
-                        Logger.Log("赤");
+                        //Logger.Log("赤");
                         images[i].color = Color.red;
                         break;
                     case DangoColor.Orange:
-                        Logger.Log("橙");
+                        //Logger.Log("橙");
                         images[i].color = new Color32(255, 155, 0, 255);
                         break;
                     case DangoColor.Yellow:
-                        Logger.Log("黄色");
+                        //Logger.Log("黄色");
                         images[i].color = Color.yellow;
                         break;
                     case DangoColor.Green:
-                        Logger.Log("緑");
+                        //Logger.Log("緑");
                         images[i].color = Color.green;
                         break;
                     case DangoColor.Blue:
-                        Logger.Log("青");
+                        //Logger.Log("青");
                         images[i].color = Color.blue;
                         break;
                     case DangoColor.Purple:
-                        Logger.Log("紫");
+                        //Logger.Log("紫");
                         images[i].color = new Color32(200, 0, 255, 255);
                         break;
                     case DangoColor.Cyan:
-                        Logger.Log("水色");
+                        //Logger.Log("水色");
                         images[i].color = Color.cyan;
                         break;
                 }
