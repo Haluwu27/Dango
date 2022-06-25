@@ -132,7 +132,9 @@ class DangoRole
             {
                 //キャスト可能かを確認（不可能な場合エラーが起こるためこの処理は必須）
                 if (quest is Dango.Quest.QuestIncludeColor questInc)
-                    questManager.CheckQuestSucceed(questInc, color);
+                {
+                    if (questManager.CheckQuestSucceed(questInc, color)) break;
+                }
             }
         }
 
@@ -261,7 +263,9 @@ class DangoRole
                 {
                     // キャスト可能かを確認（不可能な場合エラーが起こるためこの処理は必須）
                     if (quest is Dango.Quest.QuestCreateRole questCr)
-                        questManager.CheckQuestSucceed(questCr, posRole);
+                    {
+                        if (questManager.CheckQuestSucceed(questCr, posRole)) break;
+                    }
                 }
 
                 //[Debug]役名の表示

@@ -6,11 +6,11 @@ abstract class QuestData
 {
     protected QuestType questType;
     protected string questName;
-    protected float score;
+    protected float returnScore;
     protected bool isKeyQuest;
 
     public QuestType QuestType => questType;
     public string QuestName => questName;
-    public float Score => score;
+    public float ReturnScore => returnScore;
     public bool IsKeyQuest => isKeyQuest;
 }

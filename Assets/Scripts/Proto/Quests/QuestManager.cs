@@ -13,13 +13,19 @@ class QuestManager
     {
         return new(color, count, quest_name);
     }
+    public QuestPlayAction CreateQuestPlayAction(int count, string quest_name)
+    {
+        return new(count, quest_name);
+    }
+    public QuestGetScore CreateQuestGetScore(int score, string quest_name)
+    {
+        return new(score, quest_name);
+    }
+    public QuestEatSpecialDango CreateQuestEatSpecialDango()
+    {
+        return new();
+    }
 
-    /// <summary>
-    /// クエストをクリアしたか判定する関数
-    /// </summary>
-    /// <param name="quest">判定したいクエスト</param>
-    /// <param name="role">作った役</param>
-    /// <returns></returns>
     public bool CheckQuestSucceed(QuestCreateRole quest, Role<int> role)
     {
         //不正なアクセスであれば弾く
@@ -30,8 +36,7 @@ class QuestManager
         if (role.GetRolename() != quest.RoleName) return false;
 
         //条件すべてクリアした場合、クエスト成功として返却
-        Logger.Log(quest.QuestName + " クエストクリア！");
-        QuestSucceed();
+        QuestSucceed(quest.QuestName);
         return true;
     }
 
@@ -53,8 +58,7 @@ class QuestManager
             if (quest.SpecifyCount != quest.MadeCount) break;//作っていないならここでカット
 
             //作っていたら成功として返却
-            Logger.Log(quest.QuestName + " クエストクリア！");
-            QuestSucceed();
+            QuestSucceed(quest.QuestName);
             return true;
         }
 
@@ -62,9 +66,38 @@ class QuestManager
         return false;
     }
 
-    private void QuestSucceed()
+    public bool CheckQuestSucceed(QuestPlayAction quest)
     {
-        //ここにクエストクリア時に行う処理
+        //不正なアクセスであれば弾く
+        if (quest.QuestType != QuestType.PlayAction) return false;
+
+
+        //クエスト失敗として返却
+        return false;
+    }
+
+    public bool CheckQuestSucceed(QuestGetScore quest, int score)
+    {
+        //不正なアクセスであれば弾く
+        if (quest.QuestType != QuestType.GetScore) return false;
+
+        //スコアを追加して
+        quest.AddScore(score);
+
+        //合計スコアがミッション指定値を超えているか判定
+        if (quest.Score < quest.ClearScore) return false;
+
+        //超えていたら成功として返却
+        QuestSucceed(quest.QuestName);
+        return true;
+    }
+
+    private void QuestSucceed(string quest_name)
+    {
+        QuestUI.OnGUIQuestSucceed(quest_name);
+
+        //なんらかのクエスト成功時の処理
+        Logger.Log(quest_name + " クエストクリア！");
     }
 
 }
