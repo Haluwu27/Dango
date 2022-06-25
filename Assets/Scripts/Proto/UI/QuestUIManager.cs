@@ -43,8 +43,8 @@ public class QuestUIManager : MonoBehaviour
         {
             //クエストを更新し、設定を戻す。
             GameManager.Quests.Clear();
-            GameManager.Quests.Add(_questManager.CreateQuestCreateRole(DangoRole.POSROLE_LOOP, 1, "役「ループ」を2個作れ"));
-            GameManager.Quests.Add(_questManager.CreateQuestIncludeColor(DangoColor.Red, 3, "青色を含めて役を2個作れ！"));
+            GameManager.Quests.Add(_questManager.CreateQuestCreateRole(DangoRole.POSROLE_LOOP, 2, "役「ループ」を2個作れ"));
+            GameManager.Quests.Add(_questManager.CreateQuestIncludeColor(DangoColor.Blue, 2, "青色を含めて役を2個作れ！"));
 
             questUI.OnGUIChangeQuest(images, quests);
             _coolTime = COOLTIME;
