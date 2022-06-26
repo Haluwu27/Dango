@@ -19,8 +19,5 @@ public class WayScript : MonoBehaviour
     {
         transform.parent.GetComponent<OneWayScript>().OnWayTriggerExit();
     }
-    void Update()
-    {
-        
-    }
+
 }

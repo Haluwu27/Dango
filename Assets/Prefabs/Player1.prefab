@@ -15,7 +15,6 @@ GameObject:
   - component: {fileID: 3952613918130635535}
   - component: {fileID: 3952613918130635534}
   - component: {fileID: 6013245353808961043}
-  - component: {fileID: 59349930321962221}
   m_Layer: 3
   m_Name: Player1
   m_TagString: Player
@@ -283,11 +282,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _rigidbody: {fileID: 6013245353808961043}
   PlayerCamera: {fileID: 0}
-  angle: 0
   _moveSpeed: 3
   _jumpPower: 10
   spitManager: {fileID: 4079021194536965440}
   DangoUISC: {fileID: 0}
+  maker: {fileID: 0}
 --- !u!54 &6013245353808961043
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -304,18 +303,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 112
   m_CollisionDetection: 0
---- !u!114 &59349930321962221
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3952613918130635532}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a9fc7163f3f309e4c8b6f81564e84fdb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &5792373984132286415
 GameObject:
   m_ObjectHideFlags: 0

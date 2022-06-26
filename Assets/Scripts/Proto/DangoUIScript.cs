@@ -5,7 +5,6 @@ using UnityEngine.UI;
 
 public class DangoUIScript : MonoBehaviour
 {
-    // Start is called before the first frame update
     [SerializeField] Image[] DangoImagObjs;
 
     public void DangoUISet(List<DangoColor> dangos)

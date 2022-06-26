@@ -4,7 +4,9 @@ using UnityEngine;
 
 public class DangoInjection : MonoBehaviour
 {
-    [SerializeField] private DangoManager dango;
+    [SerializeField] private DangoPoolManager _poolManager = default!;
+    [SerializeField] private int injectionCount = 20;
+    [SerializeField] private int waitFrame = 500;
 
     private void Start()
     {
@@ -15,13 +17,12 @@ public class DangoInjection : MonoBehaviour
     {
         for (int i = 0; i < 10; i++)
         {
-            for (int j = 0; j < 500; j++)
-                yield return null;
+            for (int j = 0; j < waitFrame; j++)
+                yield return new WaitForFixedUpdate();
 
-
-            for (int j = 0; j < 20; j++)
+            for (int j = 0; j < injectionCount; j++)
             {
-                GameManager.DangoPool.Get();
+                _poolManager.DangoPool.Get();
             }
         }
     }
