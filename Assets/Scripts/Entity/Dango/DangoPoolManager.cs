@@ -30,6 +30,34 @@ public class DangoPoolManager : MonoBehaviour
         var dangoManager = dangoObj.GetComponent<DangoManager>();
 
         //Žæ“¾‚µ‚½’iŠK‚Å’cŽq‚ÌF‚ðÝ’è
+        SetDangoColor(dangoManager);
+
+        dangoManager.transform.parent = parent;
+
+        return dangoManager;
+    }
+
+    private void OnTakeFromPool(DangoManager dango)
+    {
+        SetDangoColor(dango);
+        dango.gameObject.SetActive(true);
+    }
+
+    private void OnReturnedToPool(DangoManager dango)
+    {
+        dango.gameObject.SetActive(false);
+        dango.gameObject.transform.SetPositionAndRotation(Vector3.zero, Quaternion.identity);
+        dango.gameObject.transform.localScale = Vector3.one;
+        dango.SetDangoColor(DangoColor.None);
+    }
+
+    void OnDestroyPoolObject(DangoManager dango)
+    {
+        Destroy(dango.gameObject);
+    }
+
+    private void SetDangoColor(DangoManager dangoManager)
+    {
         dangoManager.SetDangoColor((DangoColor)_poolCount + 1);
         _poolCount++;
         if (_poolCount > 6) _poolCount = 0;
@@ -46,27 +74,5 @@ public class DangoPoolManager : MonoBehaviour
             DangoColor.Other => Color.gray,
             _ => Color.white,
         };
-
-        dangoManager.transform.parent = parent;
-
-        return dangoManager;
-    }
-
-    private void OnTakeFromPool(DangoManager dango)
-    {
-        dango.gameObject.SetActive(true);
-    }
-
-    private void OnReturnedToPool(DangoManager dango)
-    {
-        dango.gameObject.SetActive(false);
-        dango.gameObject.transform.SetPositionAndRotation(Vector3.zero, Quaternion.identity);
-        dango.gameObject.transform.localScale = Vector3.one;
-        dango.SetDangoColor(DangoColor.None);
-    }
-
-    void OnDestroyPoolObject(DangoManager dango)
-    {
-        Destroy(dango.gameObject);
     }
 }
