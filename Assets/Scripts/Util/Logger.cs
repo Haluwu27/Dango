@@ -19,4 +19,10 @@ public static class Logger
     {
         UnityEngine.Debug.LogError(obj);
     }
+
+    [Conditional("UNITY_EDITOR")]
+    public static void Assert(bool obj)
+    {
+        UnityEngine.Debug.Assert(obj);
+    }
 }
