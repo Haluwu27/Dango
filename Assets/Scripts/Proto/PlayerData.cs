@@ -9,12 +9,15 @@ using UnityEngine.InputSystem;
 public class PlayerData : MonoBehaviour
 {
     #region inputSystem
+    //落下アクション定数
     const int FALLACTION_STAY_AIR_FRAME = 50;
     const int FALLACTION_FALL_POWER = 30;
     const int FALLACTION_MOVE_POWER = 10;
 
+    //スコアと満腹度のレート
     const float SCORE_TIME_RATE = 0.2f;
 
+    //落下アクション中か
     private bool _isFallAction;
     public bool IsFallAction
     {
@@ -29,14 +32,14 @@ public class PlayerData : MonoBehaviour
         }
     }
 
-    private Vector2 moveAxis;
-    private Vector2 roteAxis;
+    //入力値
+    private Vector2 _moveAxis;
+    private Vector2 _roteAxis;
 
-    [SerializeField]
-    private Rigidbody _rigidbody;
+    [SerializeField] private Rigidbody _rigidbody;
 
-    [SerializeField]
-    private GameObject PlayerCamera;
+    [SerializeField] private GameObject playerCamera;
+
     private RoleDirectingScript directing;
 
     private DangoRole dangoRole = DangoRole.instance;
@@ -46,11 +49,11 @@ public class PlayerData : MonoBehaviour
     {
         if (context.phase == InputActionPhase.Performed)
         {
-            moveAxis = context.ReadValue<Vector2>().normalized;
+            _moveAxis = context.ReadValue<Vector2>().normalized;
         }
         else if (context.phase == InputActionPhase.Canceled)
         {
-            moveAxis = Vector2.zero;
+            _moveAxis = Vector2.zero;
         }
     }
 
@@ -61,28 +64,28 @@ public class PlayerData : MonoBehaviour
         {
             if (IsGround)
             {
-                _rigidbody.AddForce(Vector3.up * (_jumpPower + (Maxdango)), ForceMode.Impulse);
+                _rigidbody.AddForce(Vector3.up * (_jumpPower + _Maxdango), ForceMode.Impulse);
             }
         }
     }
 
-    //団子弾
+    //団子弾(取り外し)
     public void OnFire(InputAction.CallbackContext context)
     {
         if (context.phase == InputActionPhase.Performed)
         {
             //串に何もなかったら実行しない。
-            if (dangos.Count == 0) return;
+            if (_dangos.Count == 0) return;
 
             //[Debug]何が消えたかわかるやつ
             //今までは、dangos[dangos.Count - 1]としなければなりませんでしたが、
             //C#8.0以降では以下のように省略できるようです。
             //問題は、これを知らない人が読むとわけが分からない。
-            Logger.Log(dangos[^1]);
+            Logger.Log(_dangos[^1]);
 
             //消す処理。
-            dangos.RemoveAt(dangos.Count - 1);
-            DangoUISC.DangoUISet(dangos);
+            _dangos.RemoveAt(_dangos.Count - 1);
+            DangoUISC.DangoUISet(_dangos);
         }
     }
 
@@ -97,12 +100,12 @@ public class PlayerData : MonoBehaviour
             if (FallAction()) return;
 
             //突き刺せる数を超えていた場合、実行しない
-            if (dangos.Count >= Maxdango)
+            if (_dangos.Count >= _Maxdango)
             {
                 //なんらかの突けないことを知らせる処理推奨。
 
                 Logger.Warn("突き刺せる数を超えています");
-                _event.text = "それ以上させないよ！";
+                _eventText.text = "それ以上させないよ！";
                 return;
             }
 
@@ -129,13 +132,13 @@ public class PlayerData : MonoBehaviour
     public void OnEatDango(InputAction.CallbackContext context)
     {
         //串に刺さってなかったら実行しない。
-        if (dangos.Count == 0) return;
+        if (_dangos.Count == 0) return;
 
         switch (context.phase)
         {
             case InputActionPhase.Started:
                 Logger.Log("食べチャージ開始！");
-                _event.text = "食べチャージ中！";
+                _eventText.text = "食べチャージ中！";
                 //SE推奨
 
                 break;
@@ -144,12 +147,12 @@ public class PlayerData : MonoBehaviour
                 //SE推奨
 
                 //食べた団子の点数を取得
-                var score = dangoRole.CheckRole(dangos);
+                var score = dangoRole.CheckRole(_dangos);
 
                 //演出関数の呼び出し
-                _directing.Dirrecting(dangos);
+                _directing.Dirrecting(_dangos);
 
-                _event.text = "食べた！" + (int)score + "点！";
+                _eventText.text = "食べた！" + (int)score + "点！";
 
                 //満腹度を上昇
                 _satiety += score * SCORE_TIME_RATE;
@@ -158,10 +161,10 @@ public class PlayerData : MonoBehaviour
                 GameManager.GameScore += score * 100f;
 
                 //串をクリア。
-                dangos.Clear();
+                _dangos.Clear();
 
                 //UI更新
-                DangoUISC.DangoUISet(dangos);
+                DangoUISC.DangoUISet(_dangos);
                 break;
         }
     }
@@ -171,11 +174,11 @@ public class PlayerData : MonoBehaviour
     {
         if (context.phase == InputActionPhase.Performed)
         {
-            roteAxis = context.ReadValue<Vector2>();
+            _roteAxis = context.ReadValue<Vector2>();
         }
         else if (context.phase == InputActionPhase.Canceled)
         {
-            roteAxis = Vector2.zero;
+            _roteAxis = Vector2.zero;
         }
 
     }
@@ -199,7 +202,7 @@ public class PlayerData : MonoBehaviour
         if (IsGround || IsFallAction) return false;
 
         //マックスまで刺してなかったら急降下突き刺しモーションに移行
-        if (dangos.Count < Maxdango)
+        if (_dangos.Count < _Maxdango)
         {
             spitManager.isSticking = true;
             spitManager.gameObject.transform.localPosition = new Vector3(0, -2f, 0);
@@ -229,21 +232,19 @@ public class PlayerData : MonoBehaviour
 
     #endregion
 
+    //プレイヤーの能力
     [SerializeField] private float _moveSpeed = 3f;
     [SerializeField] private float _jumpPower = 10f;
-    //[SerializeField] private float _attackPower = 1f;
-    //[SerializeField] private float _attackSpeed = 1f;
-    //[SerializeField] private float _hitPoint = 100f;
-    //[SerializeField] private float _strength = 1f;
+
     [SerializeField] private SpitManager spitManager = default!;
     [SerializeField] private DangoUIScript DangoUISC = default!;
-    [SerializeField] private GameObject maker = default!;
+    [SerializeField] private GameObject makerPrefab = default!;
     GameObject _maker = null;
     RoleDirectingScript _directing;
 
     //仮UI用加筆分
-    private TextMeshProUGUI _time;
-    private TextMeshProUGUI _event;
+    private TextMeshProUGUI _timeText;
+    private TextMeshProUGUI _eventText;
 
     /// <summary>
     /// 満腹度、制限時間の代わり（単位:[sec]）
@@ -256,14 +257,16 @@ public class PlayerData : MonoBehaviour
     /// </summary>
     /// 今まではnew List<DangoColor>()としなければなりませんでしたが
     /// C#9.0以降はこのように簡素化出来るそうです。
-    private List<DangoColor> dangos = new();
+    private List<DangoColor> _dangos = new();
 
     /// <summary>
     /// 刺せる数、徐々に増える
     /// </summary>    
-    private int Maxdango = 3;
+    private int _Maxdango = 3;
 
     private float time = 0;
+
+    private bool _isGround = false;
 
     public bool IsGround
     {
@@ -280,7 +283,6 @@ public class PlayerData : MonoBehaviour
         }
     }
 
-    private bool _isGround = false;
 
     public Vector3 MoveVec { get; private set; }
 
@@ -296,19 +298,19 @@ public class PlayerData : MonoBehaviour
             DangoUISC = GameObject.Find("Canvas").transform.Find("DangoBackScreen").GetComponent<DangoUIScript>();
         }
 
-        if (_time == null)
+        if (_timeText == null)
         {
-            _time = GameObject.Find("Canvas").transform.Find("Time").GetComponent<TextMeshProUGUI>();
+            _timeText = GameObject.Find("Canvas").transform.Find("Time").GetComponent<TextMeshProUGUI>();
         }
 
-        if (_event == null)
+        if (_eventText == null)
         {
-            _event = GameObject.Find("Canvas").transform.Find("Event").GetComponent<TextMeshProUGUI>();
+            _eventText = GameObject.Find("Canvas").transform.Find("Event").GetComponent<TextMeshProUGUI>();
         }
 
         _directing = GameObject.Find("Canvas").transform.Find("DirectingObj").GetComponent<RoleDirectingScript>();
 
-        _maker = Instantiate(maker);
+        _maker = Instantiate(makerPrefab);
         _maker.SetActive(false);
     }
 
@@ -325,16 +327,16 @@ public class PlayerData : MonoBehaviour
         GrowStab();
 
         //仮でここに
-        _time.text = "残り時間：" + (int)_satiety + "秒";
+        _timeText.text = "残り時間：" + (int)_satiety + "秒";
 
     }
 
     private void InitDangos()
     {
-        if (dangos == null) return;
+        if (_dangos == null) return;
 
         //初期化
-        dangos.Clear();
+        _dangos.Clear();
     }
 
     private void FallActionMaker()
@@ -360,10 +362,10 @@ public class PlayerData : MonoBehaviour
     private void PlayerMove()
     {
         //カメラの向きを確認、Cameraforwardに代入
-        var Cameraforward = Vector3.Scale(PlayerCamera.transform.forward, new Vector3(1, 0, 1)).normalized;
+        var Cameraforward = Vector3.Scale(playerCamera.transform.forward, new Vector3(1, 0, 1)).normalized;
 
         //カメラの向きを元にベクトルの作成
-        MoveVec = moveAxis.y * Cameraforward * _moveSpeed + moveAxis.x * PlayerCamera.transform.right * _moveSpeed;
+        MoveVec = _moveAxis.y * Cameraforward * _moveSpeed + _moveAxis.x * playerCamera.transform.right * _moveSpeed;
 
         if (_rigidbody.velocity.magnitude < 8f)
             _rigidbody.AddForce(MoveVec * _moveSpeed);
@@ -391,7 +393,7 @@ public class PlayerData : MonoBehaviour
     private void GrowStab()
     {
         //刺せる団子の数が7だったら実行しない。
-        if (Maxdango == 7) return;
+        if (_Maxdango == 7) return;
 
         float growTime = 10f;
 
@@ -399,16 +401,16 @@ public class PlayerData : MonoBehaviour
 
         if (time >= growTime)
         {
-            Maxdango++;
-            Logger.Log("させる団子の数が増えた！" + Maxdango);
-            _event.text = "させる団子の数が増えた！(" + Maxdango + "個)";
+            _Maxdango++;
+            Logger.Log("させる団子の数が増えた！" + _Maxdango);
+            _eventText.text = "させる団子の数が増えた！(" + _Maxdango + "個)";
             time = 0;
         }
     }
 
     private void FinishGame()
     {
-        var madeCount = 0;
+        int madeCount = 0;
         if (_satiety <= 0)
         {
             var posRoles = dangoRole.GetPosRoles();
@@ -423,23 +425,23 @@ public class PlayerData : MonoBehaviour
         }
     }
 
-    public Vector2 GetRoteAxis() => roteAxis;
-    public List<DangoColor> GetDangoType() => dangos;
+    public Vector2 GetRoteAxis() => _roteAxis;
+    public List<DangoColor> GetDangoType() => _dangos;
     public DangoColor GetDangoType(int value)
     {
         try
         {
-            return dangos[value];
+            return _dangos[value];
         }
         catch (IndexOutOfRangeException e)
         {
             Logger.Error(e);
             Logger.Error("代わりに先頭（配列の0番）を返します。");
-            return dangos[0];
+            return _dangos[0];
         }
     }
-    public int GetMaxDango() => Maxdango;
-    public List<DangoColor> GetDangos() => dangos;
-    public void AddDangos(DangoColor d) => dangos.Add(d);
+    public int GetMaxDango() => _Maxdango;
+    public List<DangoColor> GetDangos() => _dangos;
+    public void AddDangos(DangoColor d) => _dangos.Add(d);
 
 }

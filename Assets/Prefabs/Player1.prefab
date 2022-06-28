@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 3952613918130635535}
   - component: {fileID: 3952613918130635534}
   - component: {fileID: 6013245353808961043}
+  - component: {fileID: 3193100650533338812}
   m_Layer: 3
   m_Name: Player1
   m_TagString: Player
@@ -130,7 +131,7 @@ MonoBehaviour:
   - m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 3952613918130635534}
-        m_TargetAssemblyTypeName: Plater1, Assembly-CSharp
+        m_TargetAssemblyTypeName: Player1, Assembly-CSharp
         m_MethodName: OnMove
         m_Mode: 0
         m_Arguments:
@@ -281,12 +282,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _rigidbody: {fileID: 6013245353808961043}
-  PlayerCamera: {fileID: 0}
-  _moveSpeed: 3
+  playerCamera: {fileID: 0}
+  _moveSpeed: 10
   _jumpPower: 10
   spitManager: {fileID: 4079021194536965440}
   DangoUISC: {fileID: 0}
-  maker: {fileID: 0}
+  makerPrefab: {fileID: 0}
 --- !u!54 &6013245353808961043
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -296,13 +297,25 @@ Rigidbody:
   m_GameObject: {fileID: 3952613918130635532}
   serializedVersion: 2
   m_Mass: 1
-  m_Drag: 0
+  m_Drag: 1
   m_AngularDrag: 0.05
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 112
-  m_CollisionDetection: 0
+  m_CollisionDetection: 3
+--- !u!114 &3193100650533338812
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3952613918130635532}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a9fc7163f3f309e4c8b6f81564e84fdb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &5792373984132286415
 GameObject:
   m_ObjectHideFlags: 0
@@ -316,7 +329,7 @@ GameObject:
   - component: {fileID: 150973923907413414}
   - component: {fileID: 2601210829998979227}
   - component: {fileID: 4079021194536965440}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Spit
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -415,5 +428,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 3952613918130635534}
-  DangoUISC: {fileID: 0}
   isSticking: 0

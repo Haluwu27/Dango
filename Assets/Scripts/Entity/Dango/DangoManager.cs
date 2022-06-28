@@ -19,13 +19,14 @@ public class DangoManager : MonoBehaviour
 
     //団子のコンポーネント
     [SerializeField] Renderer rend = default!;
-    [SerializeField] Rigidbody rb = default!;
+    public Rigidbody Rb { get; private set; }
 
     //オブジェクトプールマネージャー
     DangoPoolManager _poolManager;
 
     private void Awake()
     {
+        Rb = GetComponent<Rigidbody>();
         _poolManager = GameObject.Find("DangoPoolManager").GetComponent<DangoPoolManager>();
     }
 
@@ -37,7 +38,7 @@ public class DangoManager : MonoBehaviour
     private void ReleaseDango()
     {
         //もし団子がカメラ外で、速度が一定値以下であれば
-        if (!rend.isVisible && rb.velocity.magnitude < DELETE_MIN_SPEED)
+        if (!rend.isVisible && Rb.velocity.magnitude < DELETE_MIN_SPEED)
         {
             if (--_frameCount <= 0) _poolManager.DangoPool.Release(this);
         }
