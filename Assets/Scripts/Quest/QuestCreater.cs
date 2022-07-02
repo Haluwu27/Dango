@@ -26,9 +26,9 @@ namespace Dango.Quest
             return new(score, quest_name);
         }
 
-        public QuestEatSpecialDango CreateQuestEatSpecialDango()
+        public QuestEatSpecialDango CreateQuestEatSpecialDango(string quest_name)
         {
-            return new();
+            return new(quest_name);
         }
     }
 }

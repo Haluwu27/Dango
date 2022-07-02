@@ -7,19 +7,16 @@ public class SpitManager : MonoBehaviour
     [SerializeField] PlayerData player = default!;
     DangoUIScript DangoUISC;
 
-    private void Awake()
+    private void Start()
     {
-        if (DangoUISC == null)
-        {
-            DangoUISC = GameObject.Find("Canvas").transform.Find("DangoBackScreen").GetComponent<DangoUIScript>();
-        }
+        DangoUISC = player.GetDangoUIScript();
     }
 
     /// <summary>
     /// 突き刺しボタンが押されたときにtrueになる。
     /// </summary>
     public bool isSticking = false;
-    
+
     private void OnTriggerStay(Collider other)
     {
         //刺せる状態ではないなら実行しない
@@ -39,7 +36,7 @@ public class SpitManager : MonoBehaviour
 
             //UIの更新
             DangoUISC.DangoUISet(player.GetDangos());
-            
+
             //刺せ無くする
             isSticking = false;
         }
@@ -47,7 +44,7 @@ public class SpitManager : MonoBehaviour
 
     private void OnFallAction()
     {
-        if (!player.IsFallAction) return;
+        if (!player.PlayerFall.IsFallAction) return;
 
         Logger.Log("落下アクション中に刺した！");
     }

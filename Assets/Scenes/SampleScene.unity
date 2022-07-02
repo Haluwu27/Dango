@@ -1472,7 +1472,19 @@ MonoBehaviour:
   m_JoinBehavior: 0
   m_PlayerJoinedEvent:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1164745713}
+        m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
+        m_MethodName: OnJoinPlayer
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_PlayerLeftEvent:
     m_PersistentCalls:
       m_Calls: []
@@ -1564,7 +1576,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &875932493
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2190,6 +2202,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1141419604}
   m_CullTransparentMesh: 1
+--- !u!114 &1164745713 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4920492317850513709, guid: f596f7fa4f031ba4eb2aaf1052d308c7,
+    type: 3}
+  m_PrefabInstance: {fileID: 4920492316001724550}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7b60e1390068ee34f8a163294b083696, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1190023587
 GameObject:
   m_ObjectHideFlags: 0
@@ -3264,6 +3288,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1634823978114895786, guid: 2894d6d8cd64d7e4c93a559e4a7a0de6,
+        type: 3}
+      propertyPath: colorChoice
+      value: -1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2894d6d8cd64d7e4c93a559e4a7a0de6, type: 3}

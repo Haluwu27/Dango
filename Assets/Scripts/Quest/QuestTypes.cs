@@ -11,20 +11,17 @@ namespace Dango.Quest
         int _specifyCount;
         int _madeCount;
 
-        public QuestCreateRole(Role<int> role, int count, string quest_name)
+        public QuestCreateRole(Role<int> role, int count, string quest_name) : base(QuestType.CreateRole, quest_name)
         {
-            questType = QuestType.CreateRole;
-            questName = quest_name;
             _role = role;
             _roleName = role.GetRolename();
             _specifyCount = count;
         }
 
-        public QuestCreateRole(string role_name, int count, string quest_name)
+        public QuestCreateRole(string role_name, int count, string quest_name) : base(QuestType.CreateRole, quest_name)
         {
             _roleName = role_name;
             _specifyCount = count;
-            questName = quest_name;
         }
 
         public Role<int> Role => _role;
@@ -41,10 +38,8 @@ namespace Dango.Quest
         int _specifyCount;
         int _madeCount;
 
-        public QuestIncludeColor(DangoColor color, int count, string quest_name)
+        public QuestIncludeColor(DangoColor color, int count, string quest_name) : base(QuestType.IncludeColor, quest_name)
         {
-            questType = QuestType.IncludeColor;
-            questName = quest_name;
             _color = color;
             _specifyCount = count;
         }
@@ -62,10 +57,8 @@ namespace Dango.Quest
         int _specifyCount;
         int _madeCount;
 
-        public QuestPlayAction(int count, string quest_name)
+        public QuestPlayAction(int count, string quest_name) : base(QuestType.PlayAction, quest_name)
         {
-            questType = QuestType.PlayAction;
-            questName = quest_name;
             _specifyCount = count;
         }
 
@@ -79,10 +72,8 @@ namespace Dango.Quest
         int _score;
         int _clearScore;
 
-        public QuestGetScore(int clearScore, string quest_name)
+        public QuestGetScore(int clearScore, string quest_name) : base(QuestType.GetScore, quest_name)
         {
-            questType = QuestType.GetScore;
-            questName = quest_name;
             _score = 0;
             _clearScore = clearScore;
         }
@@ -94,9 +85,8 @@ namespace Dango.Quest
 
     class QuestEatSpecialDango : QuestData
     {
-        public QuestEatSpecialDango()
+        public QuestEatSpecialDango(string quest_name) : base(QuestType.EatSpecialDango, quest_name)
         {
-            questType = QuestType.EatSpecialDango;
         }
     }
 }
