@@ -19,14 +19,15 @@ public class DangoManager : MonoBehaviour
 
     //団子のコンポーネント
     [SerializeField] Renderer rend = default!;
-    public Rigidbody Rb { get; private set; }
+    [SerializeField] Rigidbody rb = default!;
+    public Renderer Rend => rend;
+    public Rigidbody Rb => rb;
 
     //オブジェクトプールマネージャー
     DangoPoolManager _poolManager;
 
     private void Awake()
-    {
-        Rb = GetComponent<Rigidbody>();
+    {        
         _poolManager = GameObject.Find("DangoPoolManager").GetComponent<DangoPoolManager>();
     }
 

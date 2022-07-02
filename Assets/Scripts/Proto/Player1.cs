@@ -5,6 +5,6 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class Player1 : PlayerData
+class Player1 : PlayerData
 {
 }

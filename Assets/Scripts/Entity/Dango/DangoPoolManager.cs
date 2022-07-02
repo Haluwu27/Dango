@@ -10,14 +10,20 @@ public class DangoPoolManager : MonoBehaviour
 
     public ObjectPool<DangoManager> DangoPool { get; private set; }
     private int _poolCount = 0;
+    [SerializeField] int firstCreateCount = 100;
+    List<DangoManager> _pools = new List<DangoManager>();
 
     private void Awake()
     {
-        DangoPool = new(OnCreateDango,OnTakeFromPool,OnReturnedToPool,OnDestroyPoolObject, true,7 * 30,7 * 150);
-        
-        for (int i = 0; i < 100; i++)
+        DangoPool = new(OnCreateDango, OnTakeFromPool, OnReturnedToPool, OnDestroyPoolObject, true, 7 * 30, 7 * 150);
+
+        for (int i = 0; i < firstCreateCount; i++)
         {
-            DangoPool.Get();
+            _pools.Add(DangoPool.Get());
+        }
+        foreach (var pool in _pools)
+        {
+            DangoPool.Release(pool);
         }
     }
 
@@ -62,7 +68,7 @@ public class DangoPoolManager : MonoBehaviour
         _poolCount++;
         if (_poolCount > 6) _poolCount = 0;
 
-        dangoManager.GetComponent<Renderer>().material.color = dangoManager.GetDangoColor() switch
+        dangoManager.Rend.material.color = dangoManager.GetDangoColor() switch
         {
             DangoColor.Red => Color.red,
             DangoColor.Orange => new Color32(255, 155, 0, 255),

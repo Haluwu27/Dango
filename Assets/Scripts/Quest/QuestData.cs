@@ -4,10 +4,25 @@ using UnityEngine;
 
 abstract class QuestData
 {
-    protected QuestType questType;
-    protected string questName;
-    protected float returnScore;
-    protected bool isKeyQuest;
+    QuestType questType;
+    string questName;
+    float returnScore;
+    bool isKeyQuest;
+
+    public QuestData(QuestType questType, string questName, float returnScore, bool isKeyQuest)
+    {
+        this.questType = questType;
+        this.questName = questName;
+        this.returnScore = returnScore;
+        this.isKeyQuest = isKeyQuest;
+    }
+
+    //これはスコアとかをまだ設定していないときに使用するのでそのうち消します
+    public QuestData(QuestType questType, string questName)
+    {
+        this.questType = questType;
+        this.questName = questName;
+    }
 
     public QuestType QuestType => questType;
     public string QuestName => questName;

@@ -5,44 +5,36 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
+/// 
+/// ＜実装すること＞
+/// ・接地判定をまともに
+/// 
+
 [RequireComponent(typeof(Rigidbody), typeof(RideMoveObj))]
-public class PlayerData : MonoBehaviour
+class PlayerData : MonoBehaviour
 {
     #region inputSystem
-    //落下アクション定数
-    const int FALLACTION_STAY_AIR_FRAME = 50;
-    const int FALLACTION_FALL_POWER = 30;
-    const int FALLACTION_MOVE_POWER = 10;
-
     //スコアと満腹度のレート
     const float SCORE_TIME_RATE = 0.2f;
-
-    //落下アクション中か
-    private bool _isFallAction;
-    public bool IsFallAction
-    {
-        get => _isFallAction;
-        private set
-        {
-            if (value != IsFallAction)
-            {
-                if (!value) ResetSpit();
-                _isFallAction = value;
-            }
-        }
-    }
 
     //入力値
     private Vector2 _moveAxis;
     private Vector2 _roteAxis;
 
+    private bool _hasAttacked = false;
+    private bool _hasFalled = false;
+    private bool _hasStayedEat = false;
+
     [SerializeField] private Rigidbody _rigidbody;
 
     [SerializeField] private GameObject playerCamera;
 
-    private RoleDirectingScript directing;
-
     private DangoRole dangoRole = DangoRole.instance;
+
+    private PlayerFallAction _playerFall = new();
+    private PlayerAttackAction _playerAttack = new();
+
+    public PlayerFallAction PlayerFall => _playerFall;
 
     //移動処理
     public void OnMove(InputAction.CallbackContext context)
@@ -60,12 +52,11 @@ public class PlayerData : MonoBehaviour
     //ジャンプ処理
     public void OnJump(InputAction.CallbackContext context)
     {
+        if (!IsGround) return;
+
         if (context.phase == InputActionPhase.Performed)
         {
-            if (IsGround)
-            {
-                _rigidbody.AddForce(Vector3.up * (_jumpPower + _Maxdango), ForceMode.Impulse);
-            }
+            _rigidbody.AddForce(Vector3.up * (_jumpPower + _maxStabCount), ForceMode.Impulse);
         }
     }
 
@@ -85,7 +76,7 @@ public class PlayerData : MonoBehaviour
 
             //消す処理。
             _dangos.RemoveAt(_dangos.Count - 1);
-            DangoUISC.DangoUISet(_dangos);
+            _dangoUISC.DangoUISet(_dangos);
         }
     }
 
@@ -93,39 +84,21 @@ public class PlayerData : MonoBehaviour
     public void OnAttack(InputAction.CallbackContext context)
     {
         //落下アクション中受け付けない。
-        if (IsFallAction) return;
+        if (_playerFall.IsFallAction) return;
 
         if (context.phase == InputActionPhase.Performed)
         {
-            if (FallAction()) return;
-
-            //突き刺せる数を超えていた場合、実行しない
-            if (_dangos.Count >= _Maxdango)
+            //空中なら落下刺しに移行
+            if (!_isGround)
             {
-                //なんらかの突けないことを知らせる処理推奨。
-
-                Logger.Warn("突き刺せる数を超えています");
-                _eventText.text = "それ以上させないよ！";
-                return;
+                _hasFalled = true;
             }
-
-            //ここに突き刺しアニメーションを推奨。
-            spitManager.isSticking = true;
-            spitManager.gameObject.transform.localPosition = new Vector3(0, 0, 2.2f);
-            spitManager.gameObject.transform.localRotation = Quaternion.Euler(90f, 0, 0);
-
+            //地面なら普通に突き刺しに移行
+            else
+            {
+                _hasAttacked = true;
+            }
         }
-        if (context.phase == InputActionPhase.Canceled)
-        {
-            ResetSpit();
-        }
-    }
-
-    private void ResetSpit()
-    {
-        spitManager.isSticking = false;
-        spitManager.gameObject.transform.localRotation = Quaternion.identity;
-        spitManager.gameObject.transform.localPosition = new Vector3(0, 0.4f, 1.1f);
     }
 
     //食べる
@@ -134,39 +107,8 @@ public class PlayerData : MonoBehaviour
         //串に刺さってなかったら実行しない。
         if (_dangos.Count == 0) return;
 
-        switch (context.phase)
-        {
-            case InputActionPhase.Started:
-                Logger.Log("食べチャージ開始！");
-                _eventText.text = "食べチャージ中！";
-                //SE推奨
-
-                break;
-            case InputActionPhase.Performed:
-                Logger.Log("食べた！！");
-                //SE推奨
-
-                //食べた団子の点数を取得
-                var score = dangoRole.CheckRole(_dangos);
-
-                //演出関数の呼び出し
-                _directing.Dirrecting(_dangos);
-
-                _eventText.text = "食べた！" + (int)score + "点！";
-
-                //満腹度を上昇
-                _satiety += score * SCORE_TIME_RATE;
-
-                //スコアを上昇
-                GameManager.GameScore += score * 100f;
-
-                //串をクリア。
-                _dangos.Clear();
-
-                //UI更新
-                DangoUISC.DangoUISet(_dangos);
-                break;
-        }
+        if (context.phase == InputActionPhase.Performed) _hasStayedEat = true;
+        else if (context.phase == InputActionPhase.Canceled) _hasStayedEat = false;
     }
 
     //回転処理
@@ -192,59 +134,277 @@ public class PlayerData : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// 刺突アクション
-    /// </summary>
-    /// <returns>可能かどうか</returns>
-    private bool FallAction()
+    private void EatDango()
     {
-        //接地している または 落下アクション中なら実行しない
-        if (IsGround || IsFallAction) return false;
+        //SE推奨
 
-        //マックスまで刺してなかったら急降下突き刺しモーションに移行
-        if (_dangos.Count < _Maxdango)
-        {
-            spitManager.isSticking = true;
-            spitManager.gameObject.transform.localPosition = new Vector3(0, -2f, 0);
-            spitManager.gameObject.transform.localRotation = Quaternion.Euler(0, 0, 0);
-        }
+        _hasStayedEat = false;
 
-        StartCoroutine(StayAir());
+        //食べた団子の点数を取得
+        var score = dangoRole.CheckRole(_dangos);
 
-        return true;
+        //演出関数の呼び出し
+        _directing.Dirrecting(_dangos);
+
+        _playerUIManager.SetEventText("食べた！" + (int)score + "点！");
+
+        //満腹度を上昇
+        _satiety += score * SCORE_TIME_RATE;
+
+        //スコアを上昇
+        GameManager.GameScore += score * 100f;
+
+        //串をクリア。
+        _dangos.Clear();
+        //UI更新
+        _dangoUISC.DangoUISet(_dangos);
     }
 
-    private IEnumerator StayAir()
+    private void ResetSpit()
     {
-        IsFallAction = true;
-        int time = FALLACTION_STAY_AIR_FRAME;
-
-        while (--time > 0)
-        {
-            yield return new WaitForFixedUpdate();
-
-            //滞空処理
-            _rigidbody.velocity = new Vector3(_rigidbody.velocity.x / FALLACTION_MOVE_POWER, 0, _rigidbody.velocity.z / FALLACTION_MOVE_POWER);
-        }
-
-        _rigidbody.AddForce(Vector3.down * FALLACTION_FALL_POWER, ForceMode.Impulse);
+        spitManager.isSticking = false;
+        spitManager.gameObject.transform.localRotation = Quaternion.identity;
+        spitManager.gameObject.transform.localPosition = new Vector3(0, 0.4f, 1.1f);
     }
-
     #endregion
 
+    #region statePattern
+    interface IState
+    {
+        public enum E_State
+        {
+            Control = 0,
+            FallAction = 1,
+            AttackAction = 2,
+            StayEatDango = 3,
+            EatDango = 4,
+            GrowStab = 5,
+
+            Max,
+
+            Unchanged,
+        }
+
+        E_State Initialize(PlayerData parent);
+        E_State Update(PlayerData parent);
+        E_State FixedUpdate(PlayerData parent);
+    }
+
+    //状態管理
+    private IState.E_State _currentState = IState.E_State.Control;
+    private static readonly IState[] states = new IState[(int)IState.E_State.Max]
+     {
+        new ControlState(),
+        new FallActionState(),
+        new AttackActionState(),
+        new StayEatDangoState(),
+        new EatDangoState(),
+        new GrowStabState(),
+     };
+
+    class ControlState : IState
+    {
+        public IState.E_State Initialize(PlayerData parent)
+        {
+            //串の位置をリセット
+            parent.ResetSpit();
+            return IState.E_State.Unchanged;
+        }
+        public IState.E_State Update(PlayerData parent)
+        {
+            return IState.E_State.Unchanged;
+        }
+        public IState.E_State FixedUpdate(PlayerData parent)
+        {
+            //プレイヤーを動かす処理
+            parent.PlayerMove();
+
+            //ステートに移行。
+            if (parent._hasAttacked) return IState.E_State.AttackAction;
+            if (parent._hasStayedEat) return IState.E_State.StayEatDango;
+            if (parent._hasFalled) return IState.E_State.FallAction;
+
+            return IState.E_State.Unchanged;
+        }
+    }
+    class FallActionState : IState
+    {
+        public IState.E_State Initialize(PlayerData parent)
+        {
+            parent._hasFalled = false;
+            parent._playerFall.IsFallAction = true;
+            return IState.E_State.Unchanged;
+        }
+        public IState.E_State Update(PlayerData parent)
+        {
+            return IState.E_State.Unchanged;
+        }
+        public IState.E_State FixedUpdate(PlayerData parent)
+        {
+            //移動
+            parent.PlayerMove();
+
+            //途中で接地したらコントロールに戻る
+            if (parent.IsGround) return IState.E_State.Control;
+
+            //待機時間が終わったらアタックステートに移行
+            return parent._playerFall.FixedUpdate(parent._rigidbody, parent.spitManager)
+                ? IState.E_State.AttackAction : IState.E_State.Unchanged;
+        }
+    }
+    class AttackActionState : IState
+    {
+        public IState.E_State Initialize(PlayerData parent)
+        {
+            parent._hasAttacked = false;
+
+            if (!parent.CanStab()) return IState.E_State.Control;
+            return IState.E_State.Unchanged;
+        }
+        public IState.E_State Update(PlayerData parent)
+        {
+            return IState.E_State.Unchanged;
+        }
+        public IState.E_State FixedUpdate(PlayerData parent)
+        {
+            return parent._playerAttack.FixedUpdate() ? IState.E_State.Control : IState.E_State.Unchanged;
+        }
+
+    }
+    class StayEatDangoState : IState
+    {
+        public IState.E_State Initialize(PlayerData parent)
+        {
+            parent._playerUIManager.SetEventText("食べチャージ中！");
+            parent._playerStayEat.ResetCount();
+            //SE推奨
+
+            return IState.E_State.Unchanged;
+        }
+        public IState.E_State Update(PlayerData parent)
+        {
+            //チャージしてる感じのアニメーションとかはここ
+
+            return IState.E_State.Unchanged;
+        }
+        public IState.E_State FixedUpdate(PlayerData parent)
+        {
+            parent.PlayerMove();
+
+            //食べる待機が終わったら食べるステートに移行
+            if (parent._playerStayEat.CanEat()) return IState.E_State.EatDango;
+
+            //待機をやめたらコントロールに戻る
+            if (!parent._hasStayedEat) return IState.E_State.Control;
+
+            return IState.E_State.Unchanged;
+        }
+    }
+    class EatDangoState : IState
+    {
+        public IState.E_State Initialize(PlayerData parent)
+        {
+            if (parent._canGrowStab) return IState.E_State.GrowStab;
+
+            //SE推奨
+            parent.EatDango();
+            return IState.E_State.Control;
+        }
+        public IState.E_State Update(PlayerData parent)
+        {
+            return IState.E_State.Unchanged;
+        }
+        public IState.E_State FixedUpdate(PlayerData parent)
+        {
+            parent.PlayerMove();
+
+            return IState.E_State.Unchanged;
+        }
+
+    }
+    class GrowStabState : IState
+    {
+        public IState.E_State Initialize(PlayerData parent)
+        {
+            parent._maxStabCount = parent._playerGrowStab.GrowStab(parent._maxStabCount);
+            parent._playerUIManager.SetEventText("させる団子の数が増えた！(" + parent._maxStabCount + "個)");
+            parent._canGrowStab = false;
+            return IState.E_State.EatDango;
+        }
+        public IState.E_State Update(PlayerData parent)
+        {
+            return IState.E_State.Unchanged;
+        }
+        public IState.E_State FixedUpdate(PlayerData parent)
+        {
+            return IState.E_State.Unchanged;
+        }
+
+    }
+
+    private void InitState()
+    {
+        Logger.Assert(_currentState is >= 0 and < IState.E_State.Max);
+
+        var nextState = states[(int)_currentState].Initialize(this);
+
+        if (nextState != IState.E_State.Unchanged)
+        {
+            _currentState = nextState;
+            InitState();//初期化で状態が変わるなら再帰的に初期化する。
+        }
+    }
+    private void UpdateState()
+    {
+        Logger.Assert(_currentState is >= 0 and < IState.E_State.Max);
+
+        var nextState = states[(int)_currentState].Update(this);
+
+        if (nextState != IState.E_State.Unchanged)
+        {
+            //次に遷移
+            _currentState = nextState;
+            InitState();
+        }
+    }
+    private void FixedUpdateState()
+    {
+        Logger.Assert(_currentState is >= 0 and < IState.E_State.Max);
+
+        var nextState = states[(int)_currentState].FixedUpdate(this);
+
+        if (nextState != IState.E_State.Unchanged)
+        {
+            //次に遷移
+            _currentState = nextState;
+            InitState();
+        }
+    }
+    #endregion
+
+    #region メンバ変数
     //プレイヤーの能力
     [SerializeField] private float _moveSpeed = 3f;
     [SerializeField] private float _jumpPower = 10f;
 
     [SerializeField] private SpitManager spitManager = default!;
-    [SerializeField] private DangoUIScript DangoUISC = default!;
     [SerializeField] private GameObject makerPrefab = default!;
     GameObject _maker = null;
-    RoleDirectingScript _directing;
 
-    //仮UI用加筆分
-    private TextMeshProUGUI _timeText;
-    private TextMeshProUGUI _eventText;
+    //UI関連
+    RoleDirectingScript _directing;
+    PlayerUIManager _playerUIManager;
+    DangoUIScript _dangoUISC;
+
+    //串を伸ばす処理
+    const int MAX_DANGO = 7;
+    const int GROW_STAB_FRAME = 500;
+    PlayerGrowStab _playerGrowStab = new(MAX_DANGO, GROW_STAB_FRAME);
+    bool _canGrowStab = false;
+
+    //食べる処理
+    const int STAY_FRAME = 100;
+    PlayerStayEat _playerStayEat = new(STAY_FRAME);
 
     /// <summary>
     /// 満腹度、制限時間の代わり（単位:[sec]）
@@ -262,9 +422,7 @@ public class PlayerData : MonoBehaviour
     /// <summary>
     /// 刺せる数、徐々に増える
     /// </summary>    
-    private int _Maxdango = 3;
-
-    private float time = 0;
+    private int _maxStabCount = 3;
 
     private bool _isGround = false;
 
@@ -275,7 +433,7 @@ public class PlayerData : MonoBehaviour
         {
             if (value)
             {
-                IsFallAction = false;
+                _playerFall.IsFallAction = false;
                 _maker.SetActive(false);
             }
 
@@ -283,8 +441,8 @@ public class PlayerData : MonoBehaviour
         }
     }
 
-
     public Vector3 MoveVec { get; private set; }
+    #endregion
 
     private void OnEnable()
     {
@@ -293,22 +451,9 @@ public class PlayerData : MonoBehaviour
 
     private void Start()
     {
-        if (DangoUISC == null)
-        {
-            DangoUISC = GameObject.Find("Canvas").transform.Find("DangoBackScreen").GetComponent<DangoUIScript>();
-        }
-
-        if (_timeText == null)
-        {
-            _timeText = GameObject.Find("Canvas").transform.Find("Time").GetComponent<TextMeshProUGUI>();
-        }
-
-        if (_eventText == null)
-        {
-            _eventText = GameObject.Find("Canvas").transform.Find("Event").GetComponent<TextMeshProUGUI>();
-        }
-
-        _directing = GameObject.Find("Canvas").transform.Find("DirectingObj").GetComponent<RoleDirectingScript>();
+        _playerUIManager = GameObject.Find("PlayerUICanvas").GetComponent<PlayerUIManager>();
+        _dangoUISC = GameObject.Find("PlayerUICanvas").transform.Find("DangoBackScreen").GetComponent<DangoUIScript>();
+        _directing = GameObject.Find("PlayerUICanvas").transform.Find("DirectingObj").GetComponent<RoleDirectingScript>();
 
         _maker = Instantiate(makerPrefab);
         _maker.SetActive(false);
@@ -317,18 +462,24 @@ public class PlayerData : MonoBehaviour
     private void Update()
     {
         IsGrounded();
+        UpdateState();
         FallActionMaker();
     }
 
     private void FixedUpdate()
     {
-        PlayerMove();
         DecreaseSatiety();
-        GrowStab();
+        _canGrowStab = _playerGrowStab.CanGrowStab(_maxStabCount);
+        FixedUpdateState();
 
         //仮でここに
-        _timeText.text = "残り時間：" + (int)_satiety + "秒";
+        _playerUIManager.SetTimeText("残り時間：" + (int)_satiety + "秒");
+    }
 
+    //デバッグ終わりに削除
+    private void OnGUI()
+    {
+        GUI.Label(new Rect(20, 20, 100, 50), "" + _currentState);
     }
 
     private void InitDangos()
@@ -341,13 +492,46 @@ public class PlayerData : MonoBehaviour
 
     private void FallActionMaker()
     {
-        if (IsGround) return;
         var ray = new Ray(transform.position, Vector3.down);
+
+        //今は仮打ちでレイの長さを10にしています。変更推奨です。
         if (Physics.Raycast(ray, out RaycastHit hit, 10f))
         {
             _maker.transform.position = hit.point;
             _maker.SetActive(true);
         }
+    }
+
+    private bool CanStab()
+    {
+        //団子がこれ以上させないなら実行しない
+        if (_dangos.Count >= _maxStabCount)
+        {
+            Logger.Warn("突き刺せる数を超えています");
+            _playerUIManager.SetEventText("それ以上させないよ！");
+
+            return false;
+        }
+
+        //刺す時間の内部でカウントしているTimeをリセット
+        _playerAttack.ResetTime();
+
+        //突き刺せる状態にして
+        spitManager.isSticking = true;
+
+        //串の位置を変更（アニメーション推奨）
+        if (_playerFall.IsFallAction)
+        {
+            spitManager.gameObject.transform.localPosition = new Vector3(0, -2f, 0);
+            spitManager.gameObject.transform.localRotation = Quaternion.Euler(0, 0, 0);
+        }
+        else
+        {
+            spitManager.gameObject.transform.localPosition = new Vector3(0, 0, 2.2f);
+            spitManager.gameObject.transform.localRotation = Quaternion.Euler(90f, 0, 0);
+        }
+
+        return true;
     }
 
     private void IsGrounded()
@@ -365,7 +549,7 @@ public class PlayerData : MonoBehaviour
         var Cameraforward = Vector3.Scale(playerCamera.transform.forward, new Vector3(1, 0, 1)).normalized;
 
         //カメラの向きを元にベクトルの作成
-        MoveVec = _moveAxis.y * Cameraforward * _moveSpeed + _moveAxis.x * playerCamera.transform.right * _moveSpeed;
+        MoveVec = _moveAxis.y * _moveSpeed * Cameraforward + _moveAxis.x * _moveSpeed * playerCamera.transform.right;
 
         if (_rigidbody.velocity.magnitude < 8f)
             _rigidbody.AddForce(MoveVec * _moveSpeed);
@@ -378,53 +562,9 @@ public class PlayerData : MonoBehaviour
     {
         //満腹度を0.02秒(fixedUpdateの呼ばれる秒数)減らす
         _satiety -= Time.fixedDeltaTime;
-
-        //ゲームマネージャー管理のほうがいいと思うけど
-        //とりあえずここに置いておきます。
-        FinishGame();
-
-        //[debug]10秒おきにデバッグログを表示
-        //if ((int)_satiety % 10 == 0) Logger.Log(_satiety);
     }
 
-    /// <summary>
-    /// 串が一定時間で伸びる処理
-    /// </summary>
-    private void GrowStab()
-    {
-        //刺せる団子の数が7だったら実行しない。
-        if (_Maxdango == 7) return;
-
-        float growTime = 10f;
-
-        time += Time.fixedDeltaTime;
-
-        if (time >= growTime)
-        {
-            _Maxdango++;
-            Logger.Log("させる団子の数が増えた！" + _Maxdango);
-            _eventText.text = "させる団子の数が増えた！(" + _Maxdango + "個)";
-            time = 0;
-        }
-    }
-
-    private void FinishGame()
-    {
-        int madeCount = 0;
-        if (_satiety <= 0)
-        {
-            var posRoles = dangoRole.GetPosRoles();
-            foreach (var posRole in posRoles)
-            {
-                if (posRole.GetMadeCount() > 0)
-                {
-                    madeCount++;
-                }
-            }
-            Logger.Log("満足度：" + GameManager.GameScore * madeCount);
-        }
-    }
-
+    #region GetterSetter
     public Vector2 GetRoteAxis() => _roteAxis;
     public List<DangoColor> GetDangoType() => _dangos;
     public DangoColor GetDangoType(int value)
@@ -440,8 +580,11 @@ public class PlayerData : MonoBehaviour
             return _dangos[0];
         }
     }
-    public int GetMaxDango() => _Maxdango;
+    public int GetMaxDango() => _maxStabCount;
     public List<DangoColor> GetDangos() => _dangos;
     public void AddDangos(DangoColor d) => _dangos.Add(d);
+    public float GetSatiety() => _satiety;
+    public DangoUIScript GetDangoUIScript() => _dangoUISC;
 
+    #endregion
 }
