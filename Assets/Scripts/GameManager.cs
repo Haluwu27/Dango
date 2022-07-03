@@ -11,6 +11,8 @@ internal class GameManager : MonoBehaviour
 
     QuestManager _questManager = new();
     PlayerData _playerData;
+    private static SoundManager _soundManager = default!;
+    public static SoundManager SoundManager => _soundManager;
 
     #region statePattern
     interface IState
@@ -121,6 +123,9 @@ internal class GameManager : MonoBehaviour
 
     private void Awake()
     {
+        _soundManager = GetComponent<SoundManager>();
+        _soundManager.PlayBGM(SoundSource.BGM_Stage);
+
         //マウスカーソルのやつ。
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;

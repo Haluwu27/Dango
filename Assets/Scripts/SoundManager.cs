@@ -13,7 +13,11 @@ public enum SoundSource
     
 
     //SE
-    SE_Title_PressAnyButton,//‚±‚Ì€–Ú‚ÍSE‚Ìæ“ªŒÅ’è‚Å‚¨Šè‚¢‚µ‚Ü‚·B
+    SE_PLAYER_STAY_EATDANGO,//‚±‚Ì€–Ú‚ÍSE‚Ìæ“ªŒÅ’è‚Å‚¨Šè‚¢‚µ‚Ü‚·B
+    SE_PLAYER_EATDANGO,
+    SE_STAB_DANGO,
+    SE_REMOVE_DANGO,
+    SE_CREATE_ROLE,
 
 }
 
@@ -33,7 +37,7 @@ public class SoundManagerOnGUI : Editor
 
         EditorGUILayout.Separator();
 
-        EditorGUILayout.LabelField(soundManager._debugSoundSource >= SoundSource.SE_Title_PressAnyButton ? "SE Clip : Element " + (int)(soundManager._debugSoundSource - SoundSource.SE_Title_PressAnyButton) : "BGM Clip : Element " + (int)soundManager._debugSoundSource);
+        EditorGUILayout.LabelField(soundManager._debugSoundSource >= SoundSource.SE_PLAYER_STAY_EATDANGO ? "SE Clip : Element " + (int)(soundManager._debugSoundSource - SoundSource.SE_PLAYER_STAY_EATDANGO) : "BGM Clip : Element " + (int)soundManager._debugSoundSource);
         EditorGUILayout.Separator();
 
         base.OnInspectorGUI();

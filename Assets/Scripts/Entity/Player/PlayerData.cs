@@ -74,6 +74,9 @@ class PlayerData : MonoBehaviour
             //問題は、これを知らない人が読むとわけが分からない。
             Logger.Log(_dangos[^1]);
 
+            //SE
+            GameManager.SoundManager.PlaySE(SoundSource.SE_REMOVE_DANGO);
+
             //消す処理。
             _dangos.RemoveAt(_dangos.Count - 1);
             _dangoUISC.DangoUISet(_dangos);
@@ -136,7 +139,8 @@ class PlayerData : MonoBehaviour
 
     private void EatDango()
     {
-        //SE推奨
+        //SE
+        GameManager.SoundManager.PlaySE(SoundSource.SE_PLAYER_EATDANGO);
 
         _hasStayedEat = false;
 
@@ -306,7 +310,6 @@ class PlayerData : MonoBehaviour
         {
             if (parent._canGrowStab) return IState.E_State.GrowStab;
 
-            //SE推奨
             parent.EatDango();
             return IState.E_State.Control;
         }
