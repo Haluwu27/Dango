@@ -46,8 +46,6 @@ public class DangoInjection : MonoBehaviour
 
     private List<DangoColor> dangoColors = new();
 
-
-
     private void Awake()
     {
         Logger.Assert(verticalRot.x < verticalRot.y);
