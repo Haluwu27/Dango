@@ -91,5 +91,8 @@ MonoBehaviour:
   target: {fileID: 3952613918130635533, guid: 778aacd95f2f72d4eaff394bcf22a5d0, type: 3}
   MinAngle: 0
   MaxAngle: 0
+  t: 1
   smoothSpeed: 0.125
-  state: 1
+  TerminusObjct: {fileID: 8737837783119671717, guid: d14055c272798f645a2fb24181947d0f,
+    type: 3}
+  state: 2
