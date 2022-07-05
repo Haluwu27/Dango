@@ -25,6 +25,9 @@ public class SpitManager : MonoBehaviour
 
         if (other.gameObject.TryGetComponent(out DangoManager dango))
         {
+            //SE
+            GameManager.SoundManager.PlaySE(SoundSource.SE_STAB_DANGO);
+
             //落下アクション中に行う処理
             OnFallAction();
 

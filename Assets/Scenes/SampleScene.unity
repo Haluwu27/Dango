@@ -2248,17 +2248,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _debugSoundSource: 0
-  SEs:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
   _BGM: {fileID: 1790268704}
   _SEPrefab: {fileID: 2110355770402595655, guid: b87469c47a09e064c88f1afac9ad82f2,
     type: 3}

@@ -260,7 +260,7 @@ class DangoRole
                 _questManager.SucceedChecker.CheckQuestCreateRoleSucceed(_questManager, posRole);
 
                 //[Debug]–ð–¼‚Ì•\Ž¦
-                Logger.Log(posRole.GetRolename());
+                //Logger.Log(posRole.GetRolename());
                 return true;
             }
         }
