@@ -3509,6 +3509,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1634823978114895786, guid: 2894d6d8cd64d7e4c93a559e4a7a0de6,
         type: 3}
+      propertyPath: shotWaitFrame
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 1634823978114895786, guid: 2894d6d8cd64d7e4c93a559e4a7a0de6,
+        type: 3}
       propertyPath: verticalRot.x
       value: -30
       objectReference: {fileID: 0}
@@ -3519,6 +3524,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1634823978114895786, guid: 2894d6d8cd64d7e4c93a559e4a7a0de6,
         type: 3}
+      propertyPath: animationFrame
+      value: 40
+      objectReference: {fileID: 0}
+    - target: {fileID: 1634823978114895786, guid: 2894d6d8cd64d7e4c93a559e4a7a0de6,
+        type: 3}
       propertyPath: horizontalRot.x
       value: -50
       objectReference: {fileID: 0}
@@ -3526,6 +3536,16 @@ PrefabInstance:
         type: 3}
       propertyPath: horizontalRot.y
       value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 1634823978114895786, guid: 2894d6d8cd64d7e4c93a559e4a7a0de6,
+        type: 3}
+      propertyPath: defalutContinueFrame
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 1634823978114895786, guid: 2894d6d8cd64d7e4c93a559e4a7a0de6,
+        type: 3}
+      propertyPath: defalutInjectionCount
+      value: 3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2894d6d8cd64d7e4c93a559e4a7a0de6, type: 3}
