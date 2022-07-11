@@ -13,7 +13,7 @@ public class CameraFollow : MonoBehaviour
     [SerializeField, Tooltip("追従したいターゲット")] Transform target = default!;
     [SerializeField] float MinAngle;
     [SerializeField] float MaxAngle;
-    [SerializeField,Tooltip("どのくらいの時間で追いつくか")] float ratio;
+    [SerializeField,Tooltip("どのくらいの時間で追いつくか")] float ratio=1;
 
     [SerializeField, Range(0.01f, 1f), Tooltip("カメラの追従度")]
     private float smoothSpeed = 0.125f;
