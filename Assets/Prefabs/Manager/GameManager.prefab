@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4920492317850513708}
   - component: {fileID: 4920492317850513709}
+  - component: {fileID: 1164745714}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -44,3 +45,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7b60e1390068ee34f8a163294b083696, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1164745714
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4920492317850513710}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1266d3b2d8adc0749a78c1bbd43cca03, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _debugSoundSource: 0
+  _BGM: {fileID: 0}
+  _SEPrefab: {fileID: 2110355770402595655, guid: b87469c47a09e064c88f1afac9ad82f2,
+    type: 3}
+  BGMClip:
+  - {fileID: 8300000, guid: 3a21f1e6f55ba9e428c4c585bdb3fd49, type: 3}
+  SEClip:
+  - {fileID: 0}
+  - {fileID: 8300000, guid: ddee16cb74f1586488212a7e242cd850, type: 3}
+  - {fileID: 8300000, guid: f884590b7ecfd624fabd1f3297879090, type: 3}
+  - {fileID: 8300000, guid: ca2e979cbdbfea04fbd38761e6a8c494, type: 3}

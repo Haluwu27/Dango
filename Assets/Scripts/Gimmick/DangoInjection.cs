@@ -9,6 +9,7 @@ public class DangoInjection : MonoBehaviour
     [System.Flags]
     private enum DangoColorChoice
     {
+        [InspectorName("ëSéÊÇËè¡Çµ")]
         None = 0,
 
         Red = 1 << 1,
@@ -19,7 +20,9 @@ public class DangoInjection : MonoBehaviour
         Blue = 1 << 6,
         Purple = 1 << 7,
 
+        [InspectorName("")]
         All = 8,
+        [InspectorName("ëSëIë")]
         SET_ALL = ~0,
     }
 
