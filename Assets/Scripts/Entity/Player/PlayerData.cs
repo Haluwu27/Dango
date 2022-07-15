@@ -476,7 +476,7 @@ class PlayerData : MonoBehaviour
         FixedUpdateState();
 
         //仮でここに
-        _playerUIManager.SetTimeText("残り時間：" + (int)_satiety + "秒");
+        //_playerUIManager.SetTimeText("残り時間：" + (int)_satiety + "秒");
     }
 
     //デバッグ終わりに削除
