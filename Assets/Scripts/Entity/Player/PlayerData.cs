@@ -25,9 +25,9 @@ class PlayerData : MonoBehaviour
     private bool _hasFalled = false;
     private bool _hasStayedEat = false;
 
-    [SerializeField] private Rigidbody _rigidbody;
-
-    [SerializeField] private GameObject playerCamera;
+    [SerializeField] private Rigidbody rb = default!;
+    [SerializeField] private CapsuleCollider capsuleCollider = default!;
+    [SerializeField] private GameObject playerCamera = default!;
 
     private DangoRole dangoRole = DangoRole.instance;
 
@@ -56,7 +56,7 @@ class PlayerData : MonoBehaviour
 
         if (context.phase == InputActionPhase.Performed)
         {
-            _rigidbody.AddForce(Vector3.up * (_jumpPower + _maxStabCount), ForceMode.Impulse);
+            rb.AddForce(Vector3.up * (_jumpPower + _maxStabCount), ForceMode.Impulse);
         }
     }
 
@@ -91,10 +91,14 @@ class PlayerData : MonoBehaviour
 
         if (context.phase == InputActionPhase.Performed)
         {
-            //空中なら落下刺しに移行
+            //空中かつ地面に近すぎなければ落下刺しに移行
             if (!_isGround)
             {
-                _hasFalled = true;
+                Ray ray = new(transform.position, Vector3.down);
+
+                //近くに地面があるか(playerの半分の大きさ)判定
+                if (Physics.Raycast(ray, capsuleCollider.height + capsuleCollider.height / 2f)) _hasAttacked = true;
+                else _hasFalled = true;
             }
             //地面なら普通に突き刺しに移行
             else
@@ -252,7 +256,7 @@ class PlayerData : MonoBehaviour
             if (parent.IsGround) return IState.E_State.Control;
 
             //待機時間が終わったらアタックステートに移行
-            return parent._playerFall.FixedUpdate(parent._rigidbody, parent.spitManager)
+            return parent._playerFall.FixedUpdate(parent.rb, parent.spitManager)
                 ? IState.E_State.AttackAction : IState.E_State.Unchanged;
         }
     }
@@ -503,6 +507,7 @@ class PlayerData : MonoBehaviour
             _maker.transform.position = hit.point;
             _maker.SetActive(true);
         }
+        else _maker.SetActive(false);
     }
 
     private bool CanStab()
@@ -540,7 +545,7 @@ class PlayerData : MonoBehaviour
     private void IsGrounded()
     {
         var ray = new Ray(transform.position, Vector3.down);
-        IsGround = Physics.Raycast(ray, 1f);
+        IsGround = Physics.Raycast(ray, capsuleCollider.height / 1.999f);
     }
 
     /// <summary>
@@ -554,8 +559,8 @@ class PlayerData : MonoBehaviour
         //カメラの向きを元にベクトルの作成
         MoveVec = _moveAxis.y * _moveSpeed * Cameraforward + _moveAxis.x * _moveSpeed * playerCamera.transform.right;
 
-        if (_rigidbody.velocity.magnitude < 8f)
-            _rigidbody.AddForce(MoveVec * _moveSpeed);
+        if (rb.velocity.magnitude < 8f)
+            rb.AddForce(MoveVec * _moveSpeed);
     }
 
     /// <summary>
