@@ -13,6 +13,8 @@ internal class GameManager : MonoBehaviour
     PlayerData _playerData;
     private static SoundManager _soundManager = default!;
     public static SoundManager SoundManager => _soundManager;
+    private static FadeManager _fadeManager = default!;
+    public static FadeManager FadeManager => _fadeManager;
 
     #region statePattern
     interface IState
@@ -124,6 +126,9 @@ internal class GameManager : MonoBehaviour
     private void Awake()
     {
         _soundManager = GetComponent<SoundManager>();
+        _fadeManager = GameObject.Find("FadeCanvas").GetComponentInChildren<FadeManager>();
+        _fadeManager.StartFade(TM.Easing.EaseType.Linear, FadeStyle.Fadeout, 5f);
+
         _soundManager.PlayBGM(SoundSource.BGM_Stage);
 
         //マウスカーソルのやつ。

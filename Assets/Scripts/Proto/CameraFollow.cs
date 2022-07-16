@@ -139,7 +139,7 @@ public class CameraFollow : MonoBehaviour
         if (Physics.Raycast(targetPos, terminus.transform.position - targetPos, out hit, Vector3.Distance(targetPos, terminus.transform.position), wallLayer, QueryTriggerInteraction.Ignore))
         {
             wallHitPos = hit.point * 0.95f;//“–‚½‚Á‚½êŠ‚É”ò‚Î‚·‚ÆƒJƒƒ‰‚ª•Ç‚Ì’†‚É–„‚Ü‚é‚Ì‚Å’²®B
-            Logger.Log(hit.point);
+            //Logger.Log(hit.point);
             return true;
         }
         else
