@@ -5,6 +5,7 @@ using UnityEngine;
 /// <summary>
 /// ゲームの進行に関わるもののみ定義
 /// </summary>
+[RequireComponent(typeof(GameStartManager))]
 internal class GameManager : MonoBehaviour
 {
     public static float GameScore { get; set; } = 0;
@@ -13,8 +14,6 @@ internal class GameManager : MonoBehaviour
     PlayerData _playerData;
     private static SoundManager _soundManager = default!;
     public static SoundManager SoundManager => _soundManager;
-    private static FadeManager _fadeManager = default!;
-    public static FadeManager FadeManager => _fadeManager;
 
     #region statePattern
     interface IState
@@ -126,14 +125,8 @@ internal class GameManager : MonoBehaviour
     private void Awake()
     {
         _soundManager = GetComponent<SoundManager>();
-        _fadeManager = GameObject.Find("FadeCanvas").GetComponentInChildren<FadeManager>();
-        _fadeManager.StartFade(TM.Easing.EaseType.Linear, FadeStyle.Fadeout, 5f);
 
         _soundManager.PlayBGM(SoundSource.BGM_Stage);
-
-        //マウスカーソルのやつ。
-        Cursor.visible = false;
-        Cursor.lockState = CursorLockMode.Locked;
 
         //最初のクエストを仮置き。
         _questManager.ChangeQuest(_questManager.Creater.CreateQuestCreateRole(DangoRole.POSROLE_DIVIDED_INTO_TWO, 1, "役「二分割」を1個作れ！"),
