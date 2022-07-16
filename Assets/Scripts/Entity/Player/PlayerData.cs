@@ -41,7 +41,7 @@ class PlayerData : MonoBehaviour
     {
         if (context.phase == InputActionPhase.Performed)
         {
-            _moveAxis = context.ReadValue<Vector2>().normalized;
+            _moveAxis = context.ReadValue<Vector2>();
         }
         else if (context.phase == InputActionPhase.Canceled)
         {
@@ -391,7 +391,7 @@ class PlayerData : MonoBehaviour
 
     #region メンバ変数
     //プレイヤーの能力
-    [SerializeField] private float _moveSpeed = 3f;
+    [SerializeField] private float _moveSpeed = 50f;
     [SerializeField] private float _jumpPower = 10f;
 
     [SerializeField] private SpitManager spitManager = default!;
@@ -448,8 +448,19 @@ class PlayerData : MonoBehaviour
         }
     }
 
+    //移動速度定数
+    const float MAX_VELOCITY_MAG = 8f;
+    const float RUN_SPEED_MAG = 7f;
+
     public Vector3 MoveVec { get; private set; }
     #endregion
+
+    private void Awake()
+    {
+        _playerUIManager = GameObject.Find("PlayerUICanvas").GetComponent<PlayerUIManager>();
+        _dangoUISC = GameObject.Find("PlayerUICanvas").transform.Find("DangoBackScreen").GetComponent<DangoUIScript>();
+        _directing = GameObject.Find("PlayerUICanvas").transform.Find("DirectingObj").GetComponent<RoleDirectingScript>();
+    }
 
     private void OnEnable()
     {
@@ -458,9 +469,6 @@ class PlayerData : MonoBehaviour
 
     private void Start()
     {
-        _playerUIManager = GameObject.Find("PlayerUICanvas").GetComponent<PlayerUIManager>();
-        _dangoUISC = GameObject.Find("PlayerUICanvas").transform.Find("DangoBackScreen").GetComponent<DangoUIScript>();
-        _directing = GameObject.Find("PlayerUICanvas").transform.Find("DirectingObj").GetComponent<RoleDirectingScript>();
 
         _maker = Instantiate(makerPrefab);
         _maker.SetActive(false);
@@ -478,9 +486,6 @@ class PlayerData : MonoBehaviour
         DecreaseSatiety();
         _canGrowStab = _playerGrowStab.CanGrowStab(_maxStabCount);
         FixedUpdateState();
-
-        //仮でここに
-        //_playerUIManager.SetTimeText("残り時間：" + (int)_satiety + "秒");
     }
 
     //デバッグ終わりに削除
@@ -559,8 +564,12 @@ class PlayerData : MonoBehaviour
         //カメラの向きを元にベクトルの作成
         MoveVec = _moveAxis.y * _moveSpeed * Cameraforward + _moveAxis.x * _moveSpeed * playerCamera.transform.right;
 
-        if (rb.velocity.magnitude < 8f)
-            rb.AddForce(MoveVec * _moveSpeed);
+        if (rb.velocity.magnitude < MAX_VELOCITY_MAG)
+        {
+            float mag = Mathf.Sqrt(rb.velocity.x * rb.velocity.x + rb.velocity.z * rb.velocity.z);
+            float speedMag = RUN_SPEED_MAG - mag;
+            rb.AddForce(MoveVec * speedMag);
+        }
     }
 
     /// <summary>
