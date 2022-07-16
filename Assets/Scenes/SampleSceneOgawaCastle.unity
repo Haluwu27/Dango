@@ -3188,9 +3188,19 @@ PrefabInstance:
       objectReference: {fileID: 447632294}
     - target: {fileID: 4062595608074469455, guid: e00667b9f080330498c4b7b845c69a76,
         type: 3}
+      propertyPath: _moveSpeed
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 4062595608074469455, guid: e00667b9f080330498c4b7b845c69a76,
+        type: 3}
       propertyPath: capsuleCollider
       value: 
       objectReference: {fileID: 447632300}
+    - target: {fileID: 6757909140035296594, guid: e00667b9f080330498c4b7b845c69a76,
+        type: 3}
+      propertyPath: m_Interpolate
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e00667b9f080330498c4b7b845c69a76, type: 3}
 --- !u!1 &60231584
