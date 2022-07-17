@@ -54,6 +54,7 @@ public class CameraFollow : MonoBehaviour
         _playerData = target.GetComponent<PlayerData>();
 
         //カメラの位置を変更する
+        if(target.position - targetPos != target.position)
         terminus.transform.position += target.position - targetPos;
 
         //X軸回転の角度を所得
