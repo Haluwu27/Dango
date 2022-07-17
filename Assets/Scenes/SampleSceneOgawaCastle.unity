@@ -3118,8 +3118,13 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1061649141369810906, guid: e00667b9f080330498c4b7b845c69a76,
         type: 3}
+      propertyPath: ratio
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 1061649141369810906, guid: e00667b9f080330498c4b7b845c69a76,
+        type: 3}
       propertyPath: state
-      value: 2
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1061649141422286778, guid: e00667b9f080330498c4b7b845c69a76,
         type: 3}
@@ -76140,7 +76145,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh39784
+  m_Name: pb_Mesh60088
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
