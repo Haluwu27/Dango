@@ -24,6 +24,7 @@ class PlayerData : MonoBehaviour
     private bool _hasAttacked = false;
     private bool _hasFalled = false;
     private bool _hasStayedEat = false;
+    private bool _hasJumped = false;
 
     [SerializeField] private Rigidbody rb = default!;
     [SerializeField] private CapsuleCollider capsuleCollider = default!;
@@ -56,7 +57,7 @@ class PlayerData : MonoBehaviour
 
         if (context.phase == InputActionPhase.Performed)
         {
-            rb.AddForce(Vector3.up * (_jumpPower + _maxStabCount), ForceMode.Impulse);
+            _hasJumped = true;
         }
     }
 
@@ -225,7 +226,7 @@ class PlayerData : MonoBehaviour
         public IState.E_State FixedUpdate(PlayerData parent)
         {
             //プレイヤーを動かす処理
-            parent.PlayerMove();
+            parent.PlayerMove(parent._cameraForward);
 
             //ステートに移行。
             if (parent._hasAttacked) return IState.E_State.AttackAction;
@@ -250,7 +251,7 @@ class PlayerData : MonoBehaviour
         public IState.E_State FixedUpdate(PlayerData parent)
         {
             //移動
-            parent.PlayerMove();
+            parent.PlayerMove(parent._cameraForward);
 
             //途中で接地したらコントロールに戻る
             if (parent.IsGround) return IState.E_State.Control;
@@ -297,7 +298,7 @@ class PlayerData : MonoBehaviour
         }
         public IState.E_State FixedUpdate(PlayerData parent)
         {
-            parent.PlayerMove();
+            parent.PlayerMove(parent._cameraForward);
 
             //食べる待機が終わったら食べるステートに移行
             if (parent._playerStayEat.CanEat()) return IState.E_State.EatDango;
@@ -323,7 +324,7 @@ class PlayerData : MonoBehaviour
         }
         public IState.E_State FixedUpdate(PlayerData parent)
         {
-            parent.PlayerMove();
+            parent.PlayerMove(parent._cameraForward);
 
             return IState.E_State.Unchanged;
         }
@@ -453,6 +454,9 @@ class PlayerData : MonoBehaviour
     const float RUN_SPEED_MAG = 7f;
 
     public Vector3 MoveVec { get; private set; }
+    private Vector3 _cameraForward;
+
+    public void SetCameraForward(Vector3 camForward) => _cameraForward = camForward;
     #endregion
 
     private void Awake()
@@ -486,6 +490,11 @@ class PlayerData : MonoBehaviour
         DecreaseSatiety();
         _canGrowStab = _playerGrowStab.CanGrowStab(_maxStabCount);
         FixedUpdateState();
+        if (_hasJumped)
+        {
+            rb.AddForce(Vector3.up * (_jumpPower + _maxStabCount), ForceMode.Impulse);
+            _hasJumped = false;
+        }
     }
 
     //デバッグ終わりに削除
@@ -556,13 +565,10 @@ class PlayerData : MonoBehaviour
     /// <summary>
     /// Playerをカメラの方向に合わせて動かす関数。
     /// </summary>
-    private void PlayerMove()
+    private void PlayerMove(Vector3 camForward)
     {
-        //カメラの向きを確認、Cameraforwardに代入
-        var Cameraforward = Vector3.Scale(playerCamera.transform.forward, new Vector3(1, 0, 1)).normalized;
-
         //カメラの向きを元にベクトルの作成
-        MoveVec = _moveAxis.y * _moveSpeed * Cameraforward + _moveAxis.x * _moveSpeed * playerCamera.transform.right;
+        MoveVec = _moveAxis.y * _moveSpeed * _cameraForward + _moveAxis.x * _moveSpeed * playerCamera.transform.right;
 
         if (rb.velocity.magnitude < MAX_VELOCITY_MAG)
         {
@@ -597,6 +603,13 @@ class PlayerData : MonoBehaviour
             return _dangos[0];
         }
     }
+    public void PlayerRotate(Quaternion rot)
+    {
+        if (_currentState != IState.E_State.Control) return;
+
+        transform.rotation = rot;
+    }
+
     public int GetMaxDango() => _maxStabCount;
     public List<DangoColor> GetDangos() => _dangos;
     public void AddDangos(DangoColor d) => _dangos.Add(d);
