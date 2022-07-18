@@ -198,7 +198,6 @@ class PlayerData : MonoBehaviour
         E_State Update(PlayerData parent);
         E_State FixedUpdate(PlayerData parent);
     }
-
     //状態管理
     private IState.E_State _currentState = IState.E_State.Control;
     private static readonly IState[] states = new IState[(int)IState.E_State.Max]
@@ -337,6 +336,8 @@ class PlayerData : MonoBehaviour
             parent._maxStabCount = parent._playerGrowStab.GrowStab(parent._maxStabCount);
             parent._playerUIManager.SetEventText("させる団子の数が増えた！(" + parent._maxStabCount + "個)");
             parent._canGrowStab = false;
+            //刺せる範囲表示の拡大。今串が伸びないのでコメントアウトしてます。
+            //parent.rangeUI.transform.localScale = new Vector3(parent.rangeUI.transform.localScale.x, parent.rangeUI.transform.localScale.y + 0.01f, parent.rangeUI.transform.localScale.z);
             return IState.E_State.EatDango;
         }
         public IState.E_State Update(PlayerData parent)
@@ -396,7 +397,8 @@ class PlayerData : MonoBehaviour
     [SerializeField] private float _jumpPower = 10f;
 
     [SerializeField] private SpitManager spitManager = default!;
-    [SerializeField] private GameObject makerPrefab = default!;
+    [SerializeField] private GameObject makerUI = default!;
+    [SerializeField] private GameObject rangeUI = default;
 
     //UI関連
     RoleDirectingScript _directing;
@@ -441,7 +443,6 @@ class PlayerData : MonoBehaviour
             if (value)
             {
                 _playerFall.IsFallAction = false;
-                makerPrefab.SetActive(false);
             }
 
             _isGround = value;
@@ -472,7 +473,7 @@ class PlayerData : MonoBehaviour
 
     private void Start()
     {
-        makerPrefab.SetActive(false);
+        makerUI.SetActive(false);
     }
 
     private void Update()
@@ -480,6 +481,7 @@ class PlayerData : MonoBehaviour
         IsGrounded();
         UpdateState();
         FallActionMaker();
+        RangeUI();
     }
 
     private void FixedUpdate()
@@ -512,17 +514,36 @@ class PlayerData : MonoBehaviour
     {
         var ray = new Ray(transform.position, Vector3.down);
 
-            //今は仮打ちでレイの長さを10にしています。変更推奨です。
-            if (Physics.Raycast(ray, out RaycastHit hit, 10f))
+            if (Physics.Raycast(ray, out RaycastHit hit,Mathf.Infinity))
         {
-            makerPrefab.transform.position = hit.point + new Vector3(0,0.01f,0);
+            makerUI.transform.position = hit.point + new Vector3(0,0.01f,0);
             //突き刺しできるようになったら有効化
             if (!Physics.Raycast(ray, capsuleCollider.height + capsuleCollider.height / 2f))
-                makerPrefab.SetActive(true);
+                makerUI.SetActive(true);
             else
-                makerPrefab.SetActive(false);
+                makerUI.SetActive(false);
         }
         
+    }
+
+    private void RangeUI()
+    {
+        var ray = new Ray(transform.position, Vector3.down);
+        RaycastHit hit;
+        if (Physics.Raycast(ray, out hit, Mathf.Infinity))
+        {
+            rangeUI.transform.position = new Vector3(rangeUI.transform.position.x, hit.point.y + 0.01f, rangeUI.transform.position.z);
+        }
+
+        //空中でも出てると違和感あったので消します
+        if (_isGround)
+        {
+            rangeUI.SetActive(true);
+        }
+        else
+        {
+            rangeUI.SetActive(false);
+        }
     }
 
     private bool CanStab()
