@@ -6,11 +6,8 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/SampleScene.unity
-    guid: 99c9720ab356a0642a771bea13969a05
-  - enabled: 0
-    path: Assets/Temp.unity
-    guid: 6163feee0d6d94243b9db828d924d3c6
+    path: Assets/Scenes/SampleSceneOgawaCastle.unity
+    guid: 6feeb1ad1db25de43b2e776fe62c2f1e
   m_configObjects:
     com.unity.input.settings: {fileID: 11400000, guid: 422beeca8791b634fbe50524231ace79,
       type: 2}
