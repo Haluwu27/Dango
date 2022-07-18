@@ -396,7 +396,6 @@ class PlayerData : MonoBehaviour
 
     [SerializeField] private SpitManager spitManager = default!;
     [SerializeField] private GameObject makerPrefab = default!;
-    GameObject _maker = null;
 
     //UI関連
     RoleDirectingScript _directing;
@@ -441,7 +440,7 @@ class PlayerData : MonoBehaviour
             if (value)
             {
                 _playerFall.IsFallAction = false;
-                _maker.SetActive(false);
+                makerPrefab.SetActive(false);
             }
 
             _isGround = value;
@@ -469,9 +468,7 @@ class PlayerData : MonoBehaviour
 
     private void Start()
     {
-
-        _maker = Instantiate(makerPrefab);
-        _maker.SetActive(false);
+        makerPrefab.SetActive(false);
     }
 
     private void Update()
@@ -506,13 +503,17 @@ class PlayerData : MonoBehaviour
     {
         var ray = new Ray(transform.position, Vector3.down);
 
-        //今は仮打ちでレイの長さを10にしています。変更推奨です。
-        if (Physics.Raycast(ray, out RaycastHit hit, 10f))
+            //今は仮打ちでレイの長さを10にしています。変更推奨です。
+            if (Physics.Raycast(ray, out RaycastHit hit, 10f))
         {
-            _maker.transform.position = hit.point;
-            _maker.SetActive(true);
+            makerPrefab.transform.position = hit.point + new Vector3(0,0.01f,0);
+            //突き刺しできるようになったら有効化
+            if (!Physics.Raycast(ray, capsuleCollider.height + capsuleCollider.height / 2f))
+                makerPrefab.SetActive(true);
+            else
+                makerPrefab.SetActive(false);
         }
-        else _maker.SetActive(false);
+        
     }
 
     private bool CanStab()
