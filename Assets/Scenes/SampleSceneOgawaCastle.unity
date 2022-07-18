@@ -3186,6 +3186,16 @@ PrefabInstance:
       propertyPath: m_Name
       value: PlayerParent
       objectReference: {fileID: 0}
+    - target: {fileID: 4062595608074469440, guid: e00667b9f080330498c4b7b845c69a76,
+        type: 3}
+      propertyPath: m_CastShadows
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4062595608074469440, guid: e00667b9f080330498c4b7b845c69a76,
+        type: 3}
+      propertyPath: m_ReceiveShadows
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4062595608074469455, guid: e00667b9f080330498c4b7b845c69a76,
         type: 3}
       propertyPath: rb
@@ -3196,6 +3206,12 @@ PrefabInstance:
       propertyPath: _moveSpeed
       value: 10
       objectReference: {fileID: 0}
+    - target: {fileID: 4062595608074469455, guid: e00667b9f080330498c4b7b845c69a76,
+        type: 3}
+      propertyPath: makerPrefab
+      value: 
+      objectReference: {fileID: 2703463164809709797, guid: 63846cb4c6323dc46850c217c50ed35d,
+        type: 3}
     - target: {fileID: 4062595608074469455, guid: e00667b9f080330498c4b7b845c69a76,
         type: 3}
       propertyPath: capsuleCollider
