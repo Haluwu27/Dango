@@ -221,12 +221,13 @@ class PlayerData : MonoBehaviour
         }
         public IState.E_State Update(PlayerData parent)
         {
+            parent.PlayerRotateToMoveVec();
             return IState.E_State.Unchanged;
         }
         public IState.E_State FixedUpdate(PlayerData parent)
         {
             //プレイヤーを動かす処理
-            parent.PlayerMove(parent._cameraForward);
+            parent.PlayerMove();
 
             //ステートに移行。
             if (parent._hasAttacked) return IState.E_State.AttackAction;
@@ -251,7 +252,7 @@ class PlayerData : MonoBehaviour
         public IState.E_State FixedUpdate(PlayerData parent)
         {
             //移動
-            parent.PlayerMove(parent._cameraForward);
+            parent.PlayerMove();
 
             //途中で接地したらコントロールに戻る
             if (parent.IsGround) return IState.E_State.Control;
@@ -298,7 +299,7 @@ class PlayerData : MonoBehaviour
         }
         public IState.E_State FixedUpdate(PlayerData parent)
         {
-            parent.PlayerMove(parent._cameraForward);
+            parent.PlayerMove();
 
             //食べる待機が終わったら食べるステートに移行
             if (parent._playerStayEat.CanEat()) return IState.E_State.EatDango;
@@ -324,7 +325,7 @@ class PlayerData : MonoBehaviour
         }
         public IState.E_State FixedUpdate(PlayerData parent)
         {
-            parent.PlayerMove(parent._cameraForward);
+            parent.PlayerMove();
 
             return IState.E_State.Unchanged;
         }
@@ -473,7 +474,6 @@ class PlayerData : MonoBehaviour
 
     private void Start()
     {
-
         _maker = Instantiate(makerPrefab);
         _maker.SetActive(false);
     }
@@ -565,7 +565,7 @@ class PlayerData : MonoBehaviour
     /// <summary>
     /// Playerをカメラの方向に合わせて動かす関数。
     /// </summary>
-    private void PlayerMove(Vector3 camForward)
+    private void PlayerMove()
     {
         //カメラの向きを元にベクトルの作成
         MoveVec = _moveAxis.y * _moveSpeed * _cameraForward + _moveAxis.x * _moveSpeed * playerCamera.transform.right;
@@ -578,6 +578,15 @@ class PlayerData : MonoBehaviour
         }
     }
 
+    private void PlayerRotateToMoveVec()
+    {
+        if (MoveVec.magnitude == 0) return;
+        Vector3 lookRot = new(MoveVec.x, 0, MoveVec.z);
+
+        transform.localRotation = Quaternion.RotateTowards(transform.rotation, Quaternion.LookRotation(lookRot), 1.5f);
+    }
+
+
     /// <summary>
     /// 満腹度をへらす関数、fixedUpdateに配置。
     /// </summary>
@@ -588,6 +597,7 @@ class PlayerData : MonoBehaviour
     }
 
     #region GetterSetter
+    public Vector2 GetMoveAxis() => _moveAxis;
     public Vector2 GetRoteAxis() => _roteAxis;
     public List<DangoColor> GetDangoType() => _dangos;
     public DangoColor GetDangoType(int value)
@@ -602,12 +612,6 @@ class PlayerData : MonoBehaviour
             Logger.Error("代わりに先頭（配列の0番）を返します。");
             return _dangos[0];
         }
-    }
-    public void PlayerRotate(Quaternion rot)
-    {
-        if (_currentState != IState.E_State.Control) return;
-
-        transform.rotation = rot;
     }
 
     public int GetMaxDango() => _maxStabCount;
