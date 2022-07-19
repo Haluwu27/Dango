@@ -32,7 +32,8 @@ public class CameraIsStaying
         public IState.E_State Initialize(CameraIsStaying parent)
         {
             parent._currentTime = 0;
-            return IState.E_State.Unchanged;
+
+            return parent.InitControl() ? IState.E_State.Unchanged : IState.E_State.Stay;
         }
         public IState.E_State Update(CameraIsStaying parent)
         {
@@ -43,7 +44,7 @@ public class CameraIsStaying
     {
         public IState.E_State Initialize(CameraIsStaying parent)
         {
-            parent.Reset();
+            parent._currentTime = MAX_STAY_TIME;
             return IState.E_State.Unchanged;
         }
         public IState.E_State Update(CameraIsStaying parent)
@@ -70,6 +71,8 @@ public class CameraIsStaying
 
         var nextState = states[(int)_currentState].Update(this);
 
+        Logger.Log(_currentState);
+
         if (nextState != IState.E_State.Unchanged)
         {
             //次に遷移
@@ -78,20 +81,32 @@ public class CameraIsStaying
         }
     }
 
-    //待機秒数
-    private const float MAX_STAY_TIME = 2f;
+
+    //1sに移動する角度の定数
+    const float MOVE_ANGLE = 45f;
+
+    //待機秒数定数
+    const float MAX_STAY_TIME = 2f;
 
     float _currentTime = MAX_STAY_TIME;
 
     GameObject _playerCamera;
     GameObject _terminus;
-    Transform _player;
+    Transform _playerTrans;
 
-    public CameraIsStaying(GameObject playerCamera, GameObject terminus, Transform player)
+    Vector3 _playerPos;
+    Vector3 _cameraPos;
+    Vector3 _targetPos;
+    float _distancePtoC;
+    float _distanceCtoT;
+    float _angle;
+    bool _isLeft;
+
+    public CameraIsStaying(GameObject playerCamera, GameObject terminus, Transform playerTrans)
     {
         _playerCamera = playerCamera;
         _terminus = terminus;
-        _player = player;
+        _playerTrans = playerTrans;
     }
 
     public void Update()
@@ -102,6 +117,7 @@ public class CameraIsStaying
     public void Reset()
     {
         _currentTime = MAX_STAY_TIME;
+        _currentState = IState.E_State.Stay;
     }
 
     private bool IsStaying()
@@ -111,16 +127,65 @@ public class CameraIsStaying
         return _currentTime > 0;
     }
 
+    private bool InitControl()
+    {
+        //Y座標を無視したプレイヤーの座標
+        _playerPos = new(_playerTrans.position.x, _playerCamera.transform.position.y, _playerTrans.position.z);
+
+        //カメラ座標
+        _cameraPos = _playerCamera.transform.position;
+
+        //playerPosとカメラ座標の距離（ベクトルの大きさ）
+        _distancePtoC = Vector3.Distance(_cameraPos, _playerPos);
+
+        //Playerの左側にカメラがあるか外積のyを取って判定
+        _isLeft = Vector3.Cross(_playerTrans.forward, _cameraPos - _playerPos).y < 0 ? true : false;
+
+        //正面の逆ベクトルに距離をかけてプレイヤーの座標（Y無視）を足したもの
+        //これが目標地点
+        _targetPos = _playerPos + (-_playerTrans.forward) * _distancePtoC;
+
+        //余弦定理で角度を求める
+        _distanceCtoT = Vector3.Distance(_targetPos, _cameraPos);
+        float angle = Mathf.Acos((_distancePtoC * _distancePtoC + _distancePtoC * _distancePtoC - _distanceCtoT * _distanceCtoT) / (2 * _distancePtoC * _distancePtoC));
+
+        //弧度法から度数法に変換
+        _angle = angle * 180f / Mathf.PI;
+
+        //ゼロ除算ケア（そもそも到達時間が0なら移動しないということ）
+        if (_angle == 0) return false;
+
+        return true;
+    }
+
     private bool LookPlayerBack()
     {
-        float x = _currentTime += Time.deltaTime;
+        //角度を定数で割る。定数値を1としたとき何秒で目標地点に到達するかって話
+        float arrivalTime = _angle / MOVE_ANGLE;
+        _currentTime += Time.deltaTime;
 
-        //ここで移動量と時間の計算すべき？
-        x = Mathf.Clamp01(x);
+        //現在の経過時間を足す
+        //経過時間を0-1で表したいから、さっき求めた何秒で到達するかで割る
+        float x = _currentTime;
 
-        float y = x < 0.5f ? 12f * x * x : 12f * Mathf.Abs(x - 1f) * Mathf.Abs(x - 1f);
-        _playerCamera.transform.RotateAround(_player.position, Vector3.up, y);
-        _terminus.transform.RotateAround(_player.position, Vector3.up, y);
-        return (_player.forward.x - _playerCamera.transform.forward.x) * (_player.forward.x - _playerCamera.transform.forward.x) + (_player.forward.z - _playerCamera.transform.forward.z) * (_player.forward.z - _playerCamera.transform.forward.z) < 0.01f;
+        x /= arrivalTime;
+
+        float y = 0;
+        if (x < 0.5f)
+        {
+            y = 4f * x * x * x;
+        }
+        else if (x is >= 0.5f and <= 1f)
+        {
+            x = Mathf.Abs(x - 1);
+            y = 4f * x * x * x;
+        }
+
+        _playerCamera.transform.RotateAround(_playerTrans.position, Vector3.up, (_isLeft ? -y : y) * 360f * Time.deltaTime);
+        _terminus.transform.RotateAround(_playerTrans.position, Vector3.up, (_isLeft ? -y : y) * 360f * Time.deltaTime);
+        //_playerCamera.transform.RotateAround(_playerTrans.position, Vector3.up, (_isLeft ? -MOVE_ANGLE : MOVE_ANGLE) * Time.deltaTime);
+        //_terminus.transform.RotateAround(_playerTrans.position, Vector3.up, (_isLeft ? -MOVE_ANGLE : MOVE_ANGLE) * Time.deltaTime);
+
+        return _currentTime >= arrivalTime;
     }
 }
