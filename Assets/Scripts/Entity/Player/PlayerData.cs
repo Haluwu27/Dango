@@ -157,6 +157,9 @@ class PlayerData : MonoBehaviour
 
         _playerUIManager.SetEventText("食べた！" + (int)score + "点！");
 
+        //残り時間の増加
+        PlayerUIManager.time += score;
+
         //満腹度を上昇
         _satiety += score * SCORE_TIME_RATE;
 
