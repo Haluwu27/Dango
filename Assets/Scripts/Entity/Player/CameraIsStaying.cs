@@ -32,12 +32,16 @@ public class CameraIsStaying
         public IState.E_State Initialize(CameraIsStaying parent)
         {
             parent._currentTime = 0;
+            parent._timeX = parent._timeY = 0;
 
-            return parent.InitControl() ? IState.E_State.Unchanged : IState.E_State.Stay;
+            return (parent.InitControlX() && parent.InitControlY()) ? IState.E_State.Unchanged : IState.E_State.Stay;
         }
         public IState.E_State Update(CameraIsStaying parent)
         {
-            return parent.LookPlayerBack() ? IState.E_State.Stay : IState.E_State.Unchanged;
+            parent.LookPlayerBackH();
+            
+
+            return parent.LookPlayerBackV() ? IState.E_State.Stay : IState.E_State.Unchanged;
         }
     }
     class StayState : IState
@@ -81,6 +85,7 @@ public class CameraIsStaying
         }
     }
 
+    static readonly Vector3 OFFSET = new(0, 2f, -10f);
 
     //1sに移動する角度の定数
     const float MOVE_ANGLE = 45f;
@@ -94,13 +99,17 @@ public class CameraIsStaying
     GameObject _terminus;
     Transform _playerTrans;
 
-    Vector3 _playerPos;
-    Vector3 _cameraPos;
-    Vector3 _targetPos;
-    float _distancePtoC;
-    float _distanceCtoT;
-    float _angle;
+    float _arrivalTime;
+    float _arrivalX;
+    float _arrivalY;
+
+    float _angleX;
+    float _angleY;
     bool _isLeft;
+    bool _isUp;
+
+    float _timeX;
+    float _timeY;
 
     public CameraIsStaying(GameObject playerCamera, GameObject terminus, Transform playerTrans)
     {
@@ -127,48 +136,89 @@ public class CameraIsStaying
         return _currentTime > 0;
     }
 
-    private bool InitControl()
+    private bool InitControlX()
     {
         //Y座標を無視したプレイヤーの座標
-        _playerPos = new(_playerTrans.position.x, _playerCamera.transform.position.y, _playerTrans.position.z);
+        Vector3 playerPos = new(_playerTrans.position.x, _playerCamera.transform.position.y, _playerTrans.position.z);
 
         //カメラ座標
-        _cameraPos = _playerCamera.transform.position;
+        Vector3 cameraPos = _playerCamera.transform.position;
 
         //playerPosとカメラ座標の距離（ベクトルの大きさ）
-        _distancePtoC = Vector3.Distance(_cameraPos, _playerPos);
+        float distancePtoC = Vector3.Distance(cameraPos, playerPos);
+
+        //Player->Cameraのベクトル
+        Vector3 pcVec = cameraPos - playerPos;
 
         //Playerの左側にカメラがあるか外積のyを取って判定
-        _isLeft = Vector3.Cross(_playerTrans.forward, _cameraPos - _playerPos).y < 0 ? true : false;
+        _isLeft = Vector3.Cross(_playerTrans.forward, pcVec).y < 0 ? true : false;
 
         //正面の逆ベクトルに距離をかけてプレイヤーの座標（Y無視）を足したもの
         //これが目標地点
-        _targetPos = _playerPos + (-_playerTrans.forward) * _distancePtoC;
+        Vector3 targetPos = playerPos + (-_playerTrans.forward) * distancePtoC;
 
-        //余弦定理で角度を求める
-        _distanceCtoT = Vector3.Distance(_targetPos, _cameraPos);
-        float angle = Mathf.Acos((_distancePtoC * _distancePtoC + _distancePtoC * _distancePtoC - _distanceCtoT * _distanceCtoT) / (2 * _distancePtoC * _distancePtoC));
+        //余弦定理から角度を求める
+        float distanceCtoT = Vector3.Distance(targetPos, cameraPos);
+        float angleX = Mathf.Acos((distancePtoC * distancePtoC + distancePtoC * distancePtoC - distanceCtoT * distanceCtoT) / (2 * distancePtoC * distancePtoC));
 
         //弧度法から度数法に変換
-        _angle = angle * 180f / Mathf.PI;
+        _angleX = angleX * 180f / Mathf.PI;
 
         //ゼロ除算ケア（そもそも到達時間が0なら移動しないということ）
-        if (_angle == 0) return false;
+        if (_angleX == 0) return false;
+
+        float aTime = _angleX / MOVE_ANGLE;
+        _arrivalTime = Mathf.Max(aTime, _arrivalTime);
+        _arrivalX = aTime / _arrivalTime;
+
+        return true;
+    }
+    private bool InitControlY()
+    {
+        //プレイヤーの座標
+        Vector3 playerPos = _playerTrans.position;
+
+        //カメラ座標
+        Vector3 cameraPos = _playerCamera.transform.position;
+
+        //カメラ方向に地面と並行（プレイヤーの角度）なベクトル
+        Vector3 cameraVec = new(_playerCamera.transform.position.x, _playerTrans.position.y, _playerCamera.transform.position.z);
+
+        //Player->Cameraのベクトル
+        Vector3 pcVec = cameraPos - playerPos;
+        Vector3 pcVecAtGround = cameraVec - playerPos;
+
+        //Playerの左側にカメラがあるか外積のyを取って判定
+        _isUp = Vector3.Cross(_playerTrans.forward, pcVec).x < 0 ? true : false;
+
+        float currentAngle = Mathf.Acos(Vector3.Dot(pcVec, pcVecAtGround) / (pcVec.magnitude * pcVecAtGround.magnitude));
+        float cAngle = currentAngle * 180f / Mathf.PI;
+
+        Vector3 v = new(playerPos.x, playerPos.y, playerPos.z + OFFSET.z);
+        float targetAngle = Mathf.Acos(Vector3.Dot(v, OFFSET) / (v.magnitude * OFFSET.magnitude));
+        float tAngle = targetAngle * 180f / Mathf.PI;
+
+        _angleY = (cAngle - tAngle);
+
+        //ゼロ除算ケア（そもそも到達時間が0なら移動しないということ）
+        if (_angleY == 0) return false;
+
+        float aTime = _angleY / MOVE_ANGLE;
+
+        _arrivalTime = Mathf.Max(aTime, _arrivalTime);
+        _arrivalY = aTime / _arrivalTime;
 
         return true;
     }
 
-    private bool LookPlayerBack()
+    private bool LookPlayerBackV()
     {
-        //角度を定数で割る。定数値を1としたとき何秒で目標地点に到達するかって話
-        float arrivalTime = _angle / MOVE_ANGLE;
-        _currentTime += Time.deltaTime;
-
         //現在の経過時間を足す
-        //経過時間を0-1で表したいから、さっき求めた何秒で到達するかで割る
-        float x = _currentTime;
+        _timeY += Time.deltaTime;
 
-        x /= arrivalTime;
+        //経過時間を0-1で表したいから、さっき求めた何秒で到達するかで割る
+        float x = _timeY;
+        x /= _arrivalTime;
 
         float y = 0;
         if (x < 0.5f)
@@ -181,11 +231,41 @@ public class CameraIsStaying
             y = 4f * x * x * x;
         }
 
-        _playerCamera.transform.RotateAround(_playerTrans.position, Vector3.up, (_isLeft ? -y : y) * 360f * Time.deltaTime);
-        _terminus.transform.RotateAround(_playerTrans.position, Vector3.up, (_isLeft ? -y : y) * 360f * Time.deltaTime);
-        //_playerCamera.transform.RotateAround(_playerTrans.position, Vector3.up, (_isLeft ? -MOVE_ANGLE : MOVE_ANGLE) * Time.deltaTime);
-        //_terminus.transform.RotateAround(_playerTrans.position, Vector3.up, (_isLeft ? -MOVE_ANGLE : MOVE_ANGLE) * Time.deltaTime);
+        //積分した値（上の関数の面積）→これが平均の速度になる。→平均の速度がMOVE_ANGLEになればよい。
+        float dx = (0.5f * 0.5f * 0.5f * 0.5f) * 2f;
 
-        return _currentTime >= arrivalTime;
+        _playerCamera.transform.RotateAround(_playerTrans.position, _playerCamera.transform.right.normalized, (_isUp ? -y : y) * MOVE_ANGLE * _arrivalY / dx * Time.deltaTime);
+        _terminus.transform.RotateAround(_playerTrans.position, _playerCamera.transform.right.normalized, (_isUp ? -y : y) * MOVE_ANGLE * _arrivalY / dx * Time.deltaTime);
+
+        return _timeY >= _arrivalTime;
+    }
+
+    private bool LookPlayerBackH()
+    {
+        //現在の経過時間を足す
+        _timeX += Time.deltaTime;
+
+        //経過時間を0-1で表したいから、さっき求めた何秒で到達するかで割る
+        float x = _timeX;
+        x /= _arrivalTime;
+
+        float y = 0;
+        if (x < 0.5f)
+        {
+            y = 4f * x * x * x;
+        }
+        else if (x is >= 0.5f and <= 1f)
+        {
+            x = Mathf.Abs(x - 1);
+            y = 4f * x * x * x;
+        }
+
+        //積分した値（上の関数の面積）→これが平均の速度になる。→平均の速度がMOVE_ANGLEになればよい。
+        float dx = (0.5f * 0.5f * 0.5f * 0.5f) * 2f;
+
+        _playerCamera.transform.RotateAround(_playerTrans.position, Vector3.up, (_isLeft ? -y : y) * MOVE_ANGLE * _arrivalX / dx * Time.deltaTime);
+        _terminus.transform.RotateAround(_playerTrans.position, Vector3.up, (_isLeft ? -y : y) * MOVE_ANGLE * _arrivalX / dx * Time.deltaTime);
+
+        return _timeX >= _arrivalTime;
     }
 }
