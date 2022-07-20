@@ -75,8 +75,6 @@ public class CameraIsStaying
 
         var nextState = states[(int)_currentState].Update(this);
 
-        Logger.Log(_currentState);
-
         if (nextState != IState.E_State.Unchanged)
         {
             //ŽŸ‚É‘JˆÚ

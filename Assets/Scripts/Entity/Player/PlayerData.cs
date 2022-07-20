@@ -532,8 +532,7 @@ class PlayerData : MonoBehaviour
     private void RangeUI()
     {
         var ray = new Ray(transform.position, Vector3.down);
-        RaycastHit hit;
-        if (Physics.Raycast(ray, out hit, Mathf.Infinity))
+        if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity))
         {
             rangeUI.transform.position = new Vector3(rangeUI.transform.position.x, hit.point.y + 0.01f, rangeUI.transform.position.z);
         }
@@ -613,6 +612,7 @@ class PlayerData : MonoBehaviour
     }
 
     #region GetterSetter
+    public Vector2 GetMoveAxis() => _moveAxis;
     public Vector2 GetRoteAxis() => _roteAxis;
     public List<DangoColor> GetDangoType() => _dangos;
     public DangoColor GetDangoType(int value)
