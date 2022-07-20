@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using TM.Easing.Management;
 
 public class CameraFollow : MonoBehaviour
 {
@@ -33,7 +32,8 @@ public class CameraFollow : MonoBehaviour
 
     Vector3 _wallHitPos;//壁にぶつかった際の座標
     RaycastHit _hit;//壁を所得するRay
-    float _time = 0f;
+
+    CameraIsStaying _camIsStaying = null;
 
     [SerializeField] State state;
 
@@ -45,21 +45,21 @@ public class CameraFollow : MonoBehaviour
         transform.parent = null;//動くものに乗るとそれに追従しだすから親子関係を無くす
         _terminus = new GameObject("cameraTermiusObject");
         _terminus.transform.position = transform.position;
+        _camIsStaying = new(gameObject, _terminus, target);
+
         _prebTargetPos = target.position;
     }
 
     private void Update()
     {
         CameraRotate();
+        RotateToLookRot();
     }
 
     //Playerが動いたあとに実行するため、LateUpdateで行う。
     private void LateUpdate()
     {
         CameraSmoothMove();
-
-        //カメラの位置が決定してからプレイヤーの向きを決めることで、カクつきをなくす。
-        _playerData.PlayerRotate(Quaternion.Euler(0, transform.localEulerAngles.y, 0));
 
         _playerData.SetCameraForward(transform.forward);
     }
@@ -74,7 +74,6 @@ public class CameraFollow : MonoBehaviour
         if (WallHitCheck())
         {
             transform.position = _wallHitPos;//Lerpｗｐ使うと移動の際に壁の中が見えるため固定
-            _time = 0;
         }
         else//カメラの移動
         {
@@ -86,6 +85,16 @@ public class CameraFollow : MonoBehaviour
         }
 
         _prebTargetPos = target.position;
+    }
+    private void RotateToLookRot()
+    {
+        if (_playerData.GetRoteAxis().magnitude > 0.1f || _playerData.GetMoveAxis().magnitude > 0.1f)
+        {
+           _camIsStaying.Reset();
+            return;
+        }
+
+        _camIsStaying.Update();
     }
 
     private void CameraRotate()
