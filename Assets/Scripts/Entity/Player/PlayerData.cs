@@ -157,6 +157,9 @@ class PlayerData : MonoBehaviour
 
         _playerUIManager.SetEventText("食べた！" + (int)score + "点！");
 
+        //残り時間の増加
+        PlayerUIManager.time += score;
+
         //満腹度を上昇
         _satiety += score * SCORE_TIME_RATE;
 
@@ -198,7 +201,6 @@ class PlayerData : MonoBehaviour
         E_State Update(PlayerData parent);
         E_State FixedUpdate(PlayerData parent);
     }
-
     //状態管理
     private IState.E_State _currentState = IState.E_State.Control;
     private static readonly IState[] states = new IState[(int)IState.E_State.Max]
@@ -221,13 +223,12 @@ class PlayerData : MonoBehaviour
         }
         public IState.E_State Update(PlayerData parent)
         {
-            parent.PlayerRotateToMoveVec();
             return IState.E_State.Unchanged;
         }
         public IState.E_State FixedUpdate(PlayerData parent)
         {
             //プレイヤーを動かす処理
-            parent.PlayerMove();
+            parent.PlayerMove(parent._cameraForward);
 
             //ステートに移行。
             if (parent._hasAttacked) return IState.E_State.AttackAction;
@@ -252,7 +253,7 @@ class PlayerData : MonoBehaviour
         public IState.E_State FixedUpdate(PlayerData parent)
         {
             //移動
-            parent.PlayerMove();
+            parent.PlayerMove(parent._cameraForward);
 
             //途中で接地したらコントロールに戻る
             if (parent.IsGround) return IState.E_State.Control;
@@ -299,7 +300,7 @@ class PlayerData : MonoBehaviour
         }
         public IState.E_State FixedUpdate(PlayerData parent)
         {
-            parent.PlayerMove();
+            parent.PlayerMove(parent._cameraForward);
 
             //食べる待機が終わったら食べるステートに移行
             if (parent._playerStayEat.CanEat()) return IState.E_State.EatDango;
@@ -325,7 +326,7 @@ class PlayerData : MonoBehaviour
         }
         public IState.E_State FixedUpdate(PlayerData parent)
         {
-            parent.PlayerMove();
+            parent.PlayerMove(parent._cameraForward);
 
             return IState.E_State.Unchanged;
         }
@@ -338,6 +339,8 @@ class PlayerData : MonoBehaviour
             parent._maxStabCount = parent._playerGrowStab.GrowStab(parent._maxStabCount);
             parent._playerUIManager.SetEventText("させる団子の数が増えた！(" + parent._maxStabCount + "個)");
             parent._canGrowStab = false;
+            //刺せる範囲表示の拡大。今串が伸びないのでコメントアウトしてます。
+            //parent.rangeUI.transform.localScale = new Vector3(parent.rangeUI.transform.localScale.x, parent.rangeUI.transform.localScale.y + 0.01f, parent.rangeUI.transform.localScale.z);
             return IState.E_State.EatDango;
         }
         public IState.E_State Update(PlayerData parent)
@@ -397,8 +400,8 @@ class PlayerData : MonoBehaviour
     [SerializeField] private float _jumpPower = 10f;
 
     [SerializeField] private SpitManager spitManager = default!;
-    [SerializeField] private GameObject makerPrefab = default!;
-    GameObject _maker = null;
+    [SerializeField] private GameObject makerUI = default!;
+    [SerializeField] private GameObject rangeUI = default;
 
     //UI関連
     RoleDirectingScript _directing;
@@ -443,7 +446,6 @@ class PlayerData : MonoBehaviour
             if (value)
             {
                 _playerFall.IsFallAction = false;
-                _maker.SetActive(false);
             }
 
             _isGround = value;
@@ -474,8 +476,7 @@ class PlayerData : MonoBehaviour
 
     private void Start()
     {
-        _maker = Instantiate(makerPrefab);
-        _maker.SetActive(false);
+        makerUI.SetActive(false);
     }
 
     private void Update()
@@ -483,6 +484,7 @@ class PlayerData : MonoBehaviour
         IsGrounded();
         UpdateState();
         FallActionMaker();
+        RangeUI();
     }
 
     private void FixedUpdate()
@@ -515,13 +517,36 @@ class PlayerData : MonoBehaviour
     {
         var ray = new Ray(transform.position, Vector3.down);
 
-        //今は仮打ちでレイの長さを10にしています。変更推奨です。
-        if (Physics.Raycast(ray, out RaycastHit hit, 10f))
+            if (Physics.Raycast(ray, out RaycastHit hit,Mathf.Infinity))
         {
-            _maker.transform.position = hit.point;
-            _maker.SetActive(true);
+            makerUI.transform.position = hit.point + new Vector3(0,0.01f,0);
+            //突き刺しできるようになったら有効化
+            if (!Physics.Raycast(ray, capsuleCollider.height + capsuleCollider.height / 2f))
+                makerUI.SetActive(true);
+            else
+                makerUI.SetActive(false);
         }
-        else _maker.SetActive(false);
+        
+    }
+
+    private void RangeUI()
+    {
+        var ray = new Ray(transform.position, Vector3.down);
+        RaycastHit hit;
+        if (Physics.Raycast(ray, out hit, Mathf.Infinity))
+        {
+            rangeUI.transform.position = new Vector3(rangeUI.transform.position.x, hit.point.y + 0.01f, rangeUI.transform.position.z);
+        }
+
+        //空中でも出てると違和感あったので消します
+        if (_isGround)
+        {
+            rangeUI.SetActive(true);
+        }
+        else
+        {
+            rangeUI.SetActive(false);
+        }
     }
 
     private bool CanStab()
@@ -565,7 +590,7 @@ class PlayerData : MonoBehaviour
     /// <summary>
     /// Playerをカメラの方向に合わせて動かす関数。
     /// </summary>
-    private void PlayerMove()
+    private void PlayerMove(Vector3 camForward)
     {
         //カメラの向きを元にベクトルの作成
         MoveVec = _moveAxis.y * _moveSpeed * _cameraForward + _moveAxis.x * _moveSpeed * playerCamera.transform.right;
@@ -578,15 +603,6 @@ class PlayerData : MonoBehaviour
         }
     }
 
-    private void PlayerRotateToMoveVec()
-    {
-        if (MoveVec.magnitude == 0) return;
-        Vector3 lookRot = new(MoveVec.x, 0, MoveVec.z);
-
-        transform.localRotation = Quaternion.RotateTowards(transform.rotation, Quaternion.LookRotation(lookRot), 1.5f);
-    }
-
-
     /// <summary>
     /// 満腹度をへらす関数、fixedUpdateに配置。
     /// </summary>
@@ -597,7 +613,6 @@ class PlayerData : MonoBehaviour
     }
 
     #region GetterSetter
-    public Vector2 GetMoveAxis() => _moveAxis;
     public Vector2 GetRoteAxis() => _roteAxis;
     public List<DangoColor> GetDangoType() => _dangos;
     public DangoColor GetDangoType(int value)
@@ -612,6 +627,12 @@ class PlayerData : MonoBehaviour
             Logger.Error("代わりに先頭（配列の0番）を返します。");
             return _dangos[0];
         }
+    }
+    public void PlayerRotate(Quaternion rot)
+    {
+        if (_currentState != IState.E_State.Control) return;
+
+        transform.rotation = rot;
     }
 
     public int GetMaxDango() => _maxStabCount;
