@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class CameraIsStaying
 {
+    #region StatePattern
     interface IState
     {
         public enum E_State
@@ -39,7 +40,7 @@ public class CameraIsStaying
         public IState.E_State Update(CameraIsStaying parent)
         {
             parent.LookPlayerBackH();
-            
+
 
             return parent.LookPlayerBackV() ? IState.E_State.Stay : IState.E_State.Unchanged;
         }
@@ -83,6 +84,9 @@ public class CameraIsStaying
         }
     }
 
+    #endregion
+
+    #region メンバ
     static readonly Vector3 OFFSET = new(0, 2f, -10f);
 
     //1sに移動する角度の定数
@@ -106,14 +110,21 @@ public class CameraIsStaying
     bool _isLeft;
     bool _isUp;
 
+    float _tAngle;
+
     float _timeX;
     float _timeY;
+    #endregion
 
     public CameraIsStaying(GameObject playerCamera, GameObject terminus, Transform playerTrans)
     {
         _playerCamera = playerCamera;
         _terminus = terminus;
         _playerTrans = playerTrans;
+
+        Vector3 v = new(0, 0, OFFSET.z);
+        float targetAngle = Mathf.Acos(Vector3.Dot(v, OFFSET) / (v.magnitude * OFFSET.magnitude));
+        _tAngle = targetAngle * 180f / Mathf.PI;
     }
 
     public void Update()
@@ -149,7 +160,7 @@ public class CameraIsStaying
         Vector3 pcVec = cameraPos - playerPos;
 
         //Playerの左側にカメラがあるか外積のyを取って判定
-        _isLeft = Vector3.Cross(_playerTrans.forward, pcVec).y < 0 ? true : false;
+        _isLeft = Vector3.Cross(_playerTrans.forward, pcVec).y < 0;
 
         //正面の逆ベクトルに距離をかけてプレイヤーの座標（Y無視）を足したもの
         //これが目標地点
@@ -176,27 +187,20 @@ public class CameraIsStaying
         //プレイヤーの座標
         Vector3 playerPos = _playerTrans.position;
 
-        //カメラ座標
-        Vector3 cameraPos = _playerCamera.transform.position;
-
         //カメラ方向に地面と並行（プレイヤーの角度）なベクトル
         Vector3 cameraVec = new(_playerCamera.transform.position.x, _playerTrans.position.y, _playerCamera.transform.position.z);
 
         //Player->Cameraのベクトル
-        Vector3 pcVec = cameraPos - playerPos;
+        Vector3 pcVec = _playerCamera.transform.position - playerPos;
         Vector3 pcVecAtGround = cameraVec - playerPos;
 
-        //Playerの左側にカメラがあるか外積のyを取って判定
-        _isUp = Vector3.Cross(_playerTrans.forward, pcVec).x < 0 ? true : false;
+        //目標地点の上にカメラがあるかyを取って判定
+        _isUp = OFFSET.y < _terminus.transform.position.y;
 
         float currentAngle = Mathf.Acos(Vector3.Dot(pcVec, pcVecAtGround) / (pcVec.magnitude * pcVecAtGround.magnitude));
         float cAngle = currentAngle * 180f / Mathf.PI;
 
-        Vector3 v = new(playerPos.x, playerPos.y, playerPos.z + OFFSET.z);
-        float targetAngle = Mathf.Acos(Vector3.Dot(v, OFFSET) / (v.magnitude * OFFSET.magnitude));
-        float tAngle = targetAngle * 180f / Mathf.PI;
-
-        _angleY = (cAngle - tAngle);
+        _angleY = (cAngle - _tAngle);
 
         //ゼロ除算ケア（そもそも到達時間が0なら移動しないということ）
         if (_angleY == 0) return false;
@@ -218,19 +222,7 @@ public class CameraIsStaying
         float x = _timeY;
         x /= _arrivalTime;
 
-        float y = 0;
-        if (x < 0.5f)
-        {
-            y = 4f * x * x * x;
-        }
-        else if (x is >= 0.5f and <= 1f)
-        {
-            x = Mathf.Abs(x - 1);
-            y = 4f * x * x * x;
-        }
-
-        //積分した値（上の関数の面積）→これが平均の速度になる。→平均の速度がMOVE_ANGLEになればよい。
-        float dx = (0.5f * 0.5f * 0.5f * 0.5f) * 2f;
+        EaseInOutCubic(x, out float y, out float dx);
 
         _playerCamera.transform.RotateAround(_playerTrans.position, _playerCamera.transform.right.normalized, (_isUp ? -y : y) * MOVE_ANGLE * _arrivalY / dx * Time.deltaTime);
         _terminus.transform.RotateAround(_playerTrans.position, _playerCamera.transform.right.normalized, (_isUp ? -y : y) * MOVE_ANGLE * _arrivalY / dx * Time.deltaTime);
@@ -247,7 +239,18 @@ public class CameraIsStaying
         float x = _timeX;
         x /= _arrivalTime;
 
-        float y = 0;
+        EaseInOutCubic(x, out float y, out float dx);
+
+        _playerCamera.transform.RotateAround(_playerTrans.position, Vector3.up, (_isLeft ? -y : y) * MOVE_ANGLE * _arrivalX / dx * Time.deltaTime);
+        _terminus.transform.RotateAround(_playerTrans.position, Vector3.up, (_isLeft ? -y : y) * MOVE_ANGLE * _arrivalX / dx * Time.deltaTime);
+
+        return _timeX >= _arrivalTime;
+    }
+
+    private void EaseInOutCubic(float x, out float y, out float dx)
+    {
+        y = 0;
+
         if (x < 0.5f)
         {
             y = 4f * x * x * x;
@@ -258,12 +261,7 @@ public class CameraIsStaying
             y = 4f * x * x * x;
         }
 
-        //積分した値（上の関数の面積）→これが平均の速度になる。→平均の速度がMOVE_ANGLEになればよい。
-        float dx = (0.5f * 0.5f * 0.5f * 0.5f) * 2f;
-
-        _playerCamera.transform.RotateAround(_playerTrans.position, Vector3.up, (_isLeft ? -y : y) * MOVE_ANGLE * _arrivalX / dx * Time.deltaTime);
-        _terminus.transform.RotateAround(_playerTrans.position, Vector3.up, (_isLeft ? -y : y) * MOVE_ANGLE * _arrivalX / dx * Time.deltaTime);
-
-        return _timeX >= _arrivalTime;
+        //0から1/2で定積分した値（上の関数の面積）を2倍したもの→これが平均の速度になる。→平均の速度がMOVE_ANGLEになればよい。
+        dx = (0.5f * 0.5f * 0.5f * 0.5f) * 2f;
     }
 }

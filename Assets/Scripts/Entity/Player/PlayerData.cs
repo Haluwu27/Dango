@@ -223,6 +223,7 @@ class PlayerData : MonoBehaviour
         }
         public IState.E_State Update(PlayerData parent)
         {
+            parent.PlayerRotateToMoveVec();
             return IState.E_State.Unchanged;
         }
         public IState.E_State FixedUpdate(PlayerData parent)
@@ -517,16 +518,16 @@ class PlayerData : MonoBehaviour
     {
         var ray = new Ray(transform.position, Vector3.down);
 
-            if (Physics.Raycast(ray, out RaycastHit hit,Mathf.Infinity))
+        if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity))
         {
-            makerUI.transform.position = hit.point + new Vector3(0,0.01f,0);
+            makerUI.transform.position = hit.point + new Vector3(0, 0.01f, 0);
             //“Ë‚«Žh‚µ‚Å‚«‚é‚æ‚¤‚É‚È‚Á‚½‚ç—LŒø‰»
             if (!Physics.Raycast(ray, capsuleCollider.height + capsuleCollider.height / 2f))
                 makerUI.SetActive(true);
             else
                 makerUI.SetActive(false);
         }
-        
+
     }
 
     private void RangeUI()
@@ -600,6 +601,13 @@ class PlayerData : MonoBehaviour
             float speedMag = RUN_SPEED_MAG - mag;
             rb.AddForce(MoveVec * speedMag);
         }
+    }
+
+    private void PlayerRotateToMoveVec()
+    {
+        if (MoveVec.magnitude == 0) return;
+        Vector3 lookRot = new(MoveVec.x, 0, MoveVec.z);
+        transform.localRotation = Quaternion.RotateTowards(transform.rotation, Quaternion.LookRotation(lookRot), 1.5f);
     }
 
     /// <summary>
