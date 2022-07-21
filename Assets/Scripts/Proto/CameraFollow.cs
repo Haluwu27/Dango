@@ -73,7 +73,9 @@ public class CameraFollow : MonoBehaviour
 
         if (WallHitCheck())
         {
-            transform.position = _wallHitPos;//Lerpｗｐ使うと移動の際に壁の中が見えるため固定
+            //当たった場所に飛ばすとカメラが壁の中に埋まるので調整。
+            _wallHitPos = _hit.point + (currentTargetPos - _terminus.transform.position).normalized;
+            transform.position = _wallHitPos;
         }
         else//カメラの移動
         {
@@ -84,7 +86,7 @@ public class CameraFollow : MonoBehaviour
             };
         }
 
-        _prebTargetPos = target.position;
+        _prebTargetPos = currentTargetPos;
     }
     private void RotateToLookRot()
     {
@@ -141,17 +143,7 @@ public class CameraFollow : MonoBehaviour
 
     private bool WallHitCheck()
     {
-
-        if (Physics.Raycast(_prebTargetPos, _terminus.transform.position - _prebTargetPos, out _hit, Vector3.Distance(_prebTargetPos, _terminus.transform.position), wallLayer, QueryTriggerInteraction.Ignore))
-        {
-            _wallHitPos = _hit.point * 0.95f;//当たった場所に飛ばすとカメラが壁の中に埋まるので調整。
-            //Logger.Log(wallHitPos);
-            return true;
-        }
-        else
-        {
-            return false;
-        }
+        return Physics.Raycast(target.position, _terminus.transform.position - target.position, out _hit, Vector3.Distance(_prebTargetPos, _terminus.transform.position), wallLayer, QueryTriggerInteraction.Ignore);
     }
 }
 
