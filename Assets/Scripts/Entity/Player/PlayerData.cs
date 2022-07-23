@@ -37,6 +37,9 @@ class PlayerData : MonoBehaviour
 
     public PlayerFallAction PlayerFall => _playerFall;
 
+    const float EVENTTEXT_FLASH_TIME = 0.4f;
+    const float EVENTTEXT_PRINT_TIME = 2.4f;
+
     //移動処理
     public void OnMove(InputAction.CallbackContext context)
     {
@@ -115,6 +118,23 @@ class PlayerData : MonoBehaviour
         //串に刺さってなかったら実行しない。
         if (_dangos.Count == 0) return;
 
+        //何らかの動作中で食べようとしても実行しない。
+        if (_currentState is not (IState.E_State.Control or IState.E_State.StayEatDango))
+        {
+            _playerUIManager.EventText.TextData.SetText("食べられないよ！");
+            _playerUIManager.EventText.TextData.FlashAlpha(EVENTTEXT_PRINT_TIME, EVENTTEXT_FLASH_TIME, 0);
+            return;
+        }
+
+        //限界まで団子が刺さっていなかったら実行しない。
+        if (_dangos.Count != _maxStabCount)
+        {
+            _playerUIManager.EventText.TextData.SetText("食べられないよ！");
+            _playerUIManager.EventText.TextData.FlashAlpha(EVENTTEXT_PRINT_TIME, EVENTTEXT_FLASH_TIME, 0);
+
+            return;
+        }
+
         if (context.phase == InputActionPhase.Performed) _hasStayedEat = true;
         else if (context.phase == InputActionPhase.Canceled) _hasStayedEat = false;
     }
@@ -155,7 +175,7 @@ class PlayerData : MonoBehaviour
         //演出関数の呼び出し
         _directing.Dirrecting(_dangos);
 
-        _playerUIManager.SetEventText("食べた！" + (int)score + "点！");
+        _playerUIManager.EventText.TextData.SetText("食べた！" + (int)score + "点！");
 
         //残り時間の増加
         PlayerUIManager.time += score;
@@ -229,11 +249,11 @@ class PlayerData : MonoBehaviour
         public IState.E_State FixedUpdate(PlayerData parent)
         {
             //プレイヤーを動かす処理
-            parent.PlayerMove(parent._cameraForward);
+            parent.PlayerMove();
 
             //ステートに移行。
-            if (parent._hasAttacked) return IState.E_State.AttackAction;
             if (parent._hasStayedEat) return IState.E_State.StayEatDango;
+            if (parent._hasAttacked) return IState.E_State.AttackAction;
             if (parent._hasFalled) return IState.E_State.FallAction;
 
             return IState.E_State.Unchanged;
@@ -254,7 +274,7 @@ class PlayerData : MonoBehaviour
         public IState.E_State FixedUpdate(PlayerData parent)
         {
             //移動
-            parent.PlayerMove(parent._cameraForward);
+            parent.PlayerMove();
 
             //途中で接地したらコントロールに戻る
             if (parent.IsGround) return IState.E_State.Control;
@@ -287,7 +307,7 @@ class PlayerData : MonoBehaviour
     {
         public IState.E_State Initialize(PlayerData parent)
         {
-            parent._playerUIManager.SetEventText("食べチャージ中！");
+            parent._playerUIManager.EventText.TextData.SetText("食べチャージ中！");
             parent._playerStayEat.ResetCount();
             //SE推奨
 
@@ -301,7 +321,7 @@ class PlayerData : MonoBehaviour
         }
         public IState.E_State FixedUpdate(PlayerData parent)
         {
-            parent.PlayerMove(parent._cameraForward);
+            parent.PlayerMove();
 
             //食べる待機が終わったら食べるステートに移行
             if (parent._playerStayEat.CanEat()) return IState.E_State.EatDango;
@@ -327,7 +347,7 @@ class PlayerData : MonoBehaviour
         }
         public IState.E_State FixedUpdate(PlayerData parent)
         {
-            parent.PlayerMove(parent._cameraForward);
+            parent.PlayerMove();
 
             return IState.E_State.Unchanged;
         }
@@ -338,7 +358,7 @@ class PlayerData : MonoBehaviour
         public IState.E_State Initialize(PlayerData parent)
         {
             parent._maxStabCount = parent._playerGrowStab.GrowStab(parent._maxStabCount);
-            parent._playerUIManager.SetEventText("させる団子の数が増えた！(" + parent._maxStabCount + "個)");
+            parent._playerUIManager.EventText.TextData.SetText("させる団子の数が増えた！(" + parent._maxStabCount + "個)");
             parent._canGrowStab = false;
             //刺せる範囲表示の拡大。今串が伸びないのでコメントアウトしてます。
             //parent.rangeUI.transform.localScale = new Vector3(parent.rangeUI.transform.localScale.x, parent.rangeUI.transform.localScale.y + 0.01f, parent.rangeUI.transform.localScale.z);
@@ -500,12 +520,13 @@ class PlayerData : MonoBehaviour
         }
     }
 
+#if UNITY_EDITOR
     //デバッグ終わりに削除
     private void OnGUI()
     {
         GUI.Label(new Rect(20, 20, 100, 50), "" + _currentState);
     }
-
+#endif
     private void InitDangos()
     {
         if (_dangos == null) return;
@@ -555,7 +576,7 @@ class PlayerData : MonoBehaviour
         if (_dangos.Count >= _maxStabCount)
         {
             Logger.Warn("突き刺せる数を超えています");
-            _playerUIManager.SetEventText("それ以上させないよ！");
+            _playerUIManager.EventText.TextData.SetText("それ以上させないよ！");
 
             return false;
         }
@@ -590,7 +611,7 @@ class PlayerData : MonoBehaviour
     /// <summary>
     /// Playerをカメラの方向に合わせて動かす関数。
     /// </summary>
-    private void PlayerMove(Vector3 camForward)
+    private void PlayerMove()
     {
         //カメラの向きを元にベクトルの作成
         MoveVec = _moveAxis.y * _moveSpeed * _cameraForward + _moveAxis.x * _moveSpeed * playerCamera.transform.right;
