@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -29,6 +28,7 @@ class PlayerData : MonoBehaviour
     [SerializeField] private Rigidbody rb = default!;
     [SerializeField] private CapsuleCollider capsuleCollider = default!;
     [SerializeField] private GameObject playerCamera = default!;
+    private Camera _cameraComponent = default!;
 
     private DangoRole dangoRole = DangoRole.instance;
 
@@ -251,6 +251,12 @@ class PlayerData : MonoBehaviour
             //プレイヤーを動かす処理
             parent.PlayerMove();
 
+            //満腹度（制限時間）減らす処理
+            parent.DecreaseSatiety();
+
+            //ジャンプ
+            parent.Jump();
+
             //ステートに移行。
             if (parent._hasStayedEat) return IState.E_State.StayEatDango;
             if (parent._hasAttacked) return IState.E_State.AttackAction;
@@ -315,20 +321,26 @@ class PlayerData : MonoBehaviour
         }
         public IState.E_State Update(PlayerData parent)
         {
-            //チャージしてる感じのアニメーションとかはここ
+            parent.OnChargeCameraMoving();
 
             return IState.E_State.Unchanged;
         }
         public IState.E_State FixedUpdate(PlayerData parent)
         {
-            parent.PlayerMove();
+            parent.DecreaseSatiety();
 
             //食べる待機が終わったら食べるステートに移行
-            if (parent._playerStayEat.CanEat()) return IState.E_State.EatDango;
-
+            if (parent._playerStayEat.CanEat())
+            {
+                parent.StartCoroutine(parent.ResetCameraView());
+                return IState.E_State.EatDango;
+            }
             //待機をやめたらコントロールに戻る
-            if (!parent._hasStayedEat) return IState.E_State.Control;
-
+            if (!parent._hasStayedEat)
+            {
+                parent.StartCoroutine(parent.ResetCameraView());
+                return IState.E_State.Control;
+            }
             return IState.E_State.Unchanged;
         }
     }
@@ -439,6 +451,9 @@ class PlayerData : MonoBehaviour
     const int STAY_FRAME = 100;
     PlayerStayEat _playerStayEat = new(STAY_FRAME);
 
+    const float DEFAULT_CAMERA_VIEW = 60f;
+    const float CAMERA_REMOVETIME = 0.3f;
+
     /// <summary>
     /// 満腹度、制限時間の代わり（単位:[sec]）
     /// </summary>
@@ -497,6 +512,7 @@ class PlayerData : MonoBehaviour
 
     private void Start()
     {
+        _cameraComponent = playerCamera.GetComponent<Camera>();
         makerUI.SetActive(false);
     }
 
@@ -513,11 +529,6 @@ class PlayerData : MonoBehaviour
         DecreaseSatiety();
         _canGrowStab = _playerGrowStab.CanGrowStab(_maxStabCount);
         FixedUpdateState();
-        if (_hasJumped)
-        {
-            rb.AddForce(Vector3.up * (_jumpPower + _maxStabCount), ForceMode.Impulse);
-            _hasJumped = false;
-        }
     }
 
 #if UNITY_EDITOR
@@ -527,6 +538,15 @@ class PlayerData : MonoBehaviour
         GUI.Label(new Rect(20, 20, 100, 50), "" + _currentState);
     }
 #endif
+
+    private void Jump()
+    {
+        if (!_hasJumped) return;
+
+        rb.AddForce(Vector3.up * (_jumpPower + _maxStabCount), ForceMode.Impulse);
+        _hasJumped = false;
+    }
+
     private void InitDangos()
     {
         if (_dangos == null) return;
@@ -638,6 +658,23 @@ class PlayerData : MonoBehaviour
     {
         //満腹度を0.02秒(fixedUpdateの呼ばれる秒数)減らす
         _satiety -= Time.fixedDeltaTime;
+    }
+
+    private void OnChargeCameraMoving()
+    {
+        _cameraComponent.fieldOfView -= 10f * Time.deltaTime;
+    }
+
+    private IEnumerator ResetCameraView()
+    {
+        float view = _cameraComponent.fieldOfView;
+        float hokann = DEFAULT_CAMERA_VIEW - view;
+        while (_cameraComponent.fieldOfView <= DEFAULT_CAMERA_VIEW)
+        {
+            _cameraComponent.fieldOfView += (hokann / CAMERA_REMOVETIME) * Time.deltaTime;
+            yield return null;
+        }
+        _cameraComponent.fieldOfView = DEFAULT_CAMERA_VIEW;
     }
 
     #region GetterSetter
