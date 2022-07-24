@@ -8,6 +8,7 @@ public class TextData
 {
     TextMeshProUGUI _text;
     bool _isFlash;
+    float _flashCurrentTime = 0;
 
     public TextData(TextMeshProUGUI text)
     {
@@ -49,16 +50,16 @@ public class TextData
 
     public async void FlashAlpha(float finishTime, float flashTime, float coolTime)
     {
+        _flashCurrentTime = 0;
         if (_isFlash) return;
 
-        float currentTime = 0;
         _isFlash = true;
 
-        while (currentTime < finishTime)
+        while (_flashCurrentTime < finishTime)
         {
             await Fadein(flashTime, coolTime);
             await Fadeout(flashTime, coolTime);
-            currentTime += flashTime * 2f;
+            _flashCurrentTime += flashTime * 2f;
         }
 
         _isFlash = false;

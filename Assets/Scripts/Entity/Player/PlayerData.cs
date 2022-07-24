@@ -251,6 +251,9 @@ class PlayerData : MonoBehaviour
             //プレイヤーを動かす処理
             parent.PlayerMove();
 
+            //満腹度（制限時間）減らす処理
+            parent.DecreaseSatiety();
+
             //ステートに移行。
             if (parent._hasStayedEat) return IState.E_State.StayEatDango;
             if (parent._hasAttacked) return IState.E_State.AttackAction;
@@ -276,6 +279,9 @@ class PlayerData : MonoBehaviour
             //移動
             parent.PlayerMove();
 
+            //制限時間減少
+            parent.DecreaseSatiety();
+
             //途中で接地したらコントロールに戻る
             if (parent.IsGround) return IState.E_State.Control;
 
@@ -299,6 +305,8 @@ class PlayerData : MonoBehaviour
         }
         public IState.E_State FixedUpdate(PlayerData parent)
         {
+            parent.DecreaseSatiety();
+
             return parent._playerAttack.FixedUpdate() ? IState.E_State.Control : IState.E_State.Unchanged;
         }
 
@@ -322,6 +330,7 @@ class PlayerData : MonoBehaviour
         public IState.E_State FixedUpdate(PlayerData parent)
         {
             parent.PlayerMove();
+            parent.DecreaseSatiety();
 
             //食べる待機が終わったら食べるステートに移行
             if (parent._playerStayEat.CanEat()) return IState.E_State.EatDango;
@@ -347,8 +356,6 @@ class PlayerData : MonoBehaviour
         }
         public IState.E_State FixedUpdate(PlayerData parent)
         {
-            parent.PlayerMove();
-
             return IState.E_State.Unchanged;
         }
 
@@ -510,7 +517,6 @@ class PlayerData : MonoBehaviour
 
     private void FixedUpdate()
     {
-        DecreaseSatiety();
         _canGrowStab = _playerGrowStab.CanGrowStab(_maxStabCount);
         FixedUpdateState();
         if (_hasJumped)
