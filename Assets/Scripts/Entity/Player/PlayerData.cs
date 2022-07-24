@@ -1,23 +1,22 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 /// 
-/// ƒÀ‘•‚·‚é‚±‚Æ„
-/// EÚ’n”»’è‚ğ‚Ü‚Æ‚à‚É
+/// ï¼œå®Ÿè£…ã™ã‚‹ã“ã¨ï¼
+/// ãƒ»æ¥åœ°åˆ¤å®šã‚’ã¾ã¨ã‚‚ã«
 /// 
 
 [RequireComponent(typeof(Rigidbody), typeof(RideMoveObj))]
 class PlayerData : MonoBehaviour
 {
     #region inputSystem
-    //ƒXƒRƒA‚Æ–• “x‚ÌƒŒ[ƒg
+    //ã‚¹ã‚³ã‚¢ã¨æº€è…¹åº¦ã®ãƒ¬ãƒ¼ãƒˆ
     const float SCORE_TIME_RATE = 0.2f;
 
-    //“ü—Í’l
+    //å…¥åŠ›å€¤
     private Vector2 _moveAxis;
     private Vector2 _roteAxis;
 
@@ -29,6 +28,7 @@ class PlayerData : MonoBehaviour
     [SerializeField] private Rigidbody rb = default!;
     [SerializeField] private CapsuleCollider capsuleCollider = default!;
     [SerializeField] private GameObject playerCamera = default!;
+    private Camera _cameraComponent = default!;
 
     private DangoRole dangoRole = DangoRole.instance;
 
@@ -40,7 +40,7 @@ class PlayerData : MonoBehaviour
     const float EVENTTEXT_FLASH_TIME = 0.4f;
     const float EVENTTEXT_PRINT_TIME = 2.4f;
 
-    //ˆÚ“®ˆ—
+    //ç§»å‹•å‡¦ç†
     public void OnMove(InputAction.CallbackContext context)
     {
         if (context.phase == InputActionPhase.Performed)
@@ -53,7 +53,7 @@ class PlayerData : MonoBehaviour
         }
     }
 
-    //ƒWƒƒƒ“ƒvˆ—
+    //ã‚¸ãƒ£ãƒ³ãƒ—å‡¦ç†
     public void OnJump(InputAction.CallbackContext context)
     {
         if (!IsGround) return;
@@ -64,47 +64,47 @@ class PlayerData : MonoBehaviour
         }
     }
 
-    //’cq’e(æ‚èŠO‚µ)
+    //å›£å­å¼¾(å–ã‚Šå¤–ã—)
     public void OnFire(InputAction.CallbackContext context)
     {
         if (context.phase == InputActionPhase.Performed)
         {
-            //‹ø‚É‰½‚à‚È‚©‚Á‚½‚çÀs‚µ‚È‚¢B
+            //ä¸²ã«ä½•ã‚‚ãªã‹ã£ãŸã‚‰å®Ÿè¡Œã—ãªã„ã€‚
             if (_dangos.Count == 0) return;
 
-            //[Debug]‰½‚ªÁ‚¦‚½‚©‚í‚©‚é‚â‚Â
-            //¡‚Ü‚Å‚ÍAdangos[dangos.Count - 1]‚Æ‚µ‚È‚¯‚ê‚Î‚È‚è‚Ü‚¹‚ñ‚Å‚µ‚½‚ªA
-            //C#8.0ˆÈ~‚Å‚ÍˆÈ‰º‚Ì‚æ‚¤‚ÉÈ—ª‚Å‚«‚é‚æ‚¤‚Å‚·B
-            //–â‘è‚ÍA‚±‚ê‚ğ’m‚ç‚È‚¢l‚ª“Ç‚Ş‚Æ‚í‚¯‚ª•ª‚©‚ç‚È‚¢B
+            //[Debug]ä½•ãŒæ¶ˆãˆãŸã‹ã‚ã‹ã‚‹ã‚„ã¤
+            //ä»Šã¾ã§ã¯ã€dangos[dangos.Count - 1]ã¨ã—ãªã‘ã‚Œã°ãªã‚Šã¾ã›ã‚“ã§ã—ãŸãŒã€
+            //C#8.0ä»¥é™ã§ã¯ä»¥ä¸‹ã®ã‚ˆã†ã«çœç•¥ã§ãã‚‹ã‚ˆã†ã§ã™ã€‚
+            //å•é¡Œã¯ã€ã“ã‚Œã‚’çŸ¥ã‚‰ãªã„äººãŒèª­ã‚€ã¨ã‚ã‘ãŒåˆ†ã‹ã‚‰ãªã„ã€‚
             Logger.Log(_dangos[^1]);
 
             //SE
             GameManager.SoundManager.PlaySE(SoundSource.SE_REMOVE_DANGO);
 
-            //Á‚·ˆ—B
+            //æ¶ˆã™å‡¦ç†ã€‚
             _dangos.RemoveAt(_dangos.Count - 1);
             _dangoUISC.DangoUISet(_dangos);
         }
     }
 
-    //“Ë‚«h‚µƒAƒjƒ[ƒVƒ‡ƒ“
+    //çªãåˆºã—ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³
     public void OnAttack(InputAction.CallbackContext context)
     {
-        //—‰ºƒAƒNƒVƒ‡ƒ“’†ó‚¯•t‚¯‚È‚¢B
+        //è½ä¸‹ã‚¢ã‚¯ã‚·ãƒ§ãƒ³ä¸­å—ã‘ä»˜ã‘ãªã„ã€‚
         if (_playerFall.IsFallAction) return;
 
         if (context.phase == InputActionPhase.Performed)
         {
-            //‹ó’†‚©‚Â’n–Ê‚É‹ß‚·‚¬‚È‚¯‚ê‚Î—‰ºh‚µ‚ÉˆÚs
+            //ç©ºä¸­ã‹ã¤åœ°é¢ã«è¿‘ã™ããªã‘ã‚Œã°è½ä¸‹åˆºã—ã«ç§»è¡Œ
             if (!_isGround)
             {
                 Ray ray = new(transform.position, Vector3.down);
 
-                //‹ß‚­‚É’n–Ê‚ª‚ ‚é‚©(player‚Ì”¼•ª‚Ì‘å‚«‚³)”»’è
+                //è¿‘ãã«åœ°é¢ãŒã‚ã‚‹ã‹(playerã®åŠåˆ†ã®å¤§ãã•)åˆ¤å®š
                 if (Physics.Raycast(ray, capsuleCollider.height + capsuleCollider.height / 2f)) _hasAttacked = true;
                 else _hasFalled = true;
             }
-            //’n–Ê‚È‚ç•’Ê‚É“Ë‚«h‚µ‚ÉˆÚs
+            //åœ°é¢ãªã‚‰æ™®é€šã«çªãåˆºã—ã«ç§»è¡Œ
             else
             {
                 _hasAttacked = true;
@@ -112,24 +112,24 @@ class PlayerData : MonoBehaviour
         }
     }
 
-    //H‚×‚é
+    //é£Ÿã¹ã‚‹
     public void OnEatDango(InputAction.CallbackContext context)
     {
-        //‹ø‚Éh‚³‚Á‚Ä‚È‚©‚Á‚½‚çÀs‚µ‚È‚¢B
+        //ä¸²ã«åˆºã•ã£ã¦ãªã‹ã£ãŸã‚‰å®Ÿè¡Œã—ãªã„ã€‚
         if (_dangos.Count == 0) return;
 
-        //‰½‚ç‚©‚Ì“®ì’†‚ÅH‚×‚æ‚¤‚Æ‚µ‚Ä‚àÀs‚µ‚È‚¢B
+        //ä½•ã‚‰ã‹ã®å‹•ä½œä¸­ã§é£Ÿã¹ã‚ˆã†ã¨ã—ã¦ã‚‚å®Ÿè¡Œã—ãªã„ã€‚
         if (_currentState is not (IState.E_State.Control or IState.E_State.StayEatDango))
         {
-            _playerUIManager.EventText.TextData.SetText("H‚×‚ç‚ê‚È‚¢‚æI");
+            _playerUIManager.EventText.TextData.SetText("é£Ÿã¹ã‚‰ã‚Œãªã„ã‚ˆï¼");
             _playerUIManager.EventText.TextData.FlashAlpha(EVENTTEXT_PRINT_TIME, EVENTTEXT_FLASH_TIME, 0);
             return;
         }
 
-        //ŒÀŠE‚Ü‚Å’cq‚ªh‚³‚Á‚Ä‚¢‚È‚©‚Á‚½‚çÀs‚µ‚È‚¢B
+        //é™ç•Œã¾ã§å›£å­ãŒåˆºã•ã£ã¦ã„ãªã‹ã£ãŸã‚‰å®Ÿè¡Œã—ãªã„ã€‚
         if (_dangos.Count != _maxStabCount)
         {
-            _playerUIManager.EventText.TextData.SetText("H‚×‚ç‚ê‚È‚¢‚æI");
+            _playerUIManager.EventText.TextData.SetText("é£Ÿã¹ã‚‰ã‚Œãªã„ã‚ˆï¼");
             _playerUIManager.EventText.TextData.FlashAlpha(EVENTTEXT_PRINT_TIME, EVENTTEXT_FLASH_TIME, 0);
 
             return;
@@ -139,7 +139,7 @@ class PlayerData : MonoBehaviour
         else if (context.phase == InputActionPhase.Canceled) _hasStayedEat = false;
     }
 
-    //‰ñ“]ˆ—
+    //å›è»¢å‡¦ç†
     public void OnRote(InputAction.CallbackContext context)
     {
         if (context.phase == InputActionPhase.Performed)
@@ -153,7 +153,7 @@ class PlayerData : MonoBehaviour
 
     }
 
-    //iŒ»óg—p‚µ‚Ü‚¹‚ñj
+    //ï¼ˆç¾çŠ¶ä½¿ç”¨ã—ã¾ã›ã‚“ï¼‰
     public void OnCompression(InputAction.CallbackContext context)
     {
         if (context.phase == InputActionPhase.Performed)
@@ -169,26 +169,26 @@ class PlayerData : MonoBehaviour
 
         _hasStayedEat = false;
 
-        //H‚×‚½’cq‚Ì“_”‚ğæ“¾
+        //é£Ÿã¹ãŸå›£å­ã®ç‚¹æ•°ã‚’å–å¾—
         var score = dangoRole.CheckRole(_dangos);
 
-        //‰‰oŠÖ”‚ÌŒÄ‚Ño‚µ
+        //æ¼”å‡ºé–¢æ•°ã®å‘¼ã³å‡ºã—
         _directing.Dirrecting(_dangos);
 
-        _playerUIManager.EventText.TextData.SetText("H‚×‚½I" + (int)score + "“_I");
+        _playerUIManager.EventText.TextData.SetText("é£Ÿã¹ãŸï¼" + (int)score + "ç‚¹ï¼");
 
-        //c‚èŠÔ‚Ì‘‰Á
+        //æ®‹ã‚Šæ™‚é–“ã®å¢—åŠ 
         PlayerUIManager.time += score;
 
-        //–• “x‚ğã¸
+        //æº€è…¹åº¦ã‚’ä¸Šæ˜‡
         _satiety += score * SCORE_TIME_RATE;
 
-        //ƒXƒRƒA‚ğã¸
+        //ã‚¹ã‚³ã‚¢ã‚’ä¸Šæ˜‡
         GameManager.GameScore += score * 100f;
 
-        //‹ø‚ğƒNƒŠƒAB
+        //ä¸²ã‚’ã‚¯ãƒªã‚¢ã€‚
         _dangos.Clear();
-        //UIXV
+        //UIæ›´æ–°
         _dangoUISC.DangoUISet(_dangos);
     }
 
@@ -221,7 +221,7 @@ class PlayerData : MonoBehaviour
         E_State Update(PlayerData parent);
         E_State FixedUpdate(PlayerData parent);
     }
-    //ó‘ÔŠÇ—
+    //çŠ¶æ…‹ç®¡ç†
     private IState.E_State _currentState = IState.E_State.Control;
     private static readonly IState[] states = new IState[(int)IState.E_State.Max]
      {
@@ -237,7 +237,7 @@ class PlayerData : MonoBehaviour
     {
         public IState.E_State Initialize(PlayerData parent)
         {
-            //‹ø‚ÌˆÊ’u‚ğƒŠƒZƒbƒg
+            //ä¸²ã®ä½ç½®ã‚’ãƒªã‚»ãƒƒãƒˆ
             parent.ResetSpit();
             return IState.E_State.Unchanged;
         }
@@ -248,13 +248,16 @@ class PlayerData : MonoBehaviour
         }
         public IState.E_State FixedUpdate(PlayerData parent)
         {
-            //ƒvƒŒƒCƒ„[‚ğ“®‚©‚·ˆ—
+            //ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã‚’å‹•ã‹ã™å‡¦ç†
             parent.PlayerMove();
 
-            //–• “xi§ŒÀŠÔjŒ¸‚ç‚·ˆ—
+            //æº€è…¹åº¦ï¼ˆåˆ¶é™æ™‚é–“ï¼‰æ¸›ã‚‰ã™å‡¦ç†
             parent.DecreaseSatiety();
 
-            //ƒXƒe[ƒg‚ÉˆÚsB
+            //ã‚¸ãƒ£ãƒ³ãƒ—
+            parent.Jump();
+
+            //ã‚¹ãƒ†ãƒ¼ãƒˆã«ç§»è¡Œã€‚
             if (parent._hasStayedEat) return IState.E_State.StayEatDango;
             if (parent._hasAttacked) return IState.E_State.AttackAction;
             if (parent._hasFalled) return IState.E_State.FallAction;
@@ -276,16 +279,16 @@ class PlayerData : MonoBehaviour
         }
         public IState.E_State FixedUpdate(PlayerData parent)
         {
-            //ˆÚ“®
+            //ç§»å‹•
             parent.PlayerMove();
 
-            //§ŒÀŠÔŒ¸­
+            //åˆ¶é™æ™‚é–“æ¸›å°‘
             parent.DecreaseSatiety();
 
-            //“r’†‚ÅÚ’n‚µ‚½‚çƒRƒ“ƒgƒ[ƒ‹‚É–ß‚é
+            //é€”ä¸­ã§æ¥åœ°ã—ãŸã‚‰ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ«ã«æˆ»ã‚‹
             if (parent.IsGround) return IState.E_State.Control;
 
-            //‘Ò‹@ŠÔ‚ªI‚í‚Á‚½‚çƒAƒ^ƒbƒNƒXƒe[ƒg‚ÉˆÚs
+            //å¾…æ©Ÿæ™‚é–“ãŒçµ‚ã‚ã£ãŸã‚‰ã‚¢ã‚¿ãƒƒã‚¯ã‚¹ãƒ†ãƒ¼ãƒˆã«ç§»è¡Œ
             return parent._playerFall.FixedUpdate(parent.rb, parent.spitManager)
                 ? IState.E_State.AttackAction : IState.E_State.Unchanged;
         }
@@ -315,29 +318,34 @@ class PlayerData : MonoBehaviour
     {
         public IState.E_State Initialize(PlayerData parent)
         {
-            parent._playerUIManager.EventText.TextData.SetText("H‚×ƒ`ƒƒ[ƒW’†I");
+            parent._playerUIManager.EventText.TextData.SetText("é£Ÿã¹ãƒãƒ£ãƒ¼ã‚¸ä¸­ï¼");
             parent._playerStayEat.ResetCount();
-            //SE„§
+            //SEæ¨å¥¨
 
             return IState.E_State.Unchanged;
         }
         public IState.E_State Update(PlayerData parent)
         {
-            //ƒ`ƒƒ[ƒW‚µ‚Ä‚éŠ´‚¶‚ÌƒAƒjƒ[ƒVƒ‡ƒ“‚Æ‚©‚Í‚±‚±
+            parent.OnChargeCameraMoving();
 
             return IState.E_State.Unchanged;
         }
         public IState.E_State FixedUpdate(PlayerData parent)
         {
-            parent.PlayerMove();
             parent.DecreaseSatiety();
 
-            //H‚×‚é‘Ò‹@‚ªI‚í‚Á‚½‚çH‚×‚éƒXƒe[ƒg‚ÉˆÚs
-            if (parent._playerStayEat.CanEat()) return IState.E_State.EatDango;
-
-            //‘Ò‹@‚ğ‚â‚ß‚½‚çƒRƒ“ƒgƒ[ƒ‹‚É–ß‚é
-            if (!parent._hasStayedEat) return IState.E_State.Control;
-
+            //é£Ÿã¹ã‚‹å¾…æ©ŸãŒçµ‚ã‚ã£ãŸã‚‰é£Ÿã¹ã‚‹ã‚¹ãƒ†ãƒ¼ãƒˆã«ç§»è¡Œ
+            if (parent._playerStayEat.CanEat())
+            {
+                parent.StartCoroutine(parent.ResetCameraView());
+                return IState.E_State.EatDango;
+            }
+            //å¾…æ©Ÿã‚’ã‚„ã‚ãŸã‚‰ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ«ã«æˆ»ã‚‹
+            if (!parent._hasStayedEat)
+            {
+                parent.StartCoroutine(parent.ResetCameraView());
+                return IState.E_State.Control;
+            }
             return IState.E_State.Unchanged;
         }
     }
@@ -365,9 +373,9 @@ class PlayerData : MonoBehaviour
         public IState.E_State Initialize(PlayerData parent)
         {
             parent._maxStabCount = parent._playerGrowStab.GrowStab(parent._maxStabCount);
-            parent._playerUIManager.EventText.TextData.SetText("‚³‚¹‚é’cq‚Ì”‚ª‘‚¦‚½I(" + parent._maxStabCount + "ŒÂ)");
+            parent._playerUIManager.EventText.TextData.SetText("ã•ã›ã‚‹å›£å­ã®æ•°ãŒå¢—ãˆãŸï¼(" + parent._maxStabCount + "å€‹)");
             parent._canGrowStab = false;
-            //h‚¹‚é”ÍˆÍ•\¦‚ÌŠg‘åB¡‹ø‚ªL‚Ñ‚È‚¢‚Ì‚ÅƒRƒƒ“ƒgƒAƒEƒg‚µ‚Ä‚Ü‚·B
+            //åˆºã›ã‚‹ç¯„å›²è¡¨ç¤ºã®æ‹¡å¤§ã€‚ä»Šä¸²ãŒä¼¸ã³ãªã„ã®ã§ã‚³ãƒ¡ãƒ³ãƒˆã‚¢ã‚¦ãƒˆã—ã¦ã¾ã™ã€‚
             //parent.rangeUI.transform.localScale = new Vector3(parent.rangeUI.transform.localScale.x, parent.rangeUI.transform.localScale.y + 0.01f, parent.rangeUI.transform.localScale.z);
             return IState.E_State.EatDango;
         }
@@ -391,7 +399,7 @@ class PlayerData : MonoBehaviour
         if (nextState != IState.E_State.Unchanged)
         {
             _currentState = nextState;
-            InitState();//‰Šú‰»‚Åó‘Ô‚ª•Ï‚í‚é‚È‚çÄ‹A“I‚É‰Šú‰»‚·‚éB
+            InitState();//åˆæœŸåŒ–ã§çŠ¶æ…‹ãŒå¤‰ã‚ã‚‹ãªã‚‰å†å¸°çš„ã«åˆæœŸåŒ–ã™ã‚‹ã€‚
         }
     }
     private void UpdateState()
@@ -402,7 +410,7 @@ class PlayerData : MonoBehaviour
 
         if (nextState != IState.E_State.Unchanged)
         {
-            //Ÿ‚É‘JˆÚ
+            //æ¬¡ã«é·ç§»
             _currentState = nextState;
             InitState();
         }
@@ -415,15 +423,15 @@ class PlayerData : MonoBehaviour
 
         if (nextState != IState.E_State.Unchanged)
         {
-            //Ÿ‚É‘JˆÚ
+            //æ¬¡ã«é·ç§»
             _currentState = nextState;
             InitState();
         }
     }
     #endregion
 
-    #region ƒƒ“ƒo•Ï”
-    //ƒvƒŒƒCƒ„[‚Ì”\—Í
+    #region ãƒ¡ãƒ³ãƒå¤‰æ•°
+    //ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®èƒ½åŠ›
     [SerializeField] private float _moveSpeed = 50f;
     [SerializeField] private float _jumpPower = 10f;
 
@@ -431,36 +439,39 @@ class PlayerData : MonoBehaviour
     [SerializeField] private GameObject makerUI = default!;
     [SerializeField] private GameObject rangeUI = default;
 
-    //UIŠÖ˜A
+    //UIé–¢é€£
     RoleDirectingScript _directing;
     PlayerUIManager _playerUIManager;
     DangoUIScript _dangoUISC;
 
-    //‹ø‚ğL‚Î‚·ˆ—
+    //ä¸²ã‚’ä¼¸ã°ã™å‡¦ç†
     const int MAX_DANGO = 7;
     const int GROW_STAB_FRAME = 500;
     PlayerGrowStab _playerGrowStab = new(MAX_DANGO, GROW_STAB_FRAME);
     bool _canGrowStab = false;
 
-    //H‚×‚éˆ—
+    //é£Ÿã¹ã‚‹å‡¦ç†
     const int STAY_FRAME = 100;
     PlayerStayEat _playerStayEat = new(STAY_FRAME);
 
+    const float DEFAULT_CAMERA_VIEW = 60f;
+    const float CAMERA_REMOVETIME = 0.3f;
+
     /// <summary>
-    /// –• “xA§ŒÀŠÔ‚Ì‘ã‚í‚èi’PˆÊ:[sec]j
+    /// æº€è…¹åº¦ã€åˆ¶é™æ™‚é–“ã®ä»£ã‚ã‚Šï¼ˆå˜ä½:[sec]ï¼‰
     /// </summary>
-    /// ƒtƒŒ[ƒ€”‚ÅŠÇ—‚µ‚Ü‚·‚ªA‚±‚±‚Å‚Í•bŠÇ—‚Å\‚¢‚Ü‚¹‚ñB
+    /// ãƒ•ãƒ¬ãƒ¼ãƒ æ•°ã§ç®¡ç†ã—ã¾ã™ãŒã€ã“ã“ã§ã¯ç§’ç®¡ç†ã§æ§‹ã„ã¾ã›ã‚“ã€‚
     private float _satiety = 100f;
 
     /// <summary>
-    /// ‹øA‚Á‚Ä‚é’cq
+    /// ä¸²ã€æŒã£ã¦ã‚‹å›£å­
     /// </summary>
-    /// ¡‚Ü‚Å‚Ínew List<DangoColor>()‚Æ‚µ‚È‚¯‚ê‚Î‚È‚è‚Ü‚¹‚ñ‚Å‚µ‚½‚ª
-    /// C#9.0ˆÈ~‚Í‚±‚Ì‚æ‚¤‚ÉŠÈ‘f‰»o—ˆ‚é‚»‚¤‚Å‚·B
+    /// ä»Šã¾ã§ã¯new List<DangoColor>()ã¨ã—ãªã‘ã‚Œã°ãªã‚Šã¾ã›ã‚“ã§ã—ãŸãŒ
+    /// C#9.0ä»¥é™ã¯ã“ã®ã‚ˆã†ã«ç°¡ç´ åŒ–å‡ºæ¥ã‚‹ãã†ã§ã™ã€‚
     private List<DangoColor> _dangos = new();
 
     /// <summary>
-    /// h‚¹‚é”A™X‚É‘‚¦‚é
+    /// åˆºã›ã‚‹æ•°ã€å¾ã€…ã«å¢—ãˆã‚‹
     /// </summary>    
     private int _maxStabCount = 3;
 
@@ -480,7 +491,7 @@ class PlayerData : MonoBehaviour
         }
     }
 
-    //ˆÚ“®‘¬“x’è”
+    //ç§»å‹•é€Ÿåº¦å®šæ•°
     const float MAX_VELOCITY_MAG = 8f;
     const float RUN_SPEED_MAG = 7f;
 
@@ -504,6 +515,7 @@ class PlayerData : MonoBehaviour
 
     private void Start()
     {
+        _cameraComponent = playerCamera.GetComponent<Camera>();
         makerUI.SetActive(false);
     }
 
@@ -519,25 +531,29 @@ class PlayerData : MonoBehaviour
     {
         _canGrowStab = _playerGrowStab.CanGrowStab(_maxStabCount);
         FixedUpdateState();
-        if (_hasJumped)
-        {
-            rb.AddForce(Vector3.up * (_jumpPower + _maxStabCount), ForceMode.Impulse);
-            _hasJumped = false;
-        }
     }
 
 #if UNITY_EDITOR
-    //ƒfƒoƒbƒOI‚í‚è‚Éíœ
+    //ãƒ‡ãƒãƒƒã‚°çµ‚ã‚ã‚Šã«å‰Šé™¤
     private void OnGUI()
     {
         GUI.Label(new Rect(20, 20, 100, 50), "" + _currentState);
     }
 #endif
+
+    private void Jump()
+    {
+        if (!_hasJumped) return;
+
+        rb.AddForce(Vector3.up * (_jumpPower + _maxStabCount), ForceMode.Impulse);
+        _hasJumped = false;
+    }
+
     private void InitDangos()
     {
         if (_dangos == null) return;
 
-        //‰Šú‰»
+        //åˆæœŸåŒ–
         _dangos.Clear();
     }
 
@@ -548,7 +564,7 @@ class PlayerData : MonoBehaviour
         if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity))
         {
             makerUI.transform.position = hit.point + new Vector3(0, 0.01f, 0);
-            //“Ë‚«h‚µ‚Å‚«‚é‚æ‚¤‚É‚È‚Á‚½‚ç—LŒø‰»
+            //çªãåˆºã—ã§ãã‚‹ã‚ˆã†ã«ãªã£ãŸã‚‰æœ‰åŠ¹åŒ–
             if (!Physics.Raycast(ray, capsuleCollider.height + capsuleCollider.height / 2f))
                 makerUI.SetActive(true);
             else
@@ -565,7 +581,7 @@ class PlayerData : MonoBehaviour
             rangeUI.transform.position = new Vector3(rangeUI.transform.position.x, hit.point.y + 0.01f, rangeUI.transform.position.z);
         }
 
-        //‹ó’†‚Å‚ào‚Ä‚é‚Æˆá˜aŠ´‚ ‚Á‚½‚Ì‚ÅÁ‚µ‚Ü‚·
+        //ç©ºä¸­ã§ã‚‚å‡ºã¦ã‚‹ã¨é•å’Œæ„Ÿã‚ã£ãŸã®ã§æ¶ˆã—ã¾ã™
         if (_isGround)
         {
             rangeUI.SetActive(true);
@@ -578,22 +594,22 @@ class PlayerData : MonoBehaviour
 
     private bool CanStab()
     {
-        //’cq‚ª‚±‚êˆÈã‚³‚¹‚È‚¢‚È‚çÀs‚µ‚È‚¢
+        //å›£å­ãŒã“ã‚Œä»¥ä¸Šã•ã›ãªã„ãªã‚‰å®Ÿè¡Œã—ãªã„
         if (_dangos.Count >= _maxStabCount)
         {
-            Logger.Warn("“Ë‚«h‚¹‚é”‚ğ’´‚¦‚Ä‚¢‚Ü‚·");
-            _playerUIManager.EventText.TextData.SetText("‚»‚êˆÈã‚³‚¹‚È‚¢‚æI");
+            Logger.Warn("çªãåˆºã›ã‚‹æ•°ã‚’è¶…ãˆã¦ã„ã¾ã™");
+            _playerUIManager.EventText.TextData.SetText("ãã‚Œä»¥ä¸Šã•ã›ãªã„ã‚ˆï¼");
 
             return false;
         }
 
-        //h‚·ŠÔ‚Ì“à•”‚ÅƒJƒEƒ“ƒg‚µ‚Ä‚¢‚éTime‚ğƒŠƒZƒbƒg
+        //åˆºã™æ™‚é–“ã®å†…éƒ¨ã§ã‚«ã‚¦ãƒ³ãƒˆã—ã¦ã„ã‚‹Timeã‚’ãƒªã‚»ãƒƒãƒˆ
         _playerAttack.ResetTime();
 
-        //“Ë‚«h‚¹‚éó‘Ô‚É‚µ‚Ä
+        //çªãåˆºã›ã‚‹çŠ¶æ…‹ã«ã—ã¦
         spitManager.isSticking = true;
 
-        //‹ø‚ÌˆÊ’u‚ğ•ÏXiƒAƒjƒ[ƒVƒ‡ƒ“„§j
+        //ä¸²ã®ä½ç½®ã‚’å¤‰æ›´ï¼ˆã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³æ¨å¥¨ï¼‰
         if (_playerFall.IsFallAction)
         {
             spitManager.gameObject.transform.localPosition = new Vector3(0, -2f, 0);
@@ -615,11 +631,11 @@ class PlayerData : MonoBehaviour
     }
 
     /// <summary>
-    /// Player‚ğƒJƒƒ‰‚Ì•ûŒü‚É‡‚í‚¹‚Ä“®‚©‚·ŠÖ”B
+    /// Playerã‚’ã‚«ãƒ¡ãƒ©ã®æ–¹å‘ã«åˆã‚ã›ã¦å‹•ã‹ã™é–¢æ•°ã€‚
     /// </summary>
     private void PlayerMove()
     {
-        //ƒJƒƒ‰‚ÌŒü‚«‚ğŒ³‚ÉƒxƒNƒgƒ‹‚Ìì¬
+        //ã‚«ãƒ¡ãƒ©ã®å‘ãã‚’å…ƒã«ãƒ™ã‚¯ãƒˆãƒ«ã®ä½œæˆ
         MoveVec = _moveAxis.y * _moveSpeed * _cameraForward + _moveAxis.x * _moveSpeed * playerCamera.transform.right;
 
         if (rb.velocity.magnitude < MAX_VELOCITY_MAG)
@@ -638,12 +654,29 @@ class PlayerData : MonoBehaviour
     }
 
     /// <summary>
-    /// –• “x‚ğ‚Ö‚ç‚·ŠÖ”AfixedUpdate‚É”z’uB
+    /// æº€è…¹åº¦ã‚’ã¸ã‚‰ã™é–¢æ•°ã€fixedUpdateã«é…ç½®ã€‚
     /// </summary>
     private void DecreaseSatiety()
     {
-        //–• “x‚ğ0.02•b(fixedUpdate‚ÌŒÄ‚Î‚ê‚é•b”)Œ¸‚ç‚·
+        //æº€è…¹åº¦ã‚’0.02ç§’(fixedUpdateã®å‘¼ã°ã‚Œã‚‹ç§’æ•°)æ¸›ã‚‰ã™
         _satiety -= Time.fixedDeltaTime;
+    }
+
+    private void OnChargeCameraMoving()
+    {
+        _cameraComponent.fieldOfView -= 10f * Time.deltaTime;
+    }
+
+    private IEnumerator ResetCameraView()
+    {
+        float view = _cameraComponent.fieldOfView;
+        float hokann = DEFAULT_CAMERA_VIEW - view;
+        while (_cameraComponent.fieldOfView <= DEFAULT_CAMERA_VIEW)
+        {
+            _cameraComponent.fieldOfView += (hokann / CAMERA_REMOVETIME) * Time.deltaTime;
+            yield return null;
+        }
+        _cameraComponent.fieldOfView = DEFAULT_CAMERA_VIEW;
     }
 
     #region GetterSetter
@@ -659,7 +692,7 @@ class PlayerData : MonoBehaviour
         catch (IndexOutOfRangeException e)
         {
             Logger.Error(e);
-            Logger.Error("‘ã‚í‚è‚Éæ“ªi”z—ñ‚Ì0”Ôj‚ğ•Ô‚µ‚Ü‚·B");
+            Logger.Error("ä»£ã‚ã‚Šã«å…ˆé ­ï¼ˆé…åˆ—ã®0ç•ªï¼‰ã‚’è¿”ã—ã¾ã™ã€‚");
             return _dangos[0];
         }
     }
