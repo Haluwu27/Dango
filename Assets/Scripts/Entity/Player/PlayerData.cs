@@ -28,7 +28,7 @@ class PlayerData : MonoBehaviour
     [SerializeField] private Rigidbody rb = default!;
     [SerializeField] private CapsuleCollider capsuleCollider = default!;
     [SerializeField] private GameObject playerCamera = default!;
-    private Camera _cameraComponent = default!;
+    private CameraFollow _cameraFollow;
 
     private DangoRole dangoRole = DangoRole.instance;
 
@@ -191,13 +191,6 @@ class PlayerData : MonoBehaviour
         //UI更新
         _dangoUISC.DangoUISet(_dangos);
     }
-
-    private void ResetSpit()
-    {
-        spitManager.isSticking = false;
-        spitManager.gameObject.transform.localRotation = Quaternion.identity;
-        spitManager.gameObject.transform.localPosition = new Vector3(0, 0.4f, 1.1f);
-    }
     #endregion
 
     #region statePattern
@@ -238,7 +231,7 @@ class PlayerData : MonoBehaviour
         public IState.E_State Initialize(PlayerData parent)
         {
             //串の位置をリセット
-            parent.ResetSpit();
+            parent.spitManager.ResetSpitPos();
             return IState.E_State.Unchanged;
         }
         public IState.E_State Update(PlayerData parent)
@@ -299,7 +292,7 @@ class PlayerData : MonoBehaviour
         {
             parent._hasAttacked = false;
 
-            if (!parent.CanStab()) return IState.E_State.Control;
+            if (!parent.CanStabAction()) return IState.E_State.Control;
             return IState.E_State.Unchanged;
         }
         public IState.E_State Update(PlayerData parent)
@@ -326,7 +319,7 @@ class PlayerData : MonoBehaviour
         }
         public IState.E_State Update(PlayerData parent)
         {
-            parent.OnChargeCameraMoving();
+            parent._cameraFollow.OnChargeCameraMoving();
 
             return IState.E_State.Unchanged;
         }
@@ -337,13 +330,12 @@ class PlayerData : MonoBehaviour
             //食べる待機が終わったら食べるステートに移行
             if (parent._playerStayEat.CanEat())
             {
-                parent.StartCoroutine(parent.ResetCameraView());
                 return IState.E_State.EatDango;
             }
             //待機をやめたらコントロールに戻る
             if (!parent._hasStayedEat)
             {
-                parent.StartCoroutine(parent.ResetCameraView());
+                parent.StartCoroutine(parent._cameraFollow.ResetCameraView());
                 return IState.E_State.Control;
             }
             return IState.E_State.Unchanged;
@@ -355,6 +347,9 @@ class PlayerData : MonoBehaviour
         {
             if (parent._canGrowStab) return IState.E_State.GrowStab;
 
+            parent.StartCoroutine(parent._cameraFollow.ResetCameraView());
+
+            parent._cameraFollow.EatStateCamera();
             parent.EatDango();
             return IState.E_State.Control;
         }
@@ -454,9 +449,6 @@ class PlayerData : MonoBehaviour
     const int STAY_FRAME = 100;
     PlayerStayEat _playerStayEat = new(STAY_FRAME);
 
-    const float DEFAULT_CAMERA_VIEW = 60f;
-    const float CAMERA_REMOVETIME = 0.3f;
-
     /// <summary>
     /// 満腹度、制限時間の代わり（単位:[sec]）
     /// </summary>
@@ -495,6 +487,9 @@ class PlayerData : MonoBehaviour
     const float MAX_VELOCITY_MAG = 8f;
     const float RUN_SPEED_MAG = 7f;
 
+    //落下時のMakerの処理
+    PlayerFallActionMaker _playerMaker = default!;
+
     public Vector3 MoveVec { get; private set; }
     private Vector3 _cameraForward;
 
@@ -515,7 +510,8 @@ class PlayerData : MonoBehaviour
 
     private void Start()
     {
-        _cameraComponent = playerCamera.GetComponent<Camera>();
+        _playerMaker = new(gameObject, makerUI, capsuleCollider);
+        _cameraFollow = playerCamera.GetComponent<CameraFollow>();
         makerUI.SetActive(false);
     }
 
@@ -523,7 +519,7 @@ class PlayerData : MonoBehaviour
     {
         IsGrounded();
         UpdateState();
-        FallActionMaker();
+        _playerMaker.Update();
         RangeUI();
     }
 
@@ -557,22 +553,6 @@ class PlayerData : MonoBehaviour
         _dangos.Clear();
     }
 
-    private void FallActionMaker()
-    {
-        var ray = new Ray(transform.position, Vector3.down);
-
-        if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity))
-        {
-            makerUI.transform.position = hit.point + new Vector3(0, 0.01f, 0);
-            //突き刺しできるようになったら有効化
-            if (!Physics.Raycast(ray, capsuleCollider.height + capsuleCollider.height / 2f))
-                makerUI.SetActive(true);
-            else
-                makerUI.SetActive(false);
-        }
-
-    }
-
     private void RangeUI()
     {
         var ray = new Ray(transform.position, Vector3.down);
@@ -592,7 +572,7 @@ class PlayerData : MonoBehaviour
         }
     }
 
-    private bool CanStab()
+    private bool CanStabAction()
     {
         //団子がこれ以上させないなら実行しない
         if (_dangos.Count >= _maxStabCount)
@@ -660,23 +640,6 @@ class PlayerData : MonoBehaviour
     {
         //満腹度を0.02秒(fixedUpdateの呼ばれる秒数)減らす
         _satiety -= Time.fixedDeltaTime;
-    }
-
-    private void OnChargeCameraMoving()
-    {
-        _cameraComponent.fieldOfView -= 10f * Time.deltaTime;
-    }
-
-    private IEnumerator ResetCameraView()
-    {
-        float view = _cameraComponent.fieldOfView;
-        float hokann = DEFAULT_CAMERA_VIEW - view;
-        while (_cameraComponent.fieldOfView <= DEFAULT_CAMERA_VIEW)
-        {
-            _cameraComponent.fieldOfView += (hokann / CAMERA_REMOVETIME) * Time.deltaTime;
-            yield return null;
-        }
-        _cameraComponent.fieldOfView = DEFAULT_CAMERA_VIEW;
     }
 
     #region GetterSetter

@@ -51,4 +51,11 @@ public class SpitManager : MonoBehaviour
 
         Logger.Log("落下アクション中に刺した！");
     }
+
+    public void ResetSpitPos()
+    {
+        isSticking = false;
+        transform.localRotation = Quaternion.identity;
+        transform.localPosition = new Vector3(0, 0.4f, 1.1f);
+    }
 }

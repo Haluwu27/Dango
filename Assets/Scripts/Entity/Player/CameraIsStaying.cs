@@ -41,7 +41,6 @@ public class CameraIsStaying
         {
             parent.LookPlayerBackH();
 
-
             return parent.LookPlayerBackV() ? IState.E_State.Stay : IState.E_State.Unchanged;
         }
     }
@@ -136,6 +135,13 @@ public class CameraIsStaying
     {
         _currentTime = MAX_STAY_TIME;
         _currentState = IState.E_State.Stay;
+    }
+
+    public void Start(float duration)
+    {
+        _currentTime = 0;
+        _currentState = IState.E_State.Control;
+        _arrivalTime = duration;
     }
 
     private bool IsStaying()

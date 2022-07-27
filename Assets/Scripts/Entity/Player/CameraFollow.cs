@@ -29,15 +29,25 @@ public class CameraFollow : MonoBehaviour
 
     private float _roteYSpeed = -100f;
 
-
+    //壁にぶつかったときのもの
     Vector3 _wallHitPos;//壁にぶつかった際の座標
     RaycastHit _hit;//壁を所得するRay
 
+    //カメラ静止中に行う処理
     CameraIsStaying _camIsStaying = null;
 
     [SerializeField] State state;
 
-#endregion
+    Camera _cam;
+    [SerializeField] GameObject eatCamPos;
+
+    const float DEFAULT_CAMERA_VIEW = 60f;
+    const float CAMERA_REMOVETIME = 0.3f;
+
+    Vector3 _firstCameraPos;
+    Quaternion _firstCameraRot;
+
+    #endregion
 
     private void Start()
     {
@@ -46,6 +56,7 @@ public class CameraFollow : MonoBehaviour
         _terminus = new GameObject("cameraTermiusObject");
         _terminus.transform.position = transform.position;
         _camIsStaying = new(gameObject, _terminus, target);
+        _cam = GetComponent<Camera>();
 
         _prebTargetPos = target.position;
     }
@@ -82,17 +93,18 @@ public class CameraFollow : MonoBehaviour
             transform.position = state switch
             {
                 State.normal => _terminus.transform.position,
-                _ => Vector3.Lerp(transform.position, _terminus.transform.position, Time.deltaTime*ratio),
+                _ => Vector3.Lerp(transform.position, _terminus.transform.position, Time.deltaTime * ratio),
             };
         }
 
         _prebTargetPos = currentTargetPos;
     }
+
     private void RotateToLookRot()
     {
         if (_playerData.GetRoteAxis().magnitude > 0.1f || _playerData.GetMoveAxis().magnitude > 0.1f)
         {
-           _camIsStaying.Reset();
+            _camIsStaying.Reset();
             return;
         }
 
@@ -138,12 +150,66 @@ public class CameraFollow : MonoBehaviour
         {
             obj.transform.RotateAround(target.position, obj.transform.right, _playerData.GetRoteAxis().y * Time.deltaTime * _roteYSpeed);
         }
-
     }
 
     private bool WallHitCheck()
     {
         return Physics.Raycast(target.position, _terminus.transform.position - target.position, out _hit, Vector3.Distance(_prebTargetPos, _terminus.transform.position), wallLayer, QueryTriggerInteraction.Ignore);
     }
-}
 
+    public void OnChargeCameraMoving()
+    {
+        _cam.fieldOfView -= 10f * Time.deltaTime;
+    }
+
+    public IEnumerator ResetCameraView()
+    {
+        float view = _cam.fieldOfView;
+        float hokann = DEFAULT_CAMERA_VIEW - view;
+        while (_cam.fieldOfView <= DEFAULT_CAMERA_VIEW)
+        {
+            _cam.fieldOfView += (hokann / CAMERA_REMOVETIME) * Time.deltaTime;
+            yield return null;
+        }
+        _cam.fieldOfView = DEFAULT_CAMERA_VIEW;
+    }
+
+    public void EatStateCamera()
+    {
+        //移動開始前の初期位置を保存する
+        _firstCameraPos = transform.position;
+        _firstCameraRot = transform.rotation;
+
+        //player to camera vec
+        Vector3 pToC = transform.position - _playerData.transform.position;
+
+        //player to target vec
+        Vector3 pToT = eatCamPos.transform.position - _playerData.transform.position;
+
+        //カメラの瞬間移動
+        transform.position = eatCamPos.transform.position;
+        transform.rotation = Quaternion.Euler(new(transform.rotation.eulerAngles.x, transform.rotation.eulerAngles.y + RotateAngle(pToC, pToT), transform.rotation.eulerAngles.z));
+        _terminus.transform.position = eatCamPos.transform.position;
+        _terminus.transform.rotation = Quaternion.Euler(new(_terminus.transform.rotation.eulerAngles.x, _terminus.transform.rotation.eulerAngles.y + RotateAngle(pToC, pToT), _terminus.transform.rotation.eulerAngles.z));
+
+        //カメラをもとに戻す処理（修正必要）
+        Invoke("RemoveCamera", 0.3f);
+    }
+
+    private float RotateAngle(Vector3 from, Vector3 to)
+    {
+        //法線N
+        Vector3 n = Vector3.up;
+
+        Vector3 planeFrom = Vector3.ProjectOnPlane(from, n);
+        Vector3 planeTo = Vector3.ProjectOnPlane(to, n);
+
+        return Vector3.SignedAngle(planeFrom, planeTo, n);
+    }
+
+    private void RemoveCamera()
+    {
+        transform.position = _firstCameraPos;
+        transform.rotation = _firstCameraRot;
+    }
+}

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Cysharp.Threading.Tasks;
 using TMPro;
+using System.Runtime.CompilerServices;
 
 public class TextData
 {
@@ -15,10 +16,15 @@ public class TextData
         _text = text;
     }
 
+    //積極的にインライン化させるやつです。メソッド本体が小さいときに有効らしいです（詳しく時間の計測とかはしていないのでサイトを参照しています。）
+    //https://ufcpp.net/study/csharp/structured/miscinlining/
+    //わからなければおまじないだと思って無視してください。
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public void SetColor(Color color)
     {
         _text.color = color;
     }
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public void SetColor(Color32 color)
     {
         _text.color = color;
@@ -27,22 +33,27 @@ public class TextData
     {
         _text.fontSize = size;
     }
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public void SetPosition(Vector3 pos)
     {
         _text.transform.position = pos;
     }
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public void SetRotation(Quaternion rot)
     {
         _text.transform.rotation = rot;
     }
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public void SetRotation(Vector3 rot)
     {
         _text.transform.rotation = Quaternion.Euler(rot);
     }
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public void SetText(string text)
     {
         _text.text = text;
     }
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public void SetText()
     {
         _text.text = "";
@@ -62,6 +73,8 @@ public class TextData
             _flashCurrentTime += flashTime * 2f;
         }
 
+        SetText();
+        await Fadein(0);
         _isFlash = false;
     }
 
