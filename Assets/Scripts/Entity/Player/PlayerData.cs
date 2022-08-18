@@ -40,6 +40,9 @@ class PlayerData : MonoBehaviour
     const float EVENTTEXT_FLASH_TIME = 0.4f;
     const float EVENTTEXT_PRINT_TIME = 2.4f;
 
+    [SerializeField] PlayerInput _input = default!;
+    [SerializeField] Canvas _optionCanvas = default!;
+
     //移動処理
     public void OnMove(InputAction.CallbackContext context)
     {
@@ -153,12 +156,12 @@ class PlayerData : MonoBehaviour
 
     }
 
-    //（現状使用しません）
-    public void OnCompression(InputAction.CallbackContext context)
+    public void OnChangeToUIAction(InputAction.CallbackContext context)
     {
         if (context.phase == InputActionPhase.Performed)
         {
-            //for(int i = 0; i < debuffs.; i++)
+            _input.SwitchCurrentActionMap("UI");
+            _optionCanvas.enabled = true;
         }
     }
 

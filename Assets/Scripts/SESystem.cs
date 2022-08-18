@@ -91,7 +91,7 @@ public class SESystem : MonoBehaviour
 
     protected virtual void StopCallBack()
     {
-        if (OnStopSE != null) OnStopSE();
+        OnStopSE?.Invoke();
     }
 
     #region public void Set()
