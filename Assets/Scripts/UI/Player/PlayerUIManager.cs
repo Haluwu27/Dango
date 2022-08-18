@@ -7,13 +7,13 @@ using TMPro;
 public class PlayerUIManager : MonoBehaviour
 {
     [SerializeField, Tooltip("空腹度テキスト")] TextMeshProUGUI timeText;
-    [SerializeField, Tooltip("イベントテキスト")] EventTextUI eventText;
+    [SerializeField, Tooltip("イベントテキスト")] TextUIData eventText;
     [SerializeField, Tooltip("空腹度ゲージ")] Slider timeGage;
     public static float time = 0;
     private float maxTime;
     private float currentTime;
 
-    public EventTextUI EventText => eventText;
+    public TextUIData EventText => eventText;
 
     public void SetTimeText(string text)
     {
