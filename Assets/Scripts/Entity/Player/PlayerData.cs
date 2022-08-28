@@ -3,10 +3,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using TM.Entity.Player;
 
 /// 
 /// ＜実装すること＞
 /// ・接地判定をまともに
+/// ・移動の摩擦を加える。壁にあたったときに摩擦が存在するとその場にとどまってしまうから自力実装
 /// 
 
 [RequireComponent(typeof(Rigidbody), typeof(RideMoveObj))]
@@ -16,14 +18,9 @@ class PlayerData : MonoBehaviour
     //スコアと満腹度のレート
     const float SCORE_TIME_RATE = 0.2f;
 
-    //入力値
-    private Vector2 _moveAxis;
-    private Vector2 _roteAxis;
-
     private bool _hasAttacked = false;
     private bool _hasFalled = false;
     private bool _hasStayedEat = false;
-    private bool _hasJumped = false;
 
     [SerializeField] private Rigidbody rb = default!;
     [SerializeField] private CapsuleCollider capsuleCollider = default!;
@@ -34,89 +31,45 @@ class PlayerData : MonoBehaviour
 
     private PlayerFallAction _playerFall = new();
     private PlayerAttackAction _playerAttack = new();
+    private PlayerMove _playerMove = new();
+    private PlayerJump _playerJump = new();
+    private PlayerRemoveDango _playerRemoveDango;//生成はAwakeで行っています。
 
+    public Rigidbody Rb => rb;
     public PlayerFallAction PlayerFall => _playerFall;
 
     const float EVENTTEXT_FLASH_TIME = 0.4f;
     const float EVENTTEXT_PRINT_TIME = 2.4f;
 
-    [SerializeField] PlayerInput _input = default!;
-    [SerializeField] Canvas _optionCanvas = default!;
-
-    //移動処理
-    public void OnMove(InputAction.CallbackContext context)
-    {
-        if (context.phase == InputActionPhase.Performed)
-        {
-            _moveAxis = context.ReadValue<Vector2>();
-        }
-        else if (context.phase == InputActionPhase.Canceled)
-        {
-            _moveAxis = Vector2.zero;
-        }
-    }
-
-    //ジャンプ処理
-    public void OnJump(InputAction.CallbackContext context)
-    {
-        if (!IsGround) return;
-
-        if (context.phase == InputActionPhase.Performed)
-        {
-            _hasJumped = true;
-        }
-    }
-
-    //団子弾(取り外し)
-    public void OnFire(InputAction.CallbackContext context)
-    {
-        if (context.phase == InputActionPhase.Performed)
-        {
-            //串に何もなかったら実行しない。
-            if (_dangos.Count == 0) return;
-
-            //[Debug]何が消えたかわかるやつ
-            //今までは、dangos[dangos.Count - 1]としなければなりませんでしたが、
-            //C#8.0以降では以下のように省略できるようです。
-            //問題は、これを知らない人が読むとわけが分からない。
-            Logger.Log(_dangos[^1]);
-
-            //SE
-            GameManager.SoundManager.PlaySE(SoundSource.SE_REMOVE_DANGO);
-
-            //消す処理。
-            _dangos.RemoveAt(_dangos.Count - 1);
-            _dangoUISC.DangoUISet(_dangos);
-        }
-    }
+    Canvas _optionCanvas = default!;
 
     //突き刺しアニメーション
-    public void OnAttack(InputAction.CallbackContext context)
+    //将来的にここから移動させたい。
+    private void OnAttack()
     {
         //落下アクション中受け付けない。
         if (_playerFall.IsFallAction) return;
 
-        if (context.phase == InputActionPhase.Performed)
+        //空中かつ地面に近すぎなければ落下刺しに移行
+        if (!_isGround)
         {
-            //空中かつ地面に近すぎなければ落下刺しに移行
-            if (!_isGround)
-            {
-                Ray ray = new(transform.position, Vector3.down);
+            Ray ray = new(transform.position, Vector3.down);
 
-                //近くに地面があるか(playerの半分の大きさ)判定
-                if (Physics.Raycast(ray, capsuleCollider.height + capsuleCollider.height / 2f)) _hasAttacked = true;
-                else _hasFalled = true;
-            }
-            //地面なら普通に突き刺しに移行
-            else
-            {
-                _hasAttacked = true;
-            }
+            //近くに地面があるか(playerの半分の大きさ)判定
+            if (Physics.Raycast(ray, capsuleCollider.height + capsuleCollider.height / 2f)) _hasAttacked = true;
+            else _hasFalled = true;
         }
+        //地面なら普通に突き刺しに移行
+        else
+        {
+            _hasAttacked = true;
+        }
+
     }
 
     //食べる
-    public void OnEatDango(InputAction.CallbackContext context)
+    //将来的にここから移動させたい
+    private void OnEatDango()
     {
         //串に刺さってなかったら実行しない。
         if (_dangos.Count == 0) return;
@@ -134,35 +87,17 @@ class PlayerData : MonoBehaviour
         {
             _playerUIManager.EventText.TextData.SetText("食べられないよ！");
             _playerUIManager.EventText.TextData.FlashAlpha(EVENTTEXT_PRINT_TIME, EVENTTEXT_FLASH_TIME, 0);
-
             return;
         }
 
-        if (context.phase == InputActionPhase.Performed) _hasStayedEat = true;
-        else if (context.phase == InputActionPhase.Canceled) _hasStayedEat = false;
+        _hasStayedEat = true;
     }
 
-    //回転処理
-    public void OnRote(InputAction.CallbackContext context)
+    //将来的にここから移動させたいというかここでやる意味がない
+    private void OnChangeToUIAction()
     {
-        if (context.phase == InputActionPhase.Performed)
-        {
-            _roteAxis = context.ReadValue<Vector2>();
-        }
-        else if (context.phase == InputActionPhase.Canceled)
-        {
-            _roteAxis = Vector2.zero;
-        }
-
-    }
-
-    public void OnChangeToUIAction(InputAction.CallbackContext context)
-    {
-        if (context.phase == InputActionPhase.Performed)
-        {
-            _input.SwitchCurrentActionMap("UI");
-            _optionCanvas.enabled = true;
-        }
+        InputSystemManager.Instance.Input.SwitchCurrentActionMap("UI");
+        _optionCanvas.enabled = true;
     }
 
     private void EatDango()
@@ -246,19 +181,18 @@ class PlayerData : MonoBehaviour
         }
         public IState.E_State Update(PlayerData parent)
         {
-            parent.PlayerRotateToMoveVec();
             return IState.E_State.Unchanged;
         }
         public IState.E_State FixedUpdate(PlayerData parent)
         {
             //プレイヤーを動かす処理
-            parent.PlayerMove();
+            parent._playerMove.Update(parent.rb, parent.playerCamera.transform);
 
             //満腹度（制限時間）減らす処理
             parent.DecreaseSatiety();
 
             //ジャンプ
-            parent.Jump();
+            parent._playerJump.Jump(parent.rb, parent._isGround, parent._maxStabCount);
 
             //ステートに移行。
             if (parent._hasStayedEat) return IState.E_State.StayEatDango;
@@ -283,7 +217,7 @@ class PlayerData : MonoBehaviour
         public IState.E_State FixedUpdate(PlayerData parent)
         {
             //移動
-            parent.PlayerMove();
+            parent._playerMove.Update(parent.rb, parent.playerCamera.transform);
 
             //制限時間減少
             parent.DecreaseSatiety();
@@ -435,17 +369,14 @@ class PlayerData : MonoBehaviour
 
     #region メンバ変数
     //プレイヤーの能力
-    [SerializeField] private float _moveSpeed = 50f;
-    [SerializeField] private float _jumpPower = 10f;
-
     [SerializeField] private SpitManager spitManager = default!;
     [SerializeField] private GameObject makerUI = default!;
-    [SerializeField] private GameObject rangeUI = default;
+    [SerializeField] private GameObject rangeUI = default!;
 
     //UI関連
-    RoleDirectingScript _directing;
-    PlayerUIManager _playerUIManager;
-    DangoUIScript _dangoUISC;
+    [SerializeField] RoleDirectingScript _directing;
+    [SerializeField] PlayerUIManager _playerUIManager;
+    [SerializeField] DangoUIScript _dangoUISC = default!;
 
     //串を伸ばす処理
     const int MAX_DANGO = 7;
@@ -494,30 +425,28 @@ class PlayerData : MonoBehaviour
         }
     }
 
-    //移動速度定数
-    const float MAX_VELOCITY_MAG = 8f;
-    const float RUN_SPEED_MAG = 7f;
 
     public Vector3 MoveVec { get; private set; }
-    private Vector3 _cameraForward;
-
-    public void SetCameraForward(Vector3 camForward) => _cameraForward = camForward;
     #endregion
 
     private void Awake()
     {
-        _playerUIManager = GameObject.Find("PlayerUICanvas").GetComponent<PlayerUIManager>();
-        _dangoUISC = GameObject.Find("PlayerUICanvas").transform.Find("DangoBackScreen").GetComponent<DangoUIScript>();
-        _directing = GameObject.Find("PlayerUICanvas").transform.Find("DirectingObj").GetComponent<RoleDirectingScript>();
+        _playerRemoveDango = new(_dangos, _dangoUISC);
     }
 
     private void OnEnable()
     {
+        _optionCanvas = OptionManager.OptionCanvas;
         InitDangos();
     }
 
     private void Start()
     {
+        InputSystemManager.Instance.onFirePerformed += _playerRemoveDango.Remove;
+        InputSystemManager.Instance.onAttackPerformed += OnAttack;
+        InputSystemManager.Instance.onEatDangoPerformed += OnEatDango;
+        InputSystemManager.Instance.onEatDangoCanceled += () => _hasStayedEat = false;
+        InputSystemManager.Instance.onPausePerformed += OnChangeToUIAction;
         _cameraComponent = playerCamera.GetComponent<Camera>();
         makerUI.SetActive(false);
     }
@@ -543,14 +472,6 @@ class PlayerData : MonoBehaviour
         GUI.Label(new Rect(20, 20, 100, 50), "" + _currentState);
     }
 #endif
-
-    private void Jump()
-    {
-        if (!_hasJumped) return;
-
-        rb.AddForce(Vector3.up * (_jumpPower + _maxStabCount), ForceMode.Impulse);
-        _hasJumped = false;
-    }
 
     private void InitDangos()
     {
@@ -634,29 +555,6 @@ class PlayerData : MonoBehaviour
     }
 
     /// <summary>
-    /// Playerをカメラの方向に合わせて動かす関数。
-    /// </summary>
-    private void PlayerMove()
-    {
-        //カメラの向きを元にベクトルの作成
-        MoveVec = _moveAxis.y * _moveSpeed * _cameraForward + _moveAxis.x * _moveSpeed * playerCamera.transform.right;
-
-        if (rb.velocity.magnitude < MAX_VELOCITY_MAG)
-        {
-            float mag = Mathf.Sqrt(rb.velocity.x * rb.velocity.x + rb.velocity.z * rb.velocity.z);
-            float speedMag = RUN_SPEED_MAG - mag;
-            rb.AddForce(MoveVec * speedMag);
-        }
-    }
-
-    private void PlayerRotateToMoveVec()
-    {
-        if (MoveVec.magnitude == 0) return;
-        Vector3 lookRot = new(MoveVec.x, 0, MoveVec.z);
-        transform.localRotation = Quaternion.RotateTowards(transform.rotation, Quaternion.LookRotation(lookRot), 1.5f);
-    }
-
-    /// <summary>
     /// 満腹度をへらす関数、fixedUpdateに配置。
     /// </summary>
     private void DecreaseSatiety()
@@ -683,29 +581,6 @@ class PlayerData : MonoBehaviour
     }
 
     #region GetterSetter
-    public Vector2 GetMoveAxis() => _moveAxis;
-    public Vector2 GetRoteAxis() => _roteAxis;
-    public List<DangoColor> GetDangoType() => _dangos;
-    public DangoColor GetDangoType(int value)
-    {
-        try
-        {
-            return _dangos[value];
-        }
-        catch (IndexOutOfRangeException e)
-        {
-            Logger.Error(e);
-            Logger.Error("代わりに先頭（配列の0番）を返します。");
-            return _dangos[0];
-        }
-    }
-    public void PlayerRotate(Quaternion rot)
-    {
-        if (_currentState != IState.E_State.Control) return;
-
-        transform.rotation = rot;
-    }
-
     public int GetMaxDango() => _maxStabCount;
     public List<DangoColor> GetDangos() => _dangos;
     public void AddDangos(DangoColor d) => _dangos.Add(d);

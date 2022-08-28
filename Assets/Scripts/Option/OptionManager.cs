@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using TM.Input.KeyConfig;
+using Unity.VisualScripting;
 
 public class OptionManager : MonoBehaviour
 {
@@ -26,9 +27,14 @@ public class OptionManager : MonoBehaviour
     }
 
     #region メンバ
-    [SerializeField] PlayerInput _input = default!;
     [SerializeField] KeyConfigManager _keyConfig = default!;
     [SerializeField] Canvas _canvas = default!;
+
+    /// <summary>
+    /// 静的に取得出来るオプションキャンバス
+    /// </summary>
+    /// 単一シーンで実装するため、各画面間のやりとりの際に使用する静的なものです。
+    public static Canvas OptionCanvas { get; private set; }
 
     //現在のオプション地点
     OptionChoices _currentChoice = OptionChoices.Option;
@@ -50,7 +56,7 @@ public class OptionManager : MonoBehaviour
         if (_currentChoice == OptionChoices.Option)
         {
             //Player(通常プレイの入力)マップに戻る
-            _input.SwitchCurrentActionMap("Player");
+            InputSystemManager.Instance.Input.SwitchCurrentActionMap("Player");
 
             //Bボタンだけ一瞬で戻ってジャンプしてしまうバグあり。原因不明
 
@@ -102,6 +108,13 @@ public class OptionManager : MonoBehaviour
         }
     }
     #endregion
+
+    private void Awake()
+    {
+        OptionCanvas = _canvas;
+
+       // PlayerData.MyPlayerInput.
+    }
 
     private void ChangeChoice(Vector2 axis)
     {

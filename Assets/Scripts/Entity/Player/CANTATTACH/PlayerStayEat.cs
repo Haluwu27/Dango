@@ -5,27 +5,29 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
-class PlayerStayEat
+namespace TM.Entity.Player
 {
-    private int _stayFrame;
-    private int _currentFrame;
-
-    public PlayerStayEat(int stayFrame)
+    class PlayerStayEat
     {
-        _stayFrame = stayFrame;
-        _currentFrame = stayFrame;
-    }
+        private int _stayFrame;
+        private int _currentFrame;
 
-    public bool CanEat()
-    {
-        if (--_currentFrame > 0) return false;
+        public PlayerStayEat(int stayFrame)
+        {
+            _stayFrame = stayFrame;
+            _currentFrame = stayFrame;
+        }
 
-        return true;
-    }
+        public bool CanEat()
+        {
+            if (--_currentFrame > 0) return false;
 
-    public void ResetCount()
-    {
-        _currentFrame = _stayFrame;
+            return true;
+        }
+
+        public void ResetCount()
+        {
+            _currentFrame = _stayFrame;
+        }
     }
 }
-

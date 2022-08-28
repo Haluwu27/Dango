@@ -43,11 +43,21 @@ namespace TM.UI.Text
         }
         public void SetText(string text)
         {
+            SetAlpha(1f);
             _text.text = text;
         }
         public void SetText()
         {
+            SetAlpha(1f);
             _text.text = "";
+        }
+        private void SetAlpha(float alpha)
+        {
+            Mathf.Clamp01(alpha);
+
+            Color c = _text.color;
+            c.a = alpha;
+            _text.color = c;
         }
 
         public async void FlashAlpha(float finishTime, float flashTime, float coolTime)

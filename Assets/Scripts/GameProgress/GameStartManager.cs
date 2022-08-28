@@ -4,16 +4,16 @@ using UnityEngine;
 
 public class GameStartManager : MonoBehaviour
 {
-    private static FadeManager _fadeManager = default!;
+    static FadeManager _fadeManager = default!;
     public static FadeManager FadeManager => _fadeManager;
 
-    [SerializeField] private float StertTime; 
+    [SerializeField] private float startTime;
     private void Awake()
     {
         _fadeManager = GameObject.Find("FadeCanvas").GetComponentInChildren<FadeManager>();
         _fadeManager.StartFade(TM.Easing.EaseType.Linear, FadeStyle.Fadeout, 5f);
 
-        PlayerUIManager.time = StertTime;
+        PlayerUIManager.time = startTime;
 
 #if UNITY_EDITOR
         //マウスカーソルのやつ。
