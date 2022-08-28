@@ -401,6 +401,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 869c9c6e3960662488b8f136109b0186, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Input: {fileID: 1271659315}
 --- !u!114 &1271659317
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -413,7 +414,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 166783ef09795424bbc40f413ef598ae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  scenes: 5
+  debugScenes: 0
   _sceneRoots:
   - {fileID: 0}
   - {fileID: 0}
