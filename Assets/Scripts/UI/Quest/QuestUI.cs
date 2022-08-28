@@ -13,6 +13,8 @@ namespace Dango.Quest.UI
         private bool _succeed = false;
         private string _questName = null;
 
+        private string clearQuestName = null;
+
         private QuestUI()
         {
         }
@@ -31,6 +33,11 @@ namespace Dango.Quest.UI
                     Enabled(i, false, images, quests);
                 }
             }
+        }
+        public void OnGUIChangeOldQuest(TextMeshProUGUI quest)
+        {
+            if(clearQuestName!=null)
+            quest.text = clearQuestName;
         }
 
         public void OnGUIQuestSucceed(string questName)
@@ -53,6 +60,7 @@ namespace Dango.Quest.UI
                 if (quest.text == _questName)
                 {
                     quest.text = "クエストクリア！";
+                    clearQuestName = _questName;
                 }
             }
 
