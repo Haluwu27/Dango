@@ -18,7 +18,18 @@ public enum SoundSource
     SE_STAB_DANGO,
     SE_REMOVE_DANGO,
     SE_CREATE_ROLE,
-
+    VOISE_PRINCE_ATTACK01,
+    VOISE_PRINCE_ATTACK02,
+    VOISE_PRINCE_JUMP01,
+    VOISE_PRINCE_JUMP02,
+    VOISE_PRINCE_FALL01,
+    VOISE_PRINCE_FALL02,
+    VOISE_PRINCE_STAYEAT01,
+    VOISE_PRINCE_STAYEAT02,
+    VOISE_PRINCE_CREATEROLE01,
+    VOISE_PRINCE_CREATEROLE02,
+    VOISE_PRINCE_NOROLE01,
+    VOISE_PRINCE_NOROLE02,
 }
 
 #if UNITY_EDITOR
@@ -127,6 +138,20 @@ public class SoundManager : MonoBehaviour
     /// SEを再生します。10チャンネルすべて利用されていた場合流れません
     /// </summary>
     /// <param name="sound">再生したいSE</param>
+    public void PlaySE(int sound)
+    {
+        foreach (var se in SEs)
+        {
+            if (se.isPlaying) continue;
+
+            ChangeSE(se, (SoundSource)sound);
+            se.volume = 0.125f;
+            se.Play();
+            return;
+        }
+        //すべてのチャンネルが使用中ならここにくる
+        Logger.Warn("全SEチャンネルが使用中で" + sound + "が再生できませんでした");
+    }
     public void PlaySE(SoundSource sound)
     {
         foreach (var se in SEs)
@@ -134,6 +159,35 @@ public class SoundManager : MonoBehaviour
             if (se.isPlaying) continue;
 
             ChangeSE(se, sound);
+            se.volume = 0.125f;
+            se.Play();
+            return;
+        }
+        //すべてのチャンネルが使用中ならここにくる
+        Logger.Warn("全SEチャンネルが使用中で" + sound + "が再生できませんでした");
+    }
+    public void PlaySE(int sound,float volume)
+    {
+        foreach (var se in SEs)
+        {
+            if (se.isPlaying) continue;
+
+            ChangeSE(se, (SoundSource)sound);
+            se.volume = volume;
+            se.Play();
+            return;
+        }
+        //すべてのチャンネルが使用中ならここにくる
+        Logger.Warn("全SEチャンネルが使用中で" + sound + "が再生できませんでした");
+    }
+    public void PlaySE(SoundSource sound,float volume)
+    {
+        foreach (var se in SEs)
+        {
+            if (se.isPlaying) continue;
+
+            ChangeSE(se, sound);
+            se.volume = volume;
             se.Play();
             return;
         }

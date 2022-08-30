@@ -60,8 +60,6 @@ public class CameraFollow : MonoBehaviour
     private void LateUpdate()
     {
         CameraSmoothMove();
-
-        _playerData.SetCameraForward(transform.forward);
     }
 
     private void CameraSmoothMove()
@@ -90,7 +88,7 @@ public class CameraFollow : MonoBehaviour
     }
     private void RotateToLookRot()
     {
-        if (_playerData.GetRoteAxis().magnitude > 0.1f || _playerData.GetMoveAxis().magnitude > 0.1f)
+        if (InputSystemManager.Instance.LookAxis.magnitude > 0.1f || _playerData.Rb.velocity.magnitude > 0.1f)
         {
            _camIsStaying.Reset();
             return;
@@ -131,12 +129,12 @@ public class CameraFollow : MonoBehaviour
     private void Rote(GameObject obj, float a)
     {
         //ƒJƒƒ‰‚ðroteAxis.x‚É‡‚í‚¹‚Ä‰ñ“]‚³‚¹‚éB
-        obj.transform.RotateAround(target.position, Vector3.up, _playerData.GetRoteAxis().x * Time.deltaTime);
+        obj.transform.RotateAround(target.position, Vector3.up, InputSystemManager.Instance.LookAxis.x * Time.deltaTime);
 
         //cŽ²‚Ì§ŒÀ
-        if ((a >= MinAngle && _playerData.GetRoteAxis().y > 0) || (a <= MaxAngle && _playerData.GetRoteAxis().y < 0))
+        if ((a >= MinAngle && InputSystemManager.Instance.LookAxis.y > 0) || (a <= MaxAngle && InputSystemManager.Instance.LookAxis.y < 0))
         {
-            obj.transform.RotateAround(target.position, obj.transform.right, _playerData.GetRoteAxis().y * Time.deltaTime * _roteYSpeed);
+            obj.transform.RotateAround(target.position, obj.transform.right, InputSystemManager.Instance.LookAxis.y * Time.deltaTime * _roteYSpeed);
         }
 
     }

@@ -504,15 +504,6 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Choice",
-                    "type": "Button",
-                    "id": "7f699280-7471-49d1-a949-257fab29621c",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
                     "name": "Stick",
                     "type": "Value",
                     "id": "7b9ac939-bb3f-4d4d-829f-1b077f86071a",
@@ -520,6 +511,15 @@
                     "processors": "",
                     "interactions": "Press(pressPoint=0.5)",
                     "initialStateCheck": true
+                },
+                {
+                    "name": "Choice",
+                    "type": "Button",
+                    "id": "5b96b097-6772-412f-aca1-8a362d9e3066",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -987,28 +987,6 @@
                 },
                 {
                     "name": "",
-                    "id": "24c74127-234b-473e-85a3-9d607b4c620a",
-                    "path": "<Gamepad>/buttonEast",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Choice",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "563b3ecc-e5df-472b-a06c-33c01e1ecf68",
-                    "path": "<Keyboard>/enter",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Choice",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
                     "id": "47e2a654-f30c-43ca-a7ac-6a65a7715684",
                     "path": "<Gamepad>/leftStick",
                     "interactions": "",
@@ -1160,6 +1138,83 @@
                     "action": "Stick",
                     "isComposite": false,
                     "isPartOfComposite": true
+                },
+                {
+                    "name": "",
+                    "id": "6b8c40a6-4c91-46ce-ac74-149d2456e17e",
+                    "path": "<Keyboard>/enter",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "Choice",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "dfcaad7a-700d-4d7a-9f25-353505163378",
+                    "path": "<SwitchProControllerHID>/buttonEast",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "Choice",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "d264560a-5864-4a1f-ae3d-0683f331ae73",
+                    "path": "<XInputController>/buttonSouth",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "Choice",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "a452ebd4-bea1-4bbf-bfda-d4d78bb16aff",
+                    "path": "<DualShockGamepad>/buttonEast",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "Choice",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "53ca646b-1fe6-4c9a-9517-ff628715e795",
+                    "path": "<WebGLGamepad>/buttonEast",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "Choice",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "be89c5b0-9324-40dd-a35b-7c27ada742c8",
+                    "path": "<iOSGameController>/buttonEast",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "Choice",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "d197cb60-9452-43f2-b10f-16c63a4fc35a",
+                    "path": "<AndroidGamepad>/buttonEast",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "Choice",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 }
             ]
         }
