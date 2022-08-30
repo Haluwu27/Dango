@@ -1,9 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.InputSystem;
 using TM.Input.KeyConfig;
-using Unity.VisualScripting;
 
 public class OptionManager : MonoBehaviour
 {
@@ -12,10 +10,11 @@ public class OptionManager : MonoBehaviour
     {
         Option,
 
-        TEMP,
-        TEMP2,
-        TEMP3,
+        Camera,
+        Screen,
+        Sound,
         KeyConfig,
+        Other,
 
         Max,
     }
@@ -29,6 +28,7 @@ public class OptionManager : MonoBehaviour
     #region メンバ
     [SerializeField] KeyConfigManager _keyConfig = default!;
     [SerializeField] Canvas _canvas = default!;
+    [SerializeField] TextUIData[] _optionTexts;
 
     /// <summary>
     /// 静的に取得出来るオプションキャンバス
@@ -40,11 +40,14 @@ public class OptionManager : MonoBehaviour
     OptionChoices _currentChoice = OptionChoices.Option;
 
     //次に以降するオプション地点
-    OptionChoices _nextChoice = OptionChoices.TEMP;
+    OptionChoices _nextChoice = OptionChoices.Camera;
 
     //縦か横か
     static readonly OptionDirection direction = OptionDirection.Vertical;
     static readonly Vector2[,] directionTable = { { Vector2.up, Vector2.down }, { Vector2.left, Vector2.right } };
+
+    //上端から下端に移動するか否か
+    static readonly bool canMoveTopToBottom = false;
 
     #endregion
 
@@ -84,15 +87,13 @@ public class OptionManager : MonoBehaviour
             case OptionChoices.Option:
                 ChangeChoice(axis);
                 break;
-            case OptionChoices.TEMP:
+            case OptionChoices.Camera:
                 break;
-            case OptionChoices.TEMP2:
-                break;
-            case OptionChoices.TEMP3:
+            case OptionChoices.Screen:
                 break;
             case OptionChoices.KeyConfig:
                 break;
-            case OptionChoices.Max:
+            case OptionChoices.Other:
                 break;
         }
     }
@@ -102,7 +103,9 @@ public class OptionManager : MonoBehaviour
     {
         OptionCanvas = _canvas;
 
-       // PlayerData.MyPlayerInput.
+        _canvas.enabled = false;
+        EnterOption();
+        SetFontSize();
     }
 
     private void Start()
@@ -114,20 +117,23 @@ public class OptionManager : MonoBehaviour
 
     private void ChangeChoice(Vector2 axis)
     {
-        //縦のシステムにする？？
+        //Up or Left
         if (axis == directionTable[(int)direction, 0])
         {
             _nextChoice--;
-            if (_nextChoice == OptionChoices.Option) _nextChoice = OptionChoices.Max - 1;
-            Logger.Log(_nextChoice);
 
+            if (_nextChoice == OptionChoices.Option) _nextChoice = canMoveTopToBottom ? OptionChoices.Max - 1 : OptionChoices.Option + 1;
+
+            SetFontSize();
         }
-        if (axis == directionTable[(int)direction, 1])
+        //Down or Right
+        else if (axis == directionTable[(int)direction, 1])
         {
             _nextChoice++;
-            if (_nextChoice == OptionChoices.Max) _nextChoice = OptionChoices.Option + 1;
 
-            Logger.Log(_nextChoice);
+            if (_nextChoice == OptionChoices.Max) _nextChoice = canMoveTopToBottom ? OptionChoices.Option + 1 : OptionChoices.Max - 1;
+
+            SetFontSize();
         }
 
     }
@@ -139,16 +145,16 @@ public class OptionManager : MonoBehaviour
             case OptionChoices.Option:
                 Logger.Log("選択したよ");
                 EnterNextChoice();
+                break;
 
+            case OptionChoices.Camera:
                 break;
-            case OptionChoices.TEMP:
-                break;
-            case OptionChoices.TEMP2:
-                break;
-            case OptionChoices.TEMP3:
+            case OptionChoices.Screen:
                 break;
             case OptionChoices.KeyConfig:
                 _keyConfig.OnSelect();
+                break;
+            case OptionChoices.Other:
                 break;
         }
     }
@@ -157,14 +163,14 @@ public class OptionManager : MonoBehaviour
     {
         switch (_nextChoice)
         {
-            case OptionChoices.TEMP:
+            case OptionChoices.Camera:
                 break;
-            case OptionChoices.TEMP2:
-                break;
-            case OptionChoices.TEMP3:
+            case OptionChoices.Screen:
                 break;
             case OptionChoices.KeyConfig:
                 EnterKeyConfig();
+                break;
+            case OptionChoices.Other:
                 break;
         }
     }
@@ -178,5 +184,15 @@ public class OptionManager : MonoBehaviour
     {
         _currentChoice = OptionChoices.KeyConfig;
         _keyConfig.SetCanvasEnable(true);
+    }
+
+    private void SetFontSize()
+    {
+        for (int i = 0; i < _optionTexts.Length; i++)
+        {
+            float size = (int)_nextChoice - 1 == i ? 100f : 80f;
+
+            _optionTexts[i].TextData.SetFontSize(size);
+        }
     }
 }

@@ -51,7 +51,7 @@ namespace TM.UI.Text
             SetAlpha(1f);
             _text.text = "";
         }
-        private void SetAlpha(float alpha)
+        public void SetAlpha(float alpha)
         {
             Mathf.Clamp01(alpha);
 
