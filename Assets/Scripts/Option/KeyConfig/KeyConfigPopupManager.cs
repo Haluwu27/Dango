@@ -20,12 +20,17 @@ namespace TM.Input.KeyConfig
         KeyData.GameAction _currentAction;
         int _currentActionIndex;
 
-        public void OnNavigateVertical(InputAction.CallbackContext context)
+        private void Awake()
+        {
+            InputSystemManager.Instance.onNavigatePerformed += OnNavigateVertical;
+            InputSystemManager.Instance.onChoicePerformed += OnChoiced;
+        }
+
+        public void OnNavigateVertical()
         {
             if (!IsPopup) return;
-            if (context.phase != InputActionPhase.Performed) return;
 
-            Vector2 axis = context.ReadValue<Vector2>();
+            Vector2 axis = InputSystemManager.Instance.NavigateAxis;
 
             if (axis == Vector2.up)
             {
@@ -40,10 +45,9 @@ namespace TM.Input.KeyConfig
             Logger.Log(_currentAction);
         }
 
-        public void OnChoiced(InputAction.CallbackContext context)
+        public void OnChoiced()
         {
             if (!IsPopup) return;
-            if (context.phase != InputActionPhase.Performed) return;
 
             keyConfigManager.Rebinding((int)_currentAction);
         }

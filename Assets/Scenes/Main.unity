@@ -356,7 +356,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1271659316}
         m_TargetAssemblyTypeName: InputSystemManager, Assembly-CSharp
-        m_MethodName: OnChoice
+        m_MethodName: OnStick
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -366,8 +366,8 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-    m_ActionId: 7f699280-7471-49d1-a949-257fab29621c
-    m_ActionName: UI/Choice[/SwitchProControllerHID/buttonEast,/Keyboard/enter]
+    m_ActionId: 7b9ac939-bb3f-4d4d-829f-1b077f86071a
+    m_ActionName: UI/Stick[/SwitchProControllerHID/leftStick,/SwitchProControllerHID/rightStick,/SwitchProControllerHID/dpad,/Keyboard/w,/Keyboard/upArrow,/Keyboard/s,/Keyboard/downArrow,/Keyboard/a,/Keyboard/leftArrow,/Keyboard/d,/Keyboard/rightArrow]
   - m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1271659316}
@@ -382,8 +382,8 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-    m_ActionId: 7b9ac939-bb3f-4d4d-829f-1b077f86071a
-    m_ActionName: UI/Stick[/SwitchProControllerHID/leftStick,/SwitchProControllerHID/rightStick,/SwitchProControllerHID/dpad,/Keyboard/w,/Keyboard/upArrow,/Keyboard/s,/Keyboard/downArrow,/Keyboard/a,/Keyboard/leftArrow,/Keyboard/d,/Keyboard/rightArrow]
+    m_ActionId: 5b96b097-6772-412f-aca1-8a362d9e3066
+    m_ActionName: UI/Choice[/Keyboard/enter]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Player

@@ -49,10 +49,8 @@ public class OptionManager : MonoBehaviour
     #endregion
 
     #region InputSystem
-    public void OnBack(InputAction.CallbackContext context)
+    private void OnBack()
     {
-        if (context.phase != InputActionPhase.Performed) return;
-
         if (_currentChoice == OptionChoices.Option)
         {
             //Player(通常プレイの入力)マップに戻る
@@ -77,18 +75,9 @@ public class OptionManager : MonoBehaviour
         }
     }
 
-    public void OnChoice(InputAction.CallbackContext context)
+    private void OnNavigate()
     {
-        if (context.phase != InputActionPhase.Performed) return;
-
-        Choiced();
-    }
-
-    public void OnNavigate(InputAction.CallbackContext context)
-    {
-        if (context.phase != InputActionPhase.Performed) return;
-
-        Vector2 axis = context.ReadValue<Vector2>();
+        Vector2 axis = InputSystemManager.Instance.NavigateAxis;
 
         switch (_currentChoice)
         {
@@ -114,6 +103,13 @@ public class OptionManager : MonoBehaviour
         OptionCanvas = _canvas;
 
        // PlayerData.MyPlayerInput.
+    }
+
+    private void Start()
+    {
+        InputSystemManager.Instance.onBackPerformed += OnBack;
+        InputSystemManager.Instance.onNavigatePerformed += OnNavigate;
+        InputSystemManager.Instance.onChoicePerformed += Choiced;
     }
 
     private void ChangeChoice(Vector2 axis)

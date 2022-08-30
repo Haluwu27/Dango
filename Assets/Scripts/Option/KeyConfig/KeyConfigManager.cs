@@ -40,15 +40,14 @@ namespace TM.Input.KeyConfig
         //アクションリファレンス毎に設定するデータの全要素
         ActionData[] _actionDatas = new ActionData[(int)KeyConfigData.GameAction.Max];
 
-        public void OnStick(InputAction.CallbackContext context)
+        public void OnStick()
         {
             if (!_staticCanvas.isActiveAndEnabled) return;
             if (!_dynamicCanvas.isActiveAndEnabled) return;
             if (_popupManager.IsPopup) return;
-            if (context.phase != InputActionPhase.Performed) return;
 
             //読み取った値を保存
-            _axis = context.ReadValue<Vector2>();
+            _axis = InputSystemManager.Instance.StickAxis;
 
             //読み取った値から最も近い8方向のいずれかを返却
             InputKey key = CheckInputKey(_axis);
@@ -85,6 +84,8 @@ namespace TM.Input.KeyConfig
             {
                 _actionDatas[i] = new((KeyData.GameAction)i, DefaultKeyTable[i], _asset, "Player");
             }
+
+            InputSystemManager.Instance.onStickPerformed += OnStick;
         }
 
         //この関数をAwakeに置けば直前に抜けた地点が保存されてそこから移動できます。
@@ -154,7 +155,6 @@ namespace TM.Input.KeyConfig
         public void Rebinding(int index)
         {
             _currentData.GetComponent<KeyData>().KeyBindingOverride(_actionDatas[index].ActionReference);
-            
         }
 
         public KeyConfigData Data => _currentData;

@@ -63,6 +63,7 @@ class PlayerData : MonoBehaviour
         else
         {
             _hasAttacked = true;
+            GameManager.SoundManager.PlaySE(UnityEngine.Random.Range((int)SoundSource.VOISE_PRINCE_ATTACK01, (int)SoundSource.VOISE_PRINCE_ATTACK02+1));
         }
 
     }
@@ -90,6 +91,7 @@ class PlayerData : MonoBehaviour
             return;
         }
 
+        GameManager.SoundManager.PlaySE(UnityEngine.Random.Range((int)SoundSource.VOISE_PRINCE_STAYEAT01, (int)SoundSource.VOISE_PRINCE_STAYEAT02+1));
         _hasStayedEat = true;
     }
 

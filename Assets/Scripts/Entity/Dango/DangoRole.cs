@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -95,7 +96,7 @@ class DangoRole
 
     List<DangoColor> _color = new();
     QuestManager _questManager = new();
-
+    Random rand = new();
 
     private List<Role<DangoColor>> specialRoles = new()
     {
@@ -137,7 +138,12 @@ class DangoRole
         //その他役の判定
         if (CheckPosRole(dangos, ref score))
         {
+            GameManager.SoundManager.PlaySE(rand.Next((int)SoundSource.VOISE_PRINCE_CREATEROLE01, (int)SoundSource.VOISE_PRINCE_CREATEROLE02 + 1), 1f);
             _questManager.SucceedChecker.CheckQuestIncludeColorSucceed(_questManager, _color);
+        }
+        else
+        {
+            GameManager.SoundManager.PlaySE(rand.Next((int)SoundSource.VOISE_PRINCE_NOROLE01, (int)SoundSource.VOISE_PRINCE_NOROLE02 + 1), 1f);
         }
 
         //CheckColorRole(ref score);//処理内部にソートを含むため、位置役より下に配置。

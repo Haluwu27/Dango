@@ -86507,6 +86507,66 @@ PrefabInstance:
       propertyPath: _BGM
       value: 
       objectReference: {fileID: 3227062637934031211}
+    - target: {fileID: 1164745714, guid: f596f7fa4f031ba4eb2aaf1052d308c7, type: 3}
+      propertyPath: SEClip.Array.size
+      value: 17
+      objectReference: {fileID: 0}
+    - target: {fileID: 1164745714, guid: f596f7fa4f031ba4eb2aaf1052d308c7, type: 3}
+      propertyPath: _debugSoundSource
+      value: 14
+      objectReference: {fileID: 0}
+    - target: {fileID: 1164745714, guid: f596f7fa4f031ba4eb2aaf1052d308c7, type: 3}
+      propertyPath: SEClip.Array.data[4]
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 1164745714, guid: f596f7fa4f031ba4eb2aaf1052d308c7, type: 3}
+      propertyPath: SEClip.Array.data[5]
+      value: 
+      objectReference: {fileID: 8300000, guid: 155d931fc4074aa43b510a1d5787cc14, type: 3}
+    - target: {fileID: 1164745714, guid: f596f7fa4f031ba4eb2aaf1052d308c7, type: 3}
+      propertyPath: SEClip.Array.data[6]
+      value: 
+      objectReference: {fileID: 8300000, guid: 80e8f0ee840063241aa1c8262fa1a2d9, type: 3}
+    - target: {fileID: 1164745714, guid: f596f7fa4f031ba4eb2aaf1052d308c7, type: 3}
+      propertyPath: SEClip.Array.data[7]
+      value: 
+      objectReference: {fileID: 8300000, guid: 53c4c9046abdd9a4992a54c2fe90a834, type: 3}
+    - target: {fileID: 1164745714, guid: f596f7fa4f031ba4eb2aaf1052d308c7, type: 3}
+      propertyPath: SEClip.Array.data[8]
+      value: 
+      objectReference: {fileID: 8300000, guid: d1d7b7a9a45a14d44b0c3afb9e45d214, type: 3}
+    - target: {fileID: 1164745714, guid: f596f7fa4f031ba4eb2aaf1052d308c7, type: 3}
+      propertyPath: SEClip.Array.data[9]
+      value: 
+      objectReference: {fileID: 8300000, guid: 77741358212757045b1275ec8c640b7f, type: 3}
+    - target: {fileID: 1164745714, guid: f596f7fa4f031ba4eb2aaf1052d308c7, type: 3}
+      propertyPath: SEClip.Array.data[10]
+      value: 
+      objectReference: {fileID: 8300000, guid: 7b1b85244c646bc45bca33b1c4e06956, type: 3}
+    - target: {fileID: 1164745714, guid: f596f7fa4f031ba4eb2aaf1052d308c7, type: 3}
+      propertyPath: SEClip.Array.data[11]
+      value: 
+      objectReference: {fileID: 8300000, guid: c1d3fbc09e7ff7043b759939ba1ed71f, type: 3}
+    - target: {fileID: 1164745714, guid: f596f7fa4f031ba4eb2aaf1052d308c7, type: 3}
+      propertyPath: SEClip.Array.data[12]
+      value: 
+      objectReference: {fileID: 8300000, guid: d190dcd740b03994eb46d930dd4377e0, type: 3}
+    - target: {fileID: 1164745714, guid: f596f7fa4f031ba4eb2aaf1052d308c7, type: 3}
+      propertyPath: SEClip.Array.data[13]
+      value: 
+      objectReference: {fileID: 8300000, guid: 8d886b17989317c41bf2ca9ff5ce4971, type: 3}
+    - target: {fileID: 1164745714, guid: f596f7fa4f031ba4eb2aaf1052d308c7, type: 3}
+      propertyPath: SEClip.Array.data[14]
+      value: 
+      objectReference: {fileID: 8300000, guid: a7f75070fbc68ad45a8574006feca782, type: 3}
+    - target: {fileID: 1164745714, guid: f596f7fa4f031ba4eb2aaf1052d308c7, type: 3}
+      propertyPath: SEClip.Array.data[15]
+      value: 
+      objectReference: {fileID: 8300000, guid: 792c7766a29cb05408079a8378fd9996, type: 3}
+    - target: {fileID: 1164745714, guid: f596f7fa4f031ba4eb2aaf1052d308c7, type: 3}
+      propertyPath: SEClip.Array.data[16]
+      value: 
+      objectReference: {fileID: 8300000, guid: deb5b7043e75e55479991a4bf5a4fb0a, type: 3}
     - target: {fileID: 2653417028807249935, guid: f596f7fa4f031ba4eb2aaf1052d308c7,
         type: 3}
       propertyPath: StartTime

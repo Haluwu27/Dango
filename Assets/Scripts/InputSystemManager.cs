@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.Events;
 using UnityEngine.InputSystem;
 using static InputSystemManager;
 
@@ -163,52 +162,52 @@ public class InputSystemManager : MonoBehaviour
     {
         if (context.phase == InputActionPhase.Performed)
         {
-            onNavigatePerformed.SafeCall();
             _navigateAxis = context.ReadValue<Vector2>();
+            onNavigatePerformed.SafeCall();
         }
         else if (context.phase == InputActionPhase.Canceled)
         {
-            onNavigateCanceled.SafeCall();
             _navigateAxis = Vector2.zero;
+            onNavigateCanceled.SafeCall();
         }
     }
     public void OnBack(InputAction.CallbackContext context)
     {
         if (context.phase == InputActionPhase.Performed)
         {
-            onBackPerformed.SafeCall();
             _isPressBack = true;
+            onBackPerformed.SafeCall();
         }
         else if (context.phase == InputActionPhase.Canceled)
         {
-            onBackCanceled.SafeCall();
             _isPressBack = false;
+            onBackCanceled.SafeCall();
         }
     }
     public void OnChoice(InputAction.CallbackContext context)
     {
         if (context.phase == InputActionPhase.Performed)
         {
-            onChoicePerformed.SafeCall();
             _isPressChoice = true;
+            onChoicePerformed.SafeCall();
         }
         else if (context.phase == InputActionPhase.Canceled)
         {
-            onChoiceCanceled.SafeCall();
             _isPressChoice = false;
+            onChoiceCanceled.SafeCall();
         }
     }
     public void OnStick(InputAction.CallbackContext context)
     {
         if (context.phase == InputActionPhase.Performed)
         {
-            onStickPerformed.SafeCall();
             _stickAxis = context.ReadValue<Vector2>();
+            onStickPerformed.SafeCall();
         }
         else if (context.phase == InputActionPhase.Canceled)
         {
-            onStickCanceled.SafeCall();
             _stickAxis = Vector2.zero;
+            onStickCanceled.SafeCall();
         }
     }
 
