@@ -107,11 +107,11 @@ public class ExampleScriptEditor : Editor
 
         if (GUILayout.Button("Open"))
         {
-            fusumaManager.Open(0.5f);
+            fusumaManager.Open(1f);
         }
         if (GUILayout.Button("Close"))
         {
-            fusumaManager.Close(0.5f);
+            fusumaManager.Close(1f);
         }
         if (GUILayout.Button("Reset"))
         {

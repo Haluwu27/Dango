@@ -64,8 +64,10 @@ class SceneSystem : MonoBehaviour
 
     private void Awake()
     {
-        Load(Scenes.Option);
-        Load(Scenes.Stage1);
+        //Load(Scenes.Option);
+        //Load(Scenes.Stage1);
+
+        Load(Scenes.Menu);
     }
 
     public bool Load(Scenes scene)
