@@ -86,8 +86,10 @@ public class MenuManager : MonoBehaviour
         SetSelect();
     }
 
-    private void OnChoice()
+    private async void OnChoice()
     {
+       await _fusumaManager.UniTaskClose(1.5f);
+
         switch (CurrentMenu)
         {
             case Menu.Option:
@@ -192,18 +194,32 @@ public class MenuManager : MonoBehaviour
     private void ToOption()
     {
         Logger.Log("Optionに遷移するよ");
+        SceneSystem.Instance.Load(SceneSystem.Scenes.Option);
+        Unload();
     }
     private void ToTutorial()
     {
         Logger.Log("チュートリアルに遷移するよ");
+        SceneSystem.Instance.Load(SceneSystem.Scenes.Tutorial);
+        Unload();
     }
     private void ToEx()
     {
         Logger.Log("ぎゃらりーに遷移するよ");
+        SceneSystem.Instance.Load(SceneSystem.Scenes.Ex);
+        Unload();
     }
     private void ToStageSelect()
     {
         Logger.Log("ステージセレクトに遷移するよ");
+        SceneSystem.Instance.Load(SceneSystem.Scenes.StageSelect);
+        Unload();
+    }
 
+    private void Unload()
+    {
+        InputSystemManager.Instance.onNavigatePerformed -= OnNavigate;
+        InputSystemManager.Instance.onChoicePerformed -= OnChoice;
+        SceneSystem.Instance.UnLoad(SceneSystem.Scenes.Menu);
     }
 }

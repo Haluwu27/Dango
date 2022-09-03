@@ -103,7 +103,6 @@ public class OptionManager : MonoBehaviour
     {
         OptionCanvas = _canvas;
 
-        _canvas.enabled = false;
         EnterOption();
         SetFontSize();
     }

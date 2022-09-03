@@ -59,11 +59,14 @@ class SceneSystem : MonoBehaviour
     public Scenes debugScenes;
 #endif
 
+    public static SceneSystem Instance { get; private set; }
+
     [SerializeField] GameObject[] _sceneRoots = new GameObject[(int)Scenes.Max];
     GameObject[] _scenes = new GameObject[(int)Scenes.Max];
 
     private void Awake()
     {
+        Instance = this;
         //Load(Scenes.Option);
         //Load(Scenes.Stage1);
 
