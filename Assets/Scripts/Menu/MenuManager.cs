@@ -16,6 +16,7 @@ public class MenuManager : MonoBehaviour
         Option,
         Tutorial,
         Ex,
+        StageSelect,
 
         Max,
     }
@@ -24,6 +25,7 @@ public class MenuManager : MonoBehaviour
     [SerializeField] RectTransform option;
     [SerializeField] RectTransform tutorial;
     [SerializeField] RectTransform ex;
+    [SerializeField] Image dandou;
     [SerializeField] Image optionImage;
     [SerializeField] Image tutorialImage;
     [SerializeField] Image exImage;
@@ -70,9 +72,18 @@ public class MenuManager : MonoBehaviour
             CurrentMenu++;
             if (CurrentMenu == Menu.Max) CurrentMenu = Menu.None + 1;
         }
+        else if (InputSystemManager.Instance.NavigateAxis == Vector2.right)
+        {
+            if (!CurrentMenu.Equals(Menu.StageSelect - 1)) return;
+            CurrentMenu++;
+        }
+        else if (InputSystemManager.Instance.NavigateAxis == Vector2.left)
+        {
+            if (!CurrentMenu.Equals(Menu.StageSelect)) return;
+            CurrentMenu--;
+        }
 
         SetSelect();
-        Logger.Log(CurrentMenu);
     }
 
     private void OnChoice()
@@ -87,6 +98,9 @@ public class MenuManager : MonoBehaviour
                 break;
             case Menu.Ex:
                 ToEx();
+                break;
+            case Menu.StageSelect:
+                ToStageSelect();
                 break;
         }
     }
@@ -108,6 +122,9 @@ public class MenuManager : MonoBehaviour
                 exImage.color = Color.red;
                 await Selecting(CurrentMenu, ex, SELECTTIME);
                 break;
+            case Menu.StageSelect:
+                dandou.color = Color.red;
+                break;
         }
     }
 
@@ -116,7 +133,7 @@ public class MenuManager : MonoBehaviour
         await UniTask.Delay((int)(waitTime * 1000f));
         float currentTime = 0;
 
-        Vector2 pos = new Vector2(0, 0);
+        Vector2 pos = new(0, 0);
         while (currentTime <= time)
         {
             if (CurrentMenu != menu) break;
@@ -147,6 +164,9 @@ public class MenuManager : MonoBehaviour
                 exImage.color = Color.white;
                 await NoSelecting(menu, ex, NOSELECTTIME);
                 break;
+            case Menu.StageSelect:
+                dandou.color = Color.white;
+                break;
         }
     }
 
@@ -155,7 +175,7 @@ public class MenuManager : MonoBehaviour
         await UniTask.Delay((int)(waitTime * 1000f));
         float currentTime = 0;
 
-        Vector2 pos = new Vector2(0, 0);
+        Vector2 pos = new(0, 0);
         while (currentTime <= time)
         {
             if (CurrentMenu == menu) break;
@@ -180,5 +200,10 @@ public class MenuManager : MonoBehaviour
     private void ToEx()
     {
         Logger.Log("ぎゃらりーに遷移するよ");
+    }
+    private void ToStageSelect()
+    {
+        Logger.Log("ステージセレクトに遷移するよ");
+
     }
 }
