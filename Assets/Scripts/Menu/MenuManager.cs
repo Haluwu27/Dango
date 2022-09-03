@@ -30,6 +30,7 @@ public class MenuManager : MonoBehaviour
     [SerializeField] Image tutorialImage;
     [SerializeField] Image exImage;
     Menu _currentMenu = Menu.Option;
+    bool _isTransition;
 
     const float SELECTTIME = 1f;
     const float NOSELECTTIME = 1f;
@@ -62,6 +63,8 @@ public class MenuManager : MonoBehaviour
 
     private void OnNavigate()
     {
+        if (_isTransition) return;
+
         if (InputSystemManager.Instance.NavigateAxis == Vector2.up)
         {
             CurrentMenu--;
@@ -88,6 +91,9 @@ public class MenuManager : MonoBehaviour
 
     private async void OnChoice()
     {
+        if (_isTransition) return;
+        _isTransition = true;
+
        await _fusumaManager.UniTaskClose(1.5f);
 
         switch (CurrentMenu)
