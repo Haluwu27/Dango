@@ -46,91 +46,91 @@ public class InputSystemManager : MonoBehaviour
     {
         if (context.phase == InputActionPhase.Performed)
         {
-            onMovePerformed.SafeCall();
             _moveAxis = context.ReadValue<Vector2>();
+            onMovePerformed.SafeCall();
         }
         else if (context.phase == InputActionPhase.Canceled)
         {
-            onMoveCanceled.SafeCall();
             _moveAxis = Vector2.zero;
+            onMoveCanceled.SafeCall();
         }
     }
     public void OnLook(InputAction.CallbackContext context)
     {
         if (context.phase == InputActionPhase.Performed)
         {
-            onLookPerformed.SafeCall();
             _lookAxis = context.ReadValue<Vector2>();
+            onLookPerformed.SafeCall();
         }
         else if (context.phase == InputActionPhase.Canceled)
         {
-            onLookCanceled.SafeCall();
             _lookAxis = Vector2.zero;
+            onLookCanceled.SafeCall();
         }
     }
     public void OnJump(InputAction.CallbackContext context)
     {
         if (context.phase == InputActionPhase.Performed)
         {
-            onJumpPerformed.SafeCall();
             _isPressJump = true;
+            onJumpPerformed.SafeCall();
         }
         else if (context.phase == InputActionPhase.Canceled)
         {
-            onJumpCanceled.SafeCall();
             _isPressJump = false;
+            onJumpCanceled.SafeCall();
         }
     }
     public void OnAttack(InputAction.CallbackContext context)
     {
         if (context.phase == InputActionPhase.Performed)
         {
-            onAttackPerformed.SafeCall();
             _isPressAttack = true;
+            onAttackPerformed.SafeCall();
         }
         else if (context.phase == InputActionPhase.Canceled)
         {
-            onAttackCanceled.SafeCall();
             _isPressAttack = false;
+            onAttackCanceled.SafeCall();
         }
     }
     public void OnEatDango(InputAction.CallbackContext context)
     {
         if (context.phase == InputActionPhase.Performed)
         {
-            onEatDangoPerformed.SafeCall();
             _isPressEatDango = true;
+            onEatDangoPerformed.SafeCall();
         }
         else if (context.phase == InputActionPhase.Canceled)
         {
-            onEatDangoCanceled.SafeCall();
             _isPressEatDango = false;
+            onEatDangoCanceled.SafeCall();
         }
     }
     public void OnFire(InputAction.CallbackContext context)
     {
         if (context.phase == InputActionPhase.Performed)
         {
-            onFirePerformed.SafeCall();
             _isPressFire = true;
+            onFirePerformed.SafeCall();
         }
         else if (context.phase == InputActionPhase.Canceled)
         {
-            onFireCanceled.SafeCall();
             _isPressFire = false;
+            onFireCanceled.SafeCall();
         }
     }
     public void OnPause(InputAction.CallbackContext context)
     {
         if (context.phase == InputActionPhase.Performed)
         {
-            onPausePerformed.SafeCall();
             _isPressPause = true;
+            onPausePerformed.SafeCall();
         }
         else if (context.phase == InputActionPhase.Canceled)
         {
-            onPauseCanceled.SafeCall();
             _isPressPause = false;
+            onPauseCanceled.SafeCall();
         }
     }
 

@@ -386,7 +386,7 @@ MonoBehaviour:
     m_ActionName: UI/Choice[/Keyboard/enter]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
-  m_DefaultActionMap: Player
+  m_DefaultActionMap: UI
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
 --- !u!114 &1271659316
@@ -414,11 +414,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 166783ef09795424bbc40f413ef598ae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  debugScenes: 0
+  debugScenes: 2
   _sceneRoots:
   - {fileID: 0}
   - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 6535298415677513454, guid: 9dbe1186418d94440a714a05097a8f69, type: 3}
   - {fileID: 0}
   - {fileID: 118264768126184011, guid: 4dbffbec4aa46c84aa6313057f9cb0ac, type: 3}
   - {fileID: 0}
