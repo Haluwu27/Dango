@@ -10,7 +10,7 @@ public enum SoundSource
 {
     //BGM
     BGM_Stage,
-    
+    BGM_Title,
 
     //SE
     SE_PLAYER_STAY_EATDANGO,//‚±‚Ì€–Ú‚ÍSE‚Ìæ“ªŒÅ’è‚Å‚¨Šè‚¢‚µ‚Ü‚·B

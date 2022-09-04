@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// ゲームの進行に関わるもののみ定義
+/// メインゲームの進行に関わるもののみ定義
 /// </summary>
 [RequireComponent(typeof(GameStartManager))]
 internal class GameManager : MonoBehaviour

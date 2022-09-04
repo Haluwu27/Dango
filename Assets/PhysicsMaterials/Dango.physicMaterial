@@ -9,6 +9,6 @@ PhysicMaterial:
   m_Name: Dango
   dynamicFriction: 6.93
   staticFriction: 8.25
-  bounciness: 0
+  bounciness: 1
   frictionCombine: 0
   bounceCombine: 1
