@@ -33,6 +33,8 @@ public class InputSystemManager : MonoBehaviour
     public CallBack onFireCanceled;
     public CallBack onPausePerformed;
     public CallBack onPauseCanceled;
+    public CallBack onAnyKeyPerformed;
+    public CallBack onAnyKeyCanceled;
 
     Vector2 _moveAxis;
     Vector2 _lookAxis;
@@ -131,6 +133,17 @@ public class InputSystemManager : MonoBehaviour
         {
             _isPressPause = false;
             onPauseCanceled.SafeCall();
+        }
+    }
+    public void OnAnykey(InputAction.CallbackContext context)
+    {
+        if (context.phase == InputActionPhase.Performed)
+        {
+            onAnyKeyPerformed.SafeCall();
+        }
+        else if (context.phase == InputActionPhase.Canceled)
+        {
+            onAnyKeyCanceled.SafeCall();
         }
     }
 
