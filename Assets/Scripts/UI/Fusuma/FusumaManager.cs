@@ -17,31 +17,34 @@ class FusumaManager : MonoBehaviour
     const float MOVE_SECOND_AMOUNT = DEFAULT_OPEN_POSITION - DEFAULT_SECOND_CLOSE_POSITION;
     const TM.Easing.EaseType EASETYPE = TM.Easing.EaseType.InQuart;
 
+    const float DEFAULT_OPEN_TIME = 1f;
+    const float DEFAULT_CLOSE_TIME = 1f;
+
     Vector3 _fusuma0Pos;
     Vector3 _fusuma1Pos;
     Vector3 _fusuma2Pos;
     Vector3 _fusuma3Pos;
 
-    public async void Open(float time)
+    public async void Open(float time = DEFAULT_OPEN_TIME)
     {
         SetDefaultPosition(true);
         await FusumaOpen(time);
         SetDefaultPosition(false);
     }
-    public async UniTask UniTaskOpen(float time)
+    public async UniTask UniTaskOpen(float time = DEFAULT_OPEN_TIME)
     {
         SetDefaultPosition(true);
         await FusumaOpen(time);
         SetDefaultPosition(false);
     }
 
-    public async void Close(float time)
+    public async void Close(float time = DEFAULT_CLOSE_TIME)
     {
         SetDefaultPosition(false);
         await FusumaClose(time);
         SetDefaultPosition(true);
-    }  
-    public async UniTask UniTaskClose(float time)
+    }
+    public async UniTask UniTaskClose(float time = DEFAULT_CLOSE_TIME)
     {
         SetDefaultPosition(false);
         await FusumaClose(time);
