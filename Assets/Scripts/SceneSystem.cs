@@ -69,7 +69,7 @@ class SceneSystem : MonoBehaviour
         Instance = this;
         //Load(Scenes.Option);
         //Load(Scenes.Stage1);
-
+        //Load(Scenes.Title);
         Load(Scenes.Menu);
     }
 

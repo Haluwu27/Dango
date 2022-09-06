@@ -11,12 +11,17 @@ public enum Stage
 }
 
 public class StageData : MonoBehaviour
-{ 
-    bool _isRelease;
+{
+    [SerializeField] bool _isRelease;
     public bool IsRelease => _isRelease;
 
     [SerializeField] Stage _stage;
-    public Stage Stage=>_stage;
+    public Stage Stage => _stage;
+
+    private void Awake()
+    {
+        InputSystemManager.Instance.Input.SwitchCurrentActionMap("Player");
+    }
 
     public void Release()
     {

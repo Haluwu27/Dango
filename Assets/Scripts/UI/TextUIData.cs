@@ -16,7 +16,7 @@ public class TextUIData : MonoBehaviour
     {
         get
         {
-            if (_textData == null) _textData = new(textUGUI);
+            _textData ??= new(textUGUI);
             return _textData;
         }
         private set => _textData = value;
@@ -24,7 +24,6 @@ public class TextUIData : MonoBehaviour
 
     private void Awake()
     {
-        if (_textData == null)
-            _textData = new(textUGUI);
+        _textData ??= new(textUGUI);
     }
 }
