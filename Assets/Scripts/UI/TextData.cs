@@ -79,35 +79,41 @@ namespace TM.UI.Text
 
         public async UniTask Fadein(float time, float waitTime = 0)
         {
-            Color c = _text.color;
-            float alpha = 0;
-
             await UniTask.Delay((int)(waitTime * 1000f));
 
-            while (c.a < 1f)
+            if (time <= 0)
+            {
+                SetAlpha(1f);
+                return;
+            }
+
+            float alpha = 0;
+
+            while (_text.color.a < 1f)
             {
                 await UniTask.DelayFrame(1);
                 alpha += Time.deltaTime / time;
-                Mathf.Clamp01(alpha);
-                c.a = alpha;
-                _text.color = c;
+                SetAlpha(alpha);
             }
         }
 
         public async UniTask Fadeout(float time, float waitTime = 0)
         {
-            Color c = _text.color;
-            float alpha = 1;
-
             await UniTask.Delay((int)(waitTime * 1000f));
 
-            while (c.a > 0)
+            float alpha = 1f;
+
+            if (time <= 0)
+            {
+                SetAlpha(0);
+                return;
+            }
+
+            while (_text.color.a > 0)
             {
                 await UniTask.DelayFrame(1);
                 alpha -= Time.deltaTime / time;
-                Mathf.Clamp01(alpha);
-                c.a = alpha;
-                _text.color = c;
+                SetAlpha(alpha);
             }
         }
     }

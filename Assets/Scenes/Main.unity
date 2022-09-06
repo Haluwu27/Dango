@@ -470,7 +470,19 @@ MonoBehaviour:
     m_ActionId: 5b96b097-6772-412f-aca1-8a362d9e3066
     m_ActionName: UI/Choice[/Keyboard/enter]
   - m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1271659316}
+        m_TargetAssemblyTypeName: InputSystemManager, Assembly-CSharp
+        m_MethodName: OnAnykey
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_ActionId: 5e5e8886-d145-4659-968e-ae16fcb41424
     m_ActionName: UI/AnyKey[/Keyboard/anyKey,/SwitchProControllerHID/buttonEast,/SwitchProControllerHID/buttonNorth,/SwitchProControllerHID/buttonSouth,/SwitchProControllerHID/buttonWest,/SwitchProControllerHID/leftStickPress,/SwitchProControllerHID/leftTrigger,/SwitchProControllerHID/leftShoulder,/SwitchProControllerHID/rightShoulder,/SwitchProControllerHID/rightStickPress,/SwitchProControllerHID/rightTrigger,/SwitchProControllerHID/select,/SwitchProControllerHID/start,/SwitchProControllerHID/dpad/down,/SwitchProControllerHID/dpad/left,/SwitchProControllerHID/dpad/right,/SwitchProControllerHID/dpad/up]
   m_NeverAutoSwitchControlSchemes: 0
@@ -503,12 +515,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 166783ef09795424bbc40f413ef598ae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  debugScenes: 10
+  debugScenes: 1
   _sceneRoots:
-  - {fileID: 0}
+  - {fileID: 2063848576987206517, guid: 5e7a613d8ec67fe4cb6e39d2de87e6e2, type: 3}
   - {fileID: 0}
   - {fileID: 6535298415677513454, guid: 9dbe1186418d94440a714a05097a8f69, type: 3}
-  - {fileID: 0}
+  - {fileID: 8938324373058968092, guid: 61348ae0d0c12004888b9fe92d7e6b05, type: 3}
   - {fileID: 118264768126184011, guid: 4dbffbec4aa46c84aa6313057f9cb0ac, type: 3}
   - {fileID: 0}
   - {fileID: 0}
