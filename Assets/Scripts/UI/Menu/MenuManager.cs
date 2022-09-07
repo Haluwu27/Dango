@@ -49,7 +49,7 @@ public class MenuManager : MonoBehaviour
         }
     }
 
-    private void Start()
+    private async void Start()
     {
         InputSystemManager.Instance.onNavigatePerformed += OnNavigate;
         InputSystemManager.Instance.onChoicePerformed += OnChoice;
@@ -58,7 +58,9 @@ public class MenuManager : MonoBehaviour
         SetNoSelect(Menu.Tutorial);
         SetNoSelect(Menu.Ex);
 
-        _fusumaManager.Open(1f);
+        await _fusumaManager.UniTaskOpen(1f);
+
+        SoundManager.Instance.PlayBGM(SoundSource.BGM5_MENU);
     }
 
     private void OnNavigate()
@@ -86,6 +88,7 @@ public class MenuManager : MonoBehaviour
             CurrentMenu--;
         }
 
+        SoundManager.Instance.PlaySE(SoundSource.SE16_UI_SELECTION);
         SetSelect();
     }
 
@@ -93,8 +96,10 @@ public class MenuManager : MonoBehaviour
     {
         if (_isTransition) return;
         _isTransition = true;
+        SoundManager.Instance.PlaySE(SoundSource.SE17_UI_DECISION);
 
-       await _fusumaManager.UniTaskClose(1.5f);
+        if (CurrentMenu == Menu.Tutorial) SoundManager.Instance.StopBGM(1.5f);
+        await _fusumaManager.UniTaskClose(1.5f);
 
         switch (CurrentMenu)
         {
@@ -146,7 +151,7 @@ public class MenuManager : MonoBehaviour
         {
             if (CurrentMenu != menu) break;
 
-            await UniTask.DelayFrame(1);
+            await UniTask.Yield();
             currentTime += Time.deltaTime;
             float d = EasingManager.EaseProgress(EASETYPE, currentTime, time, 3f, 0);
 
@@ -188,7 +193,7 @@ public class MenuManager : MonoBehaviour
         {
             if (CurrentMenu == menu) break;
 
-            await UniTask.DelayFrame(1);
+            await UniTask.Yield();
             currentTime += Time.deltaTime;
             float d = EasingManager.EaseProgress(EASETYPE, currentTime, time, 3f, 0);
 
@@ -206,6 +211,7 @@ public class MenuManager : MonoBehaviour
     private void ToTutorial()
     {
         Logger.Log("チュートリアルに遷移するよ");
+
         SceneSystem.Instance.Load(SceneSystem.Scenes.Tutorial);
         Unload();
     }

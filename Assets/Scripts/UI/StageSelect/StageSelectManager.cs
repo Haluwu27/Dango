@@ -54,6 +54,7 @@ public class StageSelectManager : MonoBehaviour
         //¶‰EˆÈŠO‚Ì“ü—Í‚Í”½‰‚µ‚È‚¢
         else return;
 
+        SoundManager.Instance.PlaySE(SoundSource.SE16_UI_SELECTION);
         UpdateGuids();
         UpdateExplanationText();
         Logger.Log(_currentStage);
@@ -63,11 +64,11 @@ public class StageSelectManager : MonoBehaviour
     {
         if (!_stages[(int)_currentStage].IsRelease)
         {
-            //SE7‚ÌÄ¶
+            SoundManager.Instance.PlaySE(SoundSource.SE7_CANT_STAB_DANGO);
             return;
         }
 
-        //SE17‚ÌÄ¶
+        SoundManager.Instance.PlaySE(SoundSource.SE17_UI_DECISION);
         await _fusumaManager.UniTaskClose();
         SceneSystem.Instance.Load(SceneSystem.Scenes.Stage1 + (int)_currentStage);
         UnLoad();
