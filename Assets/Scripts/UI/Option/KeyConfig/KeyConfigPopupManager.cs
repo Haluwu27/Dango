@@ -20,7 +20,7 @@ namespace TM.Input.KeyConfig
         KeyData.GameAction _currentAction;
         int _currentActionIndex;
 
-        private void Awake()
+        private void Start()
         {
             InputSystemManager.Instance.onNavigatePerformed += OnNavigateVertical;
             InputSystemManager.Instance.onChoicePerformed += OnChoiced;
