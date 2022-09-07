@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 namespace TM.Input.KeyConfig
 {
@@ -57,9 +58,15 @@ namespace TM.Input.KeyConfig
             ///とりあえず違和感のある選択にはなるかもしれないが、こういう感じで。
             //nullチェック。nullの場合は上記設定を行う方が自然である。
             if (_currentData.GetKeyConfigDatas()[(int)key] == null) return;
-            
+
+            //ここをポップアップに変える
+            _currentData.GetComponent<RawImage>().color = Color.white;
+
             //現在のデータを選択したデータに変更
             _currentData = _currentData.GetKeyConfigDatas()[(int)key];
+            
+            //ここをポップアップに変える
+            _currentData.GetComponent<RawImage>().color = Color.red;
 
             Logger.Log(_currentData.name);
         }
@@ -84,7 +91,10 @@ namespace TM.Input.KeyConfig
             {
                 _actionDatas[i] = new((KeyData.GameAction)i, DefaultKeyTable[i], _asset, "Player");
             }
+        }
 
+        private void Start()
+        {
             InputSystemManager.Instance.onStickPerformed += OnStick;
         }
 
