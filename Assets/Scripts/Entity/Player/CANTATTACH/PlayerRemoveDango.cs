@@ -28,7 +28,7 @@ namespace TM.Entity.Player
             Logger.Log(_dangos[^1]);
 
             //SE
-            GameManager.SoundManager.PlaySE(SoundSource.SE_REMOVE_DANGO);
+            GameManager.SoundManager.PlaySE(SoundSource.SE9_REMOVE_DANGO);
 
             //è¡Ç∑èàóùÅB
             _dangos.RemoveAt(_dangos.Count - 1);

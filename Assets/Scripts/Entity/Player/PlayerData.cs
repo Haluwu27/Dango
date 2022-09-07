@@ -105,7 +105,7 @@ class PlayerData : MonoBehaviour
     private void EatDango()
     {
         //SE
-        GameManager.SoundManager.PlaySE(SoundSource.SE_PLAYER_EATDANGO);
+        //GameManager.SoundManager.PlaySE(SoundSource.SE_PLAYER_EATDANGO);
 
         _hasStayedEat = false;
 

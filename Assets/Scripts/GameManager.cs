@@ -126,7 +126,7 @@ internal class GameManager : MonoBehaviour
     {
         _soundManager = GetComponent<SoundManager>();
 
-        _soundManager.PlayBGM(SoundSource.BGM_Stage);
+        _soundManager.PlayBGM(SoundSource.BGM1A_STAGE1);
 
         //最初のクエストを仮置き。
         _questManager.ChangeQuest(_questManager.Creater.CreateQuestCreateRole(DangoRole.POSROLE_DIVIDED_INTO_TWO, 1, "役「二分割」を1個作れ！"),
