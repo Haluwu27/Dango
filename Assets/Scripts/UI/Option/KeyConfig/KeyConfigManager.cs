@@ -139,6 +139,13 @@ namespace TM.Input.KeyConfig
         {
             _staticCanvas.enabled = enable;
             _dynamicCanvas.enabled = enable;
+
+            if (enable)
+            { 
+                _currentData.GetComponent<RawImage>().color = Color.white;
+                _currentData = _firstData;
+                _currentData.GetComponent<RawImage>().color = Color.red;
+            }
         }
 
         //€–Ú‚ğ‘I‘ğ‚µ‚½Û‚Ì‚à‚Ì

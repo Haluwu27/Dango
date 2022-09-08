@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TM.Input.KeyConfig;
+using UnityEngine.InputSystem.LowLevel;
 
 public class OptionManager : MonoBehaviour
 {
@@ -26,7 +27,13 @@ public class OptionManager : MonoBehaviour
 
     #region メンバ
     [SerializeField] KeyConfigManager _keyConfig = default!;
+    [SerializeField] OperationManager _operationManager = default!;
+    [SerializeField] SoundSettingManager _soundSettingManager = default!;
+    [SerializeField] OtherSettingsManager _otherSettingsManager = default!;
+
+    //現在未使用
     [SerializeField] Canvas _canvas = default!;
+
     [SerializeField] TextUIData[] _optionTexts;
     [SerializeField] FusumaManager _fusumaManager;
 
@@ -51,17 +58,37 @@ public class OptionManager : MonoBehaviour
 
     #endregion
 
-    #region InputSystem
-    private void OnBack()
+    private void Awake()
+    {
+        OptionCanvas = _canvas;
+
+        EnterNextChoice();
+        SetFontSize();
+    }
+
+    private void Start()
+    {
+        InputSystemManager.Instance.onBackPerformed += OnBack;
+        InputSystemManager.Instance.onNavigatePerformed += OnNavigate;
+        InputSystemManager.Instance.onChoicePerformed += Choiced;
+        InputSystemManager.Instance.onTabControlPerformed += ChangeChoice;
+
+        _fusumaManager.Open();
+    }
+
+    private async void OnBack()
     {
         if (_currentChoice == OptionChoices.Option)
         {
             //Player(通常プレイの入力)マップに戻る
-            InputSystemManager.Instance.Input.SwitchCurrentActionMap("Player");
+            //InputSystemManager.Instance.Input.SwitchCurrentActionMap("Player");
 
             //Bボタンだけ一瞬で戻ってジャンプしてしまうバグあり。原因不明
 
-            _canvas.enabled = false;
+            //_canvas.enabled = false;
+            await _fusumaManager.UniTaskClose(1.5f);
+            SceneSystem.Instance.Load(SceneSystem.Scenes.Menu);
+            SceneSystem.Instance.UnLoad(SceneSystem.Scenes.Option);
         }
         else if (_currentChoice == OptionChoices.KeyConfig)
         {
@@ -85,7 +112,7 @@ public class OptionManager : MonoBehaviour
         switch (_currentChoice)
         {
             case OptionChoices.Option:
-                ChangeChoice(axis);
+                //ChangeChoice(axis);
                 break;
             case OptionChoices.Operation:
                 break;
@@ -95,27 +122,11 @@ public class OptionManager : MonoBehaviour
                 break;
         }
     }
-    #endregion
 
-    private void Awake()
+    private void ChangeChoice()
     {
-        OptionCanvas = _canvas;
+        Vector2 axis = InputSystemManager.Instance.TabControlAxis;
 
-        EnterOption();
-        SetFontSize();
-    }
-
-    private void Start()
-    {
-        InputSystemManager.Instance.onBackPerformed += OnBack;
-        InputSystemManager.Instance.onNavigatePerformed += OnNavigate;
-        InputSystemManager.Instance.onChoicePerformed += Choiced;
-
-        _fusumaManager.Open();
-    }
-
-    private void ChangeChoice(Vector2 axis)
-    {
         //Up or Left
         if (axis == directionTable[(int)direction, 0])
         {
@@ -135,6 +146,7 @@ public class OptionManager : MonoBehaviour
             SetFontSize();
         }
 
+        EnterNextChoice();
     }
 
     private void Choiced()
@@ -143,7 +155,7 @@ public class OptionManager : MonoBehaviour
         {
             case OptionChoices.Option:
                 Logger.Log("選択したよ");
-                EnterNextChoice();
+                //EnterNextChoice();
                 break;
 
             case OptionChoices.Operation:
@@ -161,11 +173,16 @@ public class OptionManager : MonoBehaviour
         switch (_nextChoice)
         {
             case OptionChoices.Operation:
+                EnterOperation();
                 break;
             case OptionChoices.KeyConfig:
                 EnterKeyConfig();
                 break;
+            case OptionChoices.Sound:
+                EnterSound();
+                break;
             case OptionChoices.Other:
+                EnterOther();
                 break;
         }
     }
@@ -173,12 +190,44 @@ public class OptionManager : MonoBehaviour
     private void EnterOption()
     {
         _keyConfig.SetCanvasEnable(false);
+        _soundSettingManager.SetCanvasEnable(false);
+        _operationManager.SetCanvasEnable(false);
+        _otherSettingsManager.SetCanvasEnable(false);
     }
 
     private void EnterKeyConfig()
     {
         _currentChoice = OptionChoices.KeyConfig;
         _keyConfig.SetCanvasEnable(true);
+        _soundSettingManager.SetCanvasEnable(false);
+        _operationManager.SetCanvasEnable(false);
+        _otherSettingsManager.SetCanvasEnable(false);
+    }
+
+    private void EnterOperation()
+    {
+        _currentChoice = OptionChoices.Operation;
+        _operationManager.SetCanvasEnable(true);
+        _keyConfig.SetCanvasEnable(false);
+        _soundSettingManager.SetCanvasEnable(false);
+        _otherSettingsManager.SetCanvasEnable(false);
+    }
+
+    private void EnterSound()
+    {
+        _currentChoice = OptionChoices.Sound;
+        _operationManager.SetCanvasEnable(false);
+        _keyConfig.SetCanvasEnable(false);
+        _soundSettingManager.SetCanvasEnable(true);
+        _otherSettingsManager.SetCanvasEnable(false);
+    }    
+    private void EnterOther()
+    {
+        _currentChoice = OptionChoices.Other;
+        _operationManager.SetCanvasEnable(false);
+        _keyConfig.SetCanvasEnable(false);
+        _soundSettingManager.SetCanvasEnable(false);
+        _otherSettingsManager.SetCanvasEnable(true);
     }
 
     private void SetFontSize()
