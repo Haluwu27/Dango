@@ -33,8 +33,6 @@ public class InputSystemManager : MonoBehaviour
     public CallBack onFireCanceled;
     public CallBack onPausePerformed;
     public CallBack onPauseCanceled;
-    public CallBack onAnyKeyPerformed;
-    public CallBack onAnyKeyCanceled;
 
     Vector2 _moveAxis;
     Vector2 _lookAxis;
@@ -135,17 +133,6 @@ public class InputSystemManager : MonoBehaviour
             onPauseCanceled.SafeCall();
         }
     }
-    public void OnAnykey(InputAction.CallbackContext context)
-    {
-        if (context.phase == InputActionPhase.Performed)
-        {
-            onAnyKeyPerformed.SafeCall();
-        }
-        else if (context.phase == InputActionPhase.Canceled)
-        {
-            onAnyKeyCanceled.SafeCall();
-        }
-    }
 
     public Vector2 MoveAxis => _moveAxis;
     public Vector2 LookAxis => _lookAxis;
@@ -165,11 +152,16 @@ public class InputSystemManager : MonoBehaviour
     public CallBack onChoiceCanceled;
     public CallBack onStickPerformed;
     public CallBack onStickCanceled;
+    public CallBack onAnyKeyPerformed;
+    public CallBack onAnyKeyCanceled;
+    public CallBack onTabControlPerformed;
+    public CallBack onTabControlCanceled;
 
     Vector2 _navigateAxis;
     bool _isPressBack;
     bool _isPressChoice;
     Vector2 _stickAxis;
+    Vector2 _tabControlAxis;
 
     public void OnNavigate(InputAction.CallbackContext context)
     {
@@ -223,11 +215,36 @@ public class InputSystemManager : MonoBehaviour
             onStickCanceled.SafeCall();
         }
     }
+    public void OnAnykey(InputAction.CallbackContext context)
+    {
+        if (context.phase == InputActionPhase.Performed)
+        {
+            onAnyKeyPerformed.SafeCall();
+        }
+        else if (context.phase == InputActionPhase.Canceled)
+        {
+            onAnyKeyCanceled.SafeCall();
+        }
+    }
+    public void OnTabControl(InputAction.CallbackContext context)
+    {
+        if (context.phase == InputActionPhase.Performed)
+        {
+            _tabControlAxis = context.ReadValue<Vector2>();
+            onTabControlPerformed.SafeCall();
+        }
+        else if (context.phase == InputActionPhase.Canceled)
+        {
+            _tabControlAxis = Vector2.zero;
+            onTabControlCanceled.SafeCall();
+        }
+    }
 
     public Vector2 NavigateAxis => _navigateAxis;
     public bool IsPressBack => _isPressBack;
     public bool IsPressChoice => _isPressChoice;
     public Vector2 StickAxis => _stickAxis;
+    public Vector2 TabControlAxis => _tabControlAxis;
     #endregion
 
     private void Awake()
