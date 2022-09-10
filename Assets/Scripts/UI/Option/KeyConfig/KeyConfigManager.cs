@@ -35,7 +35,7 @@ namespace TM.Input.KeyConfig
         //表示・非表示切り替え用に管理するもの
         [SerializeField] Canvas _staticCanvas = default!;
         [SerializeField] Canvas _dynamicCanvas = default!;
-        [SerializeField] KeyConfigWarningManager _warmingManager = default!;
+        [SerializeField] KeyConfigWarningManager _warningManager = default!;
         [SerializeField] KeyConfigPopupManager _popupManager = default!;
 
         //InputSystemのInputActions本体
@@ -50,7 +50,7 @@ namespace TM.Input.KeyConfig
             if (!_staticCanvas.isActiveAndEnabled) return;
             if (!_dynamicCanvas.isActiveAndEnabled) return;
             if (_popupManager.IsPopup) return;
-            if (_warmingManager.IsWarming) return;
+            if (_warningManager.IsWarning) return;
 
             //読み取った値を保存
             _axis = InputSystemManager.Instance.StickAxis;
@@ -167,7 +167,7 @@ namespace TM.Input.KeyConfig
         private void OnSelect()
         {
             if (IsPopup) return;
-            if (_warmingManager.IsWarming) return;
+            if (_warningManager.IsWarning) return;
 
             _popupManager.OnCanvasEnabled();
         }
@@ -199,7 +199,7 @@ namespace TM.Input.KeyConfig
 
         public bool CheckHasKeyAllActions()
         {
-            if (_warmingManager.IsWarming) return false;
+            if (_warningManager.IsWarning) return false;
 
             bool hasKey = true;
             _gameActions.Clear();
@@ -221,10 +221,10 @@ namespace TM.Input.KeyConfig
 
         private async void HasAllAction()
         {
-            _warmingManager.SetEnable(true);
-            _warmingManager.SetText(_gameActions);
+            _warningManager.SetEnable(true);
+            _warningManager.SetText(_gameActions);
             await WaitForAnyKey();
-            _warmingManager.SetEnable(false);
+            _warningManager.SetEnable(false);
         }
 
         private async UniTask WaitForAnyKey()

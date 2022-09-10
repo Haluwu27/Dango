@@ -6,9 +6,9 @@ namespace TM.Input.KeyConfig
 {
     public class KeyConfigWarningManager : MonoBehaviour
     {
-        [SerializeField] Canvas _canvas = default!;
-        [SerializeField] TextUIData _textUIData = default!;
-
+        [SerializeField] Canvas _canvas;
+        [SerializeField] TextUIData _textUIData;
+       
         public void SetEnable(bool enable)
         {
             _canvas.enabled = enable;
@@ -24,6 +24,6 @@ namespace TM.Input.KeyConfig
             _textUIData.TextData.SetText("ボタンが割り当てられていない機能があります。最低でも1つのボタンに割り当ててください。\n" + action);
         }
 
-        public bool IsWarming => _canvas.enabled;
+        public bool IsWarning => _canvas.enabled;
     }
 }
