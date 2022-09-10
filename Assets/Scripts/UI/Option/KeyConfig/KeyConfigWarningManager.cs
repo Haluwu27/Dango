@@ -21,7 +21,7 @@ namespace TM.Input.KeyConfig
             {
                 action += gameAction.ToString();
             }
-            _textUIData.TextData.SetText("ボタンが割り当てられていない機能があります。最低でも1つのボタンに割り当ててください。\n" + action);
+            _textUIData.TextData.SetText("ボタンが割り当てられていない機能があります。最低でも1つのボタンに割り当ててください。" + action);
         }
 
         public bool IsWarning => _canvas.enabled;
