@@ -64,6 +64,15 @@ namespace TM.Input.KeyConfig
             return _currentKeys.Contains(key);
         }
 
+        /// <summary>
+        /// アクションに対してキーが割り当てられているか判定するメソッド
+        /// </summary>
+        /// <returns>true:割り当てあり</returns>
+        public bool HasKey()
+        {
+            return _currentKeys.Count > 0;
+        }
+
         public KeyData.GameAction Action => _action;
         public InputActionReference ActionReference => _actionReference;
         public List<KeyData.GamepadKey> Keys => _currentKeys;
