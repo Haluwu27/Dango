@@ -16,12 +16,12 @@ namespace TM.Input.KeyConfig
 
         public void SetText(List<KeyData.GameAction> gameActions)
         {
-            string action = "";
-            foreach (var gameAction in gameActions)
-            {
-                action += gameAction.ToString();
-            }
-            _textUIData.TextData.SetText("ボタンが割り当てられていない機能があります。最低でも1つのボタンに割り当ててください。" + action);
+            //string action = "";
+            //foreach (var gameAction in gameActions)
+            //{
+            //    action += gameAction.ToString();
+            //}
+            //_textUIData.TextData.SetText("ボタンが割り当てられていない機能があります。最低でも1つのボタンに割り当ててください。" + action);
         }
 
         public bool IsWarning => _canvas.enabled;
