@@ -1,7 +1,9 @@
 using Cysharp.Threading.Tasks.Triggers;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace TM.Input.KeyConfig
 {
@@ -25,6 +27,12 @@ namespace TM.Input.KeyConfig
         {
             InputSystemManager.Instance.onNavigatePerformed += OnNavigateVertical;
             InputSystemManager.Instance.onChoicePerformed += OnChoiced;
+        }
+
+        public void OnChangeScene()
+        {
+            InputSystemManager.Instance.onNavigatePerformed -= OnNavigateVertical;
+            InputSystemManager.Instance.onChoicePerformed -= OnChoiced;
         }
 
         public void OnNavigateVertical()
