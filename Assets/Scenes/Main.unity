@@ -485,6 +485,22 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: 5e5e8886-d145-4659-968e-ae16fcb41424
     m_ActionName: UI/AnyKey[/Keyboard/anyKey,/SwitchProControllerHID/buttonEast,/SwitchProControllerHID/buttonNorth,/SwitchProControllerHID/buttonSouth,/SwitchProControllerHID/buttonWest,/SwitchProControllerHID/leftStickPress,/SwitchProControllerHID/leftTrigger,/SwitchProControllerHID/leftShoulder,/SwitchProControllerHID/rightShoulder,/SwitchProControllerHID/rightStickPress,/SwitchProControllerHID/rightTrigger,/SwitchProControllerHID/select,/SwitchProControllerHID/start,/SwitchProControllerHID/dpad/down,/SwitchProControllerHID/dpad/left,/SwitchProControllerHID/dpad/right,/SwitchProControllerHID/dpad/up]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1271659316}
+        m_TargetAssemblyTypeName: InputSystemManager, Assembly-CSharp
+        m_MethodName: OnTabControl
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 0c999e64-0dae-4795-8db1-412961714063
+    m_ActionName: UI/TabControl[/SwitchProControllerHID/leftShoulder,/SwitchProControllerHID/rightShoulder,/SwitchProControllerHID/leftTrigger,/SwitchProControllerHID/rightTrigger,/Keyboard/leftArrow,/Keyboard/rightArrow]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: UI

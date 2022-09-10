@@ -102,6 +102,15 @@ namespace TM.Input.KeyConfig
         {
             InputSystemManager.Instance.onStickPerformed += OnStick;
             InputSystemManager.Instance.onChoicePerformed += OnSelect;
+            InputSystemManager.Instance.onBackPerformed += OnBack;
+        }
+
+        public void OnChangeScene()
+        {
+            _popupManager.OnChangeScene();
+            InputSystemManager.Instance.onStickPerformed -= OnStick;
+            InputSystemManager.Instance.onChoicePerformed -= OnSelect;
+            InputSystemManager.Instance.onBackPerformed -= OnBack;
         }
 
         //この関数をAwakeに置けば直前に抜けた地点が保存されてそこから移動できます。
@@ -148,7 +157,8 @@ namespace TM.Input.KeyConfig
 
             if (enable)
             {
-                _currentData.GetComponent<RawImage>().color = Color.white;
+                if (_currentData != null)  _currentData.GetComponent<RawImage>().color = Color.white;
+                
                 _currentData = _firstData;
                 _currentData.GetComponent<RawImage>().color = Color.red;
             }
@@ -162,19 +172,15 @@ namespace TM.Input.KeyConfig
             _popupManager.OnCanvasEnabled();
         }
 
-        /// <summary>
-        /// ポップアップ中か否かで挙動が変わる。
-        /// </summary>
-        /// <returns>false:ポップアップ中</returns>
-        public bool OnBack()
+        public void OnBack()
         {
             if (_popupManager.IsPopup)
             {
                 _popupManager.OnCanvasDisabled();
-                return false;
+                return;
             }
 
-            return CheckHasKeyAllActions();
+            CheckHasKeyAllActions();
         }
 
         public void Rebinding(int index)

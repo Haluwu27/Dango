@@ -44,9 +44,6 @@ public class OptionManager : MonoBehaviour
     /// 単一シーンで実装するため、各画面間のやりとりの際に使用する静的なものです。
     public static Canvas OptionCanvas { get; private set; }
 
-    //現在のオプション地点
-    OptionChoices _currentChoice = OptionChoices.Option;
-
     //次に以降するオプション地点
     OptionChoices _nextChoice = OptionChoices.KeyConfig;
 
@@ -83,40 +80,24 @@ public class OptionManager : MonoBehaviour
     {
         InputSystemManager.Instance.onBackPerformed -= OnBack;
         InputSystemManager.Instance.onTabControlPerformed -= ChangeChoice;
+        _keyConfig.OnChangeScene();
     }
 
     private async void OnBack()
     {
-        if (_currentChoice == OptionChoices.Option)
-        {
-            //Player(通常プレイの入力)マップに戻る
-            //InputSystemManager.Instance.Input.SwitchCurrentActionMap("Player");
-            //_canvas.enabled = false;
+        if (_keyConfig.IsPopup) return;
+        if (!_keyConfig.CheckHasKeyAllActions()) return;
 
-            await _fusumaManager.UniTaskClose(1.5f);
-            SceneSystem.Instance.Load(SceneSystem.Scenes.Menu);
-            SceneSystem.Instance.UnLoad(SceneSystem.Scenes.Option);
-        }
-        else if (_currentChoice == OptionChoices.KeyConfig)
-        {
-            //ポップアップ中なら別処理を挟む
-            if (!_keyConfig.OnBack()) return;
-
-            _currentChoice = OptionChoices.Option;
-            OptionInputEnable();
-        }
-        else
-        {
-            _currentChoice = OptionChoices.Option;
-            OptionInputEnable();
-        }
+        OptionInputDisable();
+        await _fusumaManager.UniTaskClose(1.5f);
+        SceneSystem.Instance.Load(SceneSystem.Scenes.Menu);
+        SceneSystem.Instance.UnLoad(SceneSystem.Scenes.Option);
     }
 
     private void ChangeChoice()
     {
         if (_keyConfig.IsPopup) return;
         if (!_keyConfig.CheckHasKeyAllActions()) return;
-
 
         Vector2 axis = InputSystemManager.Instance.TabControlAxis;
 
@@ -163,7 +144,6 @@ public class OptionManager : MonoBehaviour
 
     private void EnterKeyConfig()
     {
-        _currentChoice = OptionChoices.KeyConfig;
         _keyConfig.SetCanvasEnable(true);
         _soundSettingManager.SetCanvasEnable(false);
         _operationManager.SetCanvasEnable(false);
@@ -172,7 +152,6 @@ public class OptionManager : MonoBehaviour
 
     private void EnterOperation()
     {
-        _currentChoice = OptionChoices.Operation;
         _operationManager.SetCanvasEnable(true);
         _keyConfig.SetCanvasEnable(false);
         _soundSettingManager.SetCanvasEnable(false);
@@ -181,7 +160,6 @@ public class OptionManager : MonoBehaviour
 
     private void EnterSound()
     {
-        _currentChoice = OptionChoices.Sound;
         _operationManager.SetCanvasEnable(false);
         _keyConfig.SetCanvasEnable(false);
         _soundSettingManager.SetCanvasEnable(true);
@@ -190,7 +168,6 @@ public class OptionManager : MonoBehaviour
 
     private void EnterOther()
     {
-        _currentChoice = OptionChoices.Other;
         _operationManager.SetCanvasEnable(false);
         _keyConfig.SetCanvasEnable(false);
         _soundSettingManager.SetCanvasEnable(false);
