@@ -37,6 +37,10 @@ namespace TM.Input.KeyConfig
         [SerializeField] KeyConfigData upperLeft;
         KeyConfigData[] keyConfigDatas = new KeyConfigData[8];
 
+        [SerializeField] KeyData _keyData = default!;
+
+        public KeyData KeyData => _keyData;
+
         public KeyConfigData[] GetKeyConfigDatas() => keyConfigDatas;
 
         public GameAction ConfigSelection => configSelection;

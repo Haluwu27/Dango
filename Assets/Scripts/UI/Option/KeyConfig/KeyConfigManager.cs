@@ -1,3 +1,5 @@
+using Cysharp.Threading.Tasks;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -25,7 +27,7 @@ namespace TM.Input.KeyConfig
         //現在選択されている変更したいキーのデータ
         KeyConfigData _currentData;
 
-        [SerializeField,Tooltip("初期に選択されているキー")] KeyConfigData _firstData = default!;
+        [SerializeField, Tooltip("初期に選択されているキー")] KeyConfigData _firstData = default!;
 
         //スティックやキーボードの移動入力読み取り用
         Vector2 _axis;
@@ -33,19 +35,22 @@ namespace TM.Input.KeyConfig
         //表示・非表示切り替え用に管理するもの
         [SerializeField] Canvas _staticCanvas = default!;
         [SerializeField] Canvas _dynamicCanvas = default!;
+        [SerializeField] KeyConfigWarningManager _warmingManager = default!;
         [SerializeField] KeyConfigPopupManager _popupManager = default!;
 
         //InputSystemのInputActions本体
         [SerializeField] InputActionAsset _asset;
 
         //アクションリファレンス毎に設定するデータの全要素
-        ActionData[] _actionDatas = new ActionData[(int)KeyConfigData.GameAction.Max];
+        readonly ActionData[] _actionDatas = new ActionData[(int)KeyConfigData.GameAction.Max];
+        readonly List<KeyData.GameAction> _gameActions = new();
 
         public void OnStick()
         {
             if (!_staticCanvas.isActiveAndEnabled) return;
             if (!_dynamicCanvas.isActiveAndEnabled) return;
             if (_popupManager.IsPopup) return;
+            if (_warmingManager.IsWarming) return;
 
             //読み取った値を保存
             _axis = InputSystemManager.Instance.StickAxis;
@@ -64,7 +69,7 @@ namespace TM.Input.KeyConfig
 
             //現在のデータを選択したデータに変更
             _currentData = _currentData.GetKeyConfigDatas()[(int)key];
-            
+
             //ここをポップアップに変える
             _currentData.GetComponent<RawImage>().color = Color.red;
 
@@ -96,6 +101,7 @@ namespace TM.Input.KeyConfig
         private void Start()
         {
             InputSystemManager.Instance.onStickPerformed += OnStick;
+            InputSystemManager.Instance.onChoicePerformed += OnSelect;
         }
 
         //この関数をAwakeに置けば直前に抜けた地点が保存されてそこから移動できます。
@@ -141,16 +147,18 @@ namespace TM.Input.KeyConfig
             _dynamicCanvas.enabled = enable;
 
             if (enable)
-            { 
+            {
                 _currentData.GetComponent<RawImage>().color = Color.white;
                 _currentData = _firstData;
                 _currentData.GetComponent<RawImage>().color = Color.red;
             }
         }
 
-        //項目を選択した際のもの
-        public void OnSelect()
+        private void OnSelect()
         {
+            if (IsPopup) return;
+            if (_warmingManager.IsWarming) return;
+
             _popupManager.OnCanvasEnabled();
         }
 
@@ -166,14 +174,65 @@ namespace TM.Input.KeyConfig
                 return false;
             }
 
-            return true;
+            return CheckHasKeyAllActions();
         }
 
         public void Rebinding(int index)
         {
-            _currentData.GetComponent<KeyData>().KeyBindingOverride(_actionDatas[index].ActionReference);
+            foreach (var actionData in _actionDatas)
+            {
+                if (_currentData.KeyData.CurrentActionReference == null) break;
+
+                if (actionData.ActionReference.ToString().Equals(_currentData.KeyData.CurrentActionReference.ToString()))
+                    actionData.Keys.Remove(_currentData.KeyData.Key);
+            }
+            _actionDatas[index].Keys.Add(_currentData.KeyData.Key);
+
+            _currentData.KeyData.KeyBindingOverride(_actionDatas[index].ActionReference);
+        }
+
+        public bool CheckHasKeyAllActions()
+        {
+            if (_warmingManager.IsWarming) return false;
+
+            bool hasKey = true;
+            _gameActions.Clear();
+
+            //すべてのアクションに対して割り当てが存在しているかチェック
+            foreach (var actionData in _actionDatas)
+            {
+                //割り当てがなかった場合
+                if (!actionData.HasKey())
+                {
+                    _gameActions.Add(actionData.Action);
+                    hasKey = false;
+                }
+            }
+            if (!hasKey) HasAllAction();
+
+            return hasKey;
+        }
+
+        private async void HasAllAction()
+        {
+            _warmingManager.SetEnable(true);
+            _warmingManager.SetText(_gameActions);
+            await WaitForAnyKey();
+            _warmingManager.SetEnable(false);
+        }
+
+        private async UniTask WaitForAnyKey()
+        {
+            await UniTask.Yield();
+
+            while (true)
+            {
+                await UniTask.Yield();
+                if (InputSystemManager.Instance.WasPressedThisFrameAnyKey) break;
+            }
         }
 
         public KeyConfigData Data => _currentData;
+        public bool IsPopup => _popupManager.IsPopup;
     }
 }

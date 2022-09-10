@@ -55,6 +55,9 @@ namespace TM.Input.KeyConfig
 
         [SerializeField] InputActionReference currentActionReference;
 
+        public InputActionReference CurrentActionReference => currentActionReference;
+        public GamepadKey Key => key;
+
         //static readonly string REBINDJSON = "rebindKey";
 
         //バインディング状態をJSON形式で出力、読み込み
@@ -103,7 +106,10 @@ namespace TM.Input.KeyConfig
         /// </summary>
         public void KeyBindingOverride(InputActionReference actionReference)
         {
-            currentActionReference.action.ChangeBinding(new InputBinding { path = ToGamepadKeyPass(key) }).Erase();
+            if (currentActionReference != null)
+            {
+                currentActionReference.action.ChangeBinding(new InputBinding { path = ToGamepadKeyPass(key) }).Erase();
+            }
             actionReference.action.AddBinding(new InputBinding { path = ToGamepadKeyPass(key) });
             currentActionReference = actionReference;
 

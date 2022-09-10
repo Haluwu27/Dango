@@ -161,6 +161,8 @@ public class InputSystemManager : MonoBehaviour
     bool _isPressBack;
     bool _isPressChoice;
     Vector2 _stickAxis;
+    bool _isPressAnyKey;
+    bool _wasPressedThisFrameAnyKey;
     Vector2 _tabControlAxis;
 
     public void OnNavigate(InputAction.CallbackContext context)
@@ -219,10 +221,13 @@ public class InputSystemManager : MonoBehaviour
     {
         if (context.phase == InputActionPhase.Performed)
         {
+            _wasPressedThisFrameAnyKey = true;
+            _isPressAnyKey = true;
             onAnyKeyPerformed.SafeCall();
         }
         else if (context.phase == InputActionPhase.Canceled)
         {
+            _isPressAnyKey = false;
             onAnyKeyCanceled.SafeCall();
         }
     }
@@ -244,12 +249,24 @@ public class InputSystemManager : MonoBehaviour
     public bool IsPressBack => _isPressBack;
     public bool IsPressChoice => _isPressChoice;
     public Vector2 StickAxis => _stickAxis;
+    public bool IsPressAnyKey => _isPressAnyKey;
+    public bool WasPressedThisFrameAnyKey => _wasPressedThisFrameAnyKey;
     public Vector2 TabControlAxis => _tabControlAxis;
     #endregion
 
     private void Awake()
     {
         Instance = this;
+    }
+
+    private void Update()
+    {
+        WasPressedThisFrame(ref _wasPressedThisFrameAnyKey);
+    }
+
+    private void WasPressedThisFrame(ref bool key)
+    {
+        if (key) key = false;
     }
 }
 

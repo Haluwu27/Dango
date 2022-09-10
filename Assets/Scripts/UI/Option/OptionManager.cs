@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TM.Input.KeyConfig;
 using UnityEngine.InputSystem.LowLevel;
+using UnityEditor.UIElements;
 
 public class OptionManager : MonoBehaviour
 {
@@ -68,12 +69,20 @@ public class OptionManager : MonoBehaviour
 
     private void Start()
     {
-        InputSystemManager.Instance.onBackPerformed += OnBack;
-        InputSystemManager.Instance.onNavigatePerformed += OnNavigate;
-        InputSystemManager.Instance.onChoicePerformed += Choiced;
-        InputSystemManager.Instance.onTabControlPerformed += ChangeChoice;
-
+        OptionInputEnable();
         _fusumaManager.Open();
+    }
+
+    private void OptionInputEnable()
+    {
+        InputSystemManager.Instance.onBackPerformed += OnBack;
+        InputSystemManager.Instance.onTabControlPerformed += ChangeChoice;
+    }
+
+    private void OptionInputDisable()
+    {
+        InputSystemManager.Instance.onBackPerformed -= OnBack;
+        InputSystemManager.Instance.onTabControlPerformed -= ChangeChoice;
     }
 
     private async void OnBack()
@@ -82,10 +91,8 @@ public class OptionManager : MonoBehaviour
         {
             //Player(通常プレイの入力)マップに戻る
             //InputSystemManager.Instance.Input.SwitchCurrentActionMap("Player");
-
-            //Bボタンだけ一瞬で戻ってジャンプしてしまうバグあり。原因不明
-
             //_canvas.enabled = false;
+
             await _fusumaManager.UniTaskClose(1.5f);
             SceneSystem.Instance.Load(SceneSystem.Scenes.Menu);
             SceneSystem.Instance.UnLoad(SceneSystem.Scenes.Option);
@@ -96,35 +103,21 @@ public class OptionManager : MonoBehaviour
             if (!_keyConfig.OnBack()) return;
 
             _currentChoice = OptionChoices.Option;
-            EnterOption();
+            OptionInputEnable();
         }
         else
         {
             _currentChoice = OptionChoices.Option;
-            EnterOption();
-        }
-    }
-
-    private void OnNavigate()
-    {
-        Vector2 axis = InputSystemManager.Instance.NavigateAxis;
-
-        switch (_currentChoice)
-        {
-            case OptionChoices.Option:
-                //ChangeChoice(axis);
-                break;
-            case OptionChoices.Operation:
-                break;
-            case OptionChoices.KeyConfig:
-                break;
-            case OptionChoices.Other:
-                break;
+            OptionInputEnable();
         }
     }
 
     private void ChangeChoice()
     {
+        if (_keyConfig.IsPopup) return;
+        if (!_keyConfig.CheckHasKeyAllActions()) return;
+
+
         Vector2 axis = InputSystemManager.Instance.TabControlAxis;
 
         //Up or Left
@@ -149,25 +142,6 @@ public class OptionManager : MonoBehaviour
         EnterNextChoice();
     }
 
-    private void Choiced()
-    {
-        switch (_currentChoice)
-        {
-            case OptionChoices.Option:
-                Logger.Log("選択したよ");
-                //EnterNextChoice();
-                break;
-
-            case OptionChoices.Operation:
-                break;
-            case OptionChoices.KeyConfig:
-                _keyConfig.OnSelect();
-                break;
-            case OptionChoices.Other:
-                break;
-        }
-    }
-
     private void EnterNextChoice()
     {
         switch (_nextChoice)
@@ -185,14 +159,6 @@ public class OptionManager : MonoBehaviour
                 EnterOther();
                 break;
         }
-    }
-
-    private void EnterOption()
-    {
-        _keyConfig.SetCanvasEnable(false);
-        _soundSettingManager.SetCanvasEnable(false);
-        _operationManager.SetCanvasEnable(false);
-        _otherSettingsManager.SetCanvasEnable(false);
     }
 
     private void EnterKeyConfig()
@@ -220,7 +186,8 @@ public class OptionManager : MonoBehaviour
         _keyConfig.SetCanvasEnable(false);
         _soundSettingManager.SetCanvasEnable(true);
         _otherSettingsManager.SetCanvasEnable(false);
-    }    
+    }
+
     private void EnterOther()
     {
         _currentChoice = OptionChoices.Other;

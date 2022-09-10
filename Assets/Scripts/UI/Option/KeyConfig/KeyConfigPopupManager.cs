@@ -1,7 +1,7 @@
+using Cysharp.Threading.Tasks.Triggers;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 namespace TM.Input.KeyConfig
 {
@@ -11,6 +11,7 @@ namespace TM.Input.KeyConfig
         [SerializeField] TextUIData selectName = default!;
         [SerializeField] KeyConfigManager keyConfigManager = default!;
         [SerializeField] Canvas _canvas = default!;
+        [SerializeField] RectTransform popup = default!;
 
         //Flags属性持ち
         KeyConfigData.GameAction _action;
@@ -87,6 +88,10 @@ namespace TM.Input.KeyConfig
             _action = keyConfigManager.Data.ConfigSelection;
             ResetTexts();
             SetTexts();
+
+            //マジックナンバーやめましょう。
+            float x = keyConfigManager.Data.transform.localPosition.x > 0 ? -450f : 450f;
+            popup.localPosition=new Vector2(x,0);
         }
 
         public void OnCanvasDisabled()
