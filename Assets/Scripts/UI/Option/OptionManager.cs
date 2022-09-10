@@ -2,8 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TM.Input.KeyConfig;
-using UnityEngine.InputSystem.LowLevel;
-using UnityEditor.UIElements;
 
 public class OptionManager : MonoBehaviour
 {
