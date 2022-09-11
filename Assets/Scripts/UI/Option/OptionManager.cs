@@ -43,7 +43,7 @@ public class OptionManager : MonoBehaviour
     public static Canvas OptionCanvas { get; private set; }
 
     //次に以降するオプション地点
-    OptionChoices _nextChoice = OptionChoices.KeyConfig;
+    OptionChoices _currentChoice = OptionChoices.KeyConfig;
 
     //縦か横か
     static readonly OptionDirection direction = OptionDirection.Horizontal;
@@ -79,6 +79,7 @@ public class OptionManager : MonoBehaviour
         InputSystemManager.Instance.onBackPerformed -= OnBack;
         InputSystemManager.Instance.onTabControlPerformed -= ChangeChoice;
         _keyConfig.OnChangeScene();
+        _operationManager.OnChangeScene();
     }
 
     private async void OnBack()
@@ -102,18 +103,18 @@ public class OptionManager : MonoBehaviour
         //Up or Left
         if (axis == directionTable[(int)direction, 0])
         {
-            _nextChoice--;
+            _currentChoice--;
 
-            if (_nextChoice == OptionChoices.Option) _nextChoice = canMoveTopToBottom ? OptionChoices.Max - 1 : OptionChoices.Option + 1;
+            if (_currentChoice == OptionChoices.Option) _currentChoice = canMoveTopToBottom ? OptionChoices.Max - 1 : OptionChoices.Option + 1;
 
             SetFontSize();
         }
         //Down or Right
         else if (axis == directionTable[(int)direction, 1])
         {
-            _nextChoice++;
+            _currentChoice++;
 
-            if (_nextChoice == OptionChoices.Max) _nextChoice = canMoveTopToBottom ? OptionChoices.Option + 1 : OptionChoices.Max - 1;
+            if (_currentChoice == OptionChoices.Max) _currentChoice = canMoveTopToBottom ? OptionChoices.Option + 1 : OptionChoices.Max - 1;
 
             SetFontSize();
         }
@@ -123,7 +124,7 @@ public class OptionManager : MonoBehaviour
 
     private void EnterNextChoice()
     {
-        switch (_nextChoice)
+        switch (_currentChoice)
         {
             case OptionChoices.Operation:
                 EnterOperation();
@@ -176,7 +177,7 @@ public class OptionManager : MonoBehaviour
     {
         for (int i = 0; i < _optionTexts.Length; i++)
         {
-            float size = (int)_nextChoice - 1 == i ? 65f : 55.5f;
+            float size = (int)_currentChoice - 1 == i ? 65f : 55.5f;
 
             _optionTexts[i].TextData.SetFontSize(size);
         }

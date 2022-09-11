@@ -766,7 +766,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 0.6886792, g: 0.6886792, b: 0.6886792, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -843,7 +843,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 0.6886792, g: 0.6886792, b: 0.6886792, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -2812,7 +2812,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 0.6886792, g: 0.6886792, b: 0.6886792, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -2955,7 +2955,7 @@ MonoBehaviour:
   _firstData: {fileID: 5484892728826221915}
   _staticCanvas: {fileID: 5484892728970605217}
   _dynamicCanvas: {fileID: 5484892727532509828}
-  _warmingManager: {fileID: 1874558302}
+  _warningManager: {fileID: 1874558302}
   _popupManager: {fileID: 5484892727831683213}
   _asset: {fileID: -944628639613478452, guid: 1da3fe81edbbd5045a5caa837599af50, type: 3}
 --- !u!1 &5484892727427033370
@@ -5093,6 +5093,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _canvas: {fileID: 5232130067645103719}
+  _images:
+  - {fileID: 176764828703776825}
+  - {fileID: 744123794858417258}
+  - {fileID: 5021938401625874972}
+  - {fileID: 1336179929331848117}
 --- !u!1 &5895132687981021277
 GameObject:
   m_ObjectHideFlags: 0
@@ -6822,7 +6827,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 0.6886792, g: 0.6886792, b: 0.6886792, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
