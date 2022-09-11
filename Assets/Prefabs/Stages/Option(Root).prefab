@@ -1017,6 +1017,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _canvas: {fileID: 3950356848122371012}
+  _images:
+  - {fileID: 2854856215844048188}
+  - {fileID: 7892040719150786966}
 --- !u!1 &1805991605312648751
 GameObject:
   m_ObjectHideFlags: 0
@@ -2508,6 +2511,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _canvas: {fileID: 6267376236623343945}
+  _images:
+  - {fileID: 6909616114019307995}
+  - {fileID: 3940963976884205437}
+  - {fileID: 3873944113493384958}
+  - {fileID: 8122988981040207448}
 --- !u!1 &4014178034797505605
 GameObject:
   m_ObjectHideFlags: 0
