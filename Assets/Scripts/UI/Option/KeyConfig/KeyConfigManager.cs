@@ -166,6 +166,8 @@ namespace TM.Input.KeyConfig
 
         private void OnSelect()
         {
+            if (!_staticCanvas.isActiveAndEnabled) return;
+            if (!_dynamicCanvas.isActiveAndEnabled) return;
             if (IsPopup) return;
             if (_warningManager.IsWarning) return;
 
@@ -174,6 +176,9 @@ namespace TM.Input.KeyConfig
 
         public void OnBack()
         {
+            if (!_staticCanvas.isActiveAndEnabled) return;
+            if (!_dynamicCanvas.isActiveAndEnabled) return;
+
             if (_popupManager.IsPopup)
             {
                 _popupManager.OnCanvasDisabled();
