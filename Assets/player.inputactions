@@ -69,7 +69,7 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "New action",
+                    "name": "ExpansionUI",
                     "type": "Button",
                     "id": "77896abf-ef83-474f-a892-afb25d3a2a30",
                     "expectedControlType": "Button",
@@ -291,11 +291,11 @@
                 {
                     "name": "",
                     "id": "f9a3a753-082d-4c6f-9b63-b3ce9a2f6a69",
-                    "path": "",
+                    "path": "<Keyboard>/tab",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
-                    "action": "New action",
+                    "groups": "Keyboard&Mouse",
+                    "action": "ExpansionUI",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
