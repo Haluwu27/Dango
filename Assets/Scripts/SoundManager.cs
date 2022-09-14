@@ -173,7 +173,7 @@ public class SoundManager : MonoBehaviour
             await UniTask.Yield();
             fadeTime += Time.deltaTime;
 
-            _BGM.volume = Mathf.Min(lastVolume * (fadeTime / time), lastVolume);
+            _BGM.volume = Mathf.Min(lastVolume * (fadeTime / time), lastVolume) * DataManager.configData.masterVolume * DataManager.configData.backGroundMusicVolume / 100 / 100;
         }
     }
     private async UniTask Fadeout(float time)
