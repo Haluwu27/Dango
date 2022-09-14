@@ -220,6 +220,7 @@ GameObject:
   - component: {fileID: 1271659316}
   - component: {fileID: 1271659315}
   - component: {fileID: 1271659319}
+  - component: {fileID: 1271659320}
   m_Layer: 0
   m_Name: GameMaster
   m_TagString: Untagged
@@ -531,7 +532,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 166783ef09795424bbc40f413ef598ae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  debugScenes: 1
+  debugScenes: 4
   _sceneRoots:
   - {fileID: 2063848576987206517, guid: 5e7a613d8ec67fe4cb6e39d2de87e6e2, type: 3}
   - {fileID: 0}
@@ -604,6 +605,18 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 8300000, guid: cae90ff0bf1abe4458788391cc2e5206, type: 3}
   - {fileID: 8300000, guid: 9c19f2f43ce7a1445a576126a5be0d48, type: 3}
+--- !u!114 &1271659320
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1271659314}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 02e1f85d90ef0944180d834b8eaade3d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1350547491
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -671,6 +684,17 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3273269692323968937, guid: 0e83b38759c6eea4283293a70f331b0f,
+        type: 3}
+      propertyPath: m_Volume
+      value: 0.04
+      objectReference: {fileID: 0}
+    - target: {fileID: 3273269692323968937, guid: 0e83b38759c6eea4283293a70f331b0f,
+        type: 3}
+      propertyPath: OutputAudioMixerGroup
+      value: 
+      objectReference: {fileID: 2961031375960033727, guid: 86efab4fcdca0c74fb242dd7926f8cc6,
+        type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0e83b38759c6eea4283293a70f331b0f, type: 3}
 --- !u!1 &2043252890

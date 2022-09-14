@@ -80,6 +80,8 @@ public class OptionManager : MonoBehaviour
         InputSystemManager.Instance.onTabControlPerformed -= ChangeChoice;
         _keyConfig.OnChangeScene();
         _operationManager.OnChangeScene();
+        _soundSettingManager.OnChangeScene();
+        _otherSettingsManager.OnChangeScene();
     }
 
     private async void OnBack()
@@ -124,53 +126,10 @@ public class OptionManager : MonoBehaviour
 
     private void EnterNextChoice()
     {
-        switch (_currentChoice)
-        {
-            case OptionChoices.Operation:
-                EnterOperation();
-                break;
-            case OptionChoices.KeyConfig:
-                EnterKeyConfig();
-                break;
-            case OptionChoices.Sound:
-                EnterSound();
-                break;
-            case OptionChoices.Other:
-                EnterOther();
-                break;
-        }
-    }
-
-    private void EnterKeyConfig()
-    {
-        _keyConfig.SetCanvasEnable(true);
-        _soundSettingManager.SetCanvasEnable(false);
-        _operationManager.SetCanvasEnable(false);
-        _otherSettingsManager.SetCanvasEnable(false);
-    }
-
-    private void EnterOperation()
-    {
-        _operationManager.SetCanvasEnable(true);
-        _keyConfig.SetCanvasEnable(false);
-        _soundSettingManager.SetCanvasEnable(false);
-        _otherSettingsManager.SetCanvasEnable(false);
-    }
-
-    private void EnterSound()
-    {
-        _operationManager.SetCanvasEnable(false);
-        _keyConfig.SetCanvasEnable(false);
-        _soundSettingManager.SetCanvasEnable(true);
-        _otherSettingsManager.SetCanvasEnable(false);
-    }
-
-    private void EnterOther()
-    {
-        _operationManager.SetCanvasEnable(false);
-        _keyConfig.SetCanvasEnable(false);
-        _soundSettingManager.SetCanvasEnable(false);
-        _otherSettingsManager.SetCanvasEnable(true);
+        _keyConfig.SetCanvasEnable(_currentChoice == OptionChoices.KeyConfig);
+        _soundSettingManager.SetCanvasEnable(_currentChoice == OptionChoices.Sound);
+        _operationManager.SetCanvasEnable(_currentChoice == OptionChoices.Operation);
+        _otherSettingsManager.SetCanvasEnable(_currentChoice == OptionChoices.Other);
     }
 
     private void SetFontSize()

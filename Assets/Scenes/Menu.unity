@@ -778,6 +778,16 @@ PrefabInstance:
       propertyPath: m_Name
       value: Menu(Root)
       objectReference: {fileID: 0}
+    - target: {fileID: 6535298416043980026, guid: 9dbe1186418d94440a714a05097a8f69,
+        type: 3}
+      propertyPath: m_Type
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 6535298416043980026, guid: 9dbe1186418d94440a714a05097a8f69,
+        type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
     - target: {fileID: 8051712767977006759, guid: 9dbe1186418d94440a714a05097a8f69,
         type: 3}
       propertyPath: m_AnchoredPosition.x

@@ -27,11 +27,15 @@ public class OperationManager : MonoBehaviour
     private void Start()
     {
         InputSystemManager.Instance.onNavigatePerformed += OnNavigate;
+        InputSystemManager.Instance.onChoicePerformed += OnChoice;
+        InputSystemManager.Instance.onBackPerformed += OnBack;
     }
 
     public void OnChangeScene()
     {
         InputSystemManager.Instance.onNavigatePerformed -= OnNavigate;
+        InputSystemManager.Instance.onChoicePerformed -= OnChoice;
+        InputSystemManager.Instance.onBackPerformed -= OnBack;
     }
 
     /// <summary>
@@ -53,7 +57,40 @@ public class OperationManager : MonoBehaviour
     {
         if (!_canvas.enabled) return;
 
-        Vector2 axis = InputSystemManager.Instance.NavigateAxis;
+        ChangeChoice(InputSystemManager.Instance.NavigateAxis);
+
+        if (_choice == OperationChoices.CameraSensitivity)
+        {
+            CameraSensitivityChange(InputSystemManager.Instance.NavigateAxis.x);
+        }
+    }
+
+    private void OnChoice()
+    {
+        if (!_canvas.enabled) return;
+
+        //bool‚Ì‚Ý’ñŽ¦
+        switch (_choice)
+        {
+            case OperationChoices.UseController:
+                UseController();
+                break;
+            case OperationChoices.CameraReversalV:
+                CameraReversalV();
+                break;
+            case OperationChoices.CameraReversalH:
+                CameraReversalH();
+                break;
+        }
+    }
+
+    private void OnBack()
+    {
+        if (!_canvas.enabled) return;
+    }
+
+    private void ChangeChoice(Vector2 axis)
+    {
         if (axis != Vector2.up && axis != Vector2.down) return;
 
         if (axis == Vector2.up)
@@ -79,4 +116,32 @@ public class OperationManager : MonoBehaviour
         _images[(int)_choice - 1].color = Color.red;
         SoundManager.Instance.PlaySE(SoundSource.SE16_UI_SELECTION);
     }
+
+    private void UseController()
+    {
+        DataManager.configData.gamepadInputEnabled ^= true;
+        Logger.Log(DataManager.configData.gamepadInputEnabled);
+    }
+
+    private void CameraReversalV()
+    {
+        DataManager.configData.cameraVerticalOrientation ^= true;
+        Logger.Log(DataManager.configData.cameraVerticalOrientation);
+    }
+
+    private void CameraReversalH()
+    {
+        DataManager.configData.cameraHorizontalOrientation ^= true;
+        Logger.Log(DataManager.configData.cameraHorizontalOrientation);
+    }
+
+    private void CameraSensitivityChange(float vecX)
+    {
+        if (vecX != 1 && vecX != -1) return;
+
+        DataManager.configData.cameraRotationSpeed += (int)vecX * 10;
+        if (DataManager.configData.cameraRotationSpeed < 10) DataManager.configData.cameraRotationSpeed = 10;
+        else if (DataManager.configData.cameraRotationSpeed > 200) DataManager.configData.cameraRotationSpeed = 200;
+        Logger.Log(DataManager.configData.cameraRotationSpeed);
+    }    
 }

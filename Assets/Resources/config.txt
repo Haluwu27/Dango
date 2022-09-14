@@ -1,0 +1,12 @@
+{
+  "languageString": "JP",
+  "gamepadInputEnabled": true,
+  "dataFilePath": "default",
+  "masterVolume": 0,
+  "soundEffectVolume": 0,
+  "backGroundMusicVolume": 0,
+  "voiceVolume": 0,
+  "cameraRotationSpeed": 100,
+  "cameraHorizontalOrientation": false,
+  "cameraVerticalOrientation": false
+}
