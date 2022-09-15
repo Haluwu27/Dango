@@ -21,6 +21,7 @@ public class SoundSettingManager : MonoBehaviour
     [SerializeField] Canvas _canvas = default!;
     [SerializeField] Image[] _images;
 
+    //ˆê‰ñ‚Ì•ÏX‚Å‚Ç‚ê‚¾‚¯ã‚°‚é‚©
     static readonly int COUNT = 10;
 
     SoundChoices _choice = SoundChoices.None + 1;
