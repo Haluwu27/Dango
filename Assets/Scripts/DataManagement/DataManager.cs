@@ -48,8 +48,6 @@ public class DataManager : MonoBehaviour
 
         LoadSaveData();
         LoadLanguageData();
-
-        Logger.Log(LanguageData.gameStart);
     }
 
     void OnApplicationQuit()

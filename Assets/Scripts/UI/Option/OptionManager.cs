@@ -86,6 +86,7 @@ public class OptionManager : MonoBehaviour
 
     private async void OnBack()
     {
+        if (_otherSettingsManager.IsPopUp) return;
         if (_keyConfig.IsPopup) return;
         if (!_keyConfig.CheckHasKeyAllActions()) return;
 
@@ -97,6 +98,7 @@ public class OptionManager : MonoBehaviour
 
     private void ChangeChoice()
     {
+        if (_otherSettingsManager.IsPopUp) return;
         if (_keyConfig.IsPopup) return;
         if (!_keyConfig.CheckHasKeyAllActions()) return;
 
