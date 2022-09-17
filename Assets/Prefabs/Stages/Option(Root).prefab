@@ -4240,6 +4240,8 @@ MonoBehaviour:
   - {fileID: 155634499129697537}
   - {fileID: 1825955016491573204}
   _fusumaManager: {fileID: 5319437274108781523}
+  _methodOfOperation: {fileID: 9034442565490859462}
+  _methodOfOperationSprites: []
 --- !u!1 &5484892727974341658
 GameObject:
   m_ObjectHideFlags: 0
@@ -6133,6 +6135,8 @@ MonoBehaviour:
   - {fileID: 744123794858417258}
   - {fileID: 5021938401625874972}
   - {fileID: 1336179929331848117}
+  _methodOfOperation: {fileID: 9034442565490859462}
+  _methodOfOperationSprites: []
 --- !u!1 &5895132687981021277
 GameObject:
   m_ObjectHideFlags: 0
