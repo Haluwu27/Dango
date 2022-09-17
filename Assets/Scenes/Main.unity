@@ -575,7 +575,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _debugSoundSource: 6
   _BGM: {fileID: 2112573776}
-  _SEPrefab: {fileID: 2110355770402595655, guid: b87469c47a09e064c88f1afac9ad82f2,
+  _SEPrefab: {fileID: 3666380681918514816, guid: b87469c47a09e064c88f1afac9ad82f2,
     type: 3}
   BGMClip:
   - {fileID: 8300000, guid: 3a21f1e6f55ba9e428c4c585bdb3fd49, type: 3}
@@ -605,6 +605,7 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 8300000, guid: cae90ff0bf1abe4458788391cc2e5206, type: 3}
   - {fileID: 8300000, guid: 9c19f2f43ce7a1445a576126a5be0d48, type: 3}
+  _audioMixer: {fileID: 24100000, guid: 86efab4fcdca0c74fb242dd7926f8cc6, type: 2}
 --- !u!114 &1271659320
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -687,7 +688,7 @@ PrefabInstance:
     - target: {fileID: 3273269692323968937, guid: 0e83b38759c6eea4283293a70f331b0f,
         type: 3}
       propertyPath: m_Volume
-      value: 0.04
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3273269692323968937, guid: 0e83b38759c6eea4283293a70f331b0f,
         type: 3}

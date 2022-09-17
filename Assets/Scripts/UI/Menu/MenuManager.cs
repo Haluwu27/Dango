@@ -204,26 +204,21 @@ public class MenuManager : MonoBehaviour
 
     private void ToOption()
     {
-        Logger.Log("Optionに遷移するよ");
         SceneSystem.Instance.Load(SceneSystem.Scenes.Option);
         Unload();
     }
     private void ToTutorial()
     {
-        Logger.Log("チュートリアルに遷移するよ");
-
         SceneSystem.Instance.Load(SceneSystem.Scenes.Tutorial);
         Unload();
     }
     private void ToEx()
     {
-        Logger.Log("ぎゃらりーに遷移するよ");
         SceneSystem.Instance.Load(SceneSystem.Scenes.Ex);
         Unload();
     }
     private void ToStageSelect()
     {
-        Logger.Log("ステージセレクトに遷移するよ");
         SceneSystem.Instance.Load(SceneSystem.Scenes.StageSelect);
         Unload();
     }

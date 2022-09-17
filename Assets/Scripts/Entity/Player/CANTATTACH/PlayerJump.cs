@@ -13,7 +13,7 @@ namespace TM.Entity.Player
             if (!isGround) return;
             if (!InputSystemManager.Instance.IsPressJump) return;
 
-            GameManager.SoundManager.PlaySE(UnityEngine.Random.Range((int)SoundSource.VOISE_PRINCE_JUMP01, (int)SoundSource.VOISE_PRINCE_JUMP02+1));
+            SoundManager.Instance.PlaySE(UnityEngine.Random.Range((int)SoundSource.VOISE_PRINCE_JUMP01, (int)SoundSource.VOISE_PRINCE_JUMP02+1));
             rb.AddForce(Vector3.up * (JUMP_POWER + maxStabCount), ForceMode.Impulse);
         }
     }
