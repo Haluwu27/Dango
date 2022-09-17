@@ -33,6 +33,7 @@ public class InputSystemManager : MonoBehaviour
     public CallBack onFireCanceled;
     public CallBack onPausePerformed;
     public CallBack onPauseCanceled;
+    public CallBack onExpansionUI;
 
     Vector2 _moveAxis;
     Vector2 _lookAxis;
@@ -41,6 +42,7 @@ public class InputSystemManager : MonoBehaviour
     bool _isPressEatDango;
     bool _isPressFire;
     bool _isPressPause;
+    bool _isPressExpansionUI;
 
     public void OnMove(InputAction.CallbackContext context)
     {
@@ -133,6 +135,19 @@ public class InputSystemManager : MonoBehaviour
             onPauseCanceled.SafeCall();
         }
     }
+    public void OnExpansionUI(InputAction.CallbackContext context)
+    {
+        if (context.phase == InputActionPhase.Performed)
+        {
+            _isPressExpansionUI = true;
+            onExpansionUI.SafeCall();
+        }
+        else if (context.phase == InputActionPhase.Canceled)
+        {
+            _isPressExpansionUI = false;
+            onExpansionUI.SafeCall();
+        }
+    }
 
     public Vector2 MoveAxis => _moveAxis;
     public Vector2 LookAxis => _lookAxis;
@@ -141,6 +156,7 @@ public class InputSystemManager : MonoBehaviour
     public bool IsPressEatDango => _isPressEatDango;
     public bool IsPressFire => _isPressFire;
     public bool IsPressPause => _isPressPause;
+    public bool IsExpantionUI => _isPressExpansionUI;
     #endregion
 
     #region UI

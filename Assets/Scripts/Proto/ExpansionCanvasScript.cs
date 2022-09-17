@@ -32,14 +32,14 @@ namespace Dango.Quest.UI {
             oldQuesttext =ExpansionQuestsPast.GetComponent<TextMeshProUGUI>();
             times[0].SetActive(false);
             quests[0].SetActive(false);
+            InputSystemManager.Instance.onExpansionUI += OnExpansion;
         }
-        public void OnExpansion(InputAction.CallbackContext context)
+        public void OnExpansion()
         {
-            if (context.phase == InputActionPhase.Performed)
+            if (InputSystemManager.Instance.IsExpantionUI)
             {
                 Onset();
-            }
-            if (context.phase == InputActionPhase.Canceled)
+            }else
             {
                 OffSet();
             }
