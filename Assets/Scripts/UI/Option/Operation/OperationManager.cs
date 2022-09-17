@@ -22,20 +22,21 @@ public class OperationManager : MonoBehaviour
     [SerializeField] Canvas _canvas = default!;
     [SerializeField] Image[] _images;
 
+    [SerializeField] Image _methodOfOperation = default!;
+    [SerializeField] Sprite[] _methodOfOperationSprites;
+
     OperationChoices _choice = OperationChoices.None + 1;
 
     private void Start()
     {
         InputSystemManager.Instance.onNavigatePerformed += OnNavigate;
         InputSystemManager.Instance.onChoicePerformed += OnChoice;
-        InputSystemManager.Instance.onBackPerformed += OnBack;
     }
 
     public void OnChangeScene()
     {
         InputSystemManager.Instance.onNavigatePerformed -= OnNavigate;
         InputSystemManager.Instance.onChoicePerformed -= OnChoice;
-        InputSystemManager.Instance.onBackPerformed -= OnBack;
     }
 
     /// <summary>
@@ -58,11 +59,7 @@ public class OperationManager : MonoBehaviour
         if (!_canvas.enabled) return;
 
         ChangeChoice(InputSystemManager.Instance.NavigateAxis);
-
-        if (_choice == OperationChoices.CameraSensitivity)
-        {
-            CameraSensitivityChange(InputSystemManager.Instance.NavigateAxis.x);
-        }
+        CameraSensitivityChange(InputSystemManager.Instance.NavigateAxis.x);
     }
 
     private void OnChoice()
@@ -84,37 +81,41 @@ public class OperationManager : MonoBehaviour
         }
     }
 
-    private void OnBack()
-    {
-        if (!_canvas.enabled) return;
-    }
-
     private void ChangeChoice(Vector2 axis)
     {
         if (axis != Vector2.up && axis != Vector2.down) return;
 
         if (axis == Vector2.up)
         {
+            if (_choice <= OperationChoices.None + 1) return;
+
             _choice--;
-            if (_choice <= OperationChoices.None)
-            {
-                _choice = OperationChoices.None + 1;
-                return;
-            }
         }
         else if (axis == Vector2.down)
         {
+            if (_choice >= OperationChoices.Max - 1) return;
+
             _choice++;
-            if (_choice >= OperationChoices.Max)
-            {
-                _choice = OperationChoices.Max - 1;
-                return;
-            }
         }
 
+        SetMethodOfOperation();
         _images[(int)_choice - 1 + (int)axis.y].color = new Color32(176, 176, 176, 255);
         _images[(int)_choice - 1].color = Color.red;
         SoundManager.Instance.PlaySE(SoundSource.SE16_UI_SELECTION);
+    }
+
+    private void SetMethodOfOperation()
+    {
+        if (_methodOfOperationSprites.Length != 3) return;
+
+        _methodOfOperation.sprite = _choice switch
+        {
+            OperationChoices.UseController => _methodOfOperationSprites[1],
+            OperationChoices.CameraSensitivity => _methodOfOperationSprites[2],
+            OperationChoices.CameraReversalV => _methodOfOperationSprites[1],
+            OperationChoices.CameraReversalH => _methodOfOperationSprites[1],
+            _ => throw new System.NotImplementedException(),
+        };
     }
 
     private void UseController()
@@ -137,11 +138,12 @@ public class OperationManager : MonoBehaviour
 
     private void CameraSensitivityChange(float vecX)
     {
+        if (_choice != OperationChoices.CameraSensitivity) return;
         if (vecX != 1 && vecX != -1) return;
 
         DataManager.configData.cameraRotationSpeed += (int)vecX * 10;
         if (DataManager.configData.cameraRotationSpeed < 10) DataManager.configData.cameraRotationSpeed = 10;
         else if (DataManager.configData.cameraRotationSpeed > 200) DataManager.configData.cameraRotationSpeed = 200;
         Logger.Log(DataManager.configData.cameraRotationSpeed);
-    }    
+    }
 }
