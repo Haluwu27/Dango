@@ -12,8 +12,6 @@ internal class GameManager : MonoBehaviour
 
     QuestManager _questManager = new();
     PlayerData _playerData;
-    private static SoundManager _soundManager = default!;
-    public static SoundManager SoundManager => _soundManager;
 
     #region statePattern
     interface IState
@@ -124,10 +122,6 @@ internal class GameManager : MonoBehaviour
 
     private void Awake()
     {
-        _soundManager = GetComponent<SoundManager>();
-
-        _soundManager.PlayBGM(SoundSource.BGM1A_STAGE1);
-
         //最初のクエストを仮置き。
         _questManager.ChangeQuest(_questManager.Creater.CreateQuestCreateRole(DangoRole.POSROLE_DIVIDED_INTO_TWO, 1, "役「二分割」を1個作れ！"),
                                _questManager.Creater.CreateQuestIncludeColor(DangoColor.Red, 3, "赤色を含めて役を3個作れ！"));

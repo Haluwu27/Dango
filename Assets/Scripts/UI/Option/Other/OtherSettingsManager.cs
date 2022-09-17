@@ -31,7 +31,7 @@ public class OtherSettingsManager : MonoBehaviour
         InputSystemManager.Instance.onNavigatePerformed += OnNavigate;
         InputSystemManager.Instance.onChoicePerformed += OnChoice;
         InputSystemManager.Instance.onAnyKeyPerformed += OnAnyKey;
-        InputSystemManager.Instance.onBackPerformed += OnBack;
+        InputSystemManager.Instance.onBackCanceled += OnBack;
 
         SetDeleteChoiceColor();
     }
@@ -41,7 +41,7 @@ public class OtherSettingsManager : MonoBehaviour
         InputSystemManager.Instance.onNavigatePerformed -= OnNavigate;
         InputSystemManager.Instance.onChoicePerformed -= OnChoice;
         InputSystemManager.Instance.onAnyKeyPerformed -= OnAnyKey;
-        InputSystemManager.Instance.onBackPerformed -= OnBack;
+        InputSystemManager.Instance.onBackCanceled -= OnBack;
     }
 
     /// <summary>
@@ -110,6 +110,8 @@ public class OtherSettingsManager : MonoBehaviour
     private void RunSecondTime()
     {
         if (!InputSystemManager.Instance.WasPressedThisFrameAnyKey) return;
+        
+        //入ってくる最初のフレームも実行されてしまうので2回目のみ実行
         if (!_canPassed)
         {
             _canPassed = true;

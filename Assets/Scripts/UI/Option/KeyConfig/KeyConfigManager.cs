@@ -102,7 +102,7 @@ namespace TM.Input.KeyConfig
         {
             InputSystemManager.Instance.onStickPerformed += OnStick;
             InputSystemManager.Instance.onChoicePerformed += OnSelect;
-            InputSystemManager.Instance.onBackPerformed += OnBack;
+            InputSystemManager.Instance.onBackCanceled += OnBack;
         }
 
         public void OnChangeScene()
@@ -110,7 +110,7 @@ namespace TM.Input.KeyConfig
             _popupManager.OnChangeScene();
             InputSystemManager.Instance.onStickPerformed -= OnStick;
             InputSystemManager.Instance.onChoicePerformed -= OnSelect;
-            InputSystemManager.Instance.onBackPerformed -= OnBack;
+            InputSystemManager.Instance.onBackCanceled -= OnBack;
         }
 
         //この関数をAwakeに置けば直前に抜けた地点が保存されてそこから移動できます。

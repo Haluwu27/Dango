@@ -63,33 +63,29 @@ public struct Pitch
 
 public class SESystem : MonoBehaviour
 {
-    private AudioSource _audioSource;
+    [SerializeField] AudioSource _audioSource;
 
-    private bool isPlaying;
+    private bool _isPlaying;
 
     public delegate void StopSEEventHandler();
     public static event StopSEEventHandler OnStopSE;
 
-    private void Awake()
-    {
-        _audioSource = GetComponent<AudioSource>();
-    }
+    public AudioSource AudioSource => _audioSource;
 
     private void Update()
     {
         if (_audioSource.isPlaying)
         {
-            isPlaying = true;
+            _isPlaying = true;
         }
-        else if (isPlaying)
+        else if (_isPlaying)
         {
-            isPlaying = false;
+            _isPlaying = false;
             StopCallBack();
         }
-
     }
 
-    protected virtual void StopCallBack()
+    private void StopCallBack()
     {
         OnStopSE?.Invoke();
     }

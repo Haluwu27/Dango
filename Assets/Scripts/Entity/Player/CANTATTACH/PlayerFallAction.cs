@@ -36,7 +36,7 @@ namespace TM.Entity.Player
                 rigidbody.velocity = new Vector3(rigidbody.velocity.x / FALLACTION_MOVE_POWER, 0, rigidbody.velocity.z / FALLACTION_MOVE_POWER);
                 return false;
             }
-            GameManager.SoundManager.PlaySE(_rand.Next((int)SoundSource.VOISE_PRINCE_FALL01, (int)SoundSource.VOISE_PRINCE_FALL02+1));
+            SoundManager.Instance.PlaySE(_rand.Next((int)SoundSource.VOISE_PRINCE_FALL01, (int)SoundSource.VOISE_PRINCE_FALL02+1));
             rigidbody.AddForce(Vector3.down * FALLACTION_FALL_POWER, ForceMode.Impulse);
             spitManager.isSticking = true;
             return true;

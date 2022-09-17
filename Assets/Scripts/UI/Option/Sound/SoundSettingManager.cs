@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -20,9 +21,6 @@ public class SoundSettingManager : MonoBehaviour
     //表示・非表示切り替え用に管理するもの
     [SerializeField] Canvas _canvas = default!;
     [SerializeField] Image[] _images;
-
-    //一回の変更でどれだけ上げるか
-    static readonly int COUNT = 10;
 
     SoundChoices _choice = SoundChoices.None + 1;
 
@@ -57,7 +55,6 @@ public class SoundSettingManager : MonoBehaviour
 
         Vector2 axis = InputSystemManager.Instance.NavigateAxis;
 
-        SoundManager.Instance.PlaySE(SoundSource.SE16_UI_SELECTION);
         ChangeVolume(axis.x);
         ChangeChoice(axis);
     }
@@ -98,49 +95,54 @@ public class SoundSettingManager : MonoBehaviour
         switch (_choice)
         {
             case SoundChoices.Master:
-                ChangeMasterVolume(vecX);
+                ChangeAudioMixerDB(ref DataManager.configData.masterVolume, vecX);
                 break;
             case SoundChoices.BGM:
-                ChangeBGMVolume(vecX);
+                ChangeAudioMixerDB(ref DataManager.configData.backGroundMusicVolume, vecX);
                 break;
             case SoundChoices.SE:
-                ChangeSEVolume(vecX);
+                ChangeAudioMixerDB(ref DataManager.configData.soundEffectVolume, vecX);
                 break;
             case SoundChoices.Voice:
-                ChangeVoiceVolume(vecX);
+                ChangeAudioMixerDB(ref DataManager.configData.voiceVolume, vecX);
                 break;
         }
     }
 
-    private void ChangeMasterVolume(float volume)
+    //下記変換関数の参照サイト
+    //https://www.hanachiru-blog.com/entry/2022/08/22/120000
+    
+    /// <summary>
+    /// ボリュームからデシベルへの変換
+    /// </summary>
+    /// <param name="volume">変換させたいボリューム（0-1）</param>
+    /// <returns>デシベル（-80 ~ 0）</returns>
+    public static float ConvertVolume2dB(float volume) => Mathf.Clamp(20f * Mathf.Log10(Mathf.Clamp(volume, 0f, 1f)), -80f, 0f);
+    
+    /// <summary>
+    /// デシベルからボリュームへの変換
+    /// </summary>
+    /// <param name="db">変換させたいデシベル（-80 ~ 0）</param>
+    /// <returns>ボリューム（0-1）</returns>
+    public static float ConvertDB2Volume(float db) => Mathf.Clamp(Mathf.Pow(10, Mathf.Clamp(db, -80, 0) / 20f), 0, 1);
+
+    private void ChangeAudioMixerDB(ref int volume, float axis)
     {
-        DataManager.configData.masterVolume += (int)volume * COUNT;
-        SoundManager.Instance.BGM.outputAudioMixerGroup.audioMixer.SetFloat("MasterVolume", DataManager.configData.masterVolume = Mathf.Clamp(DataManager.configData.masterVolume, -80, 20));
-        Logger.Log(DataManager.configData.masterVolume);
+        volume = Mathf.Clamp(volume + (int)axis, 0, 10);
+        SoundManager.Instance.ChangeAudioMixerDB(AudioGroupName(_choice), ConvertVolume2dB(volume / 10f));
+        
+        Logger.Log(volume);
     }
 
-    private void ChangeBGMVolume(float volume)
+    private string AudioGroupName(SoundChoices sound)
     {
-        DataManager.configData.backGroundMusicVolume += (int)volume * COUNT;
-        SoundManager.Instance.BGM.outputAudioMixerGroup.audioMixer.SetFloat("BGMVolume", DataManager.configData.backGroundMusicVolume = Mathf.Clamp(DataManager.configData.backGroundMusicVolume, -80, 20));
-
-        Logger.Log(DataManager.configData.backGroundMusicVolume);
+        return sound switch
+        {
+            SoundChoices.Master => "MasterVolume",
+            SoundChoices.SE => "SEVolume",
+            SoundChoices.Voice => "VoiceVolume",
+            SoundChoices.BGM => "BGMVolume",
+            _ => throw new System.NotImplementedException(),
+        };
     }
-
-    private void ChangeSEVolume(float volume)
-    {
-        DataManager.configData.soundEffectVolume += (int)volume * COUNT;
-        SoundManager.Instance.BGM.outputAudioMixerGroup.audioMixer.SetFloat("SEVolume", DataManager.configData.soundEffectVolume = Mathf.Clamp(DataManager.configData.soundEffectVolume, -80, 20));
-
-        Logger.Log(DataManager.configData.soundEffectVolume);
-    }
-
-    private void ChangeVoiceVolume(float volume)
-    {
-        DataManager.configData.voiceVolume += (int)volume * COUNT;
-        SoundManager.Instance.BGM.outputAudioMixerGroup.audioMixer.SetFloat("VoiceVolume", DataManager.configData.voiceVolume = Mathf.Clamp(DataManager.configData.voiceVolume, -80, 20));
-
-        Logger.Log(DataManager.configData.voiceVolume);
-    }
-
 }

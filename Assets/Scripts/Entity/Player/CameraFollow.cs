@@ -37,7 +37,7 @@ public class CameraFollow : MonoBehaviour
 
     [SerializeField] State state;
 
-#endregion
+    #endregion
 
     private void Start()
     {
@@ -80,7 +80,7 @@ public class CameraFollow : MonoBehaviour
             transform.position = state switch
             {
                 State.normal => _terminus.transform.position,
-                _ => Vector3.Lerp(transform.position, _terminus.transform.position, Time.deltaTime*ratio),
+                _ => Vector3.Lerp(transform.position, _terminus.transform.position, Time.deltaTime * ratio),
             };
         }
 
@@ -90,7 +90,7 @@ public class CameraFollow : MonoBehaviour
     {
         if (InputSystemManager.Instance.LookAxis.magnitude > 0.1f || _playerData.Rb.velocity.magnitude > 0.1f)
         {
-           _camIsStaying.Reset();
+            _camIsStaying.Reset();
             return;
         }
 
@@ -129,19 +129,19 @@ public class CameraFollow : MonoBehaviour
     private void Rote(GameObject obj, float a)
     {
         //ƒJƒƒ‰‚ðroteAxis.x‚É‡‚í‚¹‚Ä‰ñ“]‚³‚¹‚éB
-        obj.transform.RotateAround(target.position, Vector3.up, InputSystemManager.Instance.LookAxis.x * Time.deltaTime);
+        obj.transform.RotateAround(target.position, Vector3.up, InputSystemManager.Instance.LookAxis.x * (DataManager.configData.cameraVerticalOrientation ? -1 : 1) * DataManager.configData.cameraRotationSpeed / 100f * Time.deltaTime);
 
         //cŽ²‚Ì§ŒÀ
         if ((a >= MinAngle && InputSystemManager.Instance.LookAxis.y > 0) || (a <= MaxAngle && InputSystemManager.Instance.LookAxis.y < 0))
         {
-            obj.transform.RotateAround(target.position, obj.transform.right, InputSystemManager.Instance.LookAxis.y * Time.deltaTime * _roteYSpeed);
+            obj.transform.RotateAround(target.position, obj.transform.right, InputSystemManager.Instance.LookAxis.y * (DataManager.configData.cameraRotationSpeed / 100f) * Time.deltaTime * _roteYSpeed);
         }
-
     }
 
     private bool WallHitCheck()
     {
         return Physics.Raycast(target.position, _terminus.transform.position - target.position, out _hit, Vector3.Distance(_prebTargetPos, _terminus.transform.position), wallLayer, QueryTriggerInteraction.Ignore);
     }
+
 }
 

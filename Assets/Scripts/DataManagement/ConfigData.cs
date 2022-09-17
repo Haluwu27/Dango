@@ -33,16 +33,16 @@ public class ConfigData
     public string dataFilePath = "default";
 
     //マスターボリューム
-    public int masterVolume = 0;
+    public int masterVolume = 10;
 
     //サウンドエフェクトボリューム
-    public int soundEffectVolume = 0;
+    public int soundEffectVolume = 5;
 
     //バックグラウンドミュージックボリューム
-    public int backGroundMusicVolume = 0;
+    public int backGroundMusicVolume = 5;
 
     //ボイスボリューム
-    public int voiceVolume = 0;
+    public int voiceVolume = 5;
 
     //カメラ感度
     public int cameraRotationSpeed = 100;

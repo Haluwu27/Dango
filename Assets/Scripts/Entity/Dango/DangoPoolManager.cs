@@ -10,21 +10,10 @@ public class DangoPoolManager : MonoBehaviour
 
     public ObjectPool<DangoManager> DangoPool { get; private set; }
     private int _poolCount = 0;
-    [SerializeField] int firstCreateCount = 100;
-    List<DangoManager> _pools = new List<DangoManager>();
 
     private void Awake()
     {
         DangoPool = new(OnCreateDango, OnTakeFromPool, OnReturnedToPool, OnDestroyPoolObject, true, 7 * 30, 7 * 150);
-
-        for (int i = 0; i < firstCreateCount; i++)
-        {
-            _pools.Add(DangoPool.Get());
-        }
-        foreach (var pool in _pools)
-        {
-            DangoPool.Release(pool);
-        }
     }
 
     private DangoManager OnCreateDango()

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System;
 using UnityEngine;
 using Cysharp.Threading.Tasks;
+using UnityEngine.Audio;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -90,29 +91,41 @@ public class SoundManager : MonoBehaviour
     private const int SENum = 10;
 
     [SerializeField] private AudioSource _BGM;
-    [SerializeField] private GameObject _SEPrefab;
+    [SerializeField] private SESystem _SEPrefab;
 
     [SerializeField] private AudioClip[] BGMClip;
     [SerializeField] private AudioClip[] SEClip;
 
-    const float DEFAULT_BGM_VOLUME = 0.04166667f;
-
-    public AudioSource BGM => _BGM;
+    [SerializeField] private AudioMixer _audioMixer;
+    const float DEFAULT_BGM_VOLUME = 1f;
 
     private void Awake()
     {
         Instance = this;
+
         CreateSEs();
+    }
+
+    private void Start()
+    { 
+        InitAudioMixerGroup();
+    }
+
+    private void InitAudioMixerGroup()
+    {
+        _audioMixer.SetFloat("MasterVolume", SoundSettingManager.ConvertVolume2dB(DataManager.configData.masterVolume / 10f));
+        _audioMixer.SetFloat("BGMVolume", SoundSettingManager.ConvertVolume2dB(DataManager.configData.backGroundMusicVolume / 10f));
+        _audioMixer.SetFloat("SEVolume", SoundSettingManager.ConvertVolume2dB(DataManager.configData.soundEffectVolume / 10f));
+        _audioMixer.SetFloat("VoiceVolume", SoundSettingManager.ConvertVolume2dB(DataManager.configData.voiceVolume / 10f));
     }
 
     private void CreateSEs()
     {
         for (int i = 0; i < SENum; i++)
         {
-            SEs[i] = Instantiate(_SEPrefab).GetComponent<AudioSource>();
+            SEs[i] = Instantiate(_SEPrefab).AudioSource;
             SEs[i].name = ("SE" + (i + 1));
         }
-
     }
 
     private void ChangeBGM(SoundSource sound)
@@ -219,7 +232,6 @@ public class SoundManager : MonoBehaviour
             if (se.isPlaying) continue;
 
             ChangeSE(se, (SoundSource)sound);
-            se.volume = 0.125f;
             se.Play();
             return;
         }
@@ -233,35 +245,6 @@ public class SoundManager : MonoBehaviour
             if (se.isPlaying) continue;
 
             ChangeSE(se, sound);
-            se.volume = 0.125f;
-            se.Play();
-            return;
-        }
-        //すべてのチャンネルが使用中ならここにくる
-        Logger.Warn("全SEチャンネルが使用中で" + sound + "が再生できませんでした");
-    }
-    public void PlaySE(int sound, float volume)
-    {
-        foreach (var se in SEs)
-        {
-            if (se.isPlaying) continue;
-
-            ChangeSE(se, (SoundSource)sound);
-            se.volume = volume;
-            se.Play();
-            return;
-        }
-        //すべてのチャンネルが使用中ならここにくる
-        Logger.Warn("全SEチャンネルが使用中で" + sound + "が再生できませんでした");
-    }
-    public void PlaySE(SoundSource sound, float volume)
-    {
-        foreach (var se in SEs)
-        {
-            if (se.isPlaying) continue;
-
-            ChangeSE(se, sound);
-            se.volume = volume;
             se.Play();
             return;
         }
@@ -281,5 +264,15 @@ public class SoundManager : MonoBehaviour
             se.Stop();
         }
 
+    }
+
+    /// <summary>
+    /// オーディオミキサーの値を変更します
+    /// </summary>
+    /// <param name="name"></param>
+    /// <param name="dB"></param>
+    public void ChangeAudioMixerDB(string name, float dB)
+    {
+        _audioMixer.SetFloat(name, dB);
     }
 }

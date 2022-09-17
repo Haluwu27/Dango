@@ -12,8 +12,8 @@ public class OperationManager : MonoBehaviour
 
         UseController,
         CameraSensitivity,
-        CameraReversalV,
         CameraReversalH,
+        CameraReversalV,
 
         Max,
     }
@@ -26,6 +26,9 @@ public class OperationManager : MonoBehaviour
     [SerializeField] Sprite[] _methodOfOperationSprites;
 
     OperationChoices _choice = OperationChoices.None + 1;
+
+    const int MAX_ROTATIONSPEED = 200;
+    const int MIN_ROTATIONSPEED = 10;
 
     private void Start()
     {
@@ -141,9 +144,9 @@ public class OperationManager : MonoBehaviour
         if (_choice != OperationChoices.CameraSensitivity) return;
         if (vecX != 1 && vecX != -1) return;
 
-        DataManager.configData.cameraRotationSpeed += (int)vecX * 10;
-        if (DataManager.configData.cameraRotationSpeed < 10) DataManager.configData.cameraRotationSpeed = 10;
-        else if (DataManager.configData.cameraRotationSpeed > 200) DataManager.configData.cameraRotationSpeed = 200;
+        DataManager.configData.cameraRotationSpeed += (int)vecX * MIN_ROTATIONSPEED;
+        if (DataManager.configData.cameraRotationSpeed < MIN_ROTATIONSPEED) DataManager.configData.cameraRotationSpeed = MIN_ROTATIONSPEED;
+        else if (DataManager.configData.cameraRotationSpeed > MAX_ROTATIONSPEED) DataManager.configData.cameraRotationSpeed = MAX_ROTATIONSPEED;
         Logger.Log(DataManager.configData.cameraRotationSpeed);
     }
 }

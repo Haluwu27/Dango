@@ -138,12 +138,12 @@ class DangoRole
         //その他役の判定
         if (CheckPosRole(dangos, ref score))
         {
-            GameManager.SoundManager.PlaySE(rand.Next((int)SoundSource.VOISE_PRINCE_CREATEROLE01, (int)SoundSource.VOISE_PRINCE_CREATEROLE02 + 1), 1f);
+            SoundManager.Instance.PlaySE(rand.Next((int)SoundSource.VOISE_PRINCE_CREATEROLE01, (int)SoundSource.VOISE_PRINCE_CREATEROLE02 + 1));
             _questManager.SucceedChecker.CheckQuestIncludeColorSucceed(_questManager, _color);
         }
         else
         {
-            GameManager.SoundManager.PlaySE(rand.Next((int)SoundSource.VOISE_PRINCE_NOROLE01, (int)SoundSource.VOISE_PRINCE_NOROLE02 + 1), 1f);
+            SoundManager.Instance.PlaySE(rand.Next((int)SoundSource.VOISE_PRINCE_NOROLE01, (int)SoundSource.VOISE_PRINCE_NOROLE02 + 1));
         }
 
         //CheckColorRole(ref score);//処理内部にソートを含むため、位置役より下に配置。
