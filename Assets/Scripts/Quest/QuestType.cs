@@ -9,4 +9,6 @@ public enum QuestType
     PlayAction,
     GetScore,
     EatSpecialDango,
+    DestinationRole,
+    DestinationColor,
 }
