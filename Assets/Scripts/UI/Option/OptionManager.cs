@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TM.Input.KeyConfig;
+using UnityEngine.UI;
 
 public class OptionManager : MonoBehaviour
 {
@@ -35,6 +36,9 @@ public class OptionManager : MonoBehaviour
 
     [SerializeField] TextUIData[] _optionTexts;
     [SerializeField] FusumaManager _fusumaManager;
+
+    [SerializeField] Image _methodOfOperation = default!;
+    [SerializeField] Sprite[] _methodOfOperationSprites;
 
     /// <summary>
     /// 静的に取得出来るオプションキャンバス
@@ -132,6 +136,22 @@ public class OptionManager : MonoBehaviour
         _soundSettingManager.SetCanvasEnable(_currentChoice == OptionChoices.Sound);
         _operationManager.SetCanvasEnable(_currentChoice == OptionChoices.Operation);
         _otherSettingsManager.SetCanvasEnable(_currentChoice == OptionChoices.Other);
+
+        ChangeMethodOfOperation();
+    }
+
+    private void ChangeMethodOfOperation()
+    {
+        //右下の表示（U65）の初期設定
+        if (_methodOfOperationSprites.Length != 3) return;
+        _methodOfOperation.sprite = _currentChoice switch
+        {
+            OptionChoices.KeyConfig => _methodOfOperationSprites[0],
+            OptionChoices.Operation => _methodOfOperationSprites[1],
+            OptionChoices.Sound => _methodOfOperationSprites[2],
+            OptionChoices.Other => _methodOfOperationSprites[0],
+            _ => throw new System.NotImplementedException(),
+        };
     }
 
     private void SetFontSize()
