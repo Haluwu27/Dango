@@ -20,7 +20,6 @@ public class PlayerUIManager : MonoBehaviour
     private Image[] w_imgs;
     private Color w_color;
 
-    private GameObject TimeObj;
     private bool[] warningbool = new bool[3];
     public TextUIData EventText => eventText;
 
@@ -38,7 +37,6 @@ public class PlayerUIManager : MonoBehaviour
             timeGage[i].value = 1;
         for (int i = 0; i < warningTimes.Length - 1; i++)
             warningTimes[i] = (int)maxTime - ((i + 1) * 10);//‰¼‚Å‰Šú’l‚Ì2/3,1/3‚Ì’l
-        TimeObj = timeGage[1].gameObject;
 
         w_imgs = new Image[Warningimgs.Length];
         w_imgrects = new RectTransform[Warningimgs.Length];
