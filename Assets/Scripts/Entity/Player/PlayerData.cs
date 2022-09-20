@@ -31,7 +31,7 @@ class PlayerData : MonoBehaviour
 
     private PlayerFallAction _playerFall = new();
     private PlayerAttackAction _playerAttack = new();
-    private PlayerMove _playerMove = new();
+    private PlayerMove _playerMove;
     private PlayerJump _playerJump = new();
     private PlayerRemoveDango _playerRemoveDango;//生成はAwakeで行っています。
 
@@ -98,8 +98,8 @@ class PlayerData : MonoBehaviour
     //将来的にここから移動させたいというかここでやる意味がない
     private void OnChangeToUIAction()
     {
-        InputSystemManager.Instance.Input.SwitchCurrentActionMap("UI");
-        _optionCanvas.enabled = true;
+        //InputSystemManager.Instance.Input.SwitchCurrentActionMap("UI");
+        //_optionCanvas.enabled = true;
     }
 
     private void EatDango()
@@ -380,6 +380,8 @@ class PlayerData : MonoBehaviour
     [SerializeField] PlayerUIManager _playerUIManager;
     [SerializeField] DangoUIScript _dangoUISC = default!;
 
+    [SerializeField] Animator _animator = default!;
+
     //串を伸ばす処理
     const int MAX_DANGO = 7;
     const int GROW_STAB_FRAME = 500;
@@ -434,6 +436,7 @@ class PlayerData : MonoBehaviour
     private void Awake()
     {
         _playerRemoveDango = new(_dangos, _dangoUISC);
+        _playerMove = new(_animator);
     }
 
     private void OnEnable()

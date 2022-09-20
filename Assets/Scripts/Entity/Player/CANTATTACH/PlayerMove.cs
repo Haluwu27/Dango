@@ -13,13 +13,22 @@ namespace TM.Entity.Player
         const float RUN_SPEED_MAG = 7f;
         const float MIN_AXIS_VALUE = 0.1f;
 
+        Animator _animator;
+
+        public PlayerMove(Animator animator)
+        {
+            _animator = animator;
+        }
+
         public void Update(Rigidbody rb, Transform camera)
         {
             //“ü—Í’l‚ð‘ã“ü
             Vector2 axis = InputSystemManager.Instance.MoveAxis;
 
-            //–€ŽC‚ÌŒvŽZ‚ð‚±‚±‚Å
-
+            //Animation
+            //Logger.Log(InputSystemManager.Instance.MoveAxis.magnitude);
+            _animator.SetBool("IsDash", InputSystemManager.Instance.MoveAxis.magnitude > 0.5f);
+            _animator.SetBool("IsWalking", rb.velocity.magnitude > 0.01f);
 
             if (axis.magnitude < MIN_AXIS_VALUE) return;
 
@@ -33,6 +42,9 @@ namespace TM.Entity.Player
                 float speedMag = RUN_SPEED_MAG - mag;
                 rb.AddForce(moveVec * speedMag);
             }
+
+            //–€ŽC‚ÌŒvŽZ‚ð‚±‚±‚Å
+            rb.AddForce(-moveVec);
 
             RotateToMoveVec(moveVec, rb);
         }
