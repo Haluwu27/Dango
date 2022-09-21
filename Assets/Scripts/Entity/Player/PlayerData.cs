@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using TM.Entity.Player;
+using Cysharp.Threading.Tasks;
+using Unity.VisualScripting;
 
 /// 
 /// ＜実装すること＞
@@ -29,11 +31,14 @@ class PlayerData : MonoBehaviour
 
     readonly DangoRole dangoRole = DangoRole.instance;
 
-    readonly PlayerFallAction _playerFall = new();
     readonly PlayerAttackAction _playerAttack = new();
-    private PlayerMove _playerMove;//生成はAwakeで行っています。
-    private PlayerJump _playerJump;//生成はAwakeで行っています。
-    private PlayerRemoveDango _playerRemoveDango;//生成はAwakeで行っています。
+
+    //生成はAwakeで行っています。
+    PlayerMove _playerMove;
+    PlayerJump _playerJump;
+    PlayerRemoveDango _playerRemoveDango;
+    PlayerFallAction _playerFall;
+
 
     public Rigidbody Rb => rb;
     public PlayerFallAction PlayerFall => _playerFall;
@@ -41,29 +46,34 @@ class PlayerData : MonoBehaviour
     const float EVENTTEXT_FLASH_TIME = 0.4f;
     const float EVENTTEXT_PRINT_TIME = 2.4f;
 
-    //突き刺しアニメーション
-    //将来的にここから移動させたい。
-    private void OnAttack()
+    //突き刺しボタン降下時処理
+    private async void OnAttack()
     {
         //落下アクション中受け付けない。
         if (_playerFall.IsFallAction) return;
 
-        //空中かつ地面に近すぎなければ落下刺しに移行
-        if (!_isGround)
-        {
-            Ray ray = new(transform.position, Vector3.down);
-
-            //近くに地面があるか(playerの半分の大きさ)判定
-            if (Physics.Raycast(ray, capsuleCollider.height + capsuleCollider.height / 2f)) _hasAttacked = true;
-            else _hasFalled = true;
-        }
-        //地面なら普通に突き刺しに移行
-        else
+        //地上なら確実に通常攻撃
+        if (_isGround)
         {
             _hasAttacked = true;
-            SoundManager.Instance.PlaySE(UnityEngine.Random.Range((int)SoundSource.VOISE_PRINCE_ATTACK01, (int)SoundSource.VOISE_PRINCE_ATTACK02+1));
+            return;
         }
 
+        //Yの加速度が負になるまで待機
+        await WaitVelocityYLessZero();
+
+        //急降下するか判定、しないなら通常刺しに移行
+        _hasFalled = _playerFall.ToFallAction(transform.position, _isGround);
+        _hasAttacked = !_hasFalled;
+    }
+
+    private async UniTask WaitVelocityYLessZero()
+    {
+        while (rb.velocity.y > 0)
+        {
+            await UniTask.Yield();
+            if (!InputSystemManager.Instance.IsPressAttack) break;
+        }
     }
 
     //食べる
@@ -89,7 +99,7 @@ class PlayerData : MonoBehaviour
             return;
         }
 
-        SoundManager.Instance.PlaySE(UnityEngine.Random.Range((int)SoundSource.VOISE_PRINCE_STAYEAT01, (int)SoundSource.VOISE_PRINCE_STAYEAT02+1));
+        SoundManager.Instance.PlaySE(UnityEngine.Random.Range((int)SoundSource.VOISE_PRINCE_STAYEAT01, (int)SoundSource.VOISE_PRINCE_STAYEAT02 + 1));
         _hasStayedEat = true;
     }
 
@@ -188,7 +198,7 @@ class PlayerData : MonoBehaviour
             parent._animator.SetFloat("VelocityY", parent.rb.velocity.y);
 
             if (parent._playerJump.IsJumping) return IState.E_State.Unchanged;
-         
+
             //プレイヤーを動かす処理
             parent._playerMove.Update(parent.rb, parent.playerCamera.transform);
 
@@ -240,7 +250,9 @@ class PlayerData : MonoBehaviour
         public IState.E_State Initialize(PlayerData parent)
         {
             parent._hasAttacked = false;
+            SoundManager.Instance.PlaySE(UnityEngine.Random.Range((int)SoundSource.VOISE_PRINCE_ATTACK01, (int)SoundSource.VOISE_PRINCE_ATTACK02 + 1));
 
+            if (parent._playerFall.IsFallAction) return IState.E_State.Unchanged;
             if (!parent.CanStab()) return IState.E_State.Control;
             return IState.E_State.Unchanged;
         }
@@ -425,7 +437,13 @@ class PlayerData : MonoBehaviour
         {
             if (value)
             {
-                _playerFall.IsFallAction = false;
+                if (_playerFall.IsFallAction)
+                {
+                    //AN7Bの再生もここ
+                    SoundManager.Instance.PlaySE(SoundSource.SE11_FALLACTION_LANDING);
+
+                    _playerFall.IsFallAction = false;
+                }
             }
 
             _isGround = value;
@@ -438,9 +456,10 @@ class PlayerData : MonoBehaviour
 
     private void Awake()
     {
+        _playerFall = new(capsuleCollider, OnJump, OnJumpExit);
         _playerRemoveDango = new(_dangos, _dangoUISC);
         _playerMove = new(_animator);
-        _playerJump = new(rb, OnJump, OnJumpExit,_animator);
+        _playerJump = new(rb, OnJump, OnJumpExit, _animator);
     }
 
     private void OnEnable()
@@ -487,7 +506,6 @@ class PlayerData : MonoBehaviour
     private void OnJump()
     {
         InputSystemManager.Instance.onFirePerformed -= _playerRemoveDango.Remove;
-        InputSystemManager.Instance.onAttackPerformed -= OnAttack;
         InputSystemManager.Instance.onEatDangoPerformed -= OnEatDango;
         InputSystemManager.Instance.onEatDangoCanceled -= () => _hasStayedEat = false;
     }
@@ -495,7 +513,6 @@ class PlayerData : MonoBehaviour
     private void OnJumpExit()
     {
         InputSystemManager.Instance.onFirePerformed += _playerRemoveDango.Remove;
-        InputSystemManager.Instance.onAttackPerformed += OnAttack;
         InputSystemManager.Instance.onEatDangoPerformed += OnEatDango;
         InputSystemManager.Instance.onEatDangoCanceled += () => _hasStayedEat = false;
     }
