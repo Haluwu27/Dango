@@ -13,10 +13,10 @@ public class MenuManager : MonoBehaviour
     {
         None,
 
+        StageSelect,
         Option,
         Tutorial,
         Ex,
-        StageSelect,
 
         Max,
     }
@@ -27,9 +27,13 @@ public class MenuManager : MonoBehaviour
     [SerializeField] RectTransform ex;
     [SerializeField] Image dandou;
     [SerializeField] Image optionImage;
+    [SerializeField] Sprite[] optionSprites;
     [SerializeField] Image tutorialImage;
+    [SerializeField] Sprite[] tutorialSprites;
     [SerializeField] Image exImage;
-    Menu _currentMenu = Menu.Option;
+    [SerializeField] Sprite[] exSprites;
+
+    Menu _currentMenu = Menu.StageSelect;
     bool _isTransition;
 
     const float SELECTTIME = 1f;
@@ -55,6 +59,8 @@ public class MenuManager : MonoBehaviour
         InputSystemManager.Instance.onChoicePerformed += OnChoice;
 
         SetSelect();
+                
+        SetNoSelect(Menu.Option);
         SetNoSelect(Menu.Tutorial);
         SetNoSelect(Menu.Ex);
 
@@ -124,15 +130,15 @@ public class MenuManager : MonoBehaviour
         {
             case Menu.Option:
                 //ここのカラー変更を選択画像に変更すればOK
-                optionImage.color = Color.red;
+                optionImage.sprite = optionSprites[1];
                 await Selecting(CurrentMenu, option, SELECTTIME);
                 break;
             case Menu.Tutorial:
-                tutorialImage.color = Color.red;
+                tutorialImage.sprite = tutorialSprites[1];
                 await Selecting(CurrentMenu, tutorial, SELECTTIME);
                 break;
             case Menu.Ex:
-                exImage.color = Color.red;
+                exImage.sprite = exSprites[1];
                 await Selecting(CurrentMenu, ex, SELECTTIME);
                 break;
             case Menu.StageSelect:
@@ -155,7 +161,7 @@ public class MenuManager : MonoBehaviour
             currentTime += Time.deltaTime;
             float d = EasingManager.EaseProgress(EASETYPE, currentTime, time, 3f, 0);
 
-            pos.Set(WIDTH_MAX - (WIDTH_MAX * (1 - d)), rect.sizeDelta.y);
+            pos.Set(rect.sizeDelta.x, WIDTH_MAX - (WIDTH_MAX * (1 - d)) );
             rect.sizeDelta = pos;
         }
     }
@@ -165,16 +171,15 @@ public class MenuManager : MonoBehaviour
         switch (menu)
         {
             case Menu.Option:
-                //ここのカラー変更を選択画像に変更すればOK
-                optionImage.color = Color.white;
+                optionImage.sprite = optionSprites[0];
                 await NoSelecting(menu, option, NOSELECTTIME);
                 break;
             case Menu.Tutorial:
-                tutorialImage.color = Color.white;
+                tutorialImage.sprite = tutorialSprites[0];
                 await NoSelecting(menu, tutorial, NOSELECTTIME);
                 break;
             case Menu.Ex:
-                exImage.color = Color.white;
+                exImage.sprite = exSprites[0];
                 await NoSelecting(menu, ex, NOSELECTTIME);
                 break;
             case Menu.StageSelect:
@@ -197,7 +202,7 @@ public class MenuManager : MonoBehaviour
             currentTime += Time.deltaTime;
             float d = EasingManager.EaseProgress(EASETYPE, currentTime, time, 3f, 0);
 
-            pos.Set(WIDTH_MAX * (1 - d), rect.sizeDelta.y);
+            pos.Set(rect.sizeDelta.x, WIDTH_MAX * (1 - d));
             rect.sizeDelta = pos;
         }
     }
