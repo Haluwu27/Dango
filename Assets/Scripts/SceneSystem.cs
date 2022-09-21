@@ -68,9 +68,9 @@ class SceneSystem : MonoBehaviour
     {
         Instance = this;
         //Load(Scenes.Option);
-        Load(Scenes.Stage1);
+        //Load(Scenes.Stage1);
         //Load(Scenes.Title);
-        //Load(Scenes.Menu);
+        Load(Scenes.Menu);
     }
 
     public bool Load(Scenes scene)
