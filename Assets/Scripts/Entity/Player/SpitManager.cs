@@ -17,11 +17,19 @@ public class SpitManager : MonoBehaviour
     /// </summary>
     public bool isSticking = false;
 
-    private void OnTriggerStay(Collider other)
+    private void OnTriggerEnter(Collider other)
     {
         //éhÇπÇÈèÛë‘Ç≈ÇÕÇ»Ç¢Ç»ÇÁé¿çsÇµÇ»Ç¢
         if (!isSticking) return;
-        if (player.GetDangos().Count >= player.GetMaxDango()) return;
+        if (player.GetDangos().Count >= player.GetMaxDango())
+        {
+            if (!player.PlayerFall.IsFallAction) return;
+
+            //ã}ç~â∫íÜÇ»ÇÁícéqÇíeÇ≠
+            Logger.Log("Ç€ÇÊÅ[ÇÒ");
+            other.GetComponent<Rigidbody>().AddForce((other.transform.position - player.transform.position) * 50f, ForceMode.Impulse); ;
+            return;
+        }
 
         if (other.gameObject.TryGetComponent(out DangoManager dango))
         {

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,24 +8,35 @@ namespace TM.Entity.Player
     class PlayerFallAction
     {
         System.Random _rand = new();
-        
+
         //落下アクション定数
         const int FALLACTION_STAY_AIR_FRAME = 50;
         const int FALLACTION_FALL_POWER = 30;
         const int FALLACTION_MOVE_POWER = 10;
 
-        private int _currentTime = FALLACTION_STAY_AIR_FRAME;
+        bool _isFallAction = false;
 
-        private bool _isFallAction = false;
-        public bool IsFallAction
+        int _currentTime = FALLACTION_STAY_AIR_FRAME;
+
+        Action _onFall;
+        Action _onFallExit;
+
+        CapsuleCollider _collider;
+        public PlayerFallAction(CapsuleCollider collider, Action onFall, Action onFallExit)
         {
-            get => _isFallAction;
-            set
-            {
-                if (!value) _currentTime = FALLACTION_STAY_AIR_FRAME;
+            _collider = collider;
+            _onFall = onFall;
+            _onFallExit = onFallExit;
+        }
 
-                _isFallAction = value;
-            }
+        public bool ToFallAction(Vector3 playerPos, bool isGround)
+        {
+            if (isGround) return false;
+
+            Ray ray = new(playerPos, Vector3.down);
+
+            //近くに地面があるか(playerの半分の大きさ)判定
+            return !Physics.Raycast(ray, _collider.height + _collider.height / 2f);
         }
 
         public bool FixedUpdate(Rigidbody rigidbody, SpitManager spitManager)
@@ -36,10 +48,30 @@ namespace TM.Entity.Player
                 rigidbody.velocity = new Vector3(rigidbody.velocity.x / FALLACTION_MOVE_POWER, 0, rigidbody.velocity.z / FALLACTION_MOVE_POWER);
                 return false;
             }
-            SoundManager.Instance.PlaySE(_rand.Next((int)SoundSource.VOISE_PRINCE_FALL01, (int)SoundSource.VOISE_PRINCE_FALL02+1));
+            SoundManager.Instance.PlaySE(_rand.Next((int)SoundSource.VOISE_PRINCE_FALL01, (int)SoundSource.VOISE_PRINCE_FALL02 + 1));
+            SoundManager.Instance.PlaySE(SoundSource.SE10_FALLACTION);
             rigidbody.AddForce(Vector3.down * FALLACTION_FALL_POWER, ForceMode.Impulse);
             spitManager.isSticking = true;
             return true;
+        }
+
+        public bool IsFallAction
+        {
+            get => _isFallAction;
+            set
+            {
+                if (!value)
+                {
+                    _onFallExit?.Invoke();
+                    _currentTime = FALLACTION_STAY_AIR_FRAME;
+                }
+                else
+                {
+                    _onFall?.Invoke();
+                }
+
+                _isFallAction = value;
+            }
         }
     }
 }

@@ -71,7 +71,6 @@ namespace TM.Entity.Player
             while (_rb.velocity.y > 0)
             {
                 await UniTask.Yield();
-                Logger.Log("upupupup");
             }
         }
 
