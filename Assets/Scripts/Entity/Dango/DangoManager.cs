@@ -41,7 +41,7 @@ public class DangoManager : MonoBehaviour
         //もし団子がカメラ外で、速度が一定値以下であれば
         if (!rend.isVisible && Rb.velocity.magnitude < DELETE_MIN_SPEED)
         {
-            if (--_frameCount <= 0) _poolManager.DangoPool.Release(this);
+            if (--_frameCount <= 0) ReleaseDangoPool();
         }
         else
         {
@@ -49,6 +49,10 @@ public class DangoManager : MonoBehaviour
         }
     }
 
+    public void ReleaseDangoPool()
+    {
+        _poolManager.DangoPool.Release(this);
+    }
     public DangoColor GetDangoColor() => _color;
     public void SetDangoColor(DangoColor type) => _color = type;
 }

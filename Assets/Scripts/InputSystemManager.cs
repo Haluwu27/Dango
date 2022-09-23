@@ -39,6 +39,7 @@ public class InputSystemManager : MonoBehaviour
     Vector2 _lookAxis;
     bool _isPressJump;
     bool _isPressAttack;
+    bool _wasPressedThisFrameAttack;
     bool _isPressEatDango;
     bool _isPressFire;
     bool _isPressPause;
@@ -87,6 +88,7 @@ public class InputSystemManager : MonoBehaviour
     {
         if (context.phase == InputActionPhase.Performed)
         {
+            _wasPressedThisFrameAttack = true;
             _isPressAttack = true;
             onAttackPerformed.SafeCall();
         }
@@ -153,6 +155,7 @@ public class InputSystemManager : MonoBehaviour
     public Vector2 LookAxis => _lookAxis;
     public bool IsPressJump => _isPressJump;
     public bool IsPressAttack => _isPressAttack;
+    public bool WasPressedThisFrameAttack => _wasPressedThisFrameAttack;
     public bool IsPressEatDango => _isPressEatDango;
     public bool IsPressFire => _isPressFire;
     public bool IsPressPause => _isPressPause;
@@ -278,6 +281,7 @@ public class InputSystemManager : MonoBehaviour
     private void Update()
     {
         WasPressedThisFrame(ref _wasPressedThisFrameAnyKey);
+        WasPressedThisFrame(ref _wasPressedThisFrameAttack);
     }
 
     private void WasPressedThisFrame(ref bool key)
@@ -297,5 +301,5 @@ public static class CallBackExpantion
         performed.Invoke();
 
         return performed;
-    }    
+    }
 }

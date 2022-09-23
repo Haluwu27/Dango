@@ -11,6 +11,8 @@ namespace TM.UI
     public class ImageData
     {
         Image _image;
+        Vector3 _vec3D = new();
+        Vector2 _vec2D = new();
 
         //UniTaskのキャンセルに必要
         //キャンセルの際は、CancellationTokenSourceのCancelメソッドをコールすればよい
@@ -32,29 +34,37 @@ namespace TM.UI
         }
         public void SetPositionX(float value)
         {
-            _image.rectTransform.localPosition = new(value, _image.rectTransform.localPosition.y, _image.rectTransform.localPosition.z);
+            _vec3D.Set(value, _image.rectTransform.localPosition.y, _image.rectTransform.localPosition.z);
+            SetPosition(_vec3D);
         }
         public void SetPositionY(float value)
         {
-            _image.rectTransform.localPosition = new(_image.rectTransform.localPosition.x, value, _image.rectTransform.localPosition.z);
-
+            _vec3D.Set(_image.rectTransform.localPosition.x, value, _image.rectTransform.localPosition.z);
+            SetPosition(_vec3D);
         }
         public void SetPositionZ(float value)
         {
-            _image.rectTransform.localPosition = new(_image.rectTransform.localPosition.x, _image.rectTransform.localPosition.y, value);
-
+            _vec3D.Set(_image.rectTransform.localPosition.x, _image.rectTransform.localPosition.y, value);
+            SetPosition(_vec3D);
+        }
+        public void SetSizeDelta(Vector2 sizeDelta)
+        {
+            _image.rectTransform.sizeDelta = sizeDelta;
         }
         public void SetSizeDelta(float Width, float Height)
         {
-            _image.rectTransform.sizeDelta.Set(Mathf.Max(Width, _image.minWidth), Mathf.Max(Height, _image.minHeight));
+            _vec2D.Set(Mathf.Max(Width, _image.minWidth), Mathf.Max(Height, _image.minHeight));
+            SetSizeDelta(_vec2D);
         }
         public void SetWidth(float Width)
         {
-            _image.rectTransform.sizeDelta.Set(Mathf.Max(Width, _image.minHeight), _image.rectTransform.sizeDelta.y);
+            _vec2D.Set(Mathf.Max(Width, _image.minHeight), _image.rectTransform.sizeDelta.y);
+            SetSizeDelta(_vec2D);
         }
         public void SetHeight(float Height)
         {
-            _image.rectTransform.sizeDelta.Set(_image.rectTransform.sizeDelta.x, Mathf.Max(Height, _image.minHeight));
+            _vec2D.Set(_image.rectTransform.sizeDelta.x, Mathf.Max(Height, _image.minHeight));
+            SetSizeDelta(_vec2D);
         }
         public void SetSprite(Sprite sprite)
         {

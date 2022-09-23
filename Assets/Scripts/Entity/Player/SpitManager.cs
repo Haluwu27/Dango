@@ -5,22 +5,43 @@ using UnityEngine;
 public class SpitManager : MonoBehaviour
 {
     [SerializeField] PlayerData player = default!;
+    [SerializeField] CapsuleCollider _capsuleCollider = default!;
     DangoUIScript DangoUISC;
 
-    private void Start()
+    private void Awake()
     {
         DangoUISC = player.GetDangoUIScript();
+        _capsuleCollider.enabled = false;
     }
+
+    private bool _isSticking;
+    private bool _isInWall;
 
     /// <summary>
     /// 突き刺しボタンが押されたときにtrueになる。
     /// </summary>
-    public bool isSticking = false;
+    public bool IsSticking
+    {
+        get => _isSticking;
+        set
+        {
+            _capsuleCollider.enabled = value;
+            _isSticking = value;
+        }
+    }
 
     private void OnTriggerEnter(Collider other)
     {
         //刺せる状態ではないなら実行しない
-        if (!isSticking) return;
+        if (!IsSticking) return;
+        if (_isInWall) return;
+
+        if (LayerMask.LayerToName(other.gameObject.layer) == "Map")
+        {
+            _isInWall = true;
+            return;
+        }
+
         if (player.GetDangos().Count >= player.GetMaxDango())
         {
             if (!player.PlayerFall.IsFallAction) return;
@@ -43,13 +64,28 @@ public class SpitManager : MonoBehaviour
             player.AddDangos(dango.GetDangoColor());
 
             //フィールドにある団子を消す
-            other.gameObject.SetActive(false);
+            dango.ReleaseDangoPool();
 
             //UIの更新
             DangoUISC.DangoUISet(player.GetDangos());
 
             //刺せ無くする
-            isSticking = false;
+            IsSticking = false;
+        }
+        else
+        {
+            SoundManager.Instance.PlaySE(SoundSource.SE13_ATTACK);
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (!_isInWall) return;
+
+        if (LayerMask.LayerToName(other.gameObject.layer) == "Map")
+        {
+            _isInWall = false;
+            return;
         }
     }
 

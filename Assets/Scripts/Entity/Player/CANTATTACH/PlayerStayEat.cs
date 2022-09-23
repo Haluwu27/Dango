@@ -9,14 +9,9 @@ namespace TM.Entity.Player
 {
     class PlayerStayEat
     {
-        private int _stayFrame;
-        private int _currentFrame;
+        const int STAY_FRAME = 100;
 
-        public PlayerStayEat(int stayFrame)
-        {
-            _stayFrame = stayFrame;
-            _currentFrame = stayFrame;
-        }
+        private int _currentFrame = STAY_FRAME;
 
         public bool CanEat()
         {
@@ -27,7 +22,7 @@ namespace TM.Entity.Player
 
         public void ResetCount()
         {
-            _currentFrame = _stayFrame;
+            _currentFrame = STAY_FRAME;
         }
     }
 }
