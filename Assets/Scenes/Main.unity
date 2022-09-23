@@ -573,7 +573,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1266d3b2d8adc0749a78c1bbd43cca03, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _debugSoundSource: 6
+  _debugSoundSource: 14
   _BGM: {fileID: 2112573776}
   _SEPrefab: {fileID: 3666380681918514816, guid: b87469c47a09e064c88f1afac9ad82f2,
     type: 3}
@@ -593,7 +593,7 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 8300000, guid: a51193c02a0b0f14dbf32efde24dd538, type: 3}
   - {fileID: 0}
   - {fileID: 8300000, guid: 47e190e8a12fafb4eb27367c5a83c376, type: 3}
   - {fileID: 8300000, guid: 86bd9b75329e37345a0be8b70a150f1e, type: 3}

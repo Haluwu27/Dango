@@ -51,7 +51,7 @@ namespace TM.Entity.Player
             SoundManager.Instance.PlaySE(_rand.Next((int)SoundSource.VOISE_PRINCE_FALL01, (int)SoundSource.VOISE_PRINCE_FALL02 + 1));
             SoundManager.Instance.PlaySE(SoundSource.SE10_FALLACTION);
             rigidbody.AddForce(Vector3.down * FALLACTION_FALL_POWER, ForceMode.Impulse);
-            spitManager.isSticking = true;
+            spitManager.IsSticking = true;
             return true;
         }
 

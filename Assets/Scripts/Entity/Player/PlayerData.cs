@@ -1,153 +1,17 @@
-using System;
+using Cysharp.Threading.Tasks;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.InputSystem;
 using TM.Entity.Player;
-using Cysharp.Threading.Tasks;
-using Unity.VisualScripting;
+using UnityEngine;
 
 /// 
 /// ＜実装すること＞
 /// ・接地判定をまともに
-/// ・移動の摩擦を加える。壁にあたったときに摩擦が存在するとその場にとどまってしまうから自力実装
 /// 
 
 [RequireComponent(typeof(Rigidbody), typeof(RideMoveObj))]
 class PlayerData : MonoBehaviour
 {
-    #region inputSystem
-    //スコアと満腹度のレート
-    const float SCORE_TIME_RATE = 0.2f;
-
-    private bool _hasAttacked = false;
-    private bool _hasFalled = false;
-    private bool _hasStayedEat = false;
-
-    [SerializeField] private Rigidbody rb = default!;
-    [SerializeField] private CapsuleCollider capsuleCollider = default!;
-    [SerializeField] private GameObject playerCamera = default!;
-    private Camera _cameraComponent = default!;
-
-    readonly DangoRole dangoRole = DangoRole.instance;
-
-    readonly PlayerAttackAction _playerAttack = new();
-
-    //生成はAwakeで行っています。
-    PlayerMove _playerMove;
-    PlayerJump _playerJump;
-    PlayerRemoveDango _playerRemoveDango;
-    PlayerFallAction _playerFall;
-
-
-    public Rigidbody Rb => rb;
-    public PlayerFallAction PlayerFall => _playerFall;
-
-    const float EVENTTEXT_FLASH_TIME = 0.4f;
-    const float EVENTTEXT_PRINT_TIME = 2.4f;
-
-    //突き刺しボタン降下時処理
-    private async void OnAttack()
-    {
-        //落下アクション中受け付けない。
-        if (_playerFall.IsFallAction) return;
-
-        //地上なら確実に通常攻撃
-        if (_isGround)
-        {
-            _hasAttacked = true;
-            return;
-        }
-
-        //Yの加速度が負になるまで待機
-        await WaitVelocityYLessZero();
-
-        //急降下するか判定、しないなら通常刺しに移行
-        _hasFalled = _playerFall.ToFallAction(transform.position, _isGround);
-        _hasAttacked = !_hasFalled;
-    }
-
-    private async UniTask WaitVelocityYLessZero()
-    {
-        while (rb.velocity.y > 0)
-        {
-            await UniTask.Yield();
-            if (!InputSystemManager.Instance.IsPressAttack) break;
-        }
-    }
-
-    //食べる
-    //将来的にここから移動させたい
-    private void OnEatDango()
-    {
-        //串に刺さってなかったら実行しない。
-        if (_dangos.Count == 0) return;
-
-        //何らかの動作中で食べようとしても実行しない。
-        if (_currentState is not (IState.E_State.Control or IState.E_State.StayEatDango))
-        {
-            _playerUIManager.EventText.TextData.SetText("食べられないよ！");
-            _playerUIManager.EventText.TextData.FlashAlpha(EVENTTEXT_PRINT_TIME, EVENTTEXT_FLASH_TIME, 0);
-            return;
-        }
-
-        //限界まで団子が刺さっていなかったら実行しない。
-        if (_dangos.Count != _currentStabCount)
-        {
-            _playerUIManager.EventText.TextData.SetText("食べられないよ！");
-            _playerUIManager.EventText.TextData.FlashAlpha(EVENTTEXT_PRINT_TIME, EVENTTEXT_FLASH_TIME, 0);
-            return;
-        }
-
-        SoundManager.Instance.PlaySE(UnityEngine.Random.Range((int)SoundSource.VOISE_PRINCE_STAYEAT01, (int)SoundSource.VOISE_PRINCE_STAYEAT02 + 1));
-        _hasStayedEat = true;
-    }
-
-    //将来的にここから移動させたいというかここでやる意味がない
-    private void OnChangeToUIAction()
-    {
-        //InputSystemManager.Instance.Input.SwitchCurrentActionMap("UI");
-        //_optionCanvas.enabled = true;
-    }
-
-    private void EatDango()
-    {
-        //SE
-        //GameManager.SoundManager.PlaySE(SoundSource.SE_PLAYER_EATDANGO);
-
-        _hasStayedEat = false;
-
-        //食べた団子の点数を取得
-        var score = dangoRole.CheckRole(_dangos);
-
-        //演出関数の呼び出し
-        _directing.Dirrecting(_dangos);
-
-        _playerUIManager.EventText.TextData.SetText("食べた！" + (int)score + "点！");
-
-        //残り時間の増加
-        PlayerUIManager.time += score;
-
-        //満腹度を上昇
-        _satiety += score * SCORE_TIME_RATE;
-
-        //スコアを上昇
-        GameManager.GameScore += score * 100f;
-
-        //串をクリア。
-        _dangos.Clear();
-        //UI更新
-        _dangoUISC.DangoUISet(_dangos);
-    }
-
-    private void ResetSpit()
-    {
-        spitManager.isSticking = false;
-        spitManager.gameObject.transform.localRotation = Quaternion.identity;
-        spitManager.gameObject.transform.localPosition = new Vector3(0, 0.4f, 1.1f);
-    }
-    #endregion
-
     #region statePattern
     interface IState
     {
@@ -250,10 +114,13 @@ class PlayerData : MonoBehaviour
         public IState.E_State Initialize(PlayerData parent)
         {
             parent._hasAttacked = false;
-            SoundManager.Instance.PlaySE(UnityEngine.Random.Range((int)SoundSource.VOISE_PRINCE_ATTACK01, (int)SoundSource.VOISE_PRINCE_ATTACK02 + 1));
+            SoundManager.Instance.PlaySE(Random.Range((int)SoundSource.VOISE_PRINCE_ATTACK01, (int)SoundSource.VOISE_PRINCE_ATTACK02 + 1));
 
+            //急降下アクション中なら団子の数の有無は無視して続行
             if (parent._playerFall.IsFallAction) return IState.E_State.Unchanged;
+
             if (!parent.CanStab()) return IState.E_State.Control;
+
             return IState.E_State.Unchanged;
         }
         public IState.E_State Update(PlayerData parent)
@@ -264,9 +131,14 @@ class PlayerData : MonoBehaviour
         {
             parent.DecreaseSatiety();
 
-            return parent._playerAttack.FixedUpdate() ? IState.E_State.Control : IState.E_State.Unchanged;
-        }
+            if (parent._playerAttack.FixedUpdate())
+            {
+                parent._animator.SetBool("IsEndWalk", InputSystemManager.Instance.MoveAxis.magnitude > 0);
+                return IState.E_State.Control;
+            }
 
+            return IState.E_State.Unchanged;
+        }
     }
     class StayEatDangoState : IState
     {
@@ -385,10 +257,22 @@ class PlayerData : MonoBehaviour
     #endregion
 
     #region メンバ変数
+    //スコアと満腹度のレート
+    const float SCORE_TIME_RATE = 0.2f;
+
+    //StatePatternで各ステートに移動するフラグに使用
+    private bool _hasAttacked = false;
+    private bool _hasFalled = false;
+    private bool _hasStayedEat = false;
+
+    [SerializeField] Rigidbody rb = default!;
+    [SerializeField] CapsuleCollider capsuleCollider = default!;
+    [SerializeField] Camera playerCamera = default!;
+
     //プレイヤーの能力
-    [SerializeField] private SpitManager spitManager = default!;
-    [SerializeField] private GameObject makerUI = default!;
-    [SerializeField] private GameObject rangeUI = default!;
+    [SerializeField] SpitManager spitManager = default!;
+    [SerializeField] GameObject makerUI = default!;
+    [SerializeField] GameObject rangeUI = default!;
 
     //UI関連
     [SerializeField] RoleDirectingScript _directing;
@@ -397,18 +281,31 @@ class PlayerData : MonoBehaviour
 
     [SerializeField] Animator _animator = default!;
 
-    //串を伸ばす処理
-    const int MAX_DANGO = 7;
-    const int GROW_STAB_FRAME = 500;
-    readonly PlayerGrowStab _playerGrowStab = new(MAX_DANGO, GROW_STAB_FRAME);
-    bool _canGrowStab = false;
+    [SerializeField] PhysicMaterial _ice = default!;
+    [SerializeField] PhysicMaterial _normal = default!;
 
-    //食べる処理
-    const int STAY_FRAME = 100;
-    readonly PlayerStayEat _playerStayEat = new(STAY_FRAME);
+    [SerializeField] ImageUIData _attackRangeImage = default!;
+
+    //串を伸ばす処理
+    readonly PlayerGrowStab _playerGrowStab = new();
+    bool _canGrowStab = false;
 
     const float DEFAULT_CAMERA_VIEW = 60f;
     const float CAMERA_REMOVETIME = 0.3f;
+
+    const float EVENTTEXT_FLASH_TIME = 0.4f;
+    const float EVENTTEXT_PRINT_TIME = 2.4f;
+
+    readonly DangoRole dangoRole = DangoRole.instance;
+
+    readonly PlayerStayEat _playerStayEat = new();
+
+    //生成はAwakeで行っています。
+    PlayerMove _playerMove;
+    PlayerJump _playerJump;
+    PlayerRemoveDango _playerRemoveDango;
+    PlayerFallAction _playerFall;
+    PlayerAttackAction _playerAttack;
 
     /// <summary>
     /// 満腹度、制限時間の代わり（単位:[sec]）
@@ -443,19 +340,27 @@ class PlayerData : MonoBehaviour
                     SoundManager.Instance.PlaySE(SoundSource.SE11_FALLACTION_LANDING);
 
                     _playerFall.IsFallAction = false;
+                    capsuleCollider.sharedMaterial = _ice;
                 }
+            }
+            else
+            {
+                capsuleCollider.sharedMaterial = _normal;
             }
 
             _isGround = value;
         }
     }
 
+    public Rigidbody Rb => rb;
+    public PlayerFallAction PlayerFall => _playerFall;
 
     public Vector3 MoveVec { get; private set; }
     #endregion
 
     private void Awake()
     {
+        _playerAttack = new(_attackRangeImage);
         _playerFall = new(capsuleCollider, OnJump, OnJumpExit);
         _playerRemoveDango = new(_dangos, _dangoUISC);
         _playerMove = new(_animator);
@@ -473,9 +378,7 @@ class PlayerData : MonoBehaviour
         InputSystemManager.Instance.onAttackPerformed += OnAttack;
         InputSystemManager.Instance.onEatDangoPerformed += OnEatDango;
         InputSystemManager.Instance.onEatDangoCanceled += () => _hasStayedEat = false;
-        InputSystemManager.Instance.onPausePerformed += OnChangeToUIAction;
         InputSystemManager.Instance.onJumpPerformed += _playerJump.Jump;
-        _cameraComponent = playerCamera.GetComponent<Camera>();
         makerUI.SetActive(false);
     }
 
@@ -499,8 +402,98 @@ class PlayerData : MonoBehaviour
         InputSystemManager.Instance.onAttackPerformed -= OnAttack;
         InputSystemManager.Instance.onEatDangoPerformed -= OnEatDango;
         InputSystemManager.Instance.onEatDangoCanceled -= () => _hasStayedEat = false;
-        InputSystemManager.Instance.onPausePerformed -= OnChangeToUIAction;
         InputSystemManager.Instance.onJumpPerformed -= _playerJump.Jump;
+    }
+
+    //突き刺しボタン降下時処理
+    private async void OnAttack()
+    {
+        //落下アクション中受け付けない。
+        if (_playerFall.IsFallAction) return;
+
+        //地上なら確実に通常攻撃
+        if (_isGround)
+        {
+            _hasAttacked = true;
+            return;
+        }
+
+        //Yの加速度が負になるまで待機
+        await WaitVelocityYLessZero();
+
+        //急降下するか判定、しないなら通常刺しに移行
+        _hasFalled = _playerFall.ToFallAction(transform.position, _isGround);
+        _hasAttacked = !_hasFalled;
+    }
+
+    private async UniTask WaitVelocityYLessZero()
+    {
+        while (rb.velocity.y > 0)
+        {
+            await UniTask.Yield();
+            if (!InputSystemManager.Instance.IsPressAttack) break;
+        }
+    }
+
+    //食べる
+    private void OnEatDango()
+    {
+        //串に刺さってなかったら実行しない。
+        if (_dangos.Count == 0) return;
+
+        //何らかの動作中で食べようとしても実行しない。
+        if (_currentState is not (IState.E_State.Control or IState.E_State.StayEatDango))
+        {
+            _playerUIManager.EventText.TextData.SetText("食べられないよ！");
+            _playerUIManager.EventText.TextData.FlashAlpha(EVENTTEXT_PRINT_TIME, EVENTTEXT_FLASH_TIME, 0);
+            return;
+        }
+
+        //限界まで団子が刺さっていなかったら実行しない。
+        if (_dangos.Count != _currentStabCount)
+        {
+            _playerUIManager.EventText.TextData.SetText("食べられないよ！");
+            _playerUIManager.EventText.TextData.FlashAlpha(EVENTTEXT_PRINT_TIME, EVENTTEXT_FLASH_TIME, 0);
+            return;
+        }
+
+        SoundManager.Instance.PlaySE(Random.Range((int)SoundSource.VOISE_PRINCE_STAYEAT01, (int)SoundSource.VOISE_PRINCE_STAYEAT02 + 1));
+        _hasStayedEat = true;
+    }
+
+    private void EatDango()
+    {
+        //SE
+        //GameManager.SoundManager.PlaySE(SoundSource.SE_PLAYER_EATDANGO);
+
+        _hasStayedEat = false;
+
+        //食べた団子の点数を取得
+        var score = dangoRole.CheckRole(_dangos);
+
+        //演出関数の呼び出し
+        _directing.Dirrecting(_dangos);
+
+        _playerUIManager.EventText.TextData.SetText("食べた！" + (int)score + "点！");
+
+        //残り時間の増加
+        PlayerUIManager.time += score;
+
+        //満腹度を上昇
+        _satiety += score * SCORE_TIME_RATE;
+
+        //スコアを上昇
+        GameManager.GameScore += score * 100f;
+
+        //串をクリア。
+        _dangos.Clear();
+        //UI更新
+        _dangoUISC.DangoUISet(_dangos);
+    }
+
+    private void ResetSpit()
+    {
+        spitManager.IsSticking = false;
     }
 
     private void OnJump()
@@ -540,11 +533,9 @@ class PlayerData : MonoBehaviour
         if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity))
         {
             makerUI.transform.position = hit.point + new Vector3(0, 0.01f, 0);
+            
             //突き刺しできるようになったら有効化
-            if (!Physics.Raycast(ray, capsuleCollider.height + capsuleCollider.height / 2f))
-                makerUI.SetActive(true);
-            else
-                makerUI.SetActive(false);
+            makerUI.SetActive(!Physics.Raycast(ray, capsuleCollider.height + capsuleCollider.height / 2f));
         }
 
     }
@@ -558,14 +549,7 @@ class PlayerData : MonoBehaviour
         }
 
         //空中でも出てると違和感あったので消します
-        if (_isGround)
-        {
-            rangeUI.SetActive(true);
-        }
-        else
-        {
-            rangeUI.SetActive(false);
-        }
+        rangeUI.SetActive(_isGround);
     }
 
     private bool CanStab()
@@ -573,8 +557,12 @@ class PlayerData : MonoBehaviour
         //団子がこれ以上させないなら実行しない
         if (_dangos.Count >= _currentStabCount)
         {
-            Logger.Warn("突き刺せる数を超えています");
             _playerUIManager.EventText.TextData.SetText("それ以上させないよ！");
+
+            //すでに再生されているのを止めてSEを再生
+            SoundManager.Instance.PlaySE(SoundSource.SE7_CANT_STAB_DANGO, true);
+
+            EraseEventText(2f).Forget();
 
             return false;
         }
@@ -583,27 +571,31 @@ class PlayerData : MonoBehaviour
         _playerAttack.ResetTime();
 
         //突き刺せる状態にして
-        spitManager.isSticking = true;
+        spitManager.IsSticking = true;
 
         //串の位置を変更（アニメーション推奨）
-        if (_playerFall.IsFallAction)
-        {
-            spitManager.gameObject.transform.localPosition = new Vector3(0, -2f, 0);
-            spitManager.gameObject.transform.localRotation = Quaternion.Euler(0, 0, 0);
-        }
-        else
-        {
-            spitManager.gameObject.transform.localPosition = new Vector3(0, 0, 2.2f);
-            spitManager.gameObject.transform.localRotation = Quaternion.Euler(90f, 0, 0);
-        }
+        _animator.SetTrigger("AttackTrigger");
 
         return true;
     }
 
+    private async UniTask EraseEventText(float time)
+    {
+        float currentTime = 0;
+        while (currentTime < time)
+        {
+            await UniTask.Yield();
+            currentTime += Time.deltaTime;
+            if (InputSystemManager.Instance.WasPressedThisFrameAttack) return;
+        }
+        _playerUIManager.EventText.TextData.SetText();
+    }
+
     private void IsGrounded()
     {
-        var ray = new Ray(transform.position, Vector3.down);
+        var ray = new Ray(new(transform.position.x, transform.position.y + capsuleCollider.height / 2f, transform.position.z), Vector3.down);
         IsGround = Physics.Raycast(ray, capsuleCollider.height / 1.999f);
+        Debug.DrawRay(transform.position, Vector3.down, Color.red);
     }
 
     /// <summary>
@@ -617,19 +609,19 @@ class PlayerData : MonoBehaviour
 
     private void OnChargeCameraMoving()
     {
-        _cameraComponent.fieldOfView -= 10f * Time.deltaTime;
+        playerCamera.fieldOfView -= 10f * Time.deltaTime;
     }
 
     private IEnumerator ResetCameraView()
     {
-        float view = _cameraComponent.fieldOfView;
+        float view = playerCamera.fieldOfView;
         float hokann = DEFAULT_CAMERA_VIEW - view;
-        while (_cameraComponent.fieldOfView <= DEFAULT_CAMERA_VIEW)
+        while (playerCamera.fieldOfView <= DEFAULT_CAMERA_VIEW)
         {
-            _cameraComponent.fieldOfView += (hokann / CAMERA_REMOVETIME) * Time.deltaTime;
+            playerCamera.fieldOfView += (hokann / CAMERA_REMOVETIME) * Time.deltaTime;
             yield return null;
         }
-        _cameraComponent.fieldOfView = DEFAULT_CAMERA_VIEW;
+        playerCamera.fieldOfView = DEFAULT_CAMERA_VIEW;
     }
 
     #region GetterSetter

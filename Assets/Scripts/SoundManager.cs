@@ -107,7 +107,7 @@ public class SoundManager : MonoBehaviour
     }
 
     private void Start()
-    { 
+    {
         InitAudioMixerGroup();
     }
 
@@ -225,8 +225,11 @@ public class SoundManager : MonoBehaviour
     /// SEを再生します。10チャンネルすべて利用されていた場合流れません
     /// </summary>
     /// <param name="sound">再生したいSE</param>
-    public void PlaySE(int sound)
+    /// <param name="stopPrebSE">以前に再生している同じSEを停止させるか否か</param>    
+    public void PlaySE(int sound, bool stopPrebSE = false)
     {
+        if (stopPrebSE) StopSE(sound);
+
         foreach (var se in SEs)
         {
             if (se.isPlaying) continue;
@@ -238,8 +241,15 @@ public class SoundManager : MonoBehaviour
         //すべてのチャンネルが使用中ならここにくる
         Logger.Warn("全SEチャンネルが使用中で" + sound + "が再生できませんでした");
     }
-    public void PlaySE(SoundSource sound)
+    /// <summary>
+    /// SEを再生します。10チャンネルすべて利用されていた場合流れません
+    /// </summary>
+    /// <param name="sound">再生したいSE</param>
+    /// <param name="stopPrebSE">以前に再生している同じSEを停止させるか否か</param>    
+    public void PlaySE(SoundSource sound, bool stopPrebSE = false)
     {
+        if (stopPrebSE) StopSE(sound);
+
         foreach (var se in SEs)
         {
             if (se.isPlaying) continue;
@@ -255,16 +265,42 @@ public class SoundManager : MonoBehaviour
     /// <summary>
     /// すべてのSEを停止させます。
     /// </summary>
-    public void StopSE()
+    public void StopAllSE()
     {
         foreach (AudioSource se in SEs)
         {
-            if (se.isPlaying == false) continue;
+            if (!se.isPlaying) continue;
 
             se.Stop();
         }
-
     }
+    /// <summary>
+    /// 指定のSEをすべて停止させます
+    /// </summary>
+    /// <param name="sound"></param>
+    public void StopSE(SoundSource sound)
+    {
+        foreach (AudioSource se in SEs)
+        {
+            if (!se.isPlaying) continue;
+            if (se.clip == null) continue;
+            if (SEClip[(int)sound - BGMClip.Length] != se.clip) continue;
+
+            se.Stop();
+        }
+    }
+    public void StopSE(int sound)
+    {
+        foreach (AudioSource se in SEs)
+        {
+            if (!se.isPlaying) continue;
+            if (se.clip == null) continue;
+            if (SEClip[sound - BGMClip.Length] != se.clip) continue;
+
+            se.Stop();
+        }
+    }
+
 
     /// <summary>
     /// オーディオミキサーの値を変更します

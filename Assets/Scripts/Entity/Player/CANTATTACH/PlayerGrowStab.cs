@@ -10,16 +10,10 @@ namespace TM.Entity.Player
 {
     class PlayerGrowStab
     {
-        private int _maxValue = 0;
-        private int _growFrame = 0;
-        private int _currentFrame = 0;
+        const int MAX_DANGO = 7;
+        const int GROW_STAB_FRAME = 500;
 
-        public PlayerGrowStab(int maxValue, int growFrame)
-        {
-            _maxValue = maxValue;
-            _growFrame = growFrame;
-            _currentFrame = growFrame;
-        }
+        private int _currentFrame = GROW_STAB_FRAME;
 
         /// <summary>
         /// 串が一定時間で伸びる処理
@@ -27,7 +21,7 @@ namespace TM.Entity.Player
         public bool CanGrowStab(int currentMaxValue)
         {
             //刺せる団子の数が最大値だったら実行しない。
-            if (currentMaxValue == _maxValue) return false;
+            if (currentMaxValue == MAX_DANGO) return false;
             if (--_currentFrame > 0) return false;
 
             //マイナス値にさせない（ずっと放置してたらいずれintの範囲外になる可能性があるから）
@@ -37,7 +31,7 @@ namespace TM.Entity.Player
 
         public int GrowStab(int stabMax)
         {
-            _currentFrame = _growFrame;
+            _currentFrame = GROW_STAB_FRAME;
             return ++stabMax;
         }
     }

@@ -28,7 +28,7 @@ namespace TM.Entity.Player
             //Animation
             //Logger.Log(InputSystemManager.Instance.MoveAxis.magnitude);
             _animator.SetBool("IsDash", InputSystemManager.Instance.MoveAxis.magnitude > 0.5f);
-            _animator.SetBool("IsWalking", rb.velocity.magnitude > 0.01f);
+            _animator.SetBool("IsWalking", InputSystemManager.Instance.MoveAxis.magnitude > 0);
 
             if (axis.magnitude < MIN_AXIS_VALUE) return;
 
