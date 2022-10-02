@@ -1,31 +1,52 @@
-using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 
-abstract class QuestData
+public abstract class QuestData
 {
-    QuestType questType;
-    string questName;
-    float returnScore;
-    bool isKeyQuest;
+    int _id;
+    List<int> _nextQuestId = new();
 
-    public QuestData(QuestType questType, string questName, float returnScore, bool isKeyQuest)
+    QuestType _questType;
+    string _questName;
+    float _rewardTime;
+    bool _enableDangoCountUp;
+    bool _isKeyQuest;
+
+    public QuestData(int id, QuestType questType, string questName, float rewardTime, bool enableDangoCountUp, bool isKeyQuest, int nextQuestId)
     {
-        this.questType = questType;
-        this.questName = questName;
-        this.returnScore = returnScore;
-        this.isKeyQuest = isKeyQuest;
+        _id = id;
+        _questType = questType;
+        _questName = questName;
+        _rewardTime = rewardTime;
+        _enableDangoCountUp = enableDangoCountUp;
+        _isKeyQuest = isKeyQuest;
+        _nextQuestId.Add(nextQuestId);
+    }
+    public QuestData(int id, QuestType questType, string questName, float rewardTime, bool enableDangoCountUp, bool isKeyQuest, int[] nextQuestId)
+    {
+        _id = id;
+        _questType = questType;
+        _questName = questName;
+        _rewardTime = rewardTime;
+        _enableDangoCountUp = enableDangoCountUp;
+        _isKeyQuest = isKeyQuest;
+        _nextQuestId.AddRange(nextQuestId);
+    }
+    public QuestData(int id, QuestType questType, string questName, float rewardTime, bool enableDangoCountUp, bool isKeyQuest, List<int> nextQuestId)
+    {
+        _id = id;
+        _questType = questType;
+        _questName = questName;
+        _rewardTime = rewardTime;
+        _enableDangoCountUp = enableDangoCountUp;
+        _isKeyQuest = isKeyQuest;
+        _nextQuestId.AddRange(nextQuestId);
     }
 
-    //これはスコアとかをまだ設定していないときに使用するのでそのうち消します
-    public QuestData(QuestType questType, string questName)
-    {
-        this.questType = questType;
-        this.questName = questName;
-    }
-
-    public QuestType QuestType => questType;
-    public string QuestName => questName;
-    public float ReturnScore => returnScore;
-    public bool IsKeyQuest => isKeyQuest;
+    public int Id => _id;
+    public QuestType QuestType => _questType;
+    public string QuestName => _questName;
+    public float RewardTime => _rewardTime;
+    public bool EnableDangoCountUp => _enableDangoCountUp;
+    public bool IsKeyQuest => _isKeyQuest;
+    public List<int> NextQuestId => _nextQuestId;
 }

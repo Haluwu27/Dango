@@ -7,6 +7,7 @@ public class SpitManager : MonoBehaviour
     [SerializeField] PlayerData player = default!;
     [SerializeField] CapsuleCollider _capsuleCollider = default!;
     DangoUIScript DangoUISC;
+    QuestManager _questManager = new();
 
     private void Awake()
     {
@@ -92,6 +93,9 @@ public class SpitManager : MonoBehaviour
     private void OnFallAction()
     {
         if (!player.PlayerFall.IsFallAction) return;
+
+        //落下アクション○回しろ系クエストの判定
+        _questManager.SucceedChecker.CheckQuestPlayActionSucceed(_questManager, Dango.Quest.QuestPlayAction.PlayerAction.FallAttack);
 
         Logger.Log("落下アクション中に刺した！");
     }

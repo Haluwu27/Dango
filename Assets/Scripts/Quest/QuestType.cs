@@ -4,11 +4,8 @@ using UnityEngine;
 
 public enum QuestType
 {
+    EatDango,
     CreateRole,
-    IncludeColor,
     PlayAction,
-    GetScore,
-    EatSpecialDango,
-    DestinationRole,
-    DestinationColor,
+    Destination,
 }
