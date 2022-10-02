@@ -37,9 +37,8 @@ namespace Dango.Quest.UI {
             //スペシャル団子、目的地系以外では出ない
             switch (Qmanager.GetQuest(0).QuestType)
             {
-                case QuestType.EatSpecialDango:
-                case QuestType.DestinationColor:
-                case QuestType.DestinationRole:
+                case QuestType.EatDango:
+                case QuestType.Destination:
                     Quest = true;
                     break;
                 default:

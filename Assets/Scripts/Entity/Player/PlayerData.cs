@@ -469,7 +469,7 @@ class PlayerData : MonoBehaviour
         _hasStayedEat = false;
 
         //食べた団子の点数を取得
-        var score = dangoRole.CheckRole(_dangos);
+        var score = dangoRole.CheckRole(_dangos,_currentStabCount);
 
         //演出関数の呼び出し
         _directing.Dirrecting(_dangos);
