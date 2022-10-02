@@ -489,6 +489,7 @@ class PlayerData : MonoBehaviour
         _dangos.Clear();
         //UI更新
         _dangoUISC.DangoUISet(_dangos);
+
     }
 
     private void ResetSpit()
@@ -622,6 +623,11 @@ class PlayerData : MonoBehaviour
             yield return null;
         }
         playerCamera.fieldOfView = DEFAULT_CAMERA_VIEW;
+    }
+
+    public int GetCurrentStabCount()
+    {
+        return _currentStabCount;
     }
 
     #region GetterSetter
