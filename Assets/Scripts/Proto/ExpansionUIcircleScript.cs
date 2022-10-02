@@ -13,7 +13,7 @@ namespace Dango.Quest.UI {
         }
         private void OnTriggerStay(Collider col)//プレイヤーに当たったら拡張UI表示
         {
-            if(col.gameObject.tag =="Player")
+            if (col.gameObject.tag =="Player")
             {
                 expansion.Onset();
                 expansion.set = true;
@@ -25,6 +25,7 @@ namespace Dango.Quest.UI {
             {
                 expansion.set = false;
                 expansion.OffSet();
+                Destroy(gameObject);
             }
         }
     } 
