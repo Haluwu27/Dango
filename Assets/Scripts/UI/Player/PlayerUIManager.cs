@@ -10,8 +10,9 @@ public class PlayerUIManager : MonoBehaviour
     [SerializeField, Tooltip("イベントテキスト")] TextUIData eventText;
     [SerializeField, Tooltip("空腹度ゲージ")] Slider[] timeGage;
     [SerializeField, Tooltip("制限時間残量警告")] Image[] Warningimgs;
+    [SerializeField] PlayerData playerdata;
 
-    public static float time = 0;
+    private float time { get { return playerdata.GetSatiety(); } }
     private float maxTime;
     private float currentTime;
     private int[] warningTimes = new int[3];
@@ -50,14 +51,6 @@ public class PlayerUIManager : MonoBehaviour
     }
     private void Update()
     {
-        if (time >= 0)
-        {
-            time -= Time.deltaTime;
-        }
-        else
-        {
-            //ゲームオーバー処理
-        }
         currentTime = time;
 
         Warning();
