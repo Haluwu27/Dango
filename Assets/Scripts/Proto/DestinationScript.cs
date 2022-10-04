@@ -8,7 +8,7 @@ namespace Dango.Quest.UI {
         private Vector3 destPos;
         private LineRenderer line;
         private bool Quest;
-        private QuestManager Qmanager=new();
+        private QuestManager Qmanager = QuestManager.Instance;
         private GameObject Player;
 
         private void Start()

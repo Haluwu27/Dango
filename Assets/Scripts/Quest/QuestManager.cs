@@ -3,13 +3,19 @@ using System.Collections.Generic;
 using UnityEngine;
 using Dango.Quest;
 
-class QuestManager
+class QuestManager : MonoBehaviour
 {
-    //静的なクエスト一覧
-    static List<QuestData> _quests = new();
+    public static QuestManager Instance { get; private set; }
 
-    public QuestManager()
+    //クエスト一覧
+    List<QuestData> _quests = new();
+
+    [SerializeField] PlayerData _playerData;
+    [SerializeField] GameObject _expansionUIObj;
+
+    private void Awake()
     {
+        Instance = this;
         SucceedChecker = new(this);
     }
 
@@ -23,7 +29,7 @@ class QuestManager
 
         _quests.AddRange(items);
     }
-    public void ChangeQuest(List<QuestData>items)
+    public void ChangeQuest(List<QuestData> items)
     {
         _quests.Clear();
 
@@ -37,6 +43,12 @@ class QuestManager
         return _quests[index];
     }
 
+    public void CreateExpansionUIObj()
+    {
+        Instantiate(_expansionUIObj, _playerData.transform.position, Quaternion.identity);
+    }
+
     public int QuestsCount => _quests.Count;
+    public PlayerData Player => _playerData;
 }
 

@@ -3,7 +3,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using static DangoRole;
 
 public class Role<T>
 {
@@ -97,7 +96,6 @@ class DangoRole
     }
 
     List<DangoColor> _color = new();
-    QuestManager _questManager = new();
     Random rand = new();
 
     private List<Role<DangoColor>> specialRoles = new()
@@ -144,23 +142,23 @@ class DangoRole
             SoundManager.Instance.PlaySE(rand.Next((int)SoundSource.VOISE_PRINCE_CREATEROLE01, (int)SoundSource.VOISE_PRINCE_CREATEROLE02 + 1));
 
             //役付きで団子を○個食べた系クエスト・その他クエストのチェック
-            _questManager.SucceedChecker.CheckQuestEatDangoSucceed(_questManager, dangos, true);
+            QuestManager.Instance.SucceedChecker.CheckQuestEatDangoSucceed(QuestManager.Instance, dangos, true);
 
             //何らかの役で○色を含んで役を作れ系のクエストのチェック
-            _questManager.SucceedChecker.CheckQuestCreateRoleSucceed(_questManager, dangos, currentMaxDango);
+            QuestManager.Instance.SucceedChecker.CheckQuestCreateRoleSucceed(QuestManager.Instance, dangos, currentMaxDango);
 
             //役を作らない系クエストの連続の場合のリセットに使用
-            _questManager.SucceedChecker.CheckQuestCreateRoleSucceed(_questManager, true);
+            QuestManager.Instance.SucceedChecker.CheckQuestCreateRoleSucceed(QuestManager.Instance, true);
         }
         else
         {
             SoundManager.Instance.PlaySE(rand.Next((int)SoundSource.VOISE_PRINCE_NOROLE01, (int)SoundSource.VOISE_PRINCE_NOROLE02 + 1));
 
             //EatDangoに分類される大半のクエストのチェック。役なしを数える数えない問題のために上記のチェッカーと分けています
-            _questManager.SucceedChecker.CheckQuestEatDangoSucceed(_questManager, dangos, false);
+            QuestManager.Instance.SucceedChecker.CheckQuestEatDangoSucceed(QuestManager.Instance, dangos, false);
 
             //役を作らないで○回食べる系のクエストのチェック
-            _questManager.SucceedChecker.CheckQuestCreateRoleSucceed(_questManager, false);
+            QuestManager.Instance.SucceedChecker.CheckQuestCreateRoleSucceed(QuestManager.Instance, false);
         }
 
         //CheckColorRole(ref score);//処理内部にソートを含むため、位置役より下に配置。
@@ -280,7 +278,7 @@ class DangoRole
             score += posRole.GetScore();
 
             //クエストクリアしているかチェック
-            _questManager.SucceedChecker.CheckQuestCreateRoleSucceed(_questManager, posRole, dangos, true, currentMaxDango);
+            QuestManager.Instance.SucceedChecker.CheckQuestCreateRoleSucceed(QuestManager.Instance, posRole, dangos, true, currentMaxDango);
 
             //[Debug]役名の表示
             //Logger.Log(posRole.GetRolename());

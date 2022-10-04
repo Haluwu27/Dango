@@ -7,7 +7,7 @@ public class SpitManager : MonoBehaviour
     [SerializeField] PlayerData player = default!;
     [SerializeField] CapsuleCollider _capsuleCollider = default!;
     DangoUIScript DangoUISC;
-    QuestManager _questManager = new();
+    QuestManager _questManager = QuestManager.Instance;
 
     private void Awake()
     {
