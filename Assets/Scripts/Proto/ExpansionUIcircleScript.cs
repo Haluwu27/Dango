@@ -5,15 +5,15 @@ using UnityEngine;
 namespace Dango.Quest.UI {
     public class ExpansionUIcircleScript : MonoBehaviour
     {
-        ExpansionCanvasScript expansion;
+        public ExpansionCanvasScript expansion;
 
-        private void Start()
+        private void Awake()
         {
             expansion = GameObject.Find("ExpansionCanvas").GetComponent<ExpansionCanvasScript>();
         }
         private void OnTriggerStay(Collider col)//プレイヤーに当たったら拡張UI表示
         {
-            if (col.gameObject.tag =="Player")
+            if (col.gameObject.CompareTag("Player"))
             {
                 expansion.Onset();
                 expansion.set = true;
@@ -21,7 +21,7 @@ namespace Dango.Quest.UI {
         }
         private void OnTriggerExit(Collider col)//離れたら非表示
         {
-            if (col.gameObject.tag == "Player")
+            if (col.gameObject.CompareTag("Player"))
             {
                 expansion.set = false;
                 expansion.OffSet();

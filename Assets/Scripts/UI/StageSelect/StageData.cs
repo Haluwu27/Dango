@@ -23,6 +23,11 @@ public class StageData : MonoBehaviour
         InputSystemManager.Instance.Input.SwitchCurrentActionMap("Player");
     }
 
+    private void Start()
+    {
+        Stage001Data.Instance.AddQuest();
+    }
+
     public void Release()
     {
         _isRelease = true;

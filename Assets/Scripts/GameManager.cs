@@ -10,7 +10,7 @@ internal class GameManager : MonoBehaviour
 {
     public static float GameScore { get; set; } = 0;
 
-    PlayerData _playerData;
+    [SerializeField] PlayerData _playerData;
 
     #region statePattern
     interface IState

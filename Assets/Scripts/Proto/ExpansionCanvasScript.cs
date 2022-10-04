@@ -47,7 +47,6 @@ namespace Dango.Quest.UI {
 
         private void Update()
         {
-            QuestUI.Instance.OnGUIChangeQuest(questimage,nowQuesttext);
             QuestUI.Instance.OnGUIChangeOldQuest(oldQuesttext);
         }
 

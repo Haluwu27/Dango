@@ -188,21 +188,23 @@ namespace Dango.Quest
             quest.AddMadeCount();
 
             //指定回数作ったか判定
-            if (quest.MadeCount != quest.SpecifyCount) return false;
+            if (quest.MadeCount < quest.SpecifyCount) return false;
 
             quest.AddContinueCount();
 
-            if (quest.IsPrebCreateRole != createRole) quest.AddContinueCount();
+            if (quest.IsPrebCreateRole == createRole) quest.AddContinueCount();
             else quest.ResetContinueCount();
 
             quest.SetIsPrebCreateRole(createRole);
 
             //指定回数作ったか判定
-            if (quest.ContinueCount > quest.CurrentContinueCount) return false;
+            if (quest.ContinueCount >= quest.CurrentContinueCount) return false;
+            
+            //条件すべてクリアした場合、クエスト成功として返却
+            QuestSucceed(quest);
 
             return true;
         }
-
         #endregion
 
         #region PlayAction
@@ -233,6 +235,7 @@ namespace Dango.Quest
             //指定回数作ったか判定
             if (quest.SpecifyCount != quest.MadeCount) return false;
 
+            QuestSucceed(quest);
             return true;
         }
         #endregion
@@ -260,6 +263,7 @@ namespace Dango.Quest
             //目的地につくだけでいいのか、ついて食べないといけないのか判定
             if (quest.OnEatSucceed != onEatSucceed) return false;
 
+            QuestSucceed(quest);
             return true;
         }
         #endregion
@@ -275,9 +279,17 @@ namespace Dango.Quest
             {
                 nextQuest.Add(Stage001Data.Instance.QuestData[quest.NextQuestId[i]]);
             }
-            _manager.ChangeQuest(nextQuest);
 
-            //なんらかのクエスト成功時の処理
+            _manager.ChangeQuest(nextQuest);
+            _manager.Player.GrowStab(quest.EnableDangoCountUp);
+            _manager.Player.AddSatiety(quest.RewardTime);
+            _manager.CreateExpansionUIObj();
+
+            if (quest.IsKeyQuest)
+            {
+                //TODO:S7に遷移
+            }
+
             Logger.Log(quest.QuestName + " クエストクリア！");
         }
     }
