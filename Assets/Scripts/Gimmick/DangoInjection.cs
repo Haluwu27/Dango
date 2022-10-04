@@ -33,7 +33,7 @@ public class DangoInjection : MonoBehaviour
     [SerializeField, Tooltip("2つ以上発射するときの間隔"), Min(0)] private int defalutContinueFrame = 0;
     [SerializeField, Tooltip("アニメーション時間"), Min(0)] private int animationFrame = 40;
     [SerializeField, Tooltip("アニメーション終わりから発射までの待機時間"), Min(0)] private int shotWaitFrame = 10;
-    [SerializeField, Tooltip("アニメーションまでのクールタイム"), Min(0)] private int animationWaitFrame = 10;
+    [SerializeField, Tooltip("アニメーションまでのクールタイム"), Min(1)] private int animationWaitFrame = 10;
 
     [SerializeField, Tooltip("射出力"), Min(0.1f)] private float shotPower = 10f;
 
