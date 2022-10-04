@@ -57,7 +57,7 @@ namespace Dango.Quest.UI {
                 times[0].SetActive(true);
                 quests[0].SetActive(true);
                 times[1].SetActive(false);
-                quests[1].SetActive(false);
+                //quests[1].SetActive(false);
                 timeAnima.SetTrigger("On");
                 questAnima.SetTrigger("On");
             }
@@ -69,7 +69,7 @@ namespace Dango.Quest.UI {
                 times[0].SetActive(false);
                 quests[0].SetActive(false);
                 times[1].SetActive(true);
-                quests[1].SetActive(true);
+                //quests[1].SetActive(true);
             }
         }
     }
