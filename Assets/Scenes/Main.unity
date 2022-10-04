@@ -367,7 +367,19 @@ MonoBehaviour:
     m_ActionId: 3b926e82-9d0e-4d35-b0f5-1b850a209a92
     m_ActionName: Player/Pause[/SwitchProControllerHID/start,/SwitchProControllerHID/select,/Keyboard/escape]
   - m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1271659316}
+        m_TargetAssemblyTypeName: InputSystemManager, Assembly-CSharp
+        m_MethodName: OnExpansionUI
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_ActionId: 77896abf-ef83-474f-a892-afb25d3a2a30
     m_ActionName: Player/New action
   - m_PersistentCalls:

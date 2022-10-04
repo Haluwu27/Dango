@@ -22,7 +22,6 @@ class PlayerData : MonoBehaviour
             AttackAction = 2,
             StayEatDango = 3,
             EatDango = 4,
-            GrowStab = 5,
 
             Max,
 
@@ -42,7 +41,6 @@ class PlayerData : MonoBehaviour
         new AttackActionState(),
         new StayEatDangoState(),
         new EatDangoState(),
-        new GrowStabState(),
      };
 
     class ControlState : IState
@@ -179,31 +177,8 @@ class PlayerData : MonoBehaviour
     {
         public IState.E_State Initialize(PlayerData parent)
         {
-            if (parent._canGrowStab) return IState.E_State.GrowStab;
-
             parent.EatDango();
             return IState.E_State.Control;
-        }
-        public IState.E_State Update(PlayerData parent)
-        {
-            return IState.E_State.Unchanged;
-        }
-        public IState.E_State FixedUpdate(PlayerData parent)
-        {
-            return IState.E_State.Unchanged;
-        }
-
-    }
-    class GrowStabState : IState
-    {
-        public IState.E_State Initialize(PlayerData parent)
-        {
-            parent._currentStabCount = parent._playerGrowStab.GrowStab(parent._currentStabCount);
-            parent._playerUIManager.EventText.TextData.SetText("させる団子の数が増えた！(" + parent._currentStabCount + "個)");
-            parent._canGrowStab = false;
-            //刺せる範囲表示の拡大。今串が伸びないのでコメントアウトしてます。
-            //parent.rangeUI.transform.localScale = new Vector3(parent.rangeUI.transform.localScale.x, parent.rangeUI.transform.localScale.y + 0.01f, parent.rangeUI.transform.localScale.z);
-            return IState.E_State.EatDango;
         }
         public IState.E_State Update(PlayerData parent)
         {
@@ -288,7 +263,6 @@ class PlayerData : MonoBehaviour
 
     //串を伸ばす処理
     readonly PlayerGrowStab _playerGrowStab = new();
-    bool _canGrowStab = false;
 
     const float DEFAULT_CAMERA_VIEW = 60f;
     const float CAMERA_REMOVETIME = 0.3f;
@@ -392,7 +366,6 @@ class PlayerData : MonoBehaviour
 
     private void FixedUpdate()
     {
-        _canGrowStab = _playerGrowStab.CanGrowStab(_currentStabCount);
         FixedUpdateState();
     }
 
@@ -469,26 +442,26 @@ class PlayerData : MonoBehaviour
         _hasStayedEat = false;
 
         //食べた団子の点数を取得
-        var score = dangoRole.CheckRole(_dangos);
+        var score = dangoRole.CheckRole(_dangos, _currentStabCount);
 
         //演出関数の呼び出し
         _directing.Dirrecting(_dangos);
 
         _playerUIManager.EventText.TextData.SetText("食べた！" + (int)score + "点！");
 
-        //残り時間の増加
-        PlayerUIManager.time += score;
 
         //満腹度を上昇
-        _satiety += score * SCORE_TIME_RATE;
+        //_satiety += score * SCORE_TIME_RATE;
 
         //スコアを上昇
         GameManager.GameScore += score * 100f;
 
         //串をクリア。
         _dangos.Clear();
+
         //UI更新
         _dangoUISC.DangoUISet(_dangos);
+
     }
 
     private void ResetSpit()
@@ -533,7 +506,7 @@ class PlayerData : MonoBehaviour
         if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity))
         {
             makerUI.transform.position = hit.point + new Vector3(0, 0.01f, 0);
-            
+
             //突き刺しできるようになったら有効化
             makerUI.SetActive(!Physics.Raycast(ray, capsuleCollider.height + capsuleCollider.height / 2f));
         }
@@ -624,11 +597,28 @@ class PlayerData : MonoBehaviour
         playerCamera.fieldOfView = DEFAULT_CAMERA_VIEW;
     }
 
+    public void GrowStab(bool enable)
+    {
+        if (!enable) return;
+
+        _currentStabCount = _playerGrowStab.GrowStab(_currentStabCount);
+        _playerUIManager.EventText.TextData.SetText("させる団子の数が増えた！(" + _currentStabCount + "個)");
+
+        //刺せる範囲表示の拡大。今串が伸びないのでコメントアウトしてます。
+        //parent.rangeUI.transform.localScale = new Vector3(parent.rangeUI.transform.localScale.x, parent.rangeUI.transform.localScale.y + 0.01f, parent.rangeUI.transform.localScale.z);
+    }
+
+    public int GetCurrentStabCount()
+    {
+        return _currentStabCount;
+    }
+
     #region GetterSetter
     public int GetMaxDango() => _currentStabCount;
     public List<DangoColor> GetDangos() => _dangos;
     public void AddDangos(DangoColor d) => _dangos.Add(d);
     public float GetSatiety() => _satiety;
+    public void AddSatiety(float value) => _satiety += value;
     public DangoUIScript GetDangoUIScript() => _dangoUISC;
 
     #endregion

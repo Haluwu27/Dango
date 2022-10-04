@@ -35,16 +35,12 @@ namespace TM.Entity.Player
             //カメラの向きを元にベクトルの作成
             Vector3 moveVec = (axis.y * camera.forward + axis.x * camera.right) * MOVESPEED;
 
-
             if (rb.velocity.magnitude < MAX_VELOCITY_MAG)
             {
                 float mag = Mathf.Sqrt(rb.velocity.x * rb.velocity.x + rb.velocity.z * rb.velocity.z);
                 float speedMag = RUN_SPEED_MAG - mag;
                 rb.AddForce(moveVec * speedMag);
             }
-
-            //摩擦の計算をここで
-            rb.AddForce(-moveVec);
 
             RotateToMoveVec(moveVec, rb);
         }

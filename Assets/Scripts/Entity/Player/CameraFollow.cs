@@ -29,6 +29,8 @@ public class CameraFollow : MonoBehaviour
 
     private float _roteYSpeed = -100f;
 
+    private Vector3 rayStartPos;
+
 
     Vector3 _wallHitPos;//ï«Ç…Ç‘Ç¬Ç©Ç¡ÇΩç€ÇÃç¿ïW
     RaycastHit _hit;//ï«ÇèäìæÇ∑ÇÈRay
@@ -140,7 +142,8 @@ public class CameraFollow : MonoBehaviour
 
     private bool WallHitCheck()
     {
-        return Physics.Raycast(target.position, _terminus.transform.position - target.position, out _hit, Vector3.Distance(_prebTargetPos, _terminus.transform.position), wallLayer, QueryTriggerInteraction.Ignore);
+        rayStartPos = target.position + new Vector3(0, 0.005f, 0);
+        return Physics.Raycast(rayStartPos, _terminus.transform.position - target.position, out _hit, Vector3.Distance(_prebTargetPos, _terminus.transform.position), wallLayer, QueryTriggerInteraction.Ignore);
     }
 
 }

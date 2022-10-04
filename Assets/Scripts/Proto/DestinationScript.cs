@@ -8,7 +8,7 @@ namespace Dango.Quest.UI {
         private Vector3 destPos;
         private LineRenderer line;
         private bool Quest;
-        private QuestManager Qmanager=new();
+        private QuestManager Qmanager = QuestManager.Instance;
         private GameObject Player;
 
         private void Start()
@@ -37,9 +37,8 @@ namespace Dango.Quest.UI {
             //スペシャル団子、目的地系以外では出ない
             switch (Qmanager.GetQuest(0).QuestType)
             {
-                case QuestType.EatSpecialDango:
-                case QuestType.DestinationColor:
-                case QuestType.DestinationRole:
+                case QuestType.EatDango:
+                case QuestType.Destination:
                     Quest = true;
                     break;
                 default:

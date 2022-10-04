@@ -15,8 +15,6 @@ namespace Dango.Quest.UI
         [SerializeField, Tooltip("タイル")] Image[] images;
         [SerializeField, Tooltip("クエストテキスト")] TextMeshProUGUI[] quests;
 
-        QuestManager _questManager = new();
-
         //待機中判定
         bool _isWaitingCoolTime = false;
 
@@ -40,9 +38,6 @@ namespace Dango.Quest.UI
             //待機終了したか判定。していなければ待機時間をへらす
             if (!QuestUI.Instance.IsWaiting(--_coolTime))
             {
-                _questManager.ChangeQuest(_questManager.Creater.CreateQuestCreateRole(DangoRole.POSROLE_LOOP, 2, "役「ループ」を2個作れ！"),
-                                          _questManager.Creater.CreateQuestIncludeColor(DangoColor.Blue, 2, "青色を含めて役を2つ作れ！"));
-
                 QuestUI.Instance.OnGUIChangeQuest(images, quests);
 
                 _coolTime = COOLTIME;

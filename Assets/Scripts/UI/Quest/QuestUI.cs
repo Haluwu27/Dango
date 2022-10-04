@@ -8,7 +8,7 @@ namespace Dango.Quest.UI
     {
         public static QuestUI Instance { get; private set; } = new();
 
-        private QuestManager _questManager = new();
+        private QuestManager _questManager = QuestManager.Instance;
 
         private bool _succeed = false;
         private string _questName = null;
@@ -24,12 +24,12 @@ namespace Dango.Quest.UI
             {
                 if (_questManager.GetQuest(i) != null)
                 {
-                    Enabled(i, true, images, quests);
+                    ChangeImageEnabled(i, true, images, quests);
                     quests[i].text = _questManager.GetQuest(i).QuestName;
                 }
                 else
                 {
-                    Enabled(i, false, images, quests);
+                    ChangeImageEnabled(i, false, images, quests);
                 }
             }
         }
@@ -58,6 +58,7 @@ namespace Dango.Quest.UI
                 if (quest.text == _questName)
                 {
                     quest.text = "クエストクリア！";
+                    clearQuestName = _questName;
                 }
             }
 
@@ -72,7 +73,7 @@ namespace Dango.Quest.UI
             _questName = null;
         }
 
-        private void Enabled(int i, bool enable, Image[] images, TextMeshProUGUI[] quests)
+        private void ChangeImageEnabled(int i, bool enable, Image[] images, TextMeshProUGUI[] quests)
         {
             images[i].enabled = enable;
             quests[i].enabled = enable;
