@@ -20,6 +20,8 @@ public class PlayerUIManager : MonoBehaviour
     private Image[] w_imgs;
     private Color w_color;
 
+    //GameObject Eat
+
     private bool[] warningbool = new bool[3];
     public TextUIData EventText => eventText;
 
@@ -92,5 +94,18 @@ public class PlayerUIManager : MonoBehaviour
                 warningbool[i] = false;
             }
         }
+    }
+    public void EatDangoUI_False()
+    {
+        transform.Find("DangoBackScreen").gameObject.SetActive(false);
+        GameObject.Find("QuestCanvas").SetActive(false);
+        GameObject.Find("PlayerParent").transform.Find("Player1").transform.Find("RangeUI").gameObject.SetActive(false);
+    }
+
+    public void EatDangoUI_True()
+    {
+        transform.Find("DangoBackScreen").gameObject.SetActive(true);
+        GameObject.Find("QuestCanvas").SetActive(true);
+        GameObject.Find("PlayerParent").transform.Find("Player1").transform.Find("RangeUI").gameObject.SetActive(true);
     }
 }

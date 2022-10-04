@@ -146,6 +146,7 @@ class PlayerData : MonoBehaviour
         {
             parent._playerUIManager.EventText.TextData.SetText("食べチャージ中！");
             parent._playerStayEat.ResetCount();
+            parent._animator.SetBool("IsEatingCharge", true);
             //SE推奨
 
             return IState.E_State.Unchanged;
@@ -169,6 +170,7 @@ class PlayerData : MonoBehaviour
             //待機をやめたらコントロールに戻る
             if (!parent._hasStayedEat)
             {
+            parent._animator.SetBool("IsEatingCharge", false);
                 parent.StartCoroutine(parent.ResetCameraView());
                 return IState.E_State.Control;
             }
@@ -182,6 +184,7 @@ class PlayerData : MonoBehaviour
             if (parent._canGrowStab) return IState.E_State.GrowStab;
 
             parent.EatDango();
+            parent._animator.SetTrigger("EatingTrigger");
             return IState.E_State.Control;
         }
         public IState.E_State Update(PlayerData parent)
@@ -490,6 +493,9 @@ class PlayerData : MonoBehaviour
         //UI更新
         _dangoUISC.DangoUISet(_dangos);
 
+        //一部UIの非表示
+        _playerUIManager.EatDangoUI_False();
+
     }
 
     private void ResetSpit()
@@ -625,9 +631,10 @@ class PlayerData : MonoBehaviour
         playerCamera.fieldOfView = DEFAULT_CAMERA_VIEW;
     }
 
-    public int GetCurrentStabCount()
+    public void EatAnima()
     {
-        return _currentStabCount;
+        _animator.SetBool("IsEatingCharge", false);
+        _playerUIManager.EatDangoUI_True();
     }
 
     #region GetterSetter
