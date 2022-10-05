@@ -62,7 +62,7 @@ class PlayerData : MonoBehaviour
             if (parent._playerJump.IsJumping) return IState.E_State.Unchanged;
 
             //プレイヤーを動かす処理
-            parent._playerMove.Update(parent.rb, parent.playerCamera.transform);
+            parent._playerMove.Update(parent.rb, parent.playerCamera.transform, parent._playerRemoveDango.IsCoolDown);
 
             //満腹度（制限時間）減らす処理
             parent.DecreaseSatiety();
@@ -94,7 +94,7 @@ class PlayerData : MonoBehaviour
         public IState.E_State FixedUpdate(PlayerData parent)
         {
             //移動
-            parent._playerMove.Update(parent.rb, parent.playerCamera.transform);
+            parent._playerMove.Update(parent.rb, parent.playerCamera.transform, parent._playerRemoveDango.IsCoolDown);
 
             //制限時間減少
             parent.DecreaseSatiety();
@@ -314,14 +314,11 @@ class PlayerData : MonoBehaviour
                     SoundManager.Instance.PlaySE(SoundSource.SE11_FALLACTION_LANDING);
 
                     _playerFall.IsFallAction = false;
-                    capsuleCollider.sharedMaterial = _ice;
                 }
             }
-            else
-            {
-                capsuleCollider.sharedMaterial = _normal;
-            }
 
+            //空中時は摩擦をカット
+            capsuleCollider.sharedMaterial = value ? _normal : _ice;
             _isGround = value;
         }
     }
@@ -336,7 +333,7 @@ class PlayerData : MonoBehaviour
     {
         _playerAttack = new(_attackRangeImage);
         _playerFall = new(capsuleCollider, OnJump, OnJumpExit);
-        _playerRemoveDango = new(_dangos, _dangoUISC);
+        _playerRemoveDango = new(_dangos, _dangoUISC, this, _animator);
         _playerMove = new(_animator);
         _playerJump = new(rb, OnJump, OnJumpExit, _animator);
     }
