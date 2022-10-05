@@ -20,14 +20,13 @@ namespace TM.Entity.Player
             _animator = animator;
         }
 
-        public void Update(Rigidbody rb, Transform camera)
+        public void Update(Rigidbody rb, Transform camera, bool isRemoveCoolDown)
         {
             //“ü—Í’l‚ð‘ã“ü
             Vector2 axis = InputSystemManager.Instance.MoveAxis;
 
             //Animation
-            //Logger.Log(InputSystemManager.Instance.MoveAxis.magnitude);
-            _animator.SetBool("IsDash", InputSystemManager.Instance.MoveAxis.magnitude > 0.5f);
+            _animator.SetBool("IsDash", InputSystemManager.Instance.MoveAxis.magnitude > 0.5f && !isRemoveCoolDown);
             _animator.SetBool("IsWalking", InputSystemManager.Instance.MoveAxis.magnitude > 0);
 
             if (axis.magnitude < MIN_AXIS_VALUE) return;
@@ -39,7 +38,7 @@ namespace TM.Entity.Player
             {
                 float mag = Mathf.Sqrt(rb.velocity.x * rb.velocity.x + rb.velocity.z * rb.velocity.z);
                 float speedMag = RUN_SPEED_MAG - mag;
-                rb.AddForce(moveVec * speedMag);
+                rb.AddForce(moveVec * speedMag * (isRemoveCoolDown ? 0.2f : 1));
             }
 
             RotateToMoveVec(moveVec, rb);
@@ -49,7 +48,7 @@ namespace TM.Entity.Player
         {
             if (moveVec.magnitude == 0) return;
             Vector3 lookRot = new(moveVec.x, 0, moveVec.z);
-            rb.transform.localRotation = Quaternion.RotateTowards(rb.transform.rotation, Quaternion.LookRotation(lookRot),5f);
+            rb.transform.localRotation = Quaternion.RotateTowards(rb.transform.rotation, Quaternion.LookRotation(lookRot), 5f);
         }
     }
 }
