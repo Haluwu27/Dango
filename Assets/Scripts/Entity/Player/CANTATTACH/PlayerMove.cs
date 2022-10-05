@@ -22,6 +22,9 @@ namespace TM.Entity.Player
 
         public void Update(Rigidbody rb, Transform camera, bool isRemoveCoolDown)
         {
+            //—Ž‰º’†‚Æ‚»‚Ì’…’n’†‚ÉˆÚ“®‚Å‚«‚È‚¢‚æ‚¤‚É‚·‚é
+            if (_animator.GetCurrentAnimatorStateInfo(0).IsName("FallAction") || _animator.GetCurrentAnimatorStateInfo(0).IsName("FallActionLanding")) return;
+
             //“ü—Í’l‚ð‘ã“ü
             Vector2 axis = InputSystemManager.Instance.MoveAxis;
 

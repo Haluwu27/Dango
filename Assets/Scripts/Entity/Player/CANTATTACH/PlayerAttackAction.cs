@@ -12,13 +12,27 @@ namespace TM.Entity.Player
 
         int _currentTime = 0;
         ImageUIData _coolDownImage;
+        PlayerData _playerData;
+        Animator _animator;
 
-        public PlayerAttackAction(ImageUIData coolDownImage)
+        public PlayerAttackAction(ImageUIData coolDownImage,PlayerData playerData,Animator animator)
         {
             _coolDownImage = coolDownImage;
+            _playerData = playerData;
+            _animator = animator;
         }
 
         public bool FixedUpdate()
+        {
+            return _playerData.IsGround ? IsWaitingOnGround() : IsWaitingFallAttackAnimation();
+        }
+
+        private bool IsWaitingFallAttackAnimation()
+        {
+            return !_animator.GetCurrentAnimatorStateInfo(0).IsName("FallAction");
+        }
+
+        private bool IsWaitingOnGround()
         {
             //ìÀÇ´éhÇµíÜÅiÇ‡Ç∆Ç…ñﬂÇÈë“ã@íÜÅjÇ»ÇÁ
             if (++_currentTime < ATTACK_FRAME)
