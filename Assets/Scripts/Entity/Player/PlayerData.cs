@@ -47,7 +47,7 @@ class PlayerData : MonoBehaviour
     {
         public IState.E_State Initialize(PlayerData parent)
         {
-            //串の位置をリセット
+            //串の状態をリセット
             parent.ResetSpit();
             return IState.E_State.Unchanged;
         }
@@ -83,6 +83,7 @@ class PlayerData : MonoBehaviour
     {
         public IState.E_State Initialize(PlayerData parent)
         {
+            parent._animator.SetTrigger("FallActionTrigger");
             parent._hasFalled = false;
             parent._playerFall.IsFallAction = true;
             return IState.E_State.Unchanged;
@@ -306,15 +307,14 @@ class PlayerData : MonoBehaviour
         get => _isGround;
         private set
         {
-            if (value)
+            if (value && _playerFall.IsFallAction)
             {
-                if (_playerFall.IsFallAction)
-                {
-                    //AN7Bの再生もここ
-                    SoundManager.Instance.PlaySE(SoundSource.SE11_FALLACTION_LANDING);
+                //AN7Bの再生もここ
+                _animator.SetTrigger("FallActionLandingTrigger");
 
-                    _playerFall.IsFallAction = false;
-                }
+                SoundManager.Instance.PlaySE(SoundSource.SE11_FALLACTION_LANDING);
+
+                _playerFall.IsFallAction = false;
             }
 
             //空中時は摩擦をカット
@@ -331,7 +331,7 @@ class PlayerData : MonoBehaviour
 
     private void Awake()
     {
-        _playerAttack = new(_attackRangeImage);
+        _playerAttack = new(_attackRangeImage, this, _animator);
         _playerFall = new(capsuleCollider, OnJump, OnJumpExit);
         _playerRemoveDango = new(_dangos, _dangoUISC, this, _animator);
         _playerMove = new(_animator);
