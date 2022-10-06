@@ -20,7 +20,7 @@ namespace TM.Entity.Player
             _animator = animator;
         }
 
-        public void Update(Rigidbody rb, Transform camera, bool isRemoveCoolDown)
+        public void Update(Rigidbody rb, Transform camera, bool isRemoveCoolDown,bool isStayJump)
         {
             //—Ž‰º’†‚Æ‚»‚Ì’…’n’†‚ÉˆÚ“®‚Å‚«‚È‚¢‚æ‚¤‚É‚·‚é
             if (_animator.GetCurrentAnimatorStateInfo(0).IsName("FallAction") || _animator.GetCurrentAnimatorStateInfo(0).IsName("FallActionLanding")) return;
@@ -41,7 +41,7 @@ namespace TM.Entity.Player
             {
                 float mag = Mathf.Sqrt(rb.velocity.x * rb.velocity.x + rb.velocity.z * rb.velocity.z);
                 float speedMag = RUN_SPEED_MAG - mag;
-                rb.AddForce(moveVec * speedMag * (isRemoveCoolDown ? 0.2f : 1));
+                rb.AddForce((isRemoveCoolDown ? 0.2f : 1) * (isStayJump ? 0.2f : 1) * speedMag * moveVec);
             }
 
             RotateToMoveVec(moveVec, rb);

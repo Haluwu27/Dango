@@ -62,7 +62,7 @@ class PlayerData : MonoBehaviour
             if (parent._playerJump.IsJumping) return IState.E_State.Unchanged;
 
             //プレイヤーを動かす処理
-            parent._playerMove.Update(parent.rb, parent.playerCamera.transform, parent._playerRemoveDango.IsCoolDown);
+            parent._playerMove.Update(parent.rb, parent.playerCamera.transform, parent._playerRemoveDango.IsCoolDown, parent._playerJump.IsStayJump);
 
             //満腹度（制限時間）減らす処理
             parent.DecreaseSatiety();
@@ -95,7 +95,7 @@ class PlayerData : MonoBehaviour
         public IState.E_State FixedUpdate(PlayerData parent)
         {
             //移動
-            parent._playerMove.Update(parent.rb, parent.playerCamera.transform, parent._playerRemoveDango.IsCoolDown);
+            parent._playerMove.Update(parent.rb, parent.playerCamera.transform, parent._playerRemoveDango.IsCoolDown,parent._playerJump.IsStayJump);
 
             //制限時間減少
             parent.DecreaseSatiety();
@@ -349,7 +349,8 @@ class PlayerData : MonoBehaviour
         InputSystemManager.Instance.onAttackPerformed += OnAttack;
         InputSystemManager.Instance.onEatDangoPerformed += OnEatDango;
         InputSystemManager.Instance.onEatDangoCanceled += () => _hasStayedEat = false;
-        InputSystemManager.Instance.onJumpPerformed += _playerJump.Jump;
+        InputSystemManager.Instance.onJumpPerformed += _playerJump.OnStayJumping;
+        InputSystemManager.Instance.onJumpCanceled += _playerJump.Jump;
         makerUI.SetActive(false);
     }
 
@@ -372,7 +373,8 @@ class PlayerData : MonoBehaviour
         InputSystemManager.Instance.onAttackPerformed -= OnAttack;
         InputSystemManager.Instance.onEatDangoPerformed -= OnEatDango;
         InputSystemManager.Instance.onEatDangoCanceled -= () => _hasStayedEat = false;
-        InputSystemManager.Instance.onJumpPerformed -= _playerJump.Jump;
+        InputSystemManager.Instance.onJumpPerformed -= _playerJump.OnStayJumping;
+        InputSystemManager.Instance.onJumpCanceled -= _playerJump.Jump;
     }
 
     //突き刺しボタン降下時処理
