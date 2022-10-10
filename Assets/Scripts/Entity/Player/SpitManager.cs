@@ -52,7 +52,7 @@ public class SpitManager : MonoBehaviour
             return;
         }
 
-        if (other.gameObject.TryGetComponent(out DangoManager dango))
+        if (other.gameObject.TryGetComponent(out DangoData dango))
         {
             //SE
             SoundManager.Instance.PlaySE(SoundSource.SE14_STAB_DANGO);

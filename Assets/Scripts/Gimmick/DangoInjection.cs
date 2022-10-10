@@ -3,7 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using TM.Easing;
 using TM.Easing.Management;
-
+using TMPro;
+using System;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 public class DangoInjection : MonoBehaviour
 {
     [System.Flags]
@@ -26,6 +30,13 @@ public class DangoInjection : MonoBehaviour
         SET_ALL = ~0,
     }
 
+    private enum ShotMode
+    {
+        Random,
+        Fixed
+    }
+
+    [SerializeField, Tooltip("発射モード")] ShotMode shotMode;
     [SerializeField, Tooltip("出す色")] DangoColorChoice colorChoice;
     [SerializeField, Tooltip("団子の射出ポイント")] GameObject spawner = default!;
 
@@ -39,6 +50,10 @@ public class DangoInjection : MonoBehaviour
 
     [SerializeField, Tooltip("縦方向の可動域")] Vector2 verticalRot;
     [SerializeField, Tooltip("横方向の可動域")] Vector2 horizontalRot;
+
+    [SerializeField] DangoInjectionFixed[] fixedAngles;
+
+    [SerializeField] bool _canShot = true;
 
     private DangoPoolManager _poolManager = default!;
 
@@ -87,6 +102,7 @@ public class DangoInjection : MonoBehaviour
     {
         public IState.E_State Init(DangoInjection parent)
         {
+            if (!parent._canShot) return IState.E_State.WaitInjection;
             return IState.E_State.Unchanged;
         }
         public IState.E_State Update(DangoInjection parent)
@@ -175,6 +191,8 @@ public class DangoInjection : MonoBehaviour
                 dangoColors.Add((DangoColor)i);
             }
         }
+
+        InitState();
     }
 
     private void FixedUpdate()
@@ -205,23 +223,12 @@ public class DangoInjection : MonoBehaviour
 
         //選択した色の中からランダムに色を取得
         //※ランダムなため確率を設定できるように変更推奨※
-        var color = dangoColors[Random.Range(0, dangoColors.Count)];
+        var color = dangoColors[UnityEngine.Random.Range(0, dangoColors.Count)];
 
         //オブジェクトプールから団子を取り出して設定。
-        var dango = _poolManager.DangoPool.Get();
+        _poolManager.SetCreateColor(color);
+        var dango = _poolManager.DangoPool[(int)color - 1].Get();
         dango.SetDangoColor(color);
-        dango.Rend.material.color = dango.GetDangoColor() switch
-        {
-            DangoColor.Red => Color.red,
-            DangoColor.Orange => new Color32(255, 155, 0, 255),
-            DangoColor.Yellow => Color.yellow,
-            DangoColor.Green => Color.green,
-            DangoColor.Cyan => Color.cyan,
-            DangoColor.Blue => Color.blue,
-            DangoColor.Purple => new Color32(200, 0, 255, 255),
-            DangoColor.Other => Color.gray,
-            _ => Color.white,
-        };
 
         dango.transform.position = spawner.transform.position;
         dango.Rb.AddForce(transform.forward.normalized * shotPower, ForceMode.Impulse);
@@ -243,7 +250,7 @@ public class DangoInjection : MonoBehaviour
     {
         //現在の位置を入力
         _lookedAngle = transform.rotation.eulerAngles;
-        
+
         //位置の補正
         _lookedAngle.Set(Around(_lookedAngle.x), Around(_lookedAngle.y), Around(_lookedAngle.z));
 
@@ -252,17 +259,79 @@ public class DangoInjection : MonoBehaviour
         _injectionCount = defalutInjectionCount;
 
         //次の位置の抽選
-        _nextLookAngle = _firstLookAngle + new Vector3(Random.Range(verticalRot.x, verticalRot.y), Random.Range(horizontalRot.x, horizontalRot.y), 0);
-        
+        if (shotMode == ShotMode.Random)
+        {
+            _nextLookAngle = _firstLookAngle + new Vector3(UnityEngine.Random.Range(verticalRot.x, verticalRot.y), UnityEngine.Random.Range(horizontalRot.x, horizontalRot.y), 0);
+        }
+        else
+        {
+            if (fixedAngles.Length == 0) return;
+            int index = UnityEngine.Random.Range(0, fixedAngles.Length);
+            _nextLookAngle = _firstLookAngle.SetX(fixedAngles[index].CannonAngle).SetY(fixedAngles[index].BaseAngle);
+        }
+
         //補間値を求める
         _interpolatedVec = _nextLookAngle - _lookedAngle;
     }
 
     private float Around(float val)
     {
-        if (val > 180) return val - 360f;
-        if (val < -180) return val + 360;
+        if (val > 180f) return val - 360f;
+        if (val < -180f) return val + 360f;
 
         return val;
     }
+
+    public void SetCanShot(bool canShot) => _canShot = canShot;
+    public bool CanShot => _canShot;
+
+    [Serializable]
+    class DangoInjectionFixed
+    {
+        [SerializeField, Range(0, 360f)] float _baseAngle;
+        [SerializeField, Range(0, 360f)] float _cannonAngle;
+
+        [NonSerialized] public float ba = 0;
+        [NonSerialized] public float ca = 0;
+
+        public float BaseAngle => _baseAngle;
+        public float CannonAngle => _cannonAngle;
+        public void SetBaseAngle(float value) => _baseAngle = value;
+        public void SetCannonAngle(float value) => _cannonAngle = value;
+
+    }
+
+
+#if UNITY_EDITOR
+    [CustomEditor(typeof(DangoInjection))]
+    [CanEditMultipleObjects]
+    public class DangoInjectionEditor : Editor
+    {
+        private DangoInjection dangoInjection;
+
+        public override void OnInspectorGUI()
+        {
+            serializedObject.Update();
+
+            dangoInjection = target as DangoInjection;
+            base.OnInspectorGUI();
+
+            if (dangoInjection.fixedAngles.Length == 0) return;
+
+            if (GUILayout.Button("Copy"))
+            {
+                dangoInjection.fixedAngles[^1].ba = dangoInjection.fixedAngles[^1].BaseAngle;
+                dangoInjection.fixedAngles[^1].ca = dangoInjection.fixedAngles[^1].CannonAngle;
+                dangoInjection.fixedAngles[^1].SetBaseAngle(dangoInjection.transform.localEulerAngles.y);
+                dangoInjection.fixedAngles[^1].SetCannonAngle(dangoInjection.transform.localEulerAngles.x);
+            }
+            if (GUILayout.Button("Redo"))
+            {
+                dangoInjection.fixedAngles[^1].SetBaseAngle(dangoInjection.fixedAngles[^1].ba);
+                dangoInjection.fixedAngles[^1].SetCannonAngle(dangoInjection.fixedAngles[^1].ca);
+            }
+        }
+
+    }
+#endif
 }
