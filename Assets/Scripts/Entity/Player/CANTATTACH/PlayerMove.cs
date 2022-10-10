@@ -20,7 +20,7 @@ namespace TM.Entity.Player
             _animator = animator;
         }
 
-        public void Update(Rigidbody rb, Transform camera, bool isRemoveCoolDown,bool isStayJump)
+        public void Update(Rigidbody rb, Transform camera, bool isRemoveCoolDown, bool isStayJump)
         {
             //落下中とその着地中に移動できないようにする
             if (_animator.GetCurrentAnimatorStateInfo(0).IsName("FallAction") || _animator.GetCurrentAnimatorStateInfo(0).IsName("FallActionLanding")) return;
@@ -34,14 +34,17 @@ namespace TM.Entity.Player
 
             if (axis.magnitude < MIN_AXIS_VALUE) return;
 
+            //Yを無視
+            Vector3 cameraForward = Vector3.Scale(camera.forward, new Vector3(1, 0, 1)).normalized;
+
             //カメラの向きを元にベクトルの作成
-            Vector3 moveVec = (axis.y * camera.forward + axis.x * camera.right) * MOVESPEED;
+            Vector3 moveVec = (axis.y * cameraForward + axis.x * camera.right) * MOVESPEED;
 
             if (rb.velocity.magnitude < MAX_VELOCITY_MAG)
             {
                 float mag = Mathf.Sqrt(rb.velocity.x * rb.velocity.x + rb.velocity.z * rb.velocity.z);
                 float speedMag = RUN_SPEED_MAG - mag;
-                rb.AddForce((isRemoveCoolDown ? 0.2f : 1) * (isStayJump ? 0.2f : 1) * speedMag * moveVec);
+                rb.AddForce((isRemoveCoolDown || isStayJump ? 0.2f : 1) * speedMag * moveVec);
             }
 
             RotateToMoveVec(moveVec, rb);

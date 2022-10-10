@@ -44,5 +44,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0d43d7283d1e3a340924f69845d96b0b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dango: {fileID: 1180670251636165633, guid: 541f2df1faec63f49aa3a19a4b2a1fd7, type: 3}
+  dangoDatas:
+  - {fileID: 6296001925613289404, guid: 7e6f49edec6cc214ab07dce2a5f177ad, type: 3}
+  - {fileID: -1595249438576170679, guid: bc69325e362d32649b4d5cac7cf4df1c, type: 3}
+  - {fileID: 6494404454894688425, guid: 14dfb1bf106f7644a90fdec9edefc9c5, type: 3}
+  - {fileID: 5033716421048525632, guid: 2d0d02b0b61ae0b48a53ae29b4ba57de, type: 3}
+  - {fileID: 6127195576993545279, guid: d8918266106a4214abb73d2a057bf979, type: 3}
+  - {fileID: -4675907052653600373, guid: 23870c0fa4a7be7429c39603a9c77897, type: 3}
+  - {fileID: -861876278824071097, guid: f5abd88456b666746bfd7ee2e9efdac7, type: 3}
   parent: {fileID: 0}

@@ -123,7 +123,7 @@ class FusumaManager : MonoBehaviour
 
 #if UNITY_EDITOR
 [CustomEditor(typeof(FusumaManager))]
-public class ExampleScriptEditor : Editor
+public class FusumaManagerEditor : Editor
 {
     private FusumaManager fusumaManager;
 
