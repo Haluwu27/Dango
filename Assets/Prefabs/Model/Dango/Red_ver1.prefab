@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 835603763031808624}
   - component: {fileID: 4944406915146529071}
   - component: {fileID: 6296001925613289404}
+  - component: {fileID: 4503922483675315303}
   m_Layer: 0
   m_Name: Red_ver1
   m_TagString: Untagged
@@ -85,6 +86,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _rend: {fileID: 1901643370265143336}
   _rigidbody: {fileID: 4944406915146529071}
+--- !u!135 &4503922483675315303
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 529666500012414795}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.51
+  m_Center: {x: 0.03, y: 0.48009148, z: 0.00000011920929}
 --- !u!1 &3368886793680077489
 GameObject:
   m_ObjectHideFlags: 0
@@ -178,7 +192,7 @@ MeshCollider:
   m_GameObject: {fileID: 3368886793680077489}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 4
   m_Convex: 1
   m_CookingOptions: 30

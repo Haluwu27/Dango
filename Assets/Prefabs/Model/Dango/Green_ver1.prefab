@@ -93,7 +93,7 @@ MeshCollider:
   m_GameObject: {fileID: 1177970548511018593}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 4
   m_Convex: 1
   m_CookingOptions: 30
@@ -110,6 +110,7 @@ GameObject:
   - component: {fileID: 3272418059089151519}
   - component: {fileID: 449092210163755878}
   - component: {fileID: 5033716421048525632}
+  - component: {fileID: 8518582424873372272}
   m_Layer: 0
   m_Name: Green_ver1
   m_TagString: Untagged
@@ -183,3 +184,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _rend: {fileID: 4932151165688570698}
   _rigidbody: {fileID: 449092210163755878}
+--- !u!135 &8518582424873372272
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2425363439334282334}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.51
+  m_Center: {x: 0.03, y: 0.48009148, z: 0.00000011920929}

@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 187562370760795178}
   - component: {fileID: -4204993725390352961}
   - component: {fileID: 6127195576993545279}
+  - component: {fileID: 7615801021940113000}
   m_Layer: 0
   m_Name: Sky_ver1
   m_TagString: Untagged
@@ -85,6 +86,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _rend: {fileID: 7910076699673870259}
   _rigidbody: {fileID: -4204993725390352961}
+--- !u!135 &7615801021940113000
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1034476795072448092}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.51
+  m_Center: {x: 0.03, y: 0.48009148, z: 0.00000011920929}
 --- !u!1 &4190341172354815947
 GameObject:
   m_ObjectHideFlags: 0
@@ -178,7 +192,7 @@ MeshCollider:
   m_GameObject: {fileID: 4190341172354815947}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 4
   m_Convex: 1
   m_CookingOptions: 30

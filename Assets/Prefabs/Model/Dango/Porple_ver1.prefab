@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 3363677474159594912}
   - component: {fileID: -1568844952044859248}
   - component: {fileID: -861876278824071097}
+  - component: {fileID: 4466317130982705174}
   m_Layer: 0
   m_Name: Porple_ver1
   m_TagString: Untagged
@@ -85,6 +86,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _rend: {fileID: 5175889445463349631}
   _rigidbody: {fileID: -1568844952044859248}
+--- !u!135 &4466317130982705174
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2481280014161332420}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.51
+  m_Center: {x: 0.03, y: 0.48009148, z: 0.00000011920929}
 --- !u!1 &8474675940713244046
 GameObject:
   m_ObjectHideFlags: 0
@@ -178,7 +192,7 @@ MeshCollider:
   m_GameObject: {fileID: 8474675940713244046}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 4
   m_Convex: 1
   m_CookingOptions: 30

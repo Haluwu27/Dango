@@ -93,7 +93,7 @@ MeshCollider:
   m_GameObject: {fileID: 2247448971209664439}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 4
   m_Convex: 1
   m_CookingOptions: 30
@@ -110,6 +110,7 @@ GameObject:
   - component: {fileID: 3620484399192173655}
   - component: {fileID: -5671352867861659107}
   - component: {fileID: -1595249438576170679}
+  - component: {fileID: 3373497771088008586}
   m_Layer: 0
   m_Name: Orange_ver1
   m_TagString: Untagged
@@ -183,3 +184,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _rend: {fileID: 4861919380394624482}
   _rigidbody: {fileID: -5671352867861659107}
+--- !u!135 &3373497771088008586
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4539596197778243994}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.51
+  m_Center: {x: 0.03, y: 0.48009148, z: 0.00000011920929}
