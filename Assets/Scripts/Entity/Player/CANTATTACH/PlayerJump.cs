@@ -20,12 +20,17 @@ namespace TM.Entity.Player
         Action _onJumpExit;
         Animator _animator;
 
+        int an11TriggerHash;
+        int jumpingTriggerHash;
+
         public PlayerJump(Rigidbody rigidbody, Action onJump, Action onJumpExit, Animator animator)
         {
             _rb = rigidbody;
             _onJump = onJump;
             _onJumpExit = onJumpExit;
             _animator = animator;
+            an11TriggerHash = Animator.StringToHash("AN11Trigger");
+            jumpingTriggerHash = Animator.StringToHash("JumpingTrigger");
         }
 
         public void SetIsGround(bool isGround)
@@ -40,12 +45,14 @@ namespace TM.Entity.Player
 
         public void OnStayJumping()
         {
-            _animator.SetTrigger("AN11Trigger");
+            _animator.SetTrigger(an11TriggerHash);
             _isStayJump = true;
         }
 
         public async void Jump()
         {
+            _animator.ResetTrigger(an11TriggerHash);
+
             if (!_isGround) return;
             if (_isJumping) return;
 
@@ -58,7 +65,7 @@ namespace TM.Entity.Player
             SoundManager.Instance.PlaySE(SoundSource.SE20_JUMPCHARGE_LOOP);
 
             //アニメーションの再生
-            _animator.SetTrigger("JumpingTrigger");
+            _animator.SetTrigger(jumpingTriggerHash);
 
             //ベクトルを打ち消しジャンプ
             _isJumping = true;

@@ -32,6 +32,8 @@ public class SpitManager : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        if (other.GetComponent<DangoData>() == null) return;
+        
         //h‚¹‚éó‘Ô‚Å‚Í‚È‚¢‚È‚çÀs‚µ‚È‚¢
         if (!IsSticking) return;
         if (_isInWall) return;
