@@ -53,7 +53,7 @@ public class FloorManager : MonoBehaviour
     public void CheckDangoIsFull(Collider other, Floor floor)
     {
         //団子以外を弾く
-        if (other.GetComponent<DangoData>() == null) return;
+        if (other.GetComponentInParent<DangoData>() == null) return;
 
         //団子の数がフロアの最大値に到達していなかったら弾く
         if (!CheckFloorDangoIsFull((int)floor)) return;
@@ -68,7 +68,7 @@ public class FloorManager : MonoBehaviour
     public void CheckDangoIsNotFull(Collider other, Floor floor, int shotValue)
     {
         //団子以外を弾く
-        if (other.GetComponent<DangoData>() == null) return;
+        if (other.GetComponentInParent<DangoData>() == null) return;
 
         //団子の数がフロアの最大値に到達していたら弾く
         if (CheckFloorDangoIsFull((int)floor)) return;
