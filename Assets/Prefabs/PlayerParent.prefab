@@ -141,6 +141,21 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 5905115643392952332, guid: 778aacd95f2f72d4eaff394bcf22a5d0,
+        type: 3}
+      propertyPath: m_Direction
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6013245353808961043, guid: 778aacd95f2f72d4eaff394bcf22a5d0,
+        type: 3}
+      propertyPath: m_Drag
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6013245353808961043, guid: 778aacd95f2f72d4eaff394bcf22a5d0,
+        type: 3}
+      propertyPath: m_Mass
+      value: 60
+      objectReference: {fileID: 0}
     - target: {fileID: 7465589276578308804, guid: 778aacd95f2f72d4eaff394bcf22a5d0,
         type: 3}
       propertyPath: m_ApplyRootMotion
@@ -186,12 +201,12 @@ PrefabInstance:
     - target: {fileID: 1266330572475704520, guid: 306f682e3da8cda4d83aef30600b2d8a,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 2
+      value: 1.8
       objectReference: {fileID: 0}
     - target: {fileID: 1266330572475704520, guid: 306f682e3da8cda4d83aef30600b2d8a,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -10
+      value: -4.71
       objectReference: {fileID: 0}
     - target: {fileID: 1266330572475704520, guid: 306f682e3da8cda4d83aef30600b2d8a,
         type: 3}

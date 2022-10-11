@@ -8,9 +8,9 @@ namespace TM.Entity.Player
     class PlayerMove
     {
         //à⁄ìÆë¨ìxíËêî
-        const float MOVESPEED = 10f;
-        const float MAX_VELOCITY_MAG = 8f;
-        const float RUN_SPEED_MAG = 7f;
+        const float MOVESPEED = 75f;
+        const float MAX_VELOCITY_MAG = 15f;
+        const float RUN_SPEED_MAG = 25f;
         const float MIN_AXIS_VALUE = 0.1f;
 
         Animator _animator;

@@ -566,8 +566,8 @@ class PlayerData : MonoBehaviour
     private void IsGrounded()
     {
         var ray = new Ray(new(transform.position.x, transform.position.y + capsuleCollider.height / 2f, transform.position.z), Vector3.down);
-        IsGround = Physics.Raycast(ray, capsuleCollider.height / 1.999f);
-        Debug.DrawRay(transform.position, Vector3.down, Color.red);
+        IsGround = Physics.Raycast(ray, capsuleCollider.height / 1.5f);
+        Debug.DrawRay(new Vector3(transform.position.x,transform.position.y + capsuleCollider.height / 2f,transform.position.z), Vector3.down, Color.red);
     }
 
     /// <summary>
