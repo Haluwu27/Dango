@@ -15,7 +15,7 @@ public class FloorData : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         //’cŽqˆÈŠO‚ð’e‚­
-        if (other.GetComponent<DangoData>() == null) return;
+        if (other.GetComponentInParent<DangoData>() == null) return;
 
         _dangoCount++;
         floorManager.CheckDangoIsFull(other, floor);
