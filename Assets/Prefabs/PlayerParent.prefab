@@ -125,7 +125,7 @@ PrefabInstance:
         type: 3}
       propertyPath: spitManager
       value: 
-      objectReference: {fileID: 4265398392679304730}
+      objectReference: {fileID: 1855927937270533066}
     - target: {fileID: 3952613918130635534, guid: 778aacd95f2f72d4eaff394bcf22a5d0,
         type: 3}
       propertyPath: playerCamera
@@ -154,7 +154,7 @@ PrefabInstance:
     - target: {fileID: 6013245353808961043, guid: 778aacd95f2f72d4eaff394bcf22a5d0,
         type: 3}
       propertyPath: m_Mass
-      value: 60
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7465589276578308804, guid: 778aacd95f2f72d4eaff394bcf22a5d0,
         type: 3}
@@ -163,15 +163,9 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 778aacd95f2f72d4eaff394bcf22a5d0, type: 3}
---- !u!4 &4062595608074469452 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 3952613918130635533, guid: 778aacd95f2f72d4eaff394bcf22a5d0,
-    type: 3}
-  m_PrefabInstance: {fileID: 1061649141599716161}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &4265398392679304730 stripped
+--- !u!114 &1855927937270533066 stripped
 MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 3857897653422148955, guid: 778aacd95f2f72d4eaff394bcf22a5d0,
+  m_CorrespondingSourceObject: {fileID: 1691709573181573259, guid: 778aacd95f2f72d4eaff394bcf22a5d0,
     type: 3}
   m_PrefabInstance: {fileID: 1061649141599716161}
   m_PrefabAsset: {fileID: 0}
@@ -181,6 +175,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5d8ab5add7ef9684d90e70f1c78a0f32, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!4 &4062595608074469452 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3952613918130635533, guid: 778aacd95f2f72d4eaff394bcf22a5d0,
+    type: 3}
+  m_PrefabInstance: {fileID: 1061649141599716161}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &2245419032831560464
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -281,7 +281,7 @@ PrefabInstance:
     - target: {fileID: 1266330572475704522, guid: 306f682e3da8cda4d83aef30600b2d8a,
         type: 3}
       propertyPath: MinAngle
-      value: -30
+      value: -60
       objectReference: {fileID: 0}
     - target: {fileID: 1266330572475704522, guid: 306f682e3da8cda4d83aef30600b2d8a,
         type: 3}
