@@ -44,7 +44,7 @@ namespace TM.Entity.Player
             {
                 float mag = Mathf.Sqrt(rb.velocity.x * rb.velocity.x + rb.velocity.z * rb.velocity.z);
                 float speedMag = RUN_SPEED_MAG - mag;
-                rb.AddForce((isRemoveCoolDown || isStayJump ? 0.2f : 1) * speedMag * moveVec);
+            rb.AddForce((isRemoveCoolDown || isStayJump ? 0.4f : 1) * speedMag * moveVec,ForceMode.Acceleration);
             }
 
             RotateToMoveVec(moveVec, rb);

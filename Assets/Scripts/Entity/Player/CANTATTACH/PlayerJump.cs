@@ -70,6 +70,7 @@ namespace TM.Entity.Player
             //ベクトルを打ち消しジャンプ
             _isJumping = true;
             _onJump?.Invoke();
+            
             _rb.velocity = Vector3.zero.SetY(JUMP_POWER * _maxStabCount);
             //_rb.AddForce(Vector3.up * (JUMP_POWER + _maxStabCount), ForceMode.Impulse);
 

@@ -20,6 +20,10 @@ namespace TM.Entity.Player
         bool _isPressFire;
         bool _isCoolDown;
 
+        int _dangoRemovingHash = Animator.StringToHash("DangoRemoving");
+        int _isPressFireTriggerHash = Animator.StringToHash("IsPressFireTrigger");
+        int _isReleaseFireTriggerHash = Animator.StringToHash("IsReleaseFireTrigger");
+
         public bool IsCoolDown => _isCoolDown;
 
         public PlayerRemoveDango(List<DangoColor> dangos, DangoUIScript dangoUIScript, PlayerData playerData, Animator animator)
@@ -43,7 +47,7 @@ namespace TM.Entity.Player
             if (!_isPressFire) return;
 
             //AN8Bçƒê∂
-            _animator.CrossFade("DangoRemoving", 0f);
+            _animator.CrossFade(_dangoRemovingHash, 0f);
 
             //[Debug]âΩÇ™è¡Ç¶ÇΩÇ©ÇÌÇ©ÇÈÇ‚Ç¬
             //ç°Ç‹Ç≈ÇÕÅAdangos[dangos.Count - 1]Ç∆ÇµÇ»ÇØÇÍÇŒÇ»ÇËÇ‹ÇπÇÒÇ≈ÇµÇΩÇ™ÅA
@@ -76,7 +80,7 @@ namespace TM.Entity.Player
             _isCoolDown = true;
 
             //AN8Açƒê∂
-            _animator.SetTrigger("IsPressFireTrigger");
+            _animator.SetTrigger(_isPressFireTriggerHash);
 
             float time = ANIMATION_TIME;
 
@@ -85,7 +89,7 @@ namespace TM.Entity.Player
                 if (!InputSystemManager.Instance.IsPressFire)
                 {
                     _isPressFire = InputSystemManager.Instance.IsPressFire;
-                    _animator.SetTrigger("IsReleaseFireTrigger");
+                    _animator.SetTrigger(_isReleaseFireTriggerHash);
                     return;
                 }
 
