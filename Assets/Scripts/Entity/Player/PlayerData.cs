@@ -57,7 +57,7 @@ class PlayerData : MonoBehaviour
         }
         public IState.E_State FixedUpdate(PlayerData parent)
         {
-            parent._animator.SetFloat("VelocityY", parent.rb.velocity.y);
+            parent._animator.SetFloat(parent._velocityYHash, parent.rb.velocity.y);
 
             if (parent._playerJump.IsJumping) return IState.E_State.Unchanged;
 
@@ -83,7 +83,7 @@ class PlayerData : MonoBehaviour
     {
         public IState.E_State Initialize(PlayerData parent)
         {
-            parent._animator.SetTrigger("FallActionTrigger");
+            parent._animator.SetTrigger(parent._fallActionTriggerHash);
             parent._hasFalled = false;
             parent._playerFall.IsFallAction = true;
             return IState.E_State.Unchanged;
@@ -132,7 +132,7 @@ class PlayerData : MonoBehaviour
 
             if (parent._playerAttack.FixedUpdate())
             {
-                parent._animator.SetBool("IsEndWalk", InputSystemManager.Instance.MoveAxis.magnitude > 0);
+                parent._animator.SetBool(parent._isEndWalkHash, InputSystemManager.Instance.MoveAxis.magnitude > 0);
                 return IState.E_State.Control;
             }
 
@@ -282,6 +282,14 @@ class PlayerData : MonoBehaviour
     PlayerFallAction _playerFall;
     PlayerAttackAction _playerAttack;
 
+    //animatorのハッシュ値を取得（最適化の処理）
+    int _isGroundHash = Animator.StringToHash("IsGround");
+    int _attackTriggerHash = Animator.StringToHash("AttackTrigger");
+    int _velocityYHash = Animator.StringToHash("VelocityY");
+    int _fallActionTriggerHash = Animator.StringToHash("FallActionTrigger");
+    int _fallActionLandingTriggerHash = Animator.StringToHash("FallActionLandingTrigger");
+    int _isEndWalkHash = Animator.StringToHash("IsEndWalk");
+
     /// <summary>
     /// 満腹度、制限時間の代わり（単位:[sec]）
     /// </summary>
@@ -310,7 +318,7 @@ class PlayerData : MonoBehaviour
             if (value && _playerFall.IsFallAction)
             {
                 //AN7Bの再生もここ
-                _animator.SetTrigger("FallActionLandingTrigger");
+                _animator.SetTrigger(_fallActionLandingTriggerHash);
 
                 SoundManager.Instance.PlaySE(SoundSource.SE11_FALLACTION_LANDING);
 
@@ -546,7 +554,7 @@ class PlayerData : MonoBehaviour
         spitManager.IsSticking = true;
 
         //串の位置を変更（アニメーション推奨）
-        _animator.SetTrigger("AttackTrigger");
+        _animator.SetTrigger(_attackTriggerHash);
 
         return true;
     }
@@ -567,6 +575,8 @@ class PlayerData : MonoBehaviour
     {
         var ray = new Ray(new(transform.position.x, transform.position.y + capsuleCollider.height / 2f, transform.position.z), Vector3.down);
         IsGround = Physics.Raycast(ray, capsuleCollider.height / 1.5f);
+        _animator.SetBool(_isGroundHash, IsGround);
+
         Debug.DrawRay(new Vector3(transform.position.x,transform.position.y + capsuleCollider.height / 2f,transform.position.z), Vector3.down, Color.red);
     }
 
