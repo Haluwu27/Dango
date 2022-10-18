@@ -33,6 +33,17 @@ public class DangoData : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (_rigidbody.velocity.magnitude < 10)
+        {
+            //指定したスピードから現在の速度を引いて加速力を求める
+            float currentSpeed = 10 - _rigidbody.velocity.magnitude;
+            //調整された加速力で力を加える
+            _rigidbody.AddForce(transform.forward * currentSpeed);
+        }
+
+        //ここで回転処理でも作る
+        if (_rigidbody.velocity.magnitude < 0.01f) transform.Rotate(0, Random.Range(90f, 270f), 0);
+
         ReleaseDango();
     }
 
@@ -55,6 +66,7 @@ public class DangoData : MonoBehaviour
     {
         _poolManager.DangoPool[(int)_color - 1].Release(this);
     }
+
     public DangoColor GetDangoColor() => _color;
 
     public void SetDangoColor(DangoColor type)
