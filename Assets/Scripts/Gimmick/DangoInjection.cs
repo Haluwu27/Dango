@@ -10,7 +10,7 @@ using UnityEditor;
 #endif
 public class DangoInjection : MonoBehaviour
 {
-    [System.Flags]
+    [Flags]
     private enum DangoColorChoice
     {
         [InspectorName("ëSéÊÇËè¡Çµ")]

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class FloorManager : MonoBehaviour
@@ -50,6 +51,24 @@ public class FloorManager : MonoBehaviour
     //重複しない乱数取得用
     List<int> _nums = new();
 
+    readonly List<BoxCollider> _boxColliders = new();
+
+    private void Awake()
+    {
+        foreach (var floor in floorArrays)
+        {
+            foreach (var injection in floor.DangoInjections)
+            {
+                _boxColliders.Clear();
+
+                foreach (var data in floor.FloorDatas)
+                {
+                    _boxColliders.Add(data.GetComponent<BoxCollider>());
+                }
+            }
+        }
+    }
+
     public void CheckDangoIsFull(Collider other, Floor floor)
     {
         //団子以外を弾く
@@ -80,7 +99,7 @@ public class FloorManager : MonoBehaviour
         }
 
         //乱数用のインデックス番号を取得
-        for(int i = 0; i < floorArrays[(int)floor].DangoInjections.Length; i++)
+        for (int i = 0; i < floorArrays[(int)floor].DangoInjections.Length; i++)
         {
             _nums.Add(i);
         }
@@ -93,7 +112,7 @@ public class FloorManager : MonoBehaviour
 
             //重複しないランダムな発射装置の発射フラグを立てる
             floorArrays[(int)floor].DangoInjections[_nums[index]].SetCanShot(true);
-            
+
             //今回取得した番号を選択肢から排除
             _nums.RemoveAt(index);
         }
