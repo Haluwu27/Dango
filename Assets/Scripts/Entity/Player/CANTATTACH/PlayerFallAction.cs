@@ -10,7 +10,7 @@ namespace TM.Entity.Player
         System.Random _rand = new();
 
         //—‰ºƒAƒNƒVƒ‡ƒ“’è”
-        const int FALLACTION_STAY_AIR_FRAME = 50;
+        const int FALLACTION_STAY_AIR_FRAME = 10;
         const int FALLACTION_FALL_POWER = 30;
         const int FALLACTION_MOVE_POWER = 10;
 
