@@ -2,11 +2,11 @@
   "languageString": "JP",
   "gamepadInputEnabled": true,
   "dataFilePath": "default",
-  "masterVolume": 3,
-  "soundEffectVolume": 4,
-  "backGroundMusicVolume": 2,
-  "voiceVolume": 3,
+  "masterVolume": 10,
+  "soundEffectVolume": 5,
+  "backGroundMusicVolume": 5,
+  "voiceVolume": 5,
   "cameraRotationSpeed": 100,
-  "cameraHorizontalOrientation": true,
+  "cameraHorizontalOrientation": false,
   "cameraVerticalOrientation": false
 }

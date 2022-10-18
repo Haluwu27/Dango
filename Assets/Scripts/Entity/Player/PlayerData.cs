@@ -59,20 +59,22 @@ class PlayerData : MonoBehaviour
         }
         public IState.E_State FixedUpdate(PlayerData parent)
         {
-            parent._animator.SetFloat("VelocityY", parent.rb.velocity.y);
+            if (!Event)
+            {
+                parent._animator.SetFloat("VelocityY", parent.rb.velocity.y);
 
-            if (parent._playerJump.IsJumping) return IState.E_State.Unchanged;
+                if (parent._playerJump.IsJumping) return IState.E_State.Unchanged;
 
-            //プレイヤーを動かす処理
-            parent._playerMove.Update(parent.rb, parent.playerCamera.transform);
+                //プレイヤーを動かす処理
+                parent._playerMove.Update(parent.rb, parent.playerCamera.transform);
 
-            //満腹度（制限時間）減らす処理
-            parent.DecreaseSatiety();
+                //満腹度（制限時間）減らす処理
+                parent.DecreaseSatiety();
 
-            //ジャンプ
-            parent._playerJump.SetIsGround(parent._isGround);
-            parent._playerJump.SetMaxStabCount(parent._currentStabCount);
-
+                //ジャンプ
+                parent._playerJump.SetIsGround(parent._isGround);
+                parent._playerJump.SetMaxStabCount(parent._currentStabCount);
+            }
             //ステートに移行。
             if (parent._hasStayedEat) return IState.E_State.StayEatDango;
             if (parent._hasAttacked) return IState.E_State.AttackAction;
@@ -309,6 +311,9 @@ class PlayerData : MonoBehaviour
     PlayerRemoveDango _playerRemoveDango;
     PlayerFallAction _playerFall;
     PlayerAttackAction _playerAttack;
+
+    //映像やアニメーションのイベントフラグ
+    public static bool Event = false;
 
     /// <summary>
     /// 満腹度、制限時間の代わり（単位:[sec]）
@@ -557,6 +562,7 @@ class PlayerData : MonoBehaviour
 
         //空中でも出てると違和感あったので消します
         rangeUI.SetActive(_isGround);
+        rangeUI.SetActive(!Event);
     }
 
     private bool CanStab()
@@ -610,6 +616,7 @@ class PlayerData : MonoBehaviour
     /// </summary>
     private void DecreaseSatiety()
     {
+        if(Event)
         //満腹度を0.02秒(fixedUpdateの呼ばれる秒数)減らす
         _satiety -= Time.fixedDeltaTime;
     }
