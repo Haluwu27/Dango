@@ -7,7 +7,6 @@ public class SpitManager : MonoBehaviour
     [SerializeField] PlayerData player = default!;
     [SerializeField] CapsuleCollider _capsuleCollider = default!;
     DangoUIScript DangoUISC;
-    QuestManager _questManager = new();
 
     private void Awake()
     {
@@ -33,6 +32,8 @@ public class SpitManager : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        if (other.GetComponent<DangoData>() == null) return;
+        
         //刺せる状態ではないなら実行しない
         if (!IsSticking) return;
         if (_isInWall) return;
@@ -53,7 +54,7 @@ public class SpitManager : MonoBehaviour
             return;
         }
 
-        if (other.gameObject.TryGetComponent(out DangoManager dango))
+        if (other.gameObject.TryGetComponent(out DangoData dango))
         {
             //SE
             SoundManager.Instance.PlaySE(SoundSource.SE14_STAB_DANGO);
@@ -95,7 +96,7 @@ public class SpitManager : MonoBehaviour
         if (!player.PlayerFall.IsFallAction) return;
 
         //落下アクション○回しろ系クエストの判定
-        _questManager.SucceedChecker.CheckQuestPlayActionSucceed(_questManager, Dango.Quest.QuestPlayAction.PlayerAction.FallAttack);
+        QuestManager.Instance.SucceedChecker.CheckQuestPlayActionSucceed(QuestManager.Instance, Dango.Quest.QuestPlayAction.PlayerAction.FallAttack);
 
         Logger.Log("落下アクション中に刺した！");
     }

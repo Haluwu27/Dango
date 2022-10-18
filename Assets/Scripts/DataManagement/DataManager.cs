@@ -47,7 +47,9 @@ public class DataManager : MonoBehaviour
         }
 
         LoadSaveData();
-        LoadLanguageData();
+
+        //言語データは使用しないので不要
+        //LoadLanguageData();
     }
 
     void OnApplicationQuit()

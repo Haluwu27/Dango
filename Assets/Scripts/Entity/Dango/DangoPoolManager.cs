@@ -5,40 +5,40 @@ using UnityEngine.Pool;
 
 public class DangoPoolManager : MonoBehaviour
 {
-    [SerializeField] private GameObject dango = default!;
+    [SerializeField] private DangoData[] dangoDatas;
     [SerializeField] private Transform parent = default!;
 
-    public ObjectPool<DangoManager> DangoPool { get; private set; }
-    private int _poolCount = 0;
+    public ObjectPool<DangoData>[] DangoPool { get; private set; } = new ObjectPool<DangoData>[(int)DangoColor.Purple];
+
+    int index;
 
     private void Awake()
     {
-        DangoPool = new(OnCreateDango, OnTakeFromPool, OnReturnedToPool, OnDestroyPoolObject, true, 7 * 30, 7 * 150);
+        for (int poolIndex = 0; poolIndex < (int)DangoColor.Purple; poolIndex++)
+        {
+            DangoPool[poolIndex] = new(OnCreateDango, OnTakeFromPool, OnReturnedToPool, OnDestroyPoolObject, true, 7 * 30, 7 * 150);
+        }
     }
 
-    private DangoManager OnCreateDango()
+    private DangoData OnCreateDango()
     {
         //’cq‚ğæ“¾
-        var dangoObj = Instantiate(dango);
+        var dangoObj = Instantiate(dangoDatas[index]);
 
         //æ“¾‚µ‚½’cq‚©‚çDangoManager‚ğæ“¾
-        var dangoManager = dangoObj.GetComponent<DangoManager>();
-
-        //æ“¾‚µ‚½’iŠK‚Å’cq‚ÌF‚ğİ’è
-        SetDangoColor(dangoManager);
+        var dangoManager = dangoObj.GetComponent<DangoData>();
 
         dangoManager.transform.parent = parent;
 
         return dangoManager;
     }
 
-    private void OnTakeFromPool(DangoManager dango)
+    private void OnTakeFromPool(DangoData dango)
     {
-        SetDangoColor(dango);
         dango.gameObject.SetActive(true);
     }
 
-    private void OnReturnedToPool(DangoManager dango)
+    private void OnReturnedToPool(DangoData dango)
     {
         dango.gameObject.SetActive(false);
         dango.gameObject.transform.SetPositionAndRotation(Vector3.zero, Quaternion.identity);
@@ -46,28 +46,13 @@ public class DangoPoolManager : MonoBehaviour
         dango.SetDangoColor(DangoColor.None);
     }
 
-    void OnDestroyPoolObject(DangoManager dango)
+    void OnDestroyPoolObject(DangoData dango)
     {
         Destroy(dango.gameObject);
     }
 
-    private void SetDangoColor(DangoManager dangoManager)
+    public void SetCreateColor(DangoColor color)
     {
-        dangoManager.SetDangoColor((DangoColor)_poolCount + 1);
-        _poolCount++;
-        if (_poolCount > 6) _poolCount = 0;
-
-        dangoManager.Rend.material.color = dangoManager.GetDangoColor() switch
-        {
-            DangoColor.Red => Color.red,
-            DangoColor.Orange => new Color32(255, 155, 0, 255),
-            DangoColor.Yellow => Color.yellow,
-            DangoColor.Green => Color.green,
-            DangoColor.Cyan => Color.cyan,
-            DangoColor.Blue => Color.blue,
-            DangoColor.Purple => new Color32(200, 0, 255, 255),
-            DangoColor.Other => Color.gray,
-            _ => Color.white,
-        };
+        index = (int)color - 1;
     }
 }

@@ -22,7 +22,6 @@ class PlayerData : MonoBehaviour
             AttackAction = 2,
             StayEatDango = 3,
             EatDango = 4,
-            GrowStab = 5,
 
             Max,
 
@@ -42,14 +41,13 @@ class PlayerData : MonoBehaviour
         new AttackActionState(),
         new StayEatDangoState(),
         new EatDangoState(),
-        new GrowStabState(),
      };
 
     class ControlState : IState
     {
         public IState.E_State Initialize(PlayerData parent)
         {
-            //串の位置をリセット
+            //串の状態をリセット
             parent.ResetSpit();
             return IState.E_State.Unchanged;
         }
@@ -59,22 +57,20 @@ class PlayerData : MonoBehaviour
         }
         public IState.E_State FixedUpdate(PlayerData parent)
         {
-            if (!Event)
-            {
-                parent._animator.SetFloat("VelocityY", parent.rb.velocity.y);
+            parent._animator.SetFloat(parent._velocityYHash, parent.rb.velocity.y);
 
-                if (parent._playerJump.IsJumping) return IState.E_State.Unchanged;
+            if (parent._playerJump.IsJumping) return IState.E_State.Unchanged;
 
-                //プレイヤーを動かす処理
-                parent._playerMove.Update(parent.rb, parent.playerCamera.transform);
+            //プレイヤーを動かす処理
+            parent._playerMove.Update(parent.rb, parent.playerCamera.transform, parent._playerRemoveDango.IsCoolDown, parent._playerJump.IsStayJump);
 
-                //満腹度（制限時間）減らす処理
-                parent.DecreaseSatiety();
+            //満腹度（制限時間）減らす処理
+            parent.DecreaseSatiety();
 
-                //ジャンプ
-                parent._playerJump.SetIsGround(parent._isGround);
-                parent._playerJump.SetMaxStabCount(parent._currentStabCount);
-            }
+            //ジャンプ
+            parent._playerJump.SetIsGround(parent._isGround);
+            parent._playerJump.SetMaxStabCount(parent._currentStabCount);
+
             //ステートに移行。
             if (parent._hasStayedEat) return IState.E_State.StayEatDango;
             if (parent._hasAttacked) return IState.E_State.AttackAction;
@@ -87,6 +83,7 @@ class PlayerData : MonoBehaviour
     {
         public IState.E_State Initialize(PlayerData parent)
         {
+            parent._animator.SetTrigger(parent._fallActionTriggerHash);
             parent._hasFalled = false;
             parent._playerFall.IsFallAction = true;
             return IState.E_State.Unchanged;
@@ -98,7 +95,7 @@ class PlayerData : MonoBehaviour
         public IState.E_State FixedUpdate(PlayerData parent)
         {
             //移動
-            parent._playerMove.Update(parent.rb, parent.playerCamera.transform);
+            parent._playerMove.Update(parent.rb, parent.playerCamera.transform, parent._playerRemoveDango.IsCoolDown,parent._playerJump.IsStayJump);
 
             //制限時間減少
             parent.DecreaseSatiety();
@@ -135,7 +132,7 @@ class PlayerData : MonoBehaviour
 
             if (parent._playerAttack.FixedUpdate())
             {
-                parent._animator.SetBool("IsEndWalk", InputSystemManager.Instance.MoveAxis.magnitude > 0);
+                parent._animator.SetBool(parent._isEndWalkHash, InputSystemManager.Instance.MoveAxis.magnitude > 0);
                 return IState.E_State.Control;
             }
 
@@ -148,7 +145,6 @@ class PlayerData : MonoBehaviour
         {
             parent._playerUIManager.EventText.TextData.SetText("食べチャージ中！");
             parent._playerStayEat.ResetCount();
-            parent._animator.SetBool("IsEatingCharge", true);
             //SE推奨
 
             return IState.E_State.Unchanged;
@@ -172,7 +168,6 @@ class PlayerData : MonoBehaviour
             //待機をやめたらコントロールに戻る
             if (!parent._hasStayedEat)
             {
-            parent._animator.SetBool("IsEatingCharge", false);
                 parent.StartCoroutine(parent.ResetCameraView());
                 return IState.E_State.Control;
             }
@@ -183,32 +178,8 @@ class PlayerData : MonoBehaviour
     {
         public IState.E_State Initialize(PlayerData parent)
         {
-            if (parent._canGrowStab) return IState.E_State.GrowStab;
-
             parent.EatDango();
-            parent._animator.SetTrigger("EatingTrigger");
             return IState.E_State.Control;
-        }
-        public IState.E_State Update(PlayerData parent)
-        {
-            return IState.E_State.Unchanged;
-        }
-        public IState.E_State FixedUpdate(PlayerData parent)
-        {
-            return IState.E_State.Unchanged;
-        }
-
-    }
-    class GrowStabState : IState
-    {
-        public IState.E_State Initialize(PlayerData parent)
-        {
-            parent._currentStabCount = parent._playerGrowStab.GrowStab(parent._currentStabCount);
-            parent._playerUIManager.EventText.TextData.SetText("させる団子の数が増えた！(" + parent._currentStabCount + "個)");
-            parent._canGrowStab = false;
-            //刺せる範囲表示の拡大。今串が伸びないのでコメントアウトしてます。
-            //parent.rangeUI.transform.localScale = new Vector3(parent.rangeUI.transform.localScale.x, parent.rangeUI.transform.localScale.y + 0.01f, parent.rangeUI.transform.localScale.z);
-            return IState.E_State.EatDango;
         }
         public IState.E_State Update(PlayerData parent)
         {
@@ -293,7 +264,6 @@ class PlayerData : MonoBehaviour
 
     //串を伸ばす処理
     readonly PlayerGrowStab _playerGrowStab = new();
-    bool _canGrowStab = false;
 
     const float DEFAULT_CAMERA_VIEW = 60f;
     const float CAMERA_REMOVETIME = 0.3f;
@@ -312,8 +282,13 @@ class PlayerData : MonoBehaviour
     PlayerFallAction _playerFall;
     PlayerAttackAction _playerAttack;
 
-    //映像やアニメーションのイベントフラグ
-    public static bool Event = false;
+    //animatorのハッシュ値を取得（最適化の処理）
+    int _isGroundHash = Animator.StringToHash("IsGround");
+    int _attackTriggerHash = Animator.StringToHash("AttackTrigger");
+    int _velocityYHash = Animator.StringToHash("VelocityY");
+    int _fallActionTriggerHash = Animator.StringToHash("FallActionTrigger");
+    int _fallActionLandingTriggerHash = Animator.StringToHash("FallActionLandingTrigger");
+    int _isEndWalkHash = Animator.StringToHash("IsEndWalk");
 
     /// <summary>
     /// 満腹度、制限時間の代わり（単位:[sec]）
@@ -340,22 +315,18 @@ class PlayerData : MonoBehaviour
         get => _isGround;
         private set
         {
-            if (value)
+            if (value && _playerFall.IsFallAction)
             {
-                if (_playerFall.IsFallAction)
-                {
-                    //AN7Bの再生もここ
-                    SoundManager.Instance.PlaySE(SoundSource.SE11_FALLACTION_LANDING);
+                //AN7Bの再生もここ
+                _animator.SetTrigger(_fallActionLandingTriggerHash);
 
-                    _playerFall.IsFallAction = false;
-                    capsuleCollider.sharedMaterial = _ice;
-                }
-            }
-            else
-            {
-                capsuleCollider.sharedMaterial = _normal;
+                SoundManager.Instance.PlaySE(SoundSource.SE11_FALLACTION_LANDING);
+
+                _playerFall.IsFallAction = false;
             }
 
+            //空中時は摩擦をカット
+            capsuleCollider.sharedMaterial = value ? _normal : _ice;
             _isGround = value;
         }
     }
@@ -368,9 +339,9 @@ class PlayerData : MonoBehaviour
 
     private void Awake()
     {
-        _playerAttack = new(_attackRangeImage);
+        _playerAttack = new(_attackRangeImage, this, _animator);
         _playerFall = new(capsuleCollider, OnJump, OnJumpExit);
-        _playerRemoveDango = new(_dangos, _dangoUISC);
+        _playerRemoveDango = new(_dangos, _dangoUISC, this, _animator);
         _playerMove = new(_animator);
         _playerJump = new(rb, OnJump, OnJumpExit, _animator);
     }
@@ -386,7 +357,8 @@ class PlayerData : MonoBehaviour
         InputSystemManager.Instance.onAttackPerformed += OnAttack;
         InputSystemManager.Instance.onEatDangoPerformed += OnEatDango;
         InputSystemManager.Instance.onEatDangoCanceled += () => _hasStayedEat = false;
-        InputSystemManager.Instance.onJumpPerformed += _playerJump.Jump;
+        InputSystemManager.Instance.onJumpPerformed += _playerJump.OnStayJumping;
+        InputSystemManager.Instance.onJumpCanceled += _playerJump.Jump;
         makerUI.SetActive(false);
     }
 
@@ -400,7 +372,6 @@ class PlayerData : MonoBehaviour
 
     private void FixedUpdate()
     {
-        _canGrowStab = _playerGrowStab.CanGrowStab(_currentStabCount);
         FixedUpdateState();
     }
 
@@ -410,7 +381,8 @@ class PlayerData : MonoBehaviour
         InputSystemManager.Instance.onAttackPerformed -= OnAttack;
         InputSystemManager.Instance.onEatDangoPerformed -= OnEatDango;
         InputSystemManager.Instance.onEatDangoCanceled -= () => _hasStayedEat = false;
-        InputSystemManager.Instance.onJumpPerformed -= _playerJump.Jump;
+        InputSystemManager.Instance.onJumpPerformed -= _playerJump.OnStayJumping;
+        InputSystemManager.Instance.onJumpCanceled -= _playerJump.Jump;
     }
 
     //突き刺しボタン降下時処理
@@ -477,29 +449,25 @@ class PlayerData : MonoBehaviour
         _hasStayedEat = false;
 
         //食べた団子の点数を取得
-        var score = dangoRole.CheckRole(_dangos,_currentStabCount);
+        var score = dangoRole.CheckRole(_dangos, _currentStabCount);
 
         //演出関数の呼び出し
         _directing.Dirrecting(_dangos);
 
         _playerUIManager.EventText.TextData.SetText("食べた！" + (int)score + "点！");
 
-        //残り時間の増加
-        PlayerUIManager.time += score;
 
         //満腹度を上昇
-        _satiety += score * SCORE_TIME_RATE;
+        //_satiety += score * SCORE_TIME_RATE;
 
         //スコアを上昇
         GameManager.GameScore += score * 100f;
 
         //串をクリア。
         _dangos.Clear();
+
         //UI更新
         _dangoUISC.DangoUISet(_dangos);
-
-        //一部UIの非表示
-        _playerUIManager.EatDangoUI_False();
 
     }
 
@@ -545,7 +513,7 @@ class PlayerData : MonoBehaviour
         if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity))
         {
             makerUI.transform.position = hit.point + new Vector3(0, 0.01f, 0);
-            
+
             //突き刺しできるようになったら有効化
             makerUI.SetActive(!Physics.Raycast(ray, capsuleCollider.height + capsuleCollider.height / 2f));
         }
@@ -562,7 +530,6 @@ class PlayerData : MonoBehaviour
 
         //空中でも出てると違和感あったので消します
         rangeUI.SetActive(_isGround);
-        rangeUI.SetActive(!Event);
     }
 
     private bool CanStab()
@@ -587,7 +554,7 @@ class PlayerData : MonoBehaviour
         spitManager.IsSticking = true;
 
         //串の位置を変更（アニメーション推奨）
-        _animator.SetTrigger("AttackTrigger");
+        _animator.SetTrigger(_attackTriggerHash);
 
         return true;
     }
@@ -607,8 +574,10 @@ class PlayerData : MonoBehaviour
     private void IsGrounded()
     {
         var ray = new Ray(new(transform.position.x, transform.position.y + capsuleCollider.height / 2f, transform.position.z), Vector3.down);
-        IsGround = Physics.Raycast(ray, capsuleCollider.height / 1.999f);
-        Debug.DrawRay(transform.position, Vector3.down, Color.red);
+        IsGround = Physics.Raycast(ray, capsuleCollider.height / 1.5f);
+        _animator.SetBool(_isGroundHash, IsGround);
+
+        Debug.DrawRay(new Vector3(transform.position.x,transform.position.y + capsuleCollider.height / 2f,transform.position.z), Vector3.down, Color.red);
     }
 
     /// <summary>
@@ -616,7 +585,6 @@ class PlayerData : MonoBehaviour
     /// </summary>
     private void DecreaseSatiety()
     {
-        if(Event)
         //満腹度を0.02秒(fixedUpdateの呼ばれる秒数)減らす
         _satiety -= Time.fixedDeltaTime;
     }
@@ -638,10 +606,20 @@ class PlayerData : MonoBehaviour
         playerCamera.fieldOfView = DEFAULT_CAMERA_VIEW;
     }
 
-    public void EatAnima()
+    public void GrowStab(bool enable)
     {
-        _animator.SetBool("IsEatingCharge", false);
-        _playerUIManager.EatDangoUI_True();
+        if (!enable) return;
+
+        _currentStabCount = _playerGrowStab.GrowStab(_currentStabCount);
+        _playerUIManager.EventText.TextData.SetText("させる団子の数が増えた！(" + _currentStabCount + "個)");
+
+        //刺せる範囲表示の拡大。今串が伸びないのでコメントアウトしてます。
+        //parent.rangeUI.transform.localScale = new Vector3(parent.rangeUI.transform.localScale.x, parent.rangeUI.transform.localScale.y + 0.01f, parent.rangeUI.transform.localScale.z);
+    }
+
+    public int GetCurrentStabCount()
+    {
+        return _currentStabCount;
     }
 
     #region GetterSetter
@@ -649,6 +627,7 @@ class PlayerData : MonoBehaviour
     public List<DangoColor> GetDangos() => _dangos;
     public void AddDangos(DangoColor d) => _dangos.Add(d);
     public float GetSatiety() => _satiety;
+    public void AddSatiety(float value) => _satiety += value;
     public DangoUIScript GetDangoUIScript() => _dangoUISC;
 
     #endregion

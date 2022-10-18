@@ -45,13 +45,18 @@ namespace TM.Entity.Player
 
             if (--_currentTime > 0)
             {
-                rigidbody.velocity = new Vector3(rigidbody.velocity.x / FALLACTION_MOVE_POWER, 0, rigidbody.velocity.z / FALLACTION_MOVE_POWER);
+                rigidbody.velocity = rigidbody.velocity.SetX(rigidbody.velocity.x / FALLACTION_MOVE_POWER).SetY(0).SetZ(rigidbody.velocity.z / FALLACTION_MOVE_POWER);
                 return false;
             }
+
+            //SEçƒê∂
             SoundManager.Instance.PlaySE(_rand.Next((int)SoundSource.VOISE_PRINCE_FALL01, (int)SoundSource.VOISE_PRINCE_FALL02 + 1));
             SoundManager.Instance.PlaySE(SoundSource.SE10_FALLACTION);
-            rigidbody.AddForce(Vector3.down * FALLACTION_FALL_POWER, ForceMode.Impulse);
+            
+            //óéâ∫éhÇµèàóù(éøó ñ≥éãÇ≈óÕÇâ¡Ç¶ÇÈ)
+            rigidbody.AddForce(Vector3.down * FALLACTION_FALL_POWER, ForceMode.VelocityChange);
             spitManager.IsSticking = true;
+            
             return true;
         }
 
