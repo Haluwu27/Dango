@@ -7,38 +7,16 @@ using static FloorManager;
 
 public class FloorData : MonoBehaviour
 {
-    private void Awake()
-    {
-        CreateInvertedMeshCollider();
-    }
-
-    public void CreateInvertedMeshCollider()
-    {
-        RemoveExistingColliders();
-        InvertMesh();
-
-        gameObject.AddComponent<MeshCollider>();
-    }
-
-    private void RemoveExistingColliders()
-    {
-        Collider[] colliders = GetComponents<Collider>();
-        for (int i = 0; i < colliders.Length; i++)
-            DestroyImmediate(colliders[i]);
-    }
-
-    private void InvertMesh()
-    {
-        Mesh mesh = GetComponent<MeshFilter>().mesh;
-        mesh.triangles = mesh.triangles.Reverse().ToArray();
-    }
-
-
     [SerializeField] FloorManager floorManager;
     [SerializeField] Floor floor;
 
     //ÉtÉçÉAÇ…åªë∂ÇµÇƒÇ¢ÇÈícéqÇÃêî
     int _dangoCount;
+
+    private void Awake()
+    {
+        CreateInvertedMeshCollider();
+    }
 
     private void OnTriggerEnter(Collider other)
     {
@@ -52,10 +30,23 @@ public class FloorData : MonoBehaviour
     private void OnTriggerExit(Collider other)
     {
         //ícéqà»äOÇíeÇ≠
-        if (other.GetComponent<DangoData>() == null) return;
+        if (other.GetComponentInParent<DangoData>() == null) return;
 
         _dangoCount--;
         floorManager.CheckDangoIsNotFull(other, floor, 1);
+    }
+
+    private void CreateInvertedMeshCollider()
+    {
+        InvertMesh();
+
+        gameObject.AddComponent<MeshCollider>();
+    }
+
+    private void InvertMesh()
+    {
+        Mesh mesh = GetComponent<MeshFilter>().mesh;
+        mesh.triangles = mesh.triangles.Reverse().ToArray();
     }
 
     public void AddDangoCount() => _dangoCount++;
