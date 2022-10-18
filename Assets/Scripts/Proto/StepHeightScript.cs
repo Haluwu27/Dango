@@ -45,7 +45,7 @@ public class StepHeightScript : MonoBehaviour
 
     private void SetCollar()
     {
-        currentStabCount = player1.GetCurrentStabCount();
+        currentStabCount = player1.GetMaxDango();
 
         for (int i = 0; i < cubeMesh.Count; i++)
         {
