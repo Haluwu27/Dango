@@ -46,7 +46,7 @@ using UnityEngine;
             MainCam.gameObject.SetActive(false);
 
             Eat = true;
-            PlayerData.Event = true;
+            //PlayerData.Event = true;
         }
 
         public void OffEat()
@@ -56,6 +56,6 @@ using UnityEngine;
 
             Eat = false;
 
-            PlayerData.Event = false;
+            //PlayerData.Event = false;
         }
     } 

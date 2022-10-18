@@ -21,7 +21,7 @@ public class AnimaEventScript : MonoBehaviour
 
     public void EatAnima()
     {
-        p1.EatAnima();
+        //p1.EatAnima();
     }
 
     public void EatCameraOn()
