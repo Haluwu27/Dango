@@ -282,6 +282,9 @@ class PlayerData : MonoBehaviour
     PlayerFallAction _playerFall;
     PlayerAttackAction _playerAttack;
 
+    //映像やアニメーションのイベントフラグ
+    public static bool Event = false;
+
     //animatorのハッシュ値を取得（最適化の処理）
     int _isGroundHash = Animator.StringToHash("IsGround");
     int _attackTriggerHash = Animator.StringToHash("AttackTrigger");
@@ -468,7 +471,8 @@ class PlayerData : MonoBehaviour
 
         //UI更新
         _dangoUISC.DangoUISet(_dangos);
-
+        //一部UIの非表示
+        _playerUIManager.EatDangoUI_False();
     }
 
     private void ResetSpit()
@@ -530,6 +534,7 @@ class PlayerData : MonoBehaviour
 
         //空中でも出てると違和感あったので消します
         rangeUI.SetActive(_isGround);
+        rangeUI.SetActive(!Event);
     }
 
     private bool CanStab()
@@ -620,6 +625,12 @@ class PlayerData : MonoBehaviour
     public int GetCurrentStabCount()
     {
         return _currentStabCount;
+    }
+
+    public void EatAnima()
+    {
+        _animator.SetBool("IsEatingCharge", false);
+        _playerUIManager.EatDangoUI_True();
     }
 
     #region GetterSetter
