@@ -13,7 +13,8 @@ public class DangoUIScript : MonoBehaviour
     private void Start()
     {
         DangoImagObjs = new Image[Objs.Length];
-        for(int i = 0; i < Objs.Length; i++) { 
+        for (int i = 0; i < Objs.Length; i++)
+        {
             DangoImagObjs[i] = Objs[i].GetComponent<Image>();
             Objs[i].SetActive(false);
         }
@@ -26,7 +27,7 @@ public class DangoUIScript : MonoBehaviour
             //団子が刺さっていないものがあれば非アクティブに
             Objs[i].SetActive(true);
             Logger.Log(dangos[i]);
-            DangoImagObjs[i].sprite = DangoImags[(int)dangos[i]];
+            DangoImagObjs[i].sprite = DangoImags[(int)dangos[i] - 1];
             //DangoImagObjs[i].sprite = dangos[i] switch
             //{
             //    DangoColor.Red => DangoImags[(int)DangoColor.Red],
@@ -45,5 +46,5 @@ public class DangoUIScript : MonoBehaviour
             Objs[i].SetActive(false);
         }
     }
- 
+
 }

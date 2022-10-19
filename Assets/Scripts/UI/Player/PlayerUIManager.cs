@@ -21,7 +21,7 @@ public class PlayerUIManager : MonoBehaviour
 
     private Image[] w_imgs;
 
-    GameObject[] ErasewithEatObj = new GameObject[3];
+    [SerializeField] GameObject[] ErasewithEatObj = new GameObject[3];
 
     private bool[] warningbool = new bool[3];
     public TextUIData EventText => eventText;
@@ -44,9 +44,10 @@ public class PlayerUIManager : MonoBehaviour
         w_imgs = new Image[Warningimgs.Length];
         warningbool = new bool[warningTimes.Length];
 
-        ErasewithEatObj[0] = GameObject.Find("DangoBackScreen");
-        ErasewithEatObj[1] = GameObject.Find("QuestCanvas");
-        ErasewithEatObj[2] = GameObject.Find("PlayerParent").transform.Find("Player1").transform.Find("RangeUI").gameObject;
+        //GameObject.Findを使うならシリアライズして取得しましょう。その方が名前に縛られず確実です。
+        //ErasewithEatObj[0] = GameObject.Find("DangoBackScreen");
+        //ErasewithEatObj[1] = GameObject.Find("QuestCanvas");
+        //ErasewithEatObj[2] = GameObject.Find("PlayerParent").transform.Find("Player1").transform.Find("RangeUI").gameObject;
     }
     private void Update()
     {
