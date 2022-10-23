@@ -299,6 +299,14 @@ namespace Dango.Quest
         {
             _onEatSucceed = onEatSucceed;
         }
+        public QuestDestination(int id, bool onEatSucceed, string questName, float rewardTime, bool enableDangoCountUp, bool isKeyQuest, int[] nextQuestId) : base(id, QuestType.Destination, questName, rewardTime, enableDangoCountUp, isKeyQuest, nextQuestId)
+        {
+            _onEatSucceed = onEatSucceed;
+        }
+        public QuestDestination(int id, bool onEatSucceed, string questName, float rewardTime, bool enableDangoCountUp, bool isKeyQuest, List<int> nextQuestId) : base(id, QuestType.Destination, questName, rewardTime, enableDangoCountUp, isKeyQuest, nextQuestId)
+        {
+            _onEatSucceed = onEatSucceed;
+        }
 
         public bool OnEatSucceed => _onEatSucceed;
     }

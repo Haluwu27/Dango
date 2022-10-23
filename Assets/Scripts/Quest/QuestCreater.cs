@@ -154,6 +154,14 @@ namespace Dango.Quest
         public QuestDestination CreateQuestDestination(int id, bool onEatSucceed, string questName, float rewardTime, bool enableDangoCountUp, bool isKeyQuest, int nextQuestId)
         {
             return new(id, onEatSucceed, questName, rewardTime, enableDangoCountUp, isKeyQuest, nextQuestId);
+        }        
+        public QuestDestination CreateQuestDestination(int id, bool onEatSucceed, string questName, float rewardTime, bool enableDangoCountUp, bool isKeyQuest, int[] nextQuestId)
+        {
+            return new(id, onEatSucceed, questName, rewardTime, enableDangoCountUp, isKeyQuest, nextQuestId);
+        } 
+        public QuestDestination CreateQuestDestination(int id, bool onEatSucceed, string questName, float rewardTime, bool enableDangoCountUp, bool isKeyQuest, List<int> nextQuestId)
+        {
+            return new(id, onEatSucceed, questName, rewardTime, enableDangoCountUp, isKeyQuest, nextQuestId);
         }
         #endregion
     }
