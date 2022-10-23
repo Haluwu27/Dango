@@ -13,8 +13,8 @@ namespace Dango.Quest.UI {
         [SerializeField] GameObject[] ExpansionQuestsNow;//今のクエスト
         [SerializeField] GameObject ExpansionQuestsPast;//一個前のクエスト
         [SerializeField] GameObject[] ExpansionQuestsFuture;//次のクエスト
-        [SerializeField] Animator timeAnima;
-        [SerializeField] Animator questAnima;
+        //[SerializeField] Animator timeAnima;
+        //[SerializeField] Animator questAnima;
         private Image[] questimage;
         private TextMeshProUGUI[] nowQuesttext;
         public TextMeshProUGUI oldQuesttext;
@@ -58,8 +58,8 @@ namespace Dango.Quest.UI {
                 quests[0].SetActive(true);
                 times[1].SetActive(false);
                 //quests[1].SetActive(false);
-                timeAnima.SetTrigger("On");
-                questAnima.SetTrigger("On");
+                //timeAnima.SetTrigger("On");
+                //questAnima.SetTrigger("On");
             }
         }
         public void OffSet()
