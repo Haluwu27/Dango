@@ -74,6 +74,7 @@ class SceneSystem : MonoBehaviour
         Scenes scene = Scenes.Stage2;
 
         _currentScene = scene;
+        _currentIngameScene = scene;
         Load(scene);
     }
 
