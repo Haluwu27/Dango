@@ -63,26 +63,48 @@ class SceneSystem : MonoBehaviour
 
     [SerializeField] GameObject[] _sceneRoots = new GameObject[(int)Scenes.Max];
     GameObject[] _scenes = new GameObject[(int)Scenes.Max];
+    Scenes _prebScene;
+    Scenes _currentScene;
+    Scenes _currentIngameScene;
 
     private void Awake()
     {
         Instance = this;
-        //Load(Scenes.Option);
-       // Load(Scenes.Stage1);
-        Load(Scenes.Stage2);
-        //Load(Scenes.Title);
-        //Load(Scenes.Menu);
+
+        Scenes scene = Scenes.Stage2;
+
+        _currentScene = scene;
+        Load(scene);
     }
 
     public bool Load(Scenes scene)
     {
-        _scenes[(int)scene] = Instantiate(_sceneRoots[(int)scene]);
+        int index = (int)scene;
+
+        //多重ロードを防ぐ
+        if (_scenes[index] != null && _scenes[index].activeSelf) return false;
+
+        _prebScene = _currentScene;
+        _currentScene = scene;
+
+        if (_scenes[index] == null) _scenes[index] = Instantiate(_sceneRoots[index]);
+        else _scenes[index].SetActive(true);
+
         return true;
     }
 
-    public bool UnLoad(Scenes scene)
+    public bool UnLoad(Scenes scene, bool destroy)
     {
-        Destroy(_scenes[(int)scene]);
+        //ロードされていないなら弾く
+        if (_scenes[(int)scene] == null) return false;
+
+        if (destroy) Destroy(_scenes[(int)scene]);
+        else _scenes[(int)scene].SetActive(false);
+
         return true;
     }
+
+    public Scenes PrebScene => _prebScene;
+    public Scenes CurrentIngameScene => _currentIngameScene;
+    public void SetIngameScene(Scenes scene) => _currentIngameScene = scene;
 }

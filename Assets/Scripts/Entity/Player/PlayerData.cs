@@ -378,7 +378,7 @@ class PlayerData : MonoBehaviour
         FixedUpdateState();
     }
 
-    private void OnChangeScene()
+    private void OnDestroy()
     {
         InputSystemManager.Instance.onFirePerformed -= _playerRemoveDango.Remove;
         InputSystemManager.Instance.onAttackPerformed -= OnAttack;

@@ -3,26 +3,19 @@ using System.Collections.Generic;
 using UnityEngine;
 using TM.Input.KeyConfig;
 using UnityEngine.UI;
+using static ChangeChoiceUtil;
 
 public class OptionManager : MonoBehaviour
 {
     /// <summary>オプション画面の選択肢</summary>
     enum OptionChoices
     {
-        Option,
-
         KeyConfig,
         Operation,
         Sound,
         Other,
 
         Max,
-    }
-
-    enum OptionDirection
-    {
-        Vertical,
-        Horizontal,
     }
 
     #region メンバ
@@ -51,7 +44,6 @@ public class OptionManager : MonoBehaviour
 
     //縦か横か
     static readonly OptionDirection direction = OptionDirection.Horizontal;
-    static readonly Vector2[,] directionTable = { { Vector2.up, Vector2.down }, { Vector2.left, Vector2.right } };
 
     //上端から下端に移動するか否か
     static readonly bool canMoveTopToBottom = false;
@@ -96,8 +88,8 @@ public class OptionManager : MonoBehaviour
 
         OptionInputDisable();
         await _fusumaManager.UniTaskClose(1.5f);
-        SceneSystem.Instance.Load(SceneSystem.Scenes.Menu);
-        SceneSystem.Instance.UnLoad(SceneSystem.Scenes.Option);
+        SceneSystem.Instance.Load(SceneSystem.Instance.PrebScene);
+        SceneSystem.Instance.UnLoad(SceneSystem.Scenes.Option, true);
     }
 
     private void ChangeChoice()
@@ -108,25 +100,10 @@ public class OptionManager : MonoBehaviour
 
         Vector2 axis = InputSystemManager.Instance.TabControlAxis;
 
-        //Up or Left
-        if (axis == directionTable[(int)direction, 0])
-        {
-            _currentChoice--;
+        if (!Choice(axis, ref _currentChoice, OptionChoices.Max, canMoveTopToBottom, direction)) return;
 
-            if (_currentChoice == OptionChoices.Option) _currentChoice = canMoveTopToBottom ? OptionChoices.Max - 1 : OptionChoices.Option + 1;
-
-            SetFontSize();
-        }
-        //Down or Right
-        else if (axis == directionTable[(int)direction, 1])
-        {
-            _currentChoice++;
-
-            if (_currentChoice == OptionChoices.Max) _currentChoice = canMoveTopToBottom ? OptionChoices.Option + 1 : OptionChoices.Max - 1;
-
-            SetFontSize();
-        }
-
+        SoundManager.Instance.PlaySE(SoundSource.SE16_UI_SELECTION);
+        SetFontSize();
         EnterNextChoice();
     }
 
@@ -158,7 +135,7 @@ public class OptionManager : MonoBehaviour
     {
         for (int i = 0; i < _optionTexts.Length; i++)
         {
-            float size = (int)_currentChoice - 1 == i ? 65f : 55.5f;
+            float size = (int)_currentChoice == i ? 65f : 55.5f;
 
             _optionTexts[i].TextData.SetFontSize(size);
         }

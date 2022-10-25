@@ -70,6 +70,7 @@ public class StageSelectManager : MonoBehaviour
 
         SoundManager.Instance.PlaySE(SoundSource.SE17_UI_DECISION);
         await _fusumaManager.UniTaskClose();
+        SceneSystem.Instance.SetIngameScene(SceneSystem.Scenes.Stage1 + (int)_currentStage);
         SceneSystem.Instance.Load(SceneSystem.Scenes.Stage1 + (int)_currentStage);
         UnLoad();
     }
@@ -153,6 +154,6 @@ public class StageSelectManager : MonoBehaviour
         //仮に非同期アニメーション中だった場合破棄する
         _stageImageUpdate.ImageData.CancelUniTask();
 
-        SceneSystem.Instance.UnLoad(SceneSystem.Scenes.StageSelect);
+        SceneSystem.Instance.UnLoad(SceneSystem.Scenes.StageSelect, true);
     }
 }

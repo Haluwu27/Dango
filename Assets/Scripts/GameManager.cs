@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Windows;
 
 /// <summary>
 /// メインゲームの進行に関わるもののみ定義
@@ -118,6 +119,11 @@ internal class GameManager : MonoBehaviour
 
     #endregion
 
+    private void Start()
+    {
+        InputSystemManager.Instance.onPausePerformed += OnPause;
+    }
+
     private void Update()
     {
         UpdateState();
@@ -126,6 +132,12 @@ internal class GameManager : MonoBehaviour
     private void FixedUpdate()
     {
         FixedUpdateState();
+    }
+
+    private void OnPause()
+    {
+        SceneSystem.Instance.Load(SceneSystem.Scenes.InGamePause);
+        InputSystemManager.Instance.Input.SwitchCurrentActionMap("UI");
     }
 
     private void FinishGame()

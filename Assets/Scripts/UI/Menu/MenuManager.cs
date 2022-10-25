@@ -232,6 +232,6 @@ public class MenuManager : MonoBehaviour
     {
         InputSystemManager.Instance.onNavigatePerformed -= OnNavigate;
         InputSystemManager.Instance.onChoicePerformed -= OnChoice;
-        SceneSystem.Instance.UnLoad(SceneSystem.Scenes.Menu);
+        SceneSystem.Instance.UnLoad(SceneSystem.Scenes.Menu,true);
     }
 }

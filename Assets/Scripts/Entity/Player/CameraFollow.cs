@@ -24,6 +24,7 @@ public class CameraFollow : MonoBehaviour
 
     [SerializeField] Vector3 EatCameraPos;
 
+    [SerializeField] GameObject parent;
     private Vector3 _prebTargetPos = Vector3.zero;
     private GameObject _terminus = null;
 
@@ -48,8 +49,9 @@ public class CameraFollow : MonoBehaviour
     private void Start()
     {
         _playerData = target.GetComponent<PlayerData>();
-        transform.parent = null;//ìÆÇ≠Ç‡ÇÃÇ…èÊÇÈÇ∆ÇªÇÍÇ…í«è]ÇµÇæÇ∑Ç©ÇÁêeéqä÷åWÇñ≥Ç≠Ç∑
+        transform.parent = parent.transform;//ìÆÇ≠Ç‡ÇÃÇ…èÊÇÈÇ∆ÇªÇÍÇ…í«è]ÇµÇæÇ∑Ç©ÇÁêeéqä÷åWÇñ≥Ç≠Ç∑
         _terminus = new GameObject("cameraTermiusObject");
+        _terminus.transform.parent = parent.transform;
         _terminus.transform.position = transform.position;
         _camIsStaying = new(gameObject, _terminus, target);
 
@@ -93,6 +95,7 @@ public class CameraFollow : MonoBehaviour
         }
         _prebTargetPos = currentTargetPos;
     }
+
     private void RotateToLookRot()
     {
         if (!Event)
@@ -132,7 +135,6 @@ public class CameraFollow : MonoBehaviour
                 Rote(_terminus, currentYAngle);
                 break;
         }
-
     }
 
     private void Rote(GameObject obj, float a)
