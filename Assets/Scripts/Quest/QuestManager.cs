@@ -50,5 +50,7 @@ class QuestManager : MonoBehaviour
 
     public int QuestsCount => _quests.Count;
     public PlayerData Player => _playerData;
+
+    public List<QuestData> GetQuests => _quests;
 }
 

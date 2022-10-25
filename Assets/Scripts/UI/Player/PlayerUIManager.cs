@@ -78,7 +78,7 @@ public class PlayerUIManager : MonoBehaviour
             else if (time >= warningTimes[i] && warningbool[i])//ˆê’iŠKã‚ª‚Á‚½Û‚Ìˆ—
             {
                 W_obj.gameObject.SetActive(true);
-                Logger.Log("a‚°‚é");
+                Logger.Log("ã‚°‚é");
                 W_obj.sprite = Warningimgs[i];
                 warningbool[i] = false;
             }
