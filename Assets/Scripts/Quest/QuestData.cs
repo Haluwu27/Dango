@@ -48,5 +48,7 @@ public abstract class QuestData
     public float RewardTime => _rewardTime;
     public bool EnableDangoCountUp => _enableDangoCountUp;
     public bool IsKeyQuest => _isKeyQuest;
+
+    public bool SetKeyQuest(bool b) => _isKeyQuest = b;
     public List<int> NextQuestId => _nextQuestId;
 }
