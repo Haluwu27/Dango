@@ -146,6 +146,7 @@ class PlayerData : MonoBehaviour
             parent._playerUIManager.EventText.TextData.SetText("食べチャージ中！");
             parent._playerStayEat.ResetCount();
             //SE推奨
+            parent._animator.SetBool("IsEatingCharge", true);
 
             return IState.E_State.Unchanged;
         }
@@ -178,6 +179,7 @@ class PlayerData : MonoBehaviour
     {
         public IState.E_State Initialize(PlayerData parent)
         {
+            parent._animator.SetTrigger("EatingTrigger");
             parent.EatDango();
             return IState.E_State.Control;
         }
@@ -635,8 +637,11 @@ class PlayerData : MonoBehaviour
 
     #region GetterSetter
     public int GetMaxDango() => _currentStabCount;
+
+    public int SetMaxDango(int i) => _currentStabCount = i;
     public List<DangoColor> GetDangos() => _dangos;
     public void AddDangos(DangoColor d) => _dangos.Add(d);
+    public void ResetDangos()=>_dangos.Clear();
     public float GetSatiety() => _satiety;
     public void AddSatiety(float value) => _satiety += value;
     public DangoUIScript GetDangoUIScript() => _dangoUISC;
