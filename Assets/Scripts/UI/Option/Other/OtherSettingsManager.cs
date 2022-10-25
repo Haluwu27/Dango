@@ -7,8 +7,6 @@ public class OtherSettingsManager : MonoBehaviour
 {
     enum OtherChoices
     {
-        None,
-
         Credit,
         InitSaveData,
 
@@ -22,17 +20,21 @@ public class OtherSettingsManager : MonoBehaviour
     [SerializeField] Canvas _deleteDataCanvas = default!;
     [SerializeField] Image[] _deleteChoiceImages;
 
-    OtherChoices _choice = OtherChoices.None + 1;
+    OtherChoices _choice = 0;
     bool _canPassed;
     bool _canDelete;
+
+    bool IsEffective => SceneSystem.Instance.PrebScene == SceneSystem.Scenes.Menu;
 
     private void Start()
     {
         InputSystemManager.Instance.onNavigatePerformed += OnNavigate;
         InputSystemManager.Instance.onChoicePerformed += OnChoice;
-        InputSystemManager.Instance.onAnyKeyPerformed += OnAnyKey;
-        InputSystemManager.Instance.onBackCanceled += OnBack;
-
+        if (IsEffective)
+        {
+            InputSystemManager.Instance.onAnyKeyPerformed += OnAnyKey;
+            InputSystemManager.Instance.onBackCanceled += OnBack;
+        }
         SetDeleteChoiceColor();
     }
 
@@ -40,8 +42,11 @@ public class OtherSettingsManager : MonoBehaviour
     {
         InputSystemManager.Instance.onNavigatePerformed -= OnNavigate;
         InputSystemManager.Instance.onChoicePerformed -= OnChoice;
-        InputSystemManager.Instance.onAnyKeyPerformed -= OnAnyKey;
-        InputSystemManager.Instance.onBackCanceled -= OnBack;
+        if (IsEffective)
+        {
+            InputSystemManager.Instance.onAnyKeyPerformed -= OnAnyKey;
+            InputSystemManager.Instance.onBackCanceled -= OnBack;
+        }
     }
 
     /// <summary>
@@ -53,9 +58,10 @@ public class OtherSettingsManager : MonoBehaviour
 
         if (enable)
         {
-            _choiceImages[(int)_choice - 1].color = new Color32(176, 176, 176, 255);
-            _choice = OtherChoices.None + 1;
-            _choiceImages[(int)_choice - 1].color = Color.red;
+            _choiceImages[(int)_choice].color = new Color32(176, 176, 176, 255);
+            _choice = 0;
+            _choiceImages[(int)_choice].color = Color.red;
+            SetChoiceImagesColor();
         }
     }
 
@@ -71,6 +77,12 @@ public class OtherSettingsManager : MonoBehaviour
     private void OnChoice()
     {
         if (!_canvas.enabled) return;
+
+        if (!IsEffective)
+        {
+            SoundManager.Instance.PlaySE(SoundSource.SE18_INVALID_OPERATION);
+            return;
+        }
 
         if (_choice == OtherChoices.Credit)
         {
@@ -110,7 +122,7 @@ public class OtherSettingsManager : MonoBehaviour
     private void RunSecondTime()
     {
         if (!InputSystemManager.Instance.WasPressedThisFrameAnyKey) return;
-        
+
         //入ってくる最初のフレームも実行されてしまうので2回目のみ実行
         if (!_canPassed)
         {
@@ -125,29 +137,12 @@ public class OtherSettingsManager : MonoBehaviour
     private void ChangeChoice(Vector2 axis)
     {
         if (IsPopUp) return;
-        if (axis != Vector2.up && axis != Vector2.down) return;
+        if (!ChangeChoiceUtil.Choice(axis, ref _choice, OtherChoices.Max, false, ChangeChoiceUtil.OptionDirection.Vertical)) return;
 
-        if (axis == Vector2.up)
-        {
-            _choice--;
-            if (_choice <= OtherChoices.None)
-            {
-                _choice = OtherChoices.None + 1;
-                return;
-            }
-        }
-        else if (axis == Vector2.down)
-        {
-            _choice++;
-            if (_choice >= OtherChoices.Max)
-            {
-                _choice = OtherChoices.Max - 1;
-                return;
-            }
-        }
+        _choiceImages[(int)_choice + (int)axis.y].color = new Color32(176, 176, 176, 255);
+        _choiceImages[(int)_choice].color = Color.red;
 
-        _choiceImages[(int)_choice - 1 + (int)axis.y].color = new Color32(176, 176, 176, 255);
-        _choiceImages[(int)_choice - 1].color = Color.red;
+        SetChoiceImagesColor();
         SoundManager.Instance.PlaySE(SoundSource.SE16_UI_SELECTION);
     }
 
@@ -160,6 +155,18 @@ public class OtherSettingsManager : MonoBehaviour
         _canDelete = axis.Equals(Vector2.left);
         SetDeleteChoiceColor();
         SoundManager.Instance.PlaySE(SoundSource.SE16_UI_SELECTION);
+    }
+
+    private void SetChoiceImagesColor()
+    {
+        //有効なら弾く
+        if (IsEffective) return;
+
+        //無効を示す色に変更
+        foreach (var image in _choiceImages)
+        {
+            image.color = new Color32(50, 50, 50, 255);
+        }
     }
 
     private void SetDeleteChoiceColor()
