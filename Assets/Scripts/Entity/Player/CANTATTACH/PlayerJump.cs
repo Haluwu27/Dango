@@ -80,10 +80,6 @@ namespace TM.Entity.Player
             //D5ごとにジャンプ力を個別にする
             _rb.velocity = Vector3.zero.SetY(JUMP_POWER_TABLE[_maxStabCount - 3]);
 
-
-
-
-
             //_rb.AddForce(Vector3.up * (JUMP_POWER + _maxStabCount), ForceMode.Impulse);
 
             //自由落下まで待機
