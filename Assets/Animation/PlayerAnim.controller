@@ -913,11 +913,7 @@ AnimatorStateMachine:
     m_Position: {x: 490, y: 0, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 12523227450242412}
-<<<<<<< HEAD
-    m_Position: {x: 40, y: 290, z: 0}
-=======
     m_Position: {x: 270, y: 290, z: 0}
->>>>>>> develop
   - serializedVersion: 1
     m_State: {fileID: 8367314742051072595}
     m_Position: {x: 500, y: 130, z: 0}

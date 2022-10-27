@@ -15899,7 +15899,6 @@ AnimationClip:
     intParameter: 0
     messageOptions: 0
   - time: 1
-<<<<<<< HEAD
     functionName: EatAnima
     data: 
     objectReferenceParameter: {fileID: 0}
@@ -15907,8 +15906,6 @@ AnimationClip:
     intParameter: 0
     messageOptions: 0
   - time: 1
-=======
->>>>>>> develop
     functionName: EatCameraOff
     data: 
     objectReferenceParameter: {fileID: 0}
