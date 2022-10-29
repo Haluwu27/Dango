@@ -11,27 +11,7 @@ public abstract class QuestData
     bool _enableDangoCountUp;
     bool _isKeyQuest;
 
-    public QuestData(int id, QuestType questType, string questName, float rewardTime, bool enableDangoCountUp, bool isKeyQuest, int nextQuestId)
-    {
-        _id = id;
-        _questType = questType;
-        _questName = questName;
-        _rewardTime = rewardTime;
-        _enableDangoCountUp = enableDangoCountUp;
-        _isKeyQuest = isKeyQuest;
-        _nextQuestId.Add(nextQuestId);
-    }
     public QuestData(int id, QuestType questType, string questName, float rewardTime, bool enableDangoCountUp, bool isKeyQuest, int[] nextQuestId)
-    {
-        _id = id;
-        _questType = questType;
-        _questName = questName;
-        _rewardTime = rewardTime;
-        _enableDangoCountUp = enableDangoCountUp;
-        _isKeyQuest = isKeyQuest;
-        _nextQuestId.AddRange(nextQuestId);
-    }
-    public QuestData(int id, QuestType questType, string questName, float rewardTime, bool enableDangoCountUp, bool isKeyQuest, List<int> nextQuestId)
     {
         _id = id;
         _questType = questType;
