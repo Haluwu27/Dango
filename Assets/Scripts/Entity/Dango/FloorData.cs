@@ -2,7 +2,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Unity.VisualScripting;
 using UnityEngine;
 using static FloorManager;
 
@@ -13,9 +12,6 @@ public class FloorData : MonoBehaviour
 
     Mesh _mesh;
 
-    //フロアに現存している団子の数
-    int _dangoCount;
-
     private void Awake()
     {
         CreateInvertedMeshCollider();
@@ -23,24 +19,14 @@ public class FloorData : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        DangoTriggerEnter(other);
         PlayerTriggerEnter(other);
     }
 
     private void OnTriggerExit(Collider other)
     {
-        DangoTriggerExit(other);
         PlayerTriggerExit(other);
     }
 
-    private void DangoTriggerEnter(Collider other)
-    {
-        //団子以外を弾く
-        if (other.GetComponentInParent<DangoData>() == null) return;
-
-        _dangoCount++;
-        floorManager.CheckDangoIsFull(other, floor);
-    }
     private void PlayerTriggerEnter(Collider other)
     {
         if (!other.gameObject.CompareTag("Player")) return;
@@ -48,14 +34,6 @@ public class FloorData : MonoBehaviour
         QuestManager.Instance.SucceedChecker.CheckQuestDestinationSucceed(floor, true);
     }
 
-    private void DangoTriggerExit(Collider other)
-    {
-        //団子以外を弾く
-        if (other.GetComponentInParent<DangoData>() == null) return;
-
-        _dangoCount--;
-        floorManager.CheckDangoIsNotFull(other, floor, 1);
-    }
     private void PlayerTriggerExit(Collider other)
     {
         if (other.GetComponentInParent<PlayerData>() == null) return;
@@ -67,7 +45,7 @@ public class FloorData : MonoBehaviour
     {
         InvertMesh();
 
-        GameObject obj = new GameObject();
+        GameObject obj = new();
         obj.transform.parent = transform;
         obj.AddComponent<MeshCollider>().sharedMesh = _mesh;
         obj.layer = 8;
@@ -80,10 +58,6 @@ public class FloorData : MonoBehaviour
         _mesh = GetComponent<MeshFilter>().mesh;
         _mesh.triangles = _mesh.triangles.Reverse().ToArray();
     }
-
-    public void AddDangoCount() => _dangoCount++;
-    public void RemoveDangoCount() => _dangoCount--;
-    public int DangoCount => _dangoCount;
 }
 
 [Serializable]
@@ -93,7 +67,59 @@ public class FloorArray
     [SerializeField, Tooltip("エリアに存在する団子射出装置")] DangoInjection[] dangoInjections;
     [SerializeField, Tooltip("エリアに存在できる最大の団子の数"), Min(0)] int maxDangoCount;
 
+    int dangoCount;
+    Floor _floor;
+
+    //重複しない乱数取得用
+    List<int> _nums = new();
+
+    public void AddDangoCount()
+    {
+        dangoCount++;
+
+        if (_floor == Floor.floor1)  Logger.Log(dangoCount);
+
+        if (dangoCount < maxDangoCount) return;
+
+        foreach (var dango in dangoInjections)
+        {
+            dango.SetCanShot(false);
+        }
+    }
+
+    public void RemoveDangoCount(int shotValue)
+    {
+        dangoCount--;
+        if (_floor == Floor.floor1)
+            Logger.Log(dangoCount);
+
+        if (dangoCount >= maxDangoCount) return;
+
+        //乱数用のインデックス番号を取得
+        for (int i = 0; i < DangoInjections.Length; i++)
+        {
+            _nums.Add(i);
+        }
+
+        //ランダムな装置を選択する
+        for (int i = 0; i < shotValue; i++)
+        {
+            //インデックス番号を取得
+            int index = UnityEngine.Random.Range(0, _nums.Count);
+
+            //重複しないランダムな発射装置の発射フラグを立てる
+            DangoInjections[_nums[index]].SetCanShot(true);
+
+            //今回取得した番号を選択肢から排除
+            _nums.RemoveAt(index);
+        }
+
+        //次回用にクリアする
+        _nums.Clear();
+    }
+
+    public void SetFloor(Floor floor) => _floor = floor;
+    public Floor Floor => _floor;
     public FloorData[] FloorDatas => floorDatas;
     public DangoInjection[] DangoInjections => dangoInjections;
-    public int MaxDangoCount => maxDangoCount;
 }

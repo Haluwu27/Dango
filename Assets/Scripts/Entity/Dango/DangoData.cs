@@ -17,6 +17,8 @@ public class DangoData : MonoBehaviour
     //団子が持つ色データ
     DangoColor _color = DangoColor.None;
 
+    FloorManager.Floor _floor;
+
     [SerializeField] Renderer _rend;
     [SerializeField] Rigidbody _rigidbody;
 
@@ -73,4 +75,7 @@ public class DangoData : MonoBehaviour
     {
         _color = type;
     }
+
+    public FloorManager.Floor Floor => _floor;
+    public void SetFloor(FloorManager.Floor floor) => _floor = floor;
 }
