@@ -252,6 +252,8 @@ namespace Dango.Quest
         List<FloorManager.Floor> _floors = new();
 
         bool _onEatSucceed;
+        bool _isInFloor;
+        FloorManager.Floor _currentFloor;
 
         public QuestDestination(int id, FloorManager.Floor floor, bool onEatSucceed, string questName, float rewardTime, bool enableDangoCountUp, bool isKeyQuest, int[] nextQuestId) : base(id, QuestType.Destination, questName, rewardTime, enableDangoCountUp, isKeyQuest, nextQuestId)
         {
@@ -265,6 +267,10 @@ namespace Dango.Quest
         }
 
         public List<FloorManager.Floor> Floors => _floors;
-        public bool OnEatSucceed => _onEatSucceed;
+        public FloorManager.Floor CurrentFloor => _currentFloor;
+        public bool SucceedOnEat => _onEatSucceed;
+        public bool IsInFloor => _isInFloor;
+        public void SetIsInFloor(bool enable)=>_isInFloor = enable;
+        public void SetFloor(FloorManager.Floor floor) => _currentFloor = floor;
     }
 }
