@@ -141,10 +141,8 @@ class DangoRole
         //役が存在するかチェック
         bool enableRole = CheckPosRole(dangos, currentMaxDango, ref score);
 
-        bool isSucceedQuest;
-
         //EstablishRole系クエストのチェック
-        isSucceedQuest = QuestManager.Instance.SucceedChecker.CheckQuestCreateRoleSucceedEs(dangos, enableRole, currentMaxDango);
+        QuestManager.Instance.SucceedChecker.CheckQuestCreateRoleSucceedEs(dangos, enableRole, currentMaxDango);
 
         //その他役の判定
         if (enableRole)
@@ -164,6 +162,9 @@ class DangoRole
             //EatDangoに分類される大半のクエストのチェック。役なしを数える数えない問題のために上記のチェッカーと分けています
             QuestManager.Instance.SucceedChecker.CheckQuestEatDangoSucceed(QuestManager.Instance, dangos, false);
         }
+
+        //目的地で団子を食べる系クエストのチェック
+        QuestManager.Instance.SucceedChecker.CheckQuestDestinationSucceed();
 
         //CheckColorRole(ref score);//処理内部にソートを含むため、位置役より下に配置。
 

@@ -284,30 +284,63 @@ namespace Dango.Quest
         #endregion
 
         #region Destination
-        public bool CheckQuestDestinationSucceed(QuestManager questManager,FloorManager.Floor floor, bool onEatSucceed)
+        public bool CheckQuestDestinationSucceed(FloorManager.Floor floor, bool inFloor)
         {
             //このフレームに別のクエストがクリアされていたら弾く
             if (isSucceedThisFrame) return false;
 
-            for (int i = 0; i < questManager.QuestsCount; i++)
+            for (int i = 0; i < _manager.QuestsCount; i++)
             {
                 //キャスト可能かを確認（不可能な場合エラーが起こるためこの処理は必須）
-                if (questManager.GetQuest(i) is QuestDestination questDest)
+                if (_manager.GetQuest(i) is QuestDestination questDest)
                 {
-                    if (CheckQuestSucceed(questDest, floor,onEatSucceed)) return true;
+                    if (CheckQuestSucceed(questDest, floor, inFloor)) return true;
                 }
             }
 
             return false;
         }
 
-        private bool CheckQuestSucceed(QuestDestination quest, FloorManager.Floor floor, bool onEatSucceed)
+        public bool CheckQuestDestinationSucceed()
         {
+            //このフレームに別のクエストがクリアされていたら弾く
+            if (isSucceedThisFrame) return false;
+
+            for (int i = 0; i < _manager.QuestsCount; i++)
+            {
+                //キャスト可能かを確認（不可能な場合エラーが起こるためこの処理は必須）
+                if (_manager.GetQuest(i) is QuestDestination questDest)
+                {
+                    if (CheckQuestSucceed(questDest)) return true;
+                }
+            }
+
+            return false;
+        }
+
+        private bool CheckQuestSucceed(QuestDestination quest, FloorManager.Floor floor, bool inFloor)
+        {
+            //はじめに現在いるFloorを登録する
+            if (inFloor) quest.SetFloor(floor);
+
             //目的地でなければ弾く
             if (!quest.Floors.Contains(floor)) return false;
 
+            //部屋の出入りを記録
+            quest.SetIsInFloor(inFloor);
+
             //目的地につくだけでいいのか、ついて食べないといけないのか判定
-            if (quest.OnEatSucceed != onEatSucceed) return false;
+            if (quest.SucceedOnEat) return false;
+
+            if (!quest.IsInFloor) return false;
+
+            QuestSucceed(quest);
+            return true;
+        }
+        private bool CheckQuestSucceed(QuestDestination quest)
+        {
+            //目的地でなければ弾く
+            if (!quest.Floors.Contains(quest.CurrentFloor)) return false;
 
             QuestSucceed(quest);
             return true;
@@ -339,7 +372,7 @@ namespace Dango.Quest
             {
                 //TODO:S7に遷移
             }
-        
+
             Logger.Log(quest.QuestName + " クエストクリア！");
         }
     }

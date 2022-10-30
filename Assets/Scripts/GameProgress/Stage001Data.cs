@@ -38,9 +38,11 @@ public class Stage001Data
             _questManager.Creater.CreateQuestCreateRole(9, new QuestCreateRole.EstablishRole(true,false,DangoColor.Green), 3, 0, "緑色の団子を含んで役を3回作れ", 30f, false, false,10),
 
             _questManager.Creater.CreateQuestDestination(10, FloorManager.Floor.floor1, false, "城の宝物庫へ向かえ", 0f, false, true, 0),
+
+            _questManager.Creater.CreateQuestDestination(11,FloorManager.Floor.floor1,true,"デバッグモード",0f,true,false,11),
         };
 
         QuestData.AddRange(quest);
-        _questManager.ChangeQuest(quest[0], quest[1]);
+        _questManager.ChangeQuest(quest[11]);
     }
 }
