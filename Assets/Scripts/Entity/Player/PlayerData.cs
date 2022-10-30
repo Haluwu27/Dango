@@ -170,6 +170,7 @@ class PlayerData : MonoBehaviour
             if (!parent._hasStayedEat)
             {
                 parent.StartCoroutine(parent.ResetCameraView());
+                parent._animator.SetBool("IsEatingCharge", false);
                 return IState.E_State.Control;
             }
             return IState.E_State.Unchanged;
