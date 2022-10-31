@@ -18,6 +18,7 @@ public class DangoData : MonoBehaviour
     DangoColor _color = DangoColor.None;
 
     FloorManager.Floor _floor;
+    FloorManager _floorManager;
 
     [SerializeField] Renderer _rend;
     [SerializeField] Rigidbody _rigidbody;
@@ -66,6 +67,9 @@ public class DangoData : MonoBehaviour
 
     public void ReleaseDangoPool()
     {
+        //•”‰®‚Ì’cŽq‘”‚ð‚Ö‚ç‚·
+        _floorManager.FloorArrays[(int)_floor].RemoveDangoCount(1);
+
         _poolManager.DangoPool[(int)_color - 1].Release(this);
     }
 
@@ -78,4 +82,5 @@ public class DangoData : MonoBehaviour
 
     public FloorManager.Floor Floor => _floor;
     public void SetFloor(FloorManager.Floor floor) => _floor = floor;
+    public void SetFloorManager(FloorManager floorManager) => _floorManager = floorManager;
 }
