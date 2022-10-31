@@ -70,9 +70,6 @@ public class SpitManager : MonoBehaviour
             //フィールドにある団子を消す
             dango.ReleaseDangoPool();
 
-            //部屋の団子総数をへらす
-            _floorManager.FloorArrays[(int)dango.Floor].RemoveDangoCount(1);
-
             //UIの更新
             DangoUISC.DangoUISet(player.GetDangos());
 

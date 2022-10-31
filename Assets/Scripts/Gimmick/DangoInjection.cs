@@ -238,6 +238,7 @@ public class DangoInjection : MonoBehaviour
         dango.Rb.AddForce(transform.forward.normalized * shotPower, ForceMode.Impulse);
         _continueFrame = defalutContinueFrame;
         dango.SetFloor(_floor);
+        dango.SetFloorManager(floorManager);
 
         floorManager.FloorArrays[(int)_floor].AddDangoCount();
 
