@@ -299,7 +299,7 @@ class PlayerData : MonoBehaviour
     /// 満腹度、制限時間の代わり（単位:[sec]）
     /// </summary>
     /// フレーム数で管理しますが、ここでは秒管理で構いません。
-    private float _satiety = 5f;
+    private float _satiety = 100f;
 
     /// <summary>
     /// 串、持ってる団子
@@ -459,9 +459,6 @@ class PlayerData : MonoBehaviour
 
         //演出関数の呼び出し
         _directing.Dirrecting(_dangos);
-
-        _playerUIManager.EventText.TextData.SetText("食べた！" + (int)score + "点！");
-
 
         //満腹度を上昇
         //_satiety += score * SCORE_TIME_RATE;
