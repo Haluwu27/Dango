@@ -283,6 +283,7 @@ MonoBehaviour:
   - {fileID: 8567872267399664035}
   - {fileID: 0}
   - {fileID: 0}
+  defaultEventTextFontSize: 100
 --- !u!1 &8567872266580057492
 GameObject:
   m_ObjectHideFlags: 0
