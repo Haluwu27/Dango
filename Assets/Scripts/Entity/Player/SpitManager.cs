@@ -8,6 +8,8 @@ public class SpitManager : MonoBehaviour
     [SerializeField] CapsuleCollider _capsuleCollider = default!;
     DangoUIScript DangoUISC;
 
+    [SerializeField] FloorManager _floorManager;
+
     private void Awake()
     {
         DangoUISC = player.GetDangoUIScript();

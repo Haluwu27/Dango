@@ -5,6 +5,7 @@ using TM.Easing;
 using TM.Easing.Management;
 using TMPro;
 using System;
+using static FloorManager;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -52,6 +53,7 @@ public class DangoInjection : MonoBehaviour
     [SerializeField, Tooltip("‰¡•ûŒü‚Ì‰Â“®ˆæ")] Vector2 horizontalRot;
 
     [SerializeField] DangoInjectionFixed[] fixedAngles;
+    [SerializeField] FloorManager floorManager;
 
     [SerializeField] bool _canShot = true;
 
@@ -69,6 +71,8 @@ public class DangoInjection : MonoBehaviour
     private int _animWaitFrame = default;
 
     private List<DangoColor> dangoColors = new();
+
+    private Floor _floor;
 
     interface IState
     {
@@ -233,6 +237,10 @@ public class DangoInjection : MonoBehaviour
         dango.transform.position = spawner.transform.position;
         dango.Rb.AddForce(transform.forward.normalized * shotPower, ForceMode.Impulse);
         _continueFrame = defalutContinueFrame;
+        dango.SetFloor(_floor);
+        dango.SetFloorManager(floorManager);
+
+        floorManager.FloorArrays[(int)_floor].AddDangoCount();
 
         return --_injectionCount <= 0;
     }
@@ -281,6 +289,8 @@ public class DangoInjection : MonoBehaviour
 
         return val;
     }
+
+    public void SetFloor(Floor floor) => _floor = floor;
 
     public void SetCanShot(bool canShot) => _canShot = canShot;
     public bool CanShot => _canShot;

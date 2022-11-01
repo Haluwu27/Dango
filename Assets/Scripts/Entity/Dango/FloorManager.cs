@@ -48,89 +48,18 @@ public class FloorManager : MonoBehaviour
     //二次元配列はシリアライズできないため、別クラスを用いて仮想的に二次元配列にしている。
     [SerializeField] FloorArray[] floorArrays = new FloorArray[(int)Floor.Max];
 
-    //重複しない乱数取得用
-    List<int> _nums = new();
-
-    readonly List<BoxCollider> _boxColliders = new();
-
     private void Awake()
     {
-        foreach (var floor in floorArrays)
+        for (int i = 0; i < (int)Floor.Max; i++)
         {
-            foreach (var injection in floor.DangoInjections)
-            {
-                _boxColliders.Clear();
+            floorArrays[i].SetFloor((Floor)i);
 
-                foreach (var data in floor.FloorDatas)
-                {
-                    _boxColliders.Add(data.GetComponent<BoxCollider>());
-                }
+            foreach (var injection in floorArrays[i].DangoInjections)
+            {
+                injection.SetFloor((Floor)i);
             }
         }
     }
 
-    public void CheckDangoIsFull(Collider other, Floor floor)
-    {
-        //団子以外を弾く
-        if (other.GetComponentInParent<DangoData>() == null) return;
-
-        //団子の数がフロアの最大値に到達していなかったら弾く
-        if (!CheckFloorDangoIsFull((int)floor)) return;
-
-        //最大数ならすべて射出禁止にする
-        foreach (var dI in floorArrays[(int)floor].DangoInjections)
-        {
-            dI.SetCanShot(false);
-        }
-    }
-
-    public void CheckDangoIsNotFull(Collider other, Floor floor, int shotValue)
-    {
-        //団子以外を弾く
-        if (other.GetComponentInParent<DangoData>() == null) return;
-
-        //団子の数がフロアの最大値に到達していたら弾く
-        if (CheckFloorDangoIsFull((int)floor)) return;
-
-        //一旦すべて射出禁止にして
-        foreach (var dI in floorArrays[(int)floor].DangoInjections)
-        {
-            dI.SetCanShot(false);
-        }
-
-        //乱数用のインデックス番号を取得
-        for (int i = 0; i < floorArrays[(int)floor].DangoInjections.Length; i++)
-        {
-            _nums.Add(i);
-        }
-
-        //ランダムな装置を選択する
-        for (int i = 0; i < shotValue; i++)
-        {
-            //インデックス番号を取得
-            int index = Random.Range(0, _nums.Count);
-
-            //重複しないランダムな発射装置の発射フラグを立てる
-            floorArrays[(int)floor].DangoInjections[_nums[index]].SetCanShot(true);
-
-            //今回取得した番号を選択肢から排除
-            _nums.RemoveAt(index);
-        }
-
-        //次回用にクリアする
-        _nums.Clear();
-    }
-
-    bool CheckFloorDangoIsFull(int index)
-    {
-        int count = 0;
-
-        //ワンフロアに複数Dataが存在する場合合算する
-        for (int i = 0; i < floorArrays[index].FloorDatas.Length; i++)
-        {
-            count += floorArrays[index].FloorDatas[i].DangoCount;
-        }
-
-        return count >= floorArrays[index].MaxDangoCount;
-    }
+    public FloorArray[] FloorArrays => floorArrays;
 }
