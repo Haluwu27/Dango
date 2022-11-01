@@ -9,7 +9,8 @@ public class PlayerUIManager : MonoBehaviour
     [SerializeField, Tooltip("空腹度テキスト")] TextMeshProUGUI timeText;
     [SerializeField, Tooltip("イベントテキスト")] TextUIData eventText;
     [SerializeField, Tooltip("空腹度ゲージ")] Slider[] timeGage;
-    [SerializeField, Tooltip("制限時間残量警告")] Image[] Warningimgs;
+    [SerializeField, Tooltip("制限時間残量警告画像")] Sprite[] Warningimgs;
+    [SerializeField, Tooltip("制限時間残量警告オブジェクト")] Image W_obj;
     [SerializeField] PlayerData playerdata;
 
     private float time { get { return playerdata.GetSatiety(); } }
@@ -17,9 +18,10 @@ public class PlayerUIManager : MonoBehaviour
     private float currentTime;
     private int[] warningTimes = new int[3];
 
-    private RectTransform[] w_imgrects;
+
     private Image[] w_imgs;
-    private Color w_color;
+
+    [SerializeField] GameObject[] ErasewithEatObj = new GameObject[3];
 
     private bool[] warningbool = new bool[3];
     public TextUIData EventText => eventText;
@@ -40,14 +42,12 @@ public class PlayerUIManager : MonoBehaviour
             warningTimes[i] = (int)maxTime - ((i + 1) * 10);//仮で初期値の2/3,1/3の値
 
         w_imgs = new Image[Warningimgs.Length];
-        w_imgrects = new RectTransform[Warningimgs.Length];
+        warningbool = new bool[warningTimes.Length];
 
-        for (int i = 0; i < Warningimgs.Length;i++) {
-            w_imgrects[i] = Warningimgs[i].GetComponent<RectTransform>();
-            w_imgs[i] = Warningimgs[i].GetComponent<Image>();
-        }
-        
-        w_color = w_imgs[0].color;
+        //GameObject.Findを使うならシリアライズして取得しましょう。その方が名前に縛られず確実です。
+        //ErasewithEatObj[0] = GameObject.Find("DangoBackScreen");
+        //ErasewithEatObj[1] = GameObject.Find("QuestCanvas");
+        //ErasewithEatObj[2] = GameObject.Find("PlayerParent").transform.Find("Player1").transform.Find("RangeUI").gameObject;
     }
     private void Update()
     {
@@ -62,28 +62,37 @@ public class PlayerUIManager : MonoBehaviour
 
     private void Warning()
     {
+        if (time > warningTimes[0])
+        {
+            W_obj.gameObject.SetActive(false);
+        }
         for (int i = 0; i < warningTimes.Length; i++)
         {
             if (time < warningTimes[i] && !warningbool[i])
             {
-                for (int j = 0; j < Warningimgs.Length; j++)//一段階下がった際の処理
-                {
-                    w_color = w_imgs[j].color;
-                    w_imgrects[j].sizeDelta *= 1.2f;
-                    w_imgs[j].color = new Color(w_color.r, w_color.g, w_color.b, w_color.a += (1f / 3f));
-                }
-                    warningbool[i] = true;
+                Logger.Log("下げる");
+                W_obj.gameObject.SetActive(true);
+                W_obj.sprite = Warningimgs[i];
+                warningbool[i] = true;
             }
             else if (time >= warningTimes[i] && warningbool[i])//一段階上がった際の処理
             {
-                for (int j = 0; j < Warningimgs.Length; j++)
-                {
-                    w_color = w_imgs[j].color;
-                    w_imgrects[j].localScale /= 1.2f;
-                    w_imgs[j].color = new Color(w_color.r, w_color.g, w_color.b, w_color.a -= (1f / 3f));
-                }
+                W_obj.gameObject.SetActive(true);
+                Logger.Log("上げる");
+                W_obj.sprite = Warningimgs[i];
                 warningbool[i] = false;
             }
         }
+    }
+    public void EatDangoUI_False()
+    {
+        for (int i = 0; i < ErasewithEatObj.Length; i++)
+            ErasewithEatObj[i].SetActive(false);
+    }
+
+    public void EatDangoUI_True()
+    {
+        for (int i = 0; i < ErasewithEatObj.Length; i++)
+            ErasewithEatObj[i].SetActive(true);
     }
 }

@@ -146,6 +146,7 @@ class PlayerData : MonoBehaviour
             parent._playerUIManager.EventText.TextData.SetText("食べチャージ中！");
             parent._playerStayEat.ResetCount();
             //SE推奨
+            parent._animator.SetBool("IsEatingCharge", true);
 
             return IState.E_State.Unchanged;
         }
@@ -169,6 +170,7 @@ class PlayerData : MonoBehaviour
             if (!parent._hasStayedEat)
             {
                 parent.StartCoroutine(parent.ResetCameraView());
+                parent._animator.SetBool("IsEatingCharge", false);
                 return IState.E_State.Control;
             }
             return IState.E_State.Unchanged;
@@ -178,6 +180,7 @@ class PlayerData : MonoBehaviour
     {
         public IState.E_State Initialize(PlayerData parent)
         {
+            parent._animator.SetTrigger("EatingTrigger");
             parent.EatDango();
             return IState.E_State.Control;
         }
@@ -282,6 +285,9 @@ class PlayerData : MonoBehaviour
     PlayerFallAction _playerFall;
     PlayerAttackAction _playerAttack;
 
+    //映像やアニメーションのイベントフラグ
+    public static bool Event = false;
+
     //animatorのハッシュ値を取得（最適化の処理）
     int _isGroundHash = Animator.StringToHash("IsGround");
     int _attackTriggerHash = Animator.StringToHash("AttackTrigger");
@@ -375,7 +381,7 @@ class PlayerData : MonoBehaviour
         FixedUpdateState();
     }
 
-    private void OnChangeScene()
+    private void OnDestroy()
     {
         InputSystemManager.Instance.onFirePerformed -= _playerRemoveDango.Remove;
         InputSystemManager.Instance.onAttackPerformed -= OnAttack;
@@ -468,7 +474,8 @@ class PlayerData : MonoBehaviour
 
         //UI更新
         _dangoUISC.DangoUISet(_dangos);
-
+        //一部UIの非表示
+        _playerUIManager.EatDangoUI_False();
     }
 
     private void ResetSpit()
@@ -530,6 +537,7 @@ class PlayerData : MonoBehaviour
 
         //空中でも出てると違和感あったので消します
         rangeUI.SetActive(_isGround);
+        rangeUI.SetActive(!Event);
     }
 
     private bool CanStab()
@@ -622,10 +630,19 @@ class PlayerData : MonoBehaviour
         return _currentStabCount;
     }
 
+    public void EatAnima()
+    {
+        _animator.SetBool("IsEatingCharge", false);
+        _playerUIManager.EatDangoUI_True();
+    }
+
     #region GetterSetter
     public int GetMaxDango() => _currentStabCount;
+
+    public int SetMaxDango(int i) => _currentStabCount = i;
     public List<DangoColor> GetDangos() => _dangos;
     public void AddDangos(DangoColor d) => _dangos.Add(d);
+    public void ResetDangos()=>_dangos.Clear();
     public float GetSatiety() => _satiety;
     public void AddSatiety(float value) => _satiety += value;
     public DangoUIScript GetDangoUIScript() => _dangoUISC;

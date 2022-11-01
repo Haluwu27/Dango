@@ -26,6 +26,6 @@ public class TitleManager : MonoBehaviour
         SoundManager.Instance.StopBGM();
         
         SceneSystem.Instance.Load(scenes);
-        SceneSystem.Instance.UnLoad(SceneSystem.Scenes.Title);
+        SceneSystem.Instance.UnLoad(SceneSystem.Scenes.Title,true);
     }
 }

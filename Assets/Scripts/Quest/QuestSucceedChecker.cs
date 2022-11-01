@@ -1,15 +1,21 @@
-using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 using Dango.Quest.UI;
 using System.Linq;
-using System.Data;
+using Cysharp.Threading.Tasks;
 
 namespace Dango.Quest
 {
     class QuestSucceedChecker
     {
         QuestManager _manager;
+        bool isSucceedThisFrame;
+
+        private async UniTask SetBoolAfterOneFrame(bool enable)
+        {
+            await UniTask.Yield();
+
+            isSucceedThisFrame = enable;
+        }
 
         public QuestSucceedChecker(QuestManager manager)
         {
@@ -19,6 +25,9 @@ namespace Dango.Quest
         #region EatDango
         public bool CheckQuestEatDangoSucceed(QuestManager questManager, List<DangoColor> colors, bool createRole)
         {
+            //このフレームに別のクエストがクリアされていたら弾く
+            if (isSucceedThisFrame) return false;
+
             for (int i = 0; i < questManager.QuestsCount; i++)
             {
                 //キャスト可能かを確認（不可能な場合エラーが起こるためこの処理は必須）
@@ -33,16 +42,8 @@ namespace Dango.Quest
 
         private bool CheckQuestSucceed(QuestEatDango quest, List<DangoColor> colors, bool createRole)
         {
-            //不正なアクセスであれば弾く
-            if (quest.QuestType != QuestType.EatDango) return false;
-
             //役の成立次第で弾くものは弾く
-            if (!quest.CanCountCreateRole && createRole)
-            {
-                quest.SetIsPrebCreateRole(createRole);
-                return false;
-            }
-            if (!quest.CanCountNoCreateRole && !createRole)
+            if (createRole && !quest.AllowCountCreateRole || !createRole && !quest.AllowCountNoCreateRole)
             {
                 quest.SetIsPrebCreateRole(createRole);
                 return false;
@@ -51,7 +52,7 @@ namespace Dango.Quest
             //色を判定し、正しい色なら食べた数を追加
             foreach (var color in colors)
             {
-                if (!quest.Colors.Contains(color)) continue;
+                if (!quest.ReadColors.Contains(color)) continue;
 
                 quest.AddEatCount();
             }
@@ -63,8 +64,8 @@ namespace Dango.Quest
             quest.SetIsPrebCreateRole(createRole);
 
             //指定回数作ったか判定
-            if (quest.SpecifyCount > quest.EatCount) return false;
-            if (quest.ContinueCount > quest.CurrentContinueCount) return false;
+            if (!quest.IsAchievedEatCount()) return false;
+            if (!quest.IsAchievedContinueCount()) return false;
 
             //条件すべてクリアした場合、クエスト成功として返却
             QuestSucceed(quest);
@@ -73,133 +74,175 @@ namespace Dango.Quest
         #endregion
 
         #region CreateRole
-        public bool CheckQuestCreateRoleSucceed(QuestManager questManager, Role<int> posRole, List<DangoColor> dangos, bool createRole, int currentMaxDango)
+        public bool CheckQuestCreateRoleSucceedEs(List<DangoColor> dangos, bool createRole, int currentMaxDango)
         {
-            for (int i = 0; i < questManager.QuestsCount; i++)
+            //このフレームに別のクエストがクリアされていたら弾く
+            if (isSucceedThisFrame) return false;
+
+            for (int i = 0; i < _manager.QuestsCount; i++)
             {
                 //キャスト可能かを確認（不可能な場合エラーが起こるためこの処理は必須）
-                if (questManager.GetQuest(i) is QuestCreateRole questCr)
+                if (_manager.GetQuest(i) is QuestCreateRole questCr)
                 {
-                    if (CheckQuestSucceed(questCr, posRole,createRole,dangos.Distinct().Count(), currentMaxDango)) return true;
+                    if (CheckQuestSucceedEs(questCr, dangos, createRole, currentMaxDango)) return true;
                 }
             }
 
             return false;
         }
-        public bool CheckQuestCreateRoleSucceed(QuestManager questManager, List<DangoColor> dangos, int currentMaxDango)
+        public bool CheckQuestCreateRoleSucceedSr(Role<int> role)
         {
-            for (int i = 0; i < questManager.QuestsCount; i++)
+            //このフレームに別のクエストがクリアされていたら弾く
+            if (isSucceedThisFrame) return false;
+
+            for (int i = 0; i < _manager.QuestsCount; i++)
             {
                 //キャスト可能かを確認（不可能な場合エラーが起こるためこの処理は必須）
-                if (questManager.GetQuest(i) is QuestCreateRole questCr)
+                if (_manager.GetQuest(i) is QuestCreateRole questCr)
                 {
-                    if (CheckQuestSucceed(questCr, dangos, currentMaxDango)) return true;
+                    if (CheckQuestSucceedSr(questCr, role)) return true;
                 }
             }
 
             return false;
         }
-        public bool CheckQuestCreateRoleSucceed(QuestManager questManager, bool createRole)
+        public bool CheckQuestCreateRoleSucceedIr(List<DangoColor> dangos)
         {
-            for (int i = 0; i < questManager.QuestsCount; i++)
+            //このフレームに別のクエストがクリアされていたら弾く
+            if (isSucceedThisFrame) return false;
+
+            for (int i = 0; i < _manager.QuestsCount; i++)
             {
                 //キャスト可能かを確認（不可能な場合エラーが起こるためこの処理は必須）
-                if (questManager.GetQuest(i) is QuestCreateRole questCr)
+                if (_manager.GetQuest(i) is QuestCreateRole questCr)
                 {
-                    if (CheckQuestSucceed(questCr, createRole)) return true;
+                    if (CheckQuestSucceedIc(questCr, dangos)) return true;
                 }
             }
 
             return false;
         }
-        
-        private bool CheckQuestSucceed(QuestCreateRole quest, Role<int> role, bool createRole,int colorCount,int currentMaxDango)
+        public bool CheckQuestCreateRoleSucceedSm(Role<int> role)
         {
-            //不正なアクセスであれば弾く
-            if (quest.QuestType != QuestType.CreateRole) return false;
-            if (role == null) return false;
+            //このフレームに別のクエストがクリアされていたら弾く
+            if (isSucceedThisFrame) return false;
 
-            //役の成立・非成立のフラグが一致していなければ弾く
-            if (createRole != quest.CreateRole) return false;
+            for (int i = 0; i < _manager.QuestsCount; i++)
+            {
+                //キャスト可能かを確認（不可能な場合エラーが起こるためこの処理は必須）
+                if (_manager.GetQuest(i) is QuestCreateRole questCr)
+                {
+                    if (CheckQuestSucceedSm(questCr, role)) return true;
+                }
+            }
 
-            //色の数を判定
-            var color = role.GetData().Distinct();
-            if (color.Count() != colorCount) return false;
-
-            //今作った役がクエストと合致しているか判定
-            if (role.GetRolename() != quest.RoleName) return false;
-
-            //完全役のみの場合完全役か判定
-            if (quest.OnlyPerfectRole && role.GetData().Length != currentMaxDango) return false;
-
-            //作った回数をカウントして…
-            quest.AddMadeCount();
-
-            //指定回数作ったか判定
-            if (quest.SpecifyCount != quest.MadeCount) return false;
-
-            //条件すべてクリアした場合、クエスト成功として返却
-            QuestSucceed(quest);
-            return true;
+            return false;
         }
-        private bool CheckQuestSucceed(QuestCreateRole quest, List<DangoColor> colors, int currentMaxDango)
+
+        private bool HasReadColor(QuestCreateRole quest, IEnumerable<DangoColor> dangosDistinct)
         {
-            //不正なアクセスであれば弾く
-            if (quest.QuestType != QuestType.CreateRole) return false;
-
-            //何らかの役という条件がつかないクエストの場合弾く
-            if (!quest.EnableAnyRole) return false;
-
-            //完全役のみの場合完全役か判定
-            if (quest.OnlyPerfectRole && colors.Count != currentMaxDango) return false;
-
-            //色を判定し、正しい色なら食べた数を追加
-            foreach (var color in colors.Distinct())
+            foreach (var color in dangosDistinct)
             {
                 //指定色があったら抜ける
-                if (quest.Colors.Contains(color)) break;
+                if (quest.Establish.ReadColors.Contains(color)) return true;
+            }
 
-                //ぜんぶなかったら弾く
+            //ぜんぶなかったら弾く
+            return false;
+        }
+
+        private bool CheckQuestSucceedEs(QuestCreateRole quest, List<DangoColor> dangos, bool createRole, int currentMaxDango)
+        {
+            //不正なアクセスであれば弾く
+            if (quest.CRType != QuestCreateRole.CreateRoleType.EstablishRole) return false;
+
+            //食べた団子がクエスト内容と一致しているか判定
+            //役の成立・非成立のフラグが一致していなければ弾く
+            if (createRole != quest.Establish.CreateRole)
+            {
+                quest.ResetContinueCount();
+                return false;
+            }
+            //完全役のみの場合、完全役か判定
+            if (quest.Establish.OnlyPerfectRole && dangos.Count != currentMaxDango)
+            {
+                quest.ResetContinueCount();
+                return false;
+            }
+            //指定色があるか判定
+            if (!HasReadColor(quest, dangos.Distinct()))
+            {
+                quest.ResetContinueCount();
                 return false;
             }
 
             //作った回数をカウントして…
             quest.AddMadeCount();
+            //さらに連続した回数をカウントして…
+            quest.AddContinueCount();
 
             //指定回数作ったか判定
-            if (quest.SpecifyCount > quest.MadeCount) return false;
+            if (!quest.IsAchievedMadeCount()) return false;
+            if (!quest.IsAchievedContinueCount()) return false;
 
             //条件すべてクリアした場合、クエスト成功として返却
             QuestSucceed(quest);
             return true;
         }
-        private bool CheckQuestSucceed(QuestCreateRole quest,bool createRole)
+        private bool CheckQuestSucceedSr(QuestCreateRole quest, Role<int> role)
         {
             //不正なアクセスであれば弾く
-            if (quest.QuestType != QuestType.CreateRole) return false;
+            if (quest.CRType != QuestCreateRole.CreateRoleType.SpecifyTheRole) return false;
 
-            //役を作る場合のパターンを弾く
-            if (quest.CreateRole)
-            {
-                quest.SetIsPrebCreateRole(createRole);
-                return false;
-            }
+            //食べた団子がクエスト内容と一致しているか判定
+            //役が一致しているか判定
+            if (quest.SpecifyRole.RoleName != role.GetRolename()) return false;
 
+            //作った回数をカウントして…
             quest.AddMadeCount();
 
             //指定回数作ったか判定
-            if (quest.MadeCount < quest.SpecifyCount) return false;
+            if (!quest.IsAchievedMadeCount()) return false;
+
+            //条件すべてクリアした場合、クエスト成功として返却
+            QuestSucceed(quest);
+            return true;
+        }
+        private bool CheckQuestSucceedIc(QuestCreateRole quest, List<DangoColor> colors)
+        {
+            //不正なアクセスであれば弾く
+            if (quest.CRType != QuestCreateRole.CreateRoleType.IncludeColor) return false;
+
+            //色の数を判定
+            if (colors.Distinct().Count() != quest.IncludeColors.ColorCount) return false;
+
+            //作った回数をカウントして…
+            quest.AddMadeCount();
+
+            //指定回数作ったか判定
+            if (!quest.IsAchievedMadeCount()) return false;
+
+            //条件すべてクリアした場合、クエスト成功として返却
+            QuestSucceed(quest);
+            return true;
+        }
+        private bool CheckQuestSucceedSm(QuestCreateRole quest, Role<int> role)
+        {
+            //不正なアクセスであれば弾く
+            if (quest.CRType != QuestCreateRole.CreateRoleType.CreateSameRole) return false;
+
+            if (!quest.SameRole.IsEqualRole(role))
+            {
+                quest.ResetContinueCount();
+
+                return false;
+            }
 
             quest.AddContinueCount();
 
-            if (quest.IsPrebCreateRole == createRole) quest.AddContinueCount();
-            else quest.ResetContinueCount();
-
-            quest.SetIsPrebCreateRole(createRole);
-
             //指定回数作ったか判定
-            if (quest.ContinueCount >= quest.CurrentContinueCount) return false;
-            
+            if (!quest.IsAchievedContinueCount()) return false;
+
             //条件すべてクリアした場合、クエスト成功として返却
             QuestSucceed(quest);
 
@@ -210,6 +253,9 @@ namespace Dango.Quest
         #region PlayAction
         public bool CheckQuestPlayActionSucceed(QuestManager questManager, QuestPlayAction.PlayerAction action)
         {
+            //このフレームに別のクエストがクリアされていたら弾く
+            if (isSucceedThisFrame) return false;
+
             for (int i = 0; i < questManager.QuestsCount; i++)
             {
                 //キャスト可能かを確認（不可能な場合エラーが起こるためこの処理は必須）
@@ -224,16 +270,13 @@ namespace Dango.Quest
 
         private bool CheckQuestSucceed(QuestPlayAction quest, QuestPlayAction.PlayerAction action)
         {
-            //不正なアクセスであれば弾く
-            if (quest.QuestType != QuestType.PlayAction) return false;
-
             //判定したいアクションが異なったら弾く
             if (quest.Action != action) return false;
 
             quest.AddMadeCount();
 
             //指定回数作ったか判定
-            if (quest.SpecifyCount != quest.MadeCount) return false;
+            if (!quest.IsAchievedMadeCount()) return false;
 
             QuestSucceed(quest);
             return true;
@@ -241,27 +284,63 @@ namespace Dango.Quest
         #endregion
 
         #region Destination
-        public bool CheckQuestDestinationSucceed(QuestManager questManager,bool onEatSucceed)
+        public bool CheckQuestDestinationSucceed(FloorManager.Floor floor, bool inFloor)
         {
-            for (int i = 0; i < questManager.QuestsCount; i++)
+            //このフレームに別のクエストがクリアされていたら弾く
+            if (isSucceedThisFrame) return false;
+
+            for (int i = 0; i < _manager.QuestsCount; i++)
             {
                 //キャスト可能かを確認（不可能な場合エラーが起こるためこの処理は必須）
-                if (questManager.GetQuest(i) is QuestDestination questDest)
+                if (_manager.GetQuest(i) is QuestDestination questDest)
                 {
-                    if (CheckQuestSucceed(questDest,onEatSucceed)) return true;
+                    if (CheckQuestSucceed(questDest, floor, inFloor)) return true;
                 }
             }
 
             return false;
         }
 
-        private bool CheckQuestSucceed(QuestDestination quest,bool onEatSucceed)
+        public bool CheckQuestDestinationSucceed()
         {
-            //不正なアクセスであれば弾く
-            if (quest.QuestType != QuestType.Destination) return false;
+            //このフレームに別のクエストがクリアされていたら弾く
+            if (isSucceedThisFrame) return false;
+
+            for (int i = 0; i < _manager.QuestsCount; i++)
+            {
+                //キャスト可能かを確認（不可能な場合エラーが起こるためこの処理は必須）
+                if (_manager.GetQuest(i) is QuestDestination questDest)
+                {
+                    if (CheckQuestSucceed(questDest)) return true;
+                }
+            }
+
+            return false;
+        }
+
+        private bool CheckQuestSucceed(QuestDestination quest, FloorManager.Floor floor, bool inFloor)
+        {
+            //はじめに現在いるFloorを登録する
+            if (inFloor) quest.SetFloor(floor);
+
+            //目的地でなければ弾く
+            if (!quest.Floors.Contains(floor)) return false;
+
+            //部屋の出入りを記録
+            quest.SetIsInFloor(inFloor);
 
             //目的地につくだけでいいのか、ついて食べないといけないのか判定
-            if (quest.OnEatSucceed != onEatSucceed) return false;
+            if (quest.SucceedOnEat) return false;
+
+            if (!quest.IsInFloor) return false;
+
+            QuestSucceed(quest);
+            return true;
+        }
+        private bool CheckQuestSucceed(QuestDestination quest)
+        {
+            //目的地でなければ弾く
+            if (!quest.Floors.Contains(quest.CurrentFloor)) return false;
 
             QuestSucceed(quest);
             return true;
@@ -284,6 +363,10 @@ namespace Dango.Quest
             _manager.Player.GrowStab(quest.EnableDangoCountUp);
             _manager.Player.AddSatiety(quest.RewardTime);
             _manager.CreateExpansionUIObj();
+
+            //このフレームで判定は行わないようにする処理
+            isSucceedThisFrame = true;
+            SetBoolAfterOneFrame(false).Forget();
 
             if (quest.IsKeyQuest)
             {

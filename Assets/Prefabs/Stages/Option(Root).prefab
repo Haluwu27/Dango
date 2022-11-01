@@ -58,7 +58,7 @@ Canvas:
   m_SortingBucketNormalizedSize: 0
   m_AdditionalShaderChannelsFlag: 25
   m_SortingLayerID: 0
-  m_SortingOrder: 4
+  m_SortingOrder: 15
   m_TargetDisplay: 0
 --- !u!114 &1004294672
 MonoBehaviour:
@@ -505,7 +505,7 @@ Canvas:
   m_SortingBucketNormalizedSize: 0
   m_AdditionalShaderChannelsFlag: 25
   m_SortingLayerID: 0
-  m_SortingOrder: 4
+  m_SortingOrder: 15
   m_TargetDisplay: 0
 --- !u!114 &1874558300
 MonoBehaviour:
@@ -2714,7 +2714,7 @@ Canvas:
   m_SortingBucketNormalizedSize: 0
   m_AdditionalShaderChannelsFlag: 25
   m_SortingLayerID: 0
-  m_SortingOrder: 3
+  m_SortingOrder: 14
   m_TargetDisplay: 0
 --- !u!114 &2582936484161683773
 MonoBehaviour:
@@ -3227,7 +3227,7 @@ Canvas:
   m_SortingBucketNormalizedSize: 0
   m_AdditionalShaderChannelsFlag: 25
   m_SortingLayerID: 0
-  m_SortingOrder: 3
+  m_SortingOrder: 14
   m_TargetDisplay: 0
 --- !u!114 &7388827584868889100
 MonoBehaviour:
@@ -3386,7 +3386,7 @@ Canvas:
   m_SortingBucketNormalizedSize: 0
   m_AdditionalShaderChannelsFlag: 25
   m_SortingLayerID: 0
-  m_SortingOrder: 3
+  m_SortingOrder: 14
   m_TargetDisplay: 0
 --- !u!114 &5383419881484478667
 MonoBehaviour:
@@ -3471,7 +3471,7 @@ Canvas:
   m_SortingBucketNormalizedSize: 0
   m_AdditionalShaderChannelsFlag: 25
   m_SortingLayerID: 0
-  m_SortingOrder: 4
+  m_SortingOrder: 15
   m_TargetDisplay: 0
 --- !u!114 &1803642438240633595
 MonoBehaviour:
@@ -4049,7 +4049,7 @@ Canvas:
   m_SortingBucketNormalizedSize: 0
   m_AdditionalShaderChannelsFlag: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 4
+  m_SortingOrder: 13
   m_TargetDisplay: 0
 --- !u!114 &5484892727532509829
 MonoBehaviour:
@@ -4133,7 +4133,7 @@ Canvas:
   m_SortingBucketNormalizedSize: 0
   m_AdditionalShaderChannelsFlag: 25
   m_SortingLayerID: 0
-  m_SortingOrder: 4
+  m_SortingOrder: 15
   m_TargetDisplay: 0
 --- !u!114 &5484892727831683208
 MonoBehaviour:
@@ -4721,7 +4721,7 @@ Canvas:
   m_SortingBucketNormalizedSize: 0
   m_AdditionalShaderChannelsFlag: 25
   m_SortingLayerID: 0
-  m_SortingOrder: 2
+  m_SortingOrder: 11
   m_TargetDisplay: 0
 --- !u!114 &5484892728148923522
 MonoBehaviour:
@@ -5419,7 +5419,7 @@ Canvas:
   m_SortingBucketNormalizedSize: 0
   m_AdditionalShaderChannelsFlag: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 3
+  m_SortingOrder: 12
   m_TargetDisplay: 0
 --- !u!114 &5484892728970605230
 MonoBehaviour:
@@ -8520,7 +8520,7 @@ PrefabInstance:
     - target: {fileID: 4579026392943042360, guid: 18d0552dcf0b0a346b5913ad9a1c58fb,
         type: 3}
       propertyPath: m_SortingOrder
-      value: 6
+      value: 16
       objectReference: {fileID: 0}
     - target: {fileID: 6348685036982674566, guid: 18d0552dcf0b0a346b5913ad9a1c58fb,
         type: 3}

@@ -22,6 +22,9 @@ public class CameraFollow : MonoBehaviour
 
     [SerializeField] LayerMask wallLayer;//マップのレイヤーマスク
 
+    [SerializeField] Vector3 EatCameraPos;
+
+    [SerializeField] GameObject parent;
     private Vector3 _prebTargetPos = Vector3.zero;
     private GameObject _terminus = null;
 
@@ -30,6 +33,8 @@ public class CameraFollow : MonoBehaviour
     private float _roteYSpeed = -100f;
 
     private Vector3 rayStartPos;
+
+    private bool Event =false;
 
 
     Vector3 _wallHitPos;//壁にぶつかった際の座標
@@ -44,8 +49,9 @@ public class CameraFollow : MonoBehaviour
     private void Start()
     {
         _playerData = target.GetComponent<PlayerData>();
-        transform.parent = null;//動くものに乗るとそれに追従しだすから親子関係を無くす
+        transform.parent = parent.transform;//動くものに乗るとそれに追従しだすから親子関係を無くす
         _terminus = new GameObject("cameraTermiusObject");
+        _terminus.transform.parent = parent.transform;
         _terminus.transform.position = transform.position;
         _camIsStaying = new(gameObject, _terminus, target);
 
@@ -70,32 +76,36 @@ public class CameraFollow : MonoBehaviour
 
         //カメラの目標地点を変更する
         _terminus.transform.position += currentTargetPos - _prebTargetPos;
-
-        if (WallHitCheck())
+        if (!Event)
         {
-            //当たった場所に飛ばすとカメラが壁の中に埋まるので調整。
-            _wallHitPos = _hit.point + (currentTargetPos - _terminus.transform.position).normalized;
-            transform.position = _wallHitPos;
-        }
-        else//カメラの移動
-        {
-            transform.position = state switch
+            if (WallHitCheck())
             {
-                State.normal => _terminus.transform.position,
-                _ => Vector3.Lerp(transform.position, _terminus.transform.position, Time.deltaTime * ratio),
-            };
+                //当たった場所に飛ばすとカメラが壁の中に埋まるので調整。
+                _wallHitPos = _hit.point + (currentTargetPos - _terminus.transform.position).normalized;
+                transform.position = _wallHitPos;
+            }
+            else//カメラの移動
+            {
+                transform.position = state switch
+                {
+                    State.normal => _terminus.transform.position,
+                    _ => Vector3.Lerp(transform.position, _terminus.transform.position, Time.deltaTime * ratio),
+                };
+            }
         }
-
         _prebTargetPos = currentTargetPos;
     }
+
     private void RotateToLookRot()
     {
-        if (InputSystemManager.Instance.LookAxis.magnitude > 0.1f || _playerData.Rb.velocity.magnitude > 0.1f)
+        if (!Event)
         {
-            _camIsStaying.Reset();
-            return;
+            if (InputSystemManager.Instance.LookAxis.magnitude > 0.1f || _playerData.Rb.velocity.magnitude > 0.1f)
+            {
+                _camIsStaying.Reset();
+                return;
+            }
         }
-
         _camIsStaying.Update();
     }
 
@@ -125,7 +135,6 @@ public class CameraFollow : MonoBehaviour
                 Rote(_terminus, currentYAngle);
                 break;
         }
-
     }
 
     private void Rote(GameObject obj, float a)

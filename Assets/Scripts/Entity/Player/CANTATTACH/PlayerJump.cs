@@ -8,7 +8,9 @@ namespace TM.Entity.Player
 {
     class PlayerJump
     {
-        const float JUMP_POWER = 3.72f * 3.75f / 2.8f * (5f / 6f);
+        //const float JUMP_POWER = 3.72f * 3.75f / 2.8f * (5f / 6f);
+
+        static readonly float[] JUMP_POWER_TABLE = { 11f, 12.5f, 14.5f, 17f, 19f };
 
         Rigidbody _rb;
         bool _isGround;
@@ -70,8 +72,14 @@ namespace TM.Entity.Player
             //ベクトルを打ち消しジャンプ
             _isJumping = true;
             _onJump?.Invoke();
-            
-            _rb.velocity = Vector3.zero.SetY(JUMP_POWER * _maxStabCount);
+
+
+            //旧来
+            //_rb.velocity = Vector3.zero.SetY(JUMP_POWER * _maxStabCount);
+
+            //D5ごとにジャンプ力を個別にする
+            _rb.velocity = Vector3.zero.SetY(JUMP_POWER_TABLE[_maxStabCount - 3]);
+
             //_rb.AddForce(Vector3.up * (JUMP_POWER + _maxStabCount), ForceMode.Impulse);
 
             //自由落下まで待機
