@@ -155,6 +155,7 @@ internal class GameManager : MonoBehaviour
 
         //Logger.Log("–‘«“xF" + GameScore * madeCount);
 
+        InputSystemManager.Instance.onPausePerformed -= OnPause;
         SceneSystem.Instance.Load(SceneSystem.Scenes.GameOver);
     }
 }

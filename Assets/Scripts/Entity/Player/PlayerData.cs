@@ -276,14 +276,13 @@ class PlayerData : MonoBehaviour
 
     readonly DangoRole dangoRole = DangoRole.instance;
 
-    readonly PlayerStayEat _playerStayEat = new();
-
     //生成はAwakeで行っています。
     PlayerMove _playerMove;
     PlayerJump _playerJump;
     PlayerRemoveDango _playerRemoveDango;
     PlayerFallAction _playerFall;
     PlayerAttackAction _playerAttack;
+    PlayerStayEat _playerStayEat;
 
     //映像やアニメーションのイベントフラグ
     public static bool Event = false;
@@ -350,6 +349,7 @@ class PlayerData : MonoBehaviour
         _playerRemoveDango = new(_dangos, _dangoUISC, this, _animator);
         _playerMove = new(_animator);
         _playerJump = new(rb, OnJump, OnJumpExit, _animator);
+        _playerStayEat = new(this);
     }
 
     private void OnEnable()

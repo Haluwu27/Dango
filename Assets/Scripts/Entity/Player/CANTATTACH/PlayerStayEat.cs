@@ -13,8 +13,18 @@ namespace TM.Entity.Player
 
         private int _currentFrame = STAY_FRAME;
 
+        PlayerData _playerData;
+
+        public PlayerStayEat(PlayerData player)
+        {
+            _playerData = player;
+        }
+
         public bool CanEat()
         {
+            //チャージ中に制限時間がゼロになったら弾く
+            if (_playerData.GetSatiety() <= 0) return false;
+
             if (--_currentFrame > 0) return false;
 
             return true;
