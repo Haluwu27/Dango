@@ -48,8 +48,6 @@ public class FloorManager : MonoBehaviour
     //二次元配列はシリアライズできないため、別クラスを用いて仮想的に二次元配列にしている。
     [SerializeField] FloorArray[] floorArrays = new FloorArray[(int)Floor.Max];
 
-    readonly List<BoxCollider> _boxColliders = new();
-
     private void Awake()
     {
         for (int i = 0; i < (int)Floor.Max; i++)
@@ -59,12 +57,6 @@ public class FloorManager : MonoBehaviour
             foreach (var injection in floorArrays[i].DangoInjections)
             {
                 injection.SetFloor((Floor)i);
-                _boxColliders.Clear();
-
-                foreach (var data in floorArrays[i].FloorDatas)
-                {
-                    _boxColliders.Add(data.GetComponent<BoxCollider>());
-                }
             }
         }
     }
