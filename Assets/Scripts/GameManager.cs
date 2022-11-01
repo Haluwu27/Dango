@@ -142,17 +142,19 @@ internal class GameManager : MonoBehaviour
 
     private void FinishGame()
     {
-        int madeCount = 0;
-        var posRoles = DangoRole.instance.GetPosRoles();
+        //int madeCount = 0;
+        //var posRoles = DangoRole.instance.GetPosRoles();
 
-        foreach (var posRole in posRoles)
-        {
-            if (posRole.GetMadeCount() > 0)
-            {
-                madeCount++;
-            }
-        }
+        //foreach (var posRole in posRoles)
+        //{
+        //    if (posRole.GetMadeCount() > 0)
+        //    {
+        //        madeCount++;
+        //    }
+        //}
 
-        Logger.Log("満足度：" + GameScore * madeCount);
+        //Logger.Log("満足度：" + GameScore * madeCount);
+
+        SceneSystem.Instance.Load(SceneSystem.Scenes.GameOver);
     }
 }

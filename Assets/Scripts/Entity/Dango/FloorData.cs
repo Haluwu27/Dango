@@ -85,8 +85,6 @@ public class FloorArray
     {
         dangoCount++;
 
-        if (_floor == Floor.floor1)  Logger.Log(dangoCount);
-
         if (dangoCount < maxDangoCount) return;
 
         foreach (var dango in dangoInjections)
