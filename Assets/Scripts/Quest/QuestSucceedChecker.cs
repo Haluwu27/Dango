@@ -337,6 +337,7 @@ namespace Dango.Quest
 
             if (quest.IsKeyQuest)
             {
+                SceneSystem.Instance.Load(SceneSystem.Scenes.Success);
                 //TODO:S7‚É‘JˆÚ
             }
         
