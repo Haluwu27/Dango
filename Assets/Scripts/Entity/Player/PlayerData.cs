@@ -300,7 +300,7 @@ class PlayerData : MonoBehaviour
     /// 満腹度、制限時間の代わり（単位:[sec]）
     /// </summary>
     /// フレーム数で管理しますが、ここでは秒管理で構いません。
-    private float _satiety = 100f;
+    private float _satiety = 5f;
 
     /// <summary>
     /// 串、持ってる団子

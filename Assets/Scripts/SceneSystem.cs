@@ -1,3 +1,4 @@
+using Cysharp.Threading.Tasks;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
@@ -103,6 +104,16 @@ class SceneSystem : MonoBehaviour
         else _scenes[(int)scene].SetActive(false);
 
         return true;
+    }
+
+    public async void ReLoad(Scenes scene)
+    {
+        UnLoad(scene, true);
+
+        await UniTask.Yield();
+        await UniTask.Yield();
+
+        Load(scene);
     }
 
     public Scenes PrebScene => _prebScene;
