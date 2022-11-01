@@ -43,6 +43,7 @@ public class FloorData : MonoBehaviour
 
     private void CreateInvertedMeshCollider()
     {
+        RemoveExistingColliders();
         InvertMesh();
 
         GameObject obj = new();
@@ -51,6 +52,13 @@ public class FloorData : MonoBehaviour
         obj.layer = 8;
         obj.transform.localPosition = Vector3.zero;
         obj.transform.localRotation = Quaternion.identity;
+    }
+
+    private void RemoveExistingColliders()
+    {
+        Collider[] colliders = GetComponents<Collider>();
+        for (int i = 0; i < colliders.Length; i++)
+            DestroyImmediate(colliders[i]);
     }
 
     private void InvertMesh()
