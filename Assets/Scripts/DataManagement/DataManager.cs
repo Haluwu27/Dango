@@ -16,6 +16,7 @@ using System.Security.Cryptography;
 using Newtonsoft.Json;
 using LitJson;
 using System.Collections.Generic;
+using UnityEngine.InputSystem;
 
 public class DataManager : MonoBehaviour
 {
@@ -27,6 +28,13 @@ public class DataManager : MonoBehaviour
 
     public static ConfigData configData;
     public static SaveData saveData;
+    public static PreservationKeyConfigData keyConfigData;
+
+    [SerializeField] InputActionReference Jump;
+    [SerializeField] InputActionReference Attack;
+    [SerializeField] InputActionReference EatDango;
+    [SerializeField] InputActionReference Fire;
+    [SerializeField] InputActionReference ExpansionUI;
 
     public static bool _nowLoadConfigData = false;
 
@@ -47,6 +55,7 @@ public class DataManager : MonoBehaviour
         }
 
         LoadSaveData();
+        LoadInputData();
 
         //言語データは使用しないので不要
         //LoadLanguageData();
@@ -56,6 +65,7 @@ public class DataManager : MonoBehaviour
     {
         SaveConfigData();
         SaveSaveData();
+        SaveInputData();
     }
 
     /// <summary>
@@ -474,6 +484,177 @@ public class DataManager : MonoBehaviour
             }
             return _languageDataList[configData.language];
         }
+    }
+
+    /// <summary>
+    /// 入力データを保存する
+    /// </summary>
+    public void SaveInputData()
+    {
+
+        keyConfigData = new PreservationKeyConfigData();
+
+        //アクションデータをシリアライズして保存
+        keyConfigData.Jump = new string[Jump.action.bindings.Count]; 
+        for (int i = 0; i < Jump.action.bindings.Count; i++) 
+        {
+            keyConfigData.Jump[i] = Jump.action.bindings[i].path;
+        }
+        keyConfigData.Attack = new string[Attack.action.bindings.Count];
+        for (int i = 0; i < Attack.action.bindings.Count; i++)
+        {
+            keyConfigData.Attack[i] = Attack.action.bindings[i].path;
+        }
+        keyConfigData.EatDango = new string[EatDango.action.bindings.Count];
+        for (int i = 0; i < EatDango.action.bindings.Count; i++)
+        {
+            keyConfigData.EatDango[i] = EatDango.action.bindings[i].path;
+        }
+        keyConfigData.Fire = new string[Fire.action.bindings.Count];
+        for (int i = 0; i < Fire.action.bindings.Count; i++)
+        {
+            keyConfigData.Fire[i] = Fire.action.bindings[i].path;
+        }
+        keyConfigData.ExpansionUI = new string[ExpansionUI.action.bindings.Count];
+        for (int i = 0; i < ExpansionUI.action.bindings.Count; i++)
+        {
+            keyConfigData.ExpansionUI[i] = ExpansionUI.action.bindings[i].path;
+        }
+
+        //シリアライズ用設定データ
+
+        //パターンA
+        JsonSerializerSettings settings = new()
+        {
+            Formatting = Formatting.Indented,
+        };
+
+        //パターンB
+        //LitJson.JsonWriter jwriter = new LitJson.JsonWriter();
+        //jwriter.PrettyPrint = true;
+        //jwriter.IndentValue = 4;
+
+        //シリアライズ実行
+
+        //パターンA
+        string dataString = JsonConvert.SerializeObject(keyConfigData, settings);
+
+        //パターンB
+        //JsonMapper.ToJson(configData,jwriter);
+        //string dataString = jwriter.ToString();
+
+        //ファイルパスを決定
+#if UNITY_EDITOR
+        string path = Directory.GetCurrentDirectory() + "\\Assets\\Resources";
+#else
+        string path = AppDomain.CurrentDomain.BaseDirectory.TrimEnd('\\');
+#endif
+
+        //ファイルがあるかチェック
+        if (!File.Exists(path + "/keyConfig.txt"))
+        {
+            Logger.Warn("キーコンフィグファイルが存在しないため、生成します");
+            File.Create(path + "/keyConfig.txt").Close();
+        }
+
+        //保存
+        using StreamWriter writer = new(path + "/keyConfig.txt", false);
+        writer.WriteLine(dataString);
+        writer.Flush();
+    }
+
+    /// <summary>
+    /// 入力データをロードする
+    /// </summary>
+    public void LoadInputData()
+    {
+
+        //データ初期化
+        keyConfigData = new PreservationKeyConfigData();
+
+        //ファイルパスを決定
+#if UNITY_EDITOR
+        string path = Directory.GetCurrentDirectory() + "\\Assets\\Resources";
+#else
+        string path = AppDomain.CurrentDomain.BaseDirectory.TrimEnd('\\');
+#endif
+
+        //ファイルがあるかチェック
+        if (!File.Exists(path + "/keyConfig.txt"))
+        {
+            Logger.Warn("キーコンフィグファイルが存在しないため、生成します");
+            File.Create(path + "/keyConfig.txt").Close();
+            return;
+        }
+
+        string dataString;
+
+        using (StreamReader reader = new(path + "/keyConfig.txt", false))
+        {
+            dataString = reader.ReadToEnd();
+        }
+
+        //Jsonから読み込み
+
+        //パターンA
+        //configData = JsonUtility.FromJson<ConfigData>(dataString);
+
+        //パターンB(LitJson)
+        keyConfigData = JsonMapper.ToObject<PreservationKeyConfigData>(dataString);
+
+        //アクションデータをロード
+        for (int i = 0; i < keyConfigData.Jump.Length; i++)
+        {
+            if (CheckBinding(Jump, keyConfigData.Jump[i]))
+            {
+                Jump.action.ChangeBinding(new InputBinding { path = keyConfigData.Jump[i] }).Erase();
+            }
+            Jump.action.AddBinding(new InputBinding { path = keyConfigData.Jump[i] });
+        }
+        for (int i = 0; i < keyConfigData.Attack.Length; i++)
+        {
+            if (CheckBinding(Attack, keyConfigData.Attack[i]))
+            {
+                Attack.action.ChangeBinding(new InputBinding { path = keyConfigData.Attack[i] }).Erase();
+            }
+            Attack.action.AddBinding(new InputBinding { path = keyConfigData.Attack[i] });
+        }
+        for (int i = 0; i < keyConfigData.EatDango.Length; i++)
+        {
+            if (CheckBinding(EatDango, keyConfigData.EatDango[i]))
+            {
+                EatDango.action.ChangeBinding(new InputBinding { path = keyConfigData.EatDango[i] }).Erase();
+            }
+            EatDango.action.AddBinding(new InputBinding { path = keyConfigData.EatDango[i] });
+        }
+        for (int i = 0; i < keyConfigData.Fire.Length; i++)
+        {
+            if (CheckBinding(Fire, keyConfigData.Fire[i]))
+            {
+                Fire.action.ChangeBinding(new InputBinding { path = keyConfigData.Fire[i] }).Erase();
+            }
+            Fire.action.AddBinding(new InputBinding { path = keyConfigData.Fire[i] });
+        }
+        for (int i = 0; i < keyConfigData.ExpansionUI.Length; i++)
+        {
+            if (CheckBinding(ExpansionUI, keyConfigData.ExpansionUI[i]))
+            {
+                ExpansionUI.action.ChangeBinding(new InputBinding { path = keyConfigData.ExpansionUI[i] }).Erase();
+            }
+            ExpansionUI.action.AddBinding(new InputBinding { path = keyConfigData.ExpansionUI[i] });
+        }
+
+    }
+
+    //重複チェック関数
+    private bool CheckBinding(InputActionReference inputActionReference,string path)
+    {
+        foreach(var bind in inputActionReference.action.bindings)
+        {
+            if (path.Equals(bind.path))
+                return true;
+        }
+        return false;
     }
 
     /*以下編集は非推奨*/

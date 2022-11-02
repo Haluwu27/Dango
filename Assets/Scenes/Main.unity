@@ -549,6 +549,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 02e1f85d90ef0944180d834b8eaade3d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Jump: {fileID: -5148773989038927387, guid: 1da3fe81edbbd5045a5caa837599af50, type: 3}
+  Attack: {fileID: -797330297306943043, guid: 1da3fe81edbbd5045a5caa837599af50, type: 3}
+  EatDango: {fileID: -2715134204739923513, guid: 1da3fe81edbbd5045a5caa837599af50,
+    type: 3}
+  Fire: {fileID: -5190157588141457138, guid: 1da3fe81edbbd5045a5caa837599af50, type: 3}
+  ExpansionUI: {fileID: 3923312018620916335, guid: 1da3fe81edbbd5045a5caa837599af50,
+    type: 3}
 --- !u!1001 &1350547491
 PrefabInstance:
   m_ObjectHideFlags: 0

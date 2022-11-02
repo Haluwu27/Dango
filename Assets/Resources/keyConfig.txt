@@ -1,0 +1,24 @@
+{
+  "Jump": [
+    "<Gamepad>/buttonSouth",
+    "<Gamepad>/buttonEast",
+    "<Keyboard>/space"
+  ],
+  "Attack": [
+    "<Gamepad>/buttonNorth",
+    "<Gamepad>/buttonWest",
+    "<Mouse>/leftButton"
+  ],
+  "EatDango": [
+    "<Mouse>/rightButton",
+    "<Mouse>/rightButton",
+    "<Gamepad>/leftTrigger"
+  ],
+  "Fire": [
+    "<Gamepad>/rightTrigger",
+    "<Keyboard>/q"
+  ],
+  "ExpansionUI": [
+    "<Keyboard>/tab"
+  ]
+}
