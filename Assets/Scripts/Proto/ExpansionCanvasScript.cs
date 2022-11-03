@@ -18,6 +18,11 @@ namespace Dango.Quest.UI {
             times[0].SetActive(false);
             InputSystemManager.Instance.onExpansionUIPerformed += OnExpansion;
         }
+
+        private void OnDestroy()
+        {
+            InputSystemManager.Instance.onExpansionUIPerformed -= OnExpansion;
+        }
         public void OnExpansion()
         {
             if (InputSystemManager.Instance.IsExpantionUI)

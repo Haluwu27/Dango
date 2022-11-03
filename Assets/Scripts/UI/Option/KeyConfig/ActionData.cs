@@ -20,24 +20,10 @@ namespace TM.Input.KeyConfig
         //アクションマップの名前。想定される名前は"Player"やUI等
         string _actionMapName;
 
-        public ActionData(KeyData.GameAction action, List<KeyData.GamepadKey> key, InputActionAsset asset, string actionMapName)
-        {
-            _action = action;
-            _currentKeys = key;
-            _actionMapName = actionMapName;
-            SetActionReference(action, asset);
-        }
         public ActionData(KeyData.GameAction action, KeyData.GamepadKey[] key, InputActionAsset asset, string actionMapName)
         {
             _action = action;
             _currentKeys.AddRange(key);
-            _actionMapName = actionMapName;
-            SetActionReference(action, asset);
-        }
-        public ActionData(KeyData.GameAction action, KeyData.GamepadKey key, InputActionAsset asset, string actionMapName)
-        {
-            _action = action;
-            _currentKeys.Add(key);
             _actionMapName = actionMapName;
             SetActionReference(action, asset);
         }

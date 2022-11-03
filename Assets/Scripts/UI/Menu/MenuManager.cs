@@ -73,25 +73,15 @@ public class MenuManager : MonoBehaviour
     {
         if (_isTransition) return;
 
-        if (InputSystemManager.Instance.NavigateAxis == Vector2.up)
+        if (InputSystemManager.Instance.NavigateAxis == Vector2.left)
         {
             CurrentMenu--;
             if (CurrentMenu == Menu.None) CurrentMenu = Menu.Max - 1;
         }
-        else if (InputSystemManager.Instance.NavigateAxis == Vector2.down)
+        else if (InputSystemManager.Instance.NavigateAxis == Vector2.right)
         {
             CurrentMenu++;
             if (CurrentMenu == Menu.Max) CurrentMenu = Menu.None + 1;
-        }
-        else if (InputSystemManager.Instance.NavigateAxis == Vector2.right)
-        {
-            if (!CurrentMenu.Equals(Menu.StageSelect - 1)) return;
-            CurrentMenu++;
-        }
-        else if (InputSystemManager.Instance.NavigateAxis == Vector2.left)
-        {
-            if (!CurrentMenu.Equals(Menu.StageSelect)) return;
-            CurrentMenu--;
         }
 
         SoundManager.Instance.PlaySE(SoundSource.SE16_UI_SELECTION);
@@ -100,11 +90,25 @@ public class MenuManager : MonoBehaviour
 
     private async void OnChoice()
     {
+        //TODO:S10解放したら消す
+        if (CurrentMenu == Menu.Ex)
+        {
+            Logger.Log("メンテナンス中の機能です");
+            return;
+        }
+        //TODO:S2解放したら消す
+        if (CurrentMenu == Menu.Tutorial)
+        {
+            Logger.Log("メンテナンス中の機能です");
+            return;
+        }
+
         if (_isTransition) return;
         _isTransition = true;
         SoundManager.Instance.PlaySE(SoundSource.SE17_UI_DECISION);
 
         if (CurrentMenu == Menu.Tutorial) SoundManager.Instance.StopBGM(1.5f);
+
         await _fusumaManager.UniTaskClose(1.5f);
 
         switch (CurrentMenu)

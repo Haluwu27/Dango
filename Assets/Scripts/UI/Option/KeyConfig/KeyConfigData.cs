@@ -11,20 +11,21 @@ namespace TM.Input.KeyConfig
         [System.Flags]
         public enum GameAction
         {
-            Move = 1 << 0,
-            LookRotation = 1 << 1,
-            Jump = 1 << 2,
-            Attack = 1 << 3,
-            Eat = 1 << 4,
-            Remove = 1 << 5,
-            Pause = 1 << 6,
-            UIExpansion = 1 << 7,
+            Unset = 1 << 0,
+            Move = 1 << 1,
+            LookRotation = 1 << 2,
+            Jump = 1 << 3,
+            Attack = 1 << 4,
+            Eat = 1 << 5,
+            Remove = 1 << 6,
+            Pause = 1 << 7,
+            UIExpansion = 1 << 8,
 
             [InspectorName("")]
-            Max = 8,
+            Max = 9,
         }
 
-        [SerializeField] GameAction configSelection = GameAction.Move;
+        [SerializeField] GameAction configSelection = GameAction.Unset;
 
         //コントロールした際の移動先の指定
         [SerializeField] KeyConfigData up;
@@ -37,7 +38,9 @@ namespace TM.Input.KeyConfig
         [SerializeField] KeyConfigData upperLeft;
         KeyConfigData[] keyConfigDatas = new KeyConfigData[8];
 
-        [SerializeField] KeyData _keyData = default!;
+        [SerializeField] KeyData.GamepadKey key;
+
+        KeyData _keyData;
 
         public KeyData KeyData => _keyData;
 
@@ -50,6 +53,11 @@ namespace TM.Input.KeyConfig
             Initialize();
         }
 
+        private void Start()
+        {
+            _keyData = DataManager.GetKeyData(key);
+        }
+
         private void Initialize()
         {
             keyConfigDatas[0] = up;
@@ -60,11 +68,6 @@ namespace TM.Input.KeyConfig
             keyConfigDatas[5] = lowerLeft;
             keyConfigDatas[6] = left;
             keyConfigDatas[7] = upperLeft;
-        }
-
-        public void SelectAnimation()
-        {
-            //ここに選択したときのアニメーションでも・・・・
         }
     }
 }

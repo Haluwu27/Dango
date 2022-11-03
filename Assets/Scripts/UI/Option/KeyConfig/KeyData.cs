@@ -1,11 +1,10 @@
-using System.Collections;
-using System.Collections.Generic;
+using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 namespace TM.Input.KeyConfig
 {
-    public class KeyData : MonoBehaviour
+    public class KeyData
     {
         public enum GamepadKey
         {
@@ -36,94 +35,63 @@ namespace TM.Input.KeyConfig
             D_padRight,
             Select,
             Start,
+
+            [InspectorName("")]
+            Max,
         }
 
         public enum GameAction
         {
-            Move = 0,
-            LookRotation = 1,
-            Jump = 2,
-            Attack = 3,
-            Eat = 4,
-            Remove = 5,
-            Pause = 6,
-            UIExpansion = 7,
+            Unknown,
+
+            Move,
+            LookRotation,
+            Jump,
+            Attack,
+            Eat,
+            Remove,
+            Pause,
+            UIExpansion,
         }
 
-        [SerializeField] GamepadKey key;
-        [SerializeField] GameAction defalutAction;
+        public KeyData(GamepadKey key, InputActionReference currentActionReference, Func<InputActionReference, GameAction> action)
+        {
+            _key = key;
+            _currentActionReference = currentActionReference;
+            actionFunc = action;
+        }
 
-        [SerializeField] InputActionReference currentActionReference;
+        GamepadKey _key;
+        InputActionReference _currentActionReference;
+        Func<InputActionReference, GameAction> actionFunc;
 
-        public InputActionReference CurrentActionReference => currentActionReference;
-        public GamepadKey Key => key;
-
-        //static readonly string REBINDJSON = "rebindKey";
-
-        //バインディング状態をJSON形式で出力、読み込み
-        //をしたいんだけどひとまずわからないので一旦放置
-
-        //private bool LoadRebinding()
-        //{
-        //    //すでにリバインディングしたことがある場合はシーン読み込み時に変更。
-        //    string rebinds = PlayerPrefs.GetString(REBINDJSON);
-
-        //    //Nullか空白であったらロード失敗として返却
-        //    if (string.IsNullOrEmpty(rebinds)) return false;
-
-        //    //リバインディング状態をロード
-        //    _playerInput.actions.LoadBindingOverridesFromJson(rebinds);
-
-
-        //    return true;
-        //}
-
-        //public void RebindComplete()
-        //{
-        //    //fireアクションの1番目のコントロール(バインディングしたコントロール)のインデックスを取得
-        //    int bindingIndex = _action.action.GetBindingIndexForControl(_action.action.controls[0]);
-
-        //    //バインディングしたキーの名称を取得する
-        //    _bindingName.text = InputControlPath.ToHumanReadableString(
-        //        _action.action.bindings[bindingIndex].effectivePath,
-        //        InputControlPath.HumanReadableStringOptions.OmitDevice);
-
-        //    _rebindingOperation.Dispose();
-
-        //    //画面を通常に戻す
-        //    _rebindingButton.SetActive(true);
-        //    _rebindingMessage.SetActive(false);
-
-        //    //リバインディング時は空のアクションマップだったので通常のアクションマップに切り替え
-        //    _pInput.SwitchCurrentActionMap("Player");
-
-        //    //リバインディングしたキーを保存(シーン開始時に読み込むため)
-        //    PlayerPrefs.SetString(REBINDJSON, _playerInput.actions.SaveBindingOverridesAsJson());
-        //}
+        public InputActionReference CurrentActionReference => _currentActionReference;
+        public GamepadKey Key => _key;
+        public GameAction Action => actionFunc(_currentActionReference);
 
         /// <summary>
         /// 選択されているKeyDataのバインドを変更する関数。
         /// </summary>
         public void KeyBindingOverride(InputActionReference actionReference)
         {
-            if (currentActionReference != null)
+            if (_currentActionReference != null)
             {
-                currentActionReference.action.ChangeBinding(new InputBinding { path = ToGamepadKeyPass(key) }).Erase();
+                _currentActionReference.action.ChangeBinding(new InputBinding { path = ToGamepadKeyPass(_key) }).Erase();
             }
-            actionReference.action.AddBinding(new InputBinding { path = ToGamepadKeyPass(key) });
-            currentActionReference = actionReference;
+            if (actionReference != null) actionReference.action.AddBinding(new InputBinding { path = ToGamepadKeyPass(_key) });
+            _currentActionReference = actionReference;
 
             Logger.Log("キーバインドを変更したよ！");
         }
 
-        private string ToGamepadKeyPass(GamepadKey gamepadKey)
+        public string ToGamepadKeyPass(GamepadKey gamepadKey)
         {
             return gamepadKey switch
             {
                 GamepadKey.ButtonNorth => "<Gamepad>/buttonNorth",
                 GamepadKey.ButtonEast => "<Gamepad>/buttonEast",
-                GamepadKey.ButtonWest => "<Gamepad>/buttonSouth",
-                GamepadKey.ButtonSouth => "<Gamepad>/buttonWest",
+                GamepadKey.ButtonWest => "<Gamepad>/buttonWest",
+                GamepadKey.ButtonSouth => "<Gamepad>/buttonSouth",
                 GamepadKey.L => "<Gamepad>/leftShoulder",
                 GamepadKey.R => "<Gamepad>/rightShoulder",
                 GamepadKey.LTrigger => "<Gamepad>/leftTrigger",
