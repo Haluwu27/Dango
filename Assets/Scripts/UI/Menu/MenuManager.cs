@@ -59,7 +59,7 @@ public class MenuManager : MonoBehaviour
         InputSystemManager.Instance.onChoicePerformed += OnChoice;
 
         SetSelect();
-                
+
         SetNoSelect(Menu.Option);
         SetNoSelect(Menu.Tutorial);
         SetNoSelect(Menu.Ex);
@@ -93,13 +93,13 @@ public class MenuManager : MonoBehaviour
         //TODO:S10解放したら消す
         if (CurrentMenu == Menu.Ex)
         {
-            Logger.Log("メンテナンス中の機能です");
+            Logger.Log("メンテナンス中です");
             return;
         }
         //TODO:S2解放したら消す
         if (CurrentMenu == Menu.Tutorial)
         {
-            Logger.Log("メンテナンス中の機能です");
+            Logger.Log("メンテナンス中です");
             return;
         }
 
@@ -165,7 +165,7 @@ public class MenuManager : MonoBehaviour
             currentTime += Time.deltaTime;
             float d = EasingManager.EaseProgress(EASETYPE, currentTime, time, 3f, 0);
 
-            pos.Set(rect.sizeDelta.x, WIDTH_MAX - (WIDTH_MAX * (1 - d)) );
+            pos.Set(rect.sizeDelta.x, WIDTH_MAX - (WIDTH_MAX * (1 - d)));
             rect.sizeDelta = pos;
         }
     }
@@ -236,6 +236,6 @@ public class MenuManager : MonoBehaviour
     {
         InputSystemManager.Instance.onNavigatePerformed -= OnNavigate;
         InputSystemManager.Instance.onChoicePerformed -= OnChoice;
-        SceneSystem.Instance.UnLoad(SceneSystem.Scenes.Menu,true);
+        SceneSystem.Instance.UnLoad(SceneSystem.Scenes.Menu, true);
     }
 }
