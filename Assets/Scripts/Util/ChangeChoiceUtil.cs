@@ -43,6 +43,24 @@ public class ChangeChoiceUtil
         choice = (T)(object)choiceValue;
         return true;
     }
+    public static bool Choice(Vector2 axis, ref int choice, int max, bool canMoveTopToBottom, OptionDirection direction)
+    {
+        if (axis == directionTable[(int)direction, 0])
+        {
+            choice--;
+
+            if (choice == -1) choice = canMoveTopToBottom ? max - 1 : 0;
+        }
+        else if (axis == directionTable[(int)direction, 1])
+        {
+            choice++;
+
+            if (choice == max) choice = canMoveTopToBottom ? 0 : max - 1;
+        }
+        else return false;
+
+        return true;
+    }
 
 }
 

@@ -169,17 +169,6 @@
                 },
                 {
                     "name": "",
-                    "id": "143bb1cd-cc10-4eca-a2f0-a3664166fe91",
-                    "path": "<Gamepad>/rightTrigger",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Gamepad",
-                    "action": "Fire",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
                     "id": "05f6913d-c316-48b2-a6bb-e225f14c7960",
                     "path": "<Keyboard>/q",
                     "interactions": "",
@@ -224,28 +213,6 @@
                 },
                 {
                     "name": "",
-                    "id": "a2842bc6-62eb-472b-8fcc-258cb3fc20ef",
-                    "path": "<Gamepad>/buttonSouth",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Gamepad",
-                    "action": "Jump",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "4b5d2317-d0c0-4584-8583-28f4be329db1",
-                    "path": "<Gamepad>/buttonEast",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Gamepad",
-                    "action": "Jump",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
                     "id": "ee50bb20-5ae0-4b83-9458-299e73c49b52",
                     "path": "<Keyboard>/space",
                     "interactions": "",
@@ -279,17 +246,6 @@
                 },
                 {
                     "name": "",
-                    "id": "8395c0c2-0ea4-44c4-b1da-a87fc321e61f",
-                    "path": "<Gamepad>/leftTrigger",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Gamepad",
-                    "action": "EatDango",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
                     "id": "f9a3a753-082d-4c6f-9b63-b3ce9a2f6a69",
                     "path": "<Keyboard>/tab",
                     "interactions": "",
@@ -301,7 +257,40 @@
                 },
                 {
                     "name": "",
-                    "id": "ad48de0e-1107-48d5-8f05-9d324ef75911",
+                    "id": "9a5ed80d-9ea6-4d48-8e60-75f8496bb10e",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "Attack",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "7bc0232c-b5c9-4cce-8dbf-ed92e8bd4b1d",
+                    "path": "<Gamepad>/buttonEast",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Jump",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "1f1f3790-82c9-49c3-8598-3854c6191067",
+                    "path": "<Gamepad>/buttonWest",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Attack",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "e69dff57-dfd2-465b-9049-3586d82e36bb",
                     "path": "<Gamepad>/buttonNorth",
                     "interactions": "",
                     "processors": "",
@@ -312,23 +301,45 @@
                 },
                 {
                     "name": "",
-                    "id": "de7f56c5-c89a-437b-98b4-e4cfa7ef60d0",
-                    "path": "<Gamepad>/buttonWest",
+                    "id": "33c478bf-8adf-43e5-b31e-eeeae829e773",
+                    "path": "<Gamepad>/buttonSouth",
                     "interactions": "",
                     "processors": "",
-                    "groups": "Gamepad",
-                    "action": "Attack",
+                    "groups": "",
+                    "action": "Jump",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
                 {
                     "name": "",
-                    "id": "9a5ed80d-9ea6-4d48-8e60-75f8496bb10e",
-                    "path": "<Mouse>/leftButton",
+                    "id": "820f0fc6-e89c-46ba-b440-9bb11a664f77",
+                    "path": "<Gamepad>/leftShoulder",
                     "interactions": "",
                     "processors": "",
-                    "groups": "Keyboard&Mouse",
-                    "action": "Attack",
+                    "groups": "",
+                    "action": "ExpansionUI",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "037b4cd4-c5c1-40eb-b6a1-9513d139e169",
+                    "path": "<Gamepad>/leftTrigger",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "EatDango",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "b592f565-3214-4616-902c-acb479396598",
+                    "path": "<Gamepad>/rightTrigger",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Fire",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

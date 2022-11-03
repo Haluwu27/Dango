@@ -1,3 +1,4 @@
+using Cysharp.Threading.Tasks;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -21,11 +22,6 @@ public class StageData : MonoBehaviour
     private void Awake()
     {
         InputSystemManager.Instance.Input.SwitchCurrentActionMap("Player");
-    }
-
-    private void Start()
-    {
-        Stage001Data.Instance.AddQuest();
     }
 
     public void Release()

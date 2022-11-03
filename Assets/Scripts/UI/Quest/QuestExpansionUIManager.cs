@@ -18,18 +18,21 @@ public class QuestExpansionUIManager : MonoBehaviour
     {
         SetCanvasEnable(false);
 
-        InputSystemManager.Instance.onExpansionUIPerformed += () => SetCanvasEnable(true);
-        InputSystemManager.Instance.onExpansionUICanceled += () => SetCanvasEnable(false);
+        InputSystemManager.Instance.onExpansionUIPerformed += OnExpansionPerformed;
+        InputSystemManager.Instance.onExpansionUICanceled += OnExpansionCanceled;
+        ChangeQuest();
     }
 
     private void OnDestroy()
     {
-        InputSystemManager.Instance.onExpansionUIPerformed -= () => SetCanvasEnable(true);
-        InputSystemManager.Instance.onExpansionUICanceled -= () => SetCanvasEnable(false);
+        InputSystemManager.Instance.onExpansionUIPerformed -= OnExpansionPerformed;
+        InputSystemManager.Instance.onExpansionUICanceled -= OnExpansionCanceled;
     }
 
     public void ChangeQuest()
     {
+        if (this == null) return;
+
         _currentQuestTexts[0].TextData.SetText(QuestManager.Instance.GetQuest(0).QuestName);
 
         QuestData questData = QuestManager.Instance.GetQuest(1);
@@ -50,8 +53,16 @@ public class QuestExpansionUIManager : MonoBehaviour
         }
     }
 
-    public void SetCanvasEnable(bool enable)
+    private void SetCanvasEnable(bool enable)
     {
         _canvas.enabled = enable;
+    }    
+    private void OnExpansionPerformed()
+    {
+        _canvas.enabled = true;
+    }
+    private void OnExpansionCanceled()
+    {
+        _canvas.enabled = false;
     }
 }

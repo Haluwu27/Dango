@@ -68,15 +68,15 @@ class SceneSystem : MonoBehaviour
     Scenes _currentScene;
     Scenes _currentIngameScene;
 
+    [SerializeField] Scenes startScene;
+
     private void Awake()
     {
         Instance = this;
 
-        Scenes scene = Scenes.Stage2;
-
-        _currentScene = scene;
-        _currentIngameScene = scene;
-        Load(scene);
+        _currentScene = startScene;
+        _currentIngameScene = startScene;
+        Load(startScene);
     }
 
     public bool Load(Scenes scene)

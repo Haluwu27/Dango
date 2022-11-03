@@ -1,24 +1,31 @@
 {
-  "Jump": [
-    "<Gamepad>/buttonSouth",
-    "<Gamepad>/buttonEast",
-    "<Keyboard>/space"
-  ],
-  "Attack": [
-    "<Gamepad>/buttonNorth",
-    "<Gamepad>/buttonWest",
-    "<Mouse>/leftButton"
-  ],
-  "EatDango": [
-    "<Mouse>/rightButton",
-    "<Mouse>/rightButton",
-    "<Gamepad>/leftTrigger"
-  ],
-  "Fire": [
-    "<Gamepad>/rightTrigger",
-    "<Keyboard>/q"
-  ],
-  "ExpansionUI": [
-    "<Keyboard>/tab"
+  "keys": [
+    4,
+    3,
+    4,
+    3,
+    8,
+    0,
+    5,
+    6,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
   ]
 }
