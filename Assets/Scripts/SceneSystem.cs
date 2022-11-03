@@ -49,6 +49,7 @@ class SceneSystem : MonoBehaviour
         GameOver,
         Option,
         Ex,
+        debug,
 
         [InspectorName("")]
         Max,
@@ -71,7 +72,7 @@ class SceneSystem : MonoBehaviour
     {
         Instance = this;
 
-        Scenes scene = Scenes.Stage2;
+        Scenes scene = Scenes.debug;
 
         _currentScene = scene;
         _currentIngameScene = scene;

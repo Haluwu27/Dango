@@ -21,6 +21,7 @@ public class DangoUIScript : MonoBehaviour
     }
     public void DangoUISet(List<DangoColor> dangos)
     {
+        Logger.Log(dangos.Count);
         for (int i = 0; i < dangos.Count; i++)
         {
             //団子の種類をみてマテリアルに色を付ける、画像が出来たらimagを切り替える。
