@@ -42,7 +42,7 @@ namespace TM.Input.KeyConfig
         [SerializeField] InputActionAsset _asset;
 
         //アクションリファレンス毎に設定するデータの全要素
-        readonly ActionData[] _actionDatas = new ActionData[(int)KeyConfigData.GameAction.Max];
+        readonly ActionData[] _actionDatas = new ActionData[(int)KeyConfigData.GameAction.Max - 1];
         readonly List<KeyData.GameAction> _gameActions = new();
 
         public void OnStick()
@@ -76,7 +76,7 @@ namespace TM.Input.KeyConfig
             Logger.Log(_currentData.name);
         }
 
-        static readonly KeyData.GamepadKey[][] DefaultKeyTable = new KeyData.GamepadKey[(int)KeyConfigData.GameAction.Max][]
+        static readonly KeyData.GamepadKey[][] DefaultKeyTable = new KeyData.GamepadKey[(int)KeyConfigData.GameAction.Max - 1][]
         {
            new KeyData.GamepadKey[] {KeyData.GamepadKey.LStick },                                       //Move
            new KeyData.GamepadKey[] {KeyData.GamepadKey.RStick },                                       //Look
@@ -85,14 +85,14 @@ namespace TM.Input.KeyConfig
            new KeyData.GamepadKey[] {KeyData.GamepadKey.LTrigger },                                     //EatDango
            new KeyData.GamepadKey[] {KeyData.GamepadKey.RTrigger },                                     //Fire
            new KeyData.GamepadKey[] {KeyData.GamepadKey.Start,KeyData.GamepadKey.Select },              //Option
-           new KeyData.GamepadKey[] {KeyData.GamepadKey.R },                                            //UIExtra(not Found)
+           new KeyData.GamepadKey[] {KeyData.GamepadKey.L },                                            //UIExtra
         };
 
         private void Awake()
         {
             InitConfigData();
 
-            for (int i = 0; i < (int)KeyConfigData.GameAction.Max; i++)
+            for (int i = 0; i < (int)KeyConfigData.GameAction.Max - 1; i++)
             {
                 _actionDatas[i] = new((KeyData.GameAction)i, DefaultKeyTable[i], _asset, "Player");
             }
@@ -107,7 +107,6 @@ namespace TM.Input.KeyConfig
 
         public void OnChangeScene()
         {
-            _popupManager.OnChangeScene();
             InputSystemManager.Instance.onStickPerformed -= OnStick;
             InputSystemManager.Instance.onChoicePerformed -= OnSelect;
             InputSystemManager.Instance.onBackCanceled -= OnBack;
@@ -157,8 +156,8 @@ namespace TM.Input.KeyConfig
 
             if (enable)
             {
-                if (_currentData != null)  _currentData.GetComponent<RawImage>().color = Color.white;
-                
+                if (_currentData != null) _currentData.GetComponent<RawImage>().color = Color.white;
+
                 _currentData = _firstData;
                 _currentData.GetComponent<RawImage>().color = Color.red;
             }
@@ -188,7 +187,7 @@ namespace TM.Input.KeyConfig
             CheckHasKeyAllActions();
         }
 
-        public void Rebinding(int index)
+        public void Rebinding(KeyData.GameAction index)
         {
             foreach (var actionData in _actionDatas)
             {
@@ -197,9 +196,17 @@ namespace TM.Input.KeyConfig
                 if (actionData.ActionReference.ToString().Equals(_currentData.KeyData.CurrentActionReference.ToString()))
                     actionData.Keys.Remove(_currentData.KeyData.Key);
             }
-            _actionDatas[index].Keys.Add(_currentData.KeyData.Key);
 
-            _currentData.KeyData.KeyBindingOverride(_actionDatas[index].ActionReference);
+            //未設定にする処理
+            if (index == KeyData.GameAction.Unknown)
+            {
+                _currentData.KeyData.KeyBindingOverride(null);
+                return;
+            }
+
+            _actionDatas[(int)index - 1].Keys.Add(_currentData.KeyData.Key);
+
+            _currentData.KeyData.KeyBindingOverride(_actionDatas[(int)index - 1].ActionReference);
         }
 
         public bool CheckHasKeyAllActions()

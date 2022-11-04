@@ -9,30 +9,19 @@ namespace Dango.Quest.UI {
     public class ExpansionCanvasScript : MonoBehaviour
     {
         [SerializeField] GameObject[] times = new GameObject[2];//拡張前とあと
-        [SerializeField] GameObject[] quests = new GameObject[2];//拡張前と後
-        [SerializeField] GameObject[] ExpansionQuestsNow;//今のクエスト
-        [SerializeField] GameObject ExpansionQuestsPast;//一個前のクエスト
-        [SerializeField] GameObject[] ExpansionQuestsFuture;//次のクエスト
         //[SerializeField] Animator timeAnima;
         //[SerializeField] Animator questAnima;
-        private Image[] questimage;
-        private TextMeshProUGUI[] nowQuesttext;
-        public TextMeshProUGUI oldQuesttext;
 
         public bool set;
         private void Start()
         {
-            nowQuesttext = new TextMeshProUGUI[ExpansionQuestsNow.Length];
-            questimage =new Image[ExpansionQuestsNow.Length];
-            for (int i = 0; i < ExpansionQuestsNow.Length; i++)
-            {
-                nowQuesttext[i] = ExpansionQuestsNow[i].transform.Find("text").GetComponent<TextMeshProUGUI>();
-                questimage[i] = ExpansionQuestsNow[i].GetComponent<Image>();
-            }
-            oldQuesttext =ExpansionQuestsPast.GetComponent<TextMeshProUGUI>();
             times[0].SetActive(false);
-            quests[0].SetActive(false);
-            InputSystemManager.Instance.onExpansionUI += OnExpansion;
+            InputSystemManager.Instance.onExpansionUIPerformed += OnExpansion;
+        }
+
+        private void OnDestroy()
+        {
+            InputSystemManager.Instance.onExpansionUIPerformed -= OnExpansion;
         }
         public void OnExpansion()
         {
@@ -45,17 +34,11 @@ namespace Dango.Quest.UI {
             }
         }
 
-        private void Update()
-        {
-            QuestUI.Instance.OnGUIChangeOldQuest(oldQuesttext);
-        }
-
         public void Onset()
         {
             if (!times[0].activeSelf)
             {
                 times[0].SetActive(true);
-                quests[0].SetActive(true);
                 times[1].SetActive(false);
                 //quests[1].SetActive(false);
                 //timeAnima.SetTrigger("On");
@@ -67,7 +50,6 @@ namespace Dango.Quest.UI {
             if (times[0].activeSelf&&!set)
             {
                 times[0].SetActive(false);
-                quests[0].SetActive(false);
                 times[1].SetActive(true);
                 //quests[1].SetActive(true);
             }

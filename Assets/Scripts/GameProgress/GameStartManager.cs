@@ -12,9 +12,6 @@ public class GameStartManager : MonoBehaviour
     {
         _fadeManager = GameObject.Find("FadeCanvas").GetComponentInChildren<FadeManager>();
         _fadeManager.StartFade(TM.Easing.EaseType.Linear, FadeStyle.Fadeout, 5f);
-
-
-
     }
 
     private void Update()

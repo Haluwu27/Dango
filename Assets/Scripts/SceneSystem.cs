@@ -1,3 +1,4 @@
+using Cysharp.Threading.Tasks;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
@@ -49,7 +50,6 @@ class SceneSystem : MonoBehaviour
         GameOver,
         Option,
         Ex,
-        debug,
 
         [InspectorName("")]
         Max,
@@ -68,15 +68,15 @@ class SceneSystem : MonoBehaviour
     Scenes _currentScene;
     Scenes _currentIngameScene;
 
+    [SerializeField] Scenes startScene;
+
     private void Awake()
     {
         Instance = this;
 
-        Scenes scene = Scenes.debug;
-
-        _currentScene = scene;
-        _currentIngameScene = scene;
-        Load(scene);
+        _currentScene = startScene;
+        _currentIngameScene = startScene;
+        Load(startScene);
     }
 
     public bool Load(Scenes scene)
@@ -104,6 +104,16 @@ class SceneSystem : MonoBehaviour
         else _scenes[(int)scene].SetActive(false);
 
         return true;
+    }
+
+    public async void ReLoad(Scenes scene)
+    {
+        UnLoad(scene, true);
+
+        await UniTask.Yield();
+        await UniTask.Yield();
+
+        Load(scene);
     }
 
     public Scenes PrebScene => _prebScene;

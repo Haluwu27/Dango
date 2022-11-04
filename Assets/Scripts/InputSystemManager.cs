@@ -33,7 +33,8 @@ public class InputSystemManager : MonoBehaviour
     public CallBack onFireCanceled;
     public CallBack onPausePerformed;
     public CallBack onPauseCanceled;
-    public CallBack onExpansionUI;
+    public CallBack onExpansionUIPerformed;
+    public CallBack onExpansionUICanceled;
 
     Vector2 _moveAxis;
     Vector2 _lookAxis;
@@ -142,12 +143,12 @@ public class InputSystemManager : MonoBehaviour
         if (context.phase == InputActionPhase.Performed)
         {
             _isPressExpansionUI = true;
-            onExpansionUI.SafeCall();
+            onExpansionUIPerformed.SafeCall();
         }
         else if (context.phase == InputActionPhase.Canceled)
         {
             _isPressExpansionUI = false;
-            onExpansionUI.SafeCall();
+            onExpansionUICanceled.SafeCall();
         }
     }
 

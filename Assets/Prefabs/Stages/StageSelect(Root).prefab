@@ -707,7 +707,7 @@ GameObject:
   - component: {fileID: 8938324372256591841}
   - component: {fileID: 8938324372256591840}
   m_Layer: 5
-  m_Name: Text (TMP)
+  m_Name: ExplanationText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1116,15 +1116,19 @@ MonoBehaviour:
   _fusumaManager: {fileID: 7491481532425570027}
   _stages:
   - {fileID: 3964160029132521654, guid: 4dbffbec4aa46c84aa6313057f9cb0ac, type: 3}
-  - {fileID: 3964160029132521654, guid: 4dbffbec4aa46c84aa6313057f9cb0ac, type: 3}
+  - {fileID: -2101380978544746806, guid: 52c3f3ebe7ca4c74c92936471ef71b94, type: 3}
   _stageSprites:
-  - {fileID: 21300000, guid: b8ec711cbfba2664eb60fe17eef8e1bc, type: 3}
-  - {fileID: 21300000, guid: ce6ec4fdc28e11f41b76fac750d830c6, type: 3}
+  - {fileID: 21300000, guid: 626b1fb16692a5f44b48228176ea1d4f, type: 3}
+  - {fileID: 21300000, guid: 2ad41806f249a3f4c84d47dac979fe89, type: 3}
+  _lockedStageSprites:
+  - {fileID: 0}
+  - {fileID: 0}
   _stageImage: {fileID: 497652824}
   _stageImageUpdate: {fileID: 927328262}
   guids:
   - {fileID: 9117497292879869274}
   - {fileID: 8262524590966609722}
+  _explanationText: {fileID: 8938324372256591840}
 --- !u!1 &8938324373073515504
 GameObject:
   m_ObjectHideFlags: 0

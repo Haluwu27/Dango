@@ -10,6 +10,8 @@ namespace Dango.Quest
         QuestManager _manager;
         bool isSucceedThisFrame;
 
+        PlayerUIManager _playerUIManager;
+
         private async UniTask SetBoolAfterOneFrame(bool enable)
         {
             await UniTask.Yield();
@@ -17,9 +19,10 @@ namespace Dango.Quest
             isSucceedThisFrame = enable;
         }
 
-        public QuestSucceedChecker(QuestManager manager)
+        public QuestSucceedChecker(QuestManager manager, PlayerUIManager playerUIManager)
         {
             _manager = manager;
+            _playerUIManager = playerUIManager;
         }
 
         #region EatDango
@@ -347,10 +350,8 @@ namespace Dango.Quest
         }
         #endregion
 
-        private void QuestSucceed(QuestData quest)
+        private async void QuestSucceed(QuestData quest)
         {
-            QuestUI.Instance.OnGUIQuestSucceed(quest.QuestName);
-
             SoundManager.Instance.PlaySE(SoundSource.SE12_QUEST_SUCCEED);
 
             List<QuestData> nextQuest = new();
@@ -364,7 +365,7 @@ namespace Dango.Quest
             _manager.Player.AddSatiety(quest.RewardTime);
             _manager.CreateExpansionUIObj();
 
-            //このフレームで判定は行わないようにする処理
+            //このフレームで他の判定は行わないようにする処理
             isSucceedThisFrame = true;
             SetBoolAfterOneFrame(false).Forget();
 
@@ -374,6 +375,14 @@ namespace Dango.Quest
             }
 
             Logger.Log(quest.QuestName + " クエストクリア！");
+
+            //クエストを達成したときの演出
+            _playerUIManager.EventText.TextData.SetText("団道達成");
+            _playerUIManager.EventText.TextData.SetFontSize(210f);
+            
+            await _playerUIManager.EventText.TextData.Fadeout(0.5f, 2f);
+
+            _playerUIManager.EventText.TextData.SetFontSize(_playerUIManager.defaultEventTextFontSize);
         }
     }
 }

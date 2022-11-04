@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Dango.Quest;
+using Dango.Quest.UI;
 
 class QuestManager : MonoBehaviour
 {
@@ -12,11 +13,19 @@ class QuestManager : MonoBehaviour
 
     [SerializeField] PlayerData _playerData;
     [SerializeField] GameObject _expansionUIObj;
+    [SerializeField] PlayerUIManager _playerUIManager;
+    [SerializeField] QuestExpansionUIManager _questExpansionUIManager;
+    [SerializeField] QuestUIManager _questUIManager;
 
     private void Awake()
     {
         Instance = this;
-        SucceedChecker = new(this);
+        SucceedChecker = new(this, _playerUIManager);
+    }
+
+    private void Start()
+    {
+        Stage001Data.Instance.AddQuest();
     }
 
     //クエストの生成・クリア判定のやつ
@@ -28,12 +37,16 @@ class QuestManager : MonoBehaviour
         _quests.Clear();
 
         _quests.AddRange(items);
+        _questExpansionUIManager.ChangeQuest();
+        _questUIManager.ChangeIcon(items);
     }
     public void ChangeQuest(List<QuestData> items)
     {
         _quests.Clear();
 
         _quests.AddRange(items);
+        _questExpansionUIManager.ChangeQuest();
+        _questUIManager.ChangeIcon(items.ToArray());
     }
 
     public QuestData GetQuest(int index)
@@ -53,4 +66,3 @@ class QuestManager : MonoBehaviour
 
     public List<QuestData> GetQuests => _quests;
 }
-
