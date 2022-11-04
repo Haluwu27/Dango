@@ -236,9 +236,6 @@ class PlayerData : MonoBehaviour
     #endregion
 
     #region メンバ変数
-    //スコアと満腹度のレート
-    const float SCORE_TIME_RATE = 0.2f;
-
     //StatePatternで各ステートに移動するフラグに使用
     private bool _hasAttacked = false;
     private bool _hasFalled = false;
@@ -461,10 +458,7 @@ class PlayerData : MonoBehaviour
         _directing.Dirrecting(_dangos);
 
         //満腹度を上昇
-        //_satiety += score * SCORE_TIME_RATE;
-
-        //スコアを上昇
-        GameManager.GameScore += score * 100f;
+        _satiety += score;
 
         //串をクリア。
         _dangos.Clear();
