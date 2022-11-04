@@ -50,7 +50,7 @@ public class FloorManager : MonoBehaviour
 
     private void Awake()
     {
-        for (int i = 0; i < (int)Floor.Max; i++)
+        for (int i = 0; i < floorArrays.Length; i++)
         {
             floorArrays[i].SetFloor((Floor)i);
 
