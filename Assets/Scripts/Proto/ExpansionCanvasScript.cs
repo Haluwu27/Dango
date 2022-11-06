@@ -5,7 +5,8 @@ using UnityEngine.InputSystem;
 using UnityEngine.UI;
 using TMPro;
 
-namespace Dango.Quest.UI {
+namespace Dango.Quest.UI
+{
     public class ExpansionCanvasScript : MonoBehaviour
     {
         [SerializeField] GameObject[] times = new GameObject[2];//Šg’£‘O‚Æ‚ ‚Æ
@@ -16,22 +17,22 @@ namespace Dango.Quest.UI {
         private void Start()
         {
             times[0].SetActive(false);
+            InputSystemManager.Instance.onExpansionUICanceled += OnExpansionCancel;
             InputSystemManager.Instance.onExpansionUIPerformed += OnExpansion;
         }
 
         private void OnDestroy()
         {
             InputSystemManager.Instance.onExpansionUIPerformed -= OnExpansion;
+            InputSystemManager.Instance.onExpansionUICanceled -= OnExpansionCancel;
         }
         public void OnExpansion()
         {
-            if (InputSystemManager.Instance.IsExpantionUI)
-            {
-                Onset();
-            }else
-            {
-                OffSet();
-            }
+            Onset();
+        }
+        private void OnExpansionCancel()
+        {
+            OffSet();
         }
 
         public void Onset()
@@ -47,7 +48,7 @@ namespace Dango.Quest.UI {
         }
         public void OffSet()
         {
-            if (times[0].activeSelf&&!set)
+            if (times[0].activeSelf && !set)
             {
                 times[0].SetActive(false);
                 times[1].SetActive(true);
