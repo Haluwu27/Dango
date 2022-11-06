@@ -8,7 +8,7 @@ namespace Dango.Quest
     class QuestSucceedChecker
     {
         QuestManager _manager;
-        bool isSucceedThisFrame;
+        bool _isSucceedThisFrame;
 
         PlayerUIManager _playerUIManager;
 
@@ -16,7 +16,7 @@ namespace Dango.Quest
         {
             await UniTask.Yield();
 
-            isSucceedThisFrame = enable;
+            _isSucceedThisFrame = enable;
         }
 
         public QuestSucceedChecker(QuestManager manager, PlayerUIManager playerUIManager)
@@ -29,7 +29,7 @@ namespace Dango.Quest
         public bool CheckQuestEatDangoSucceed(QuestManager questManager, List<DangoColor> colors, bool createRole)
         {
             //このフレームに別のクエストがクリアされていたら弾く
-            if (isSucceedThisFrame) return false;
+            if (_isSucceedThisFrame) return false;
 
             for (int i = 0; i < questManager.QuestsCount; i++)
             {
@@ -80,7 +80,7 @@ namespace Dango.Quest
         public bool CheckQuestCreateRoleSucceedEs(List<DangoColor> dangos, bool createRole, int currentMaxDango)
         {
             //このフレームに別のクエストがクリアされていたら弾く
-            if (isSucceedThisFrame) return false;
+            if (_isSucceedThisFrame) return false;
 
             for (int i = 0; i < _manager.QuestsCount; i++)
             {
@@ -96,7 +96,7 @@ namespace Dango.Quest
         public bool CheckQuestCreateRoleSucceedSr(Role<int> role)
         {
             //このフレームに別のクエストがクリアされていたら弾く
-            if (isSucceedThisFrame) return false;
+            if (_isSucceedThisFrame) return false;
 
             for (int i = 0; i < _manager.QuestsCount; i++)
             {
@@ -112,7 +112,7 @@ namespace Dango.Quest
         public bool CheckQuestCreateRoleSucceedIr(List<DangoColor> dangos)
         {
             //このフレームに別のクエストがクリアされていたら弾く
-            if (isSucceedThisFrame) return false;
+            if (_isSucceedThisFrame) return false;
 
             for (int i = 0; i < _manager.QuestsCount; i++)
             {
@@ -128,7 +128,7 @@ namespace Dango.Quest
         public bool CheckQuestCreateRoleSucceedSm(Role<int> role)
         {
             //このフレームに別のクエストがクリアされていたら弾く
-            if (isSucceedThisFrame) return false;
+            if (_isSucceedThisFrame) return false;
 
             for (int i = 0; i < _manager.QuestsCount; i++)
             {
@@ -257,7 +257,7 @@ namespace Dango.Quest
         public bool CheckQuestPlayActionSucceed(QuestManager questManager, QuestPlayAction.PlayerAction action)
         {
             //このフレームに別のクエストがクリアされていたら弾く
-            if (isSucceedThisFrame) return false;
+            if (_isSucceedThisFrame) return false;
 
             for (int i = 0; i < questManager.QuestsCount; i++)
             {
@@ -290,7 +290,7 @@ namespace Dango.Quest
         public bool CheckQuestDestinationSucceed(FloorManager.Floor floor, bool inFloor)
         {
             //このフレームに別のクエストがクリアされていたら弾く
-            if (isSucceedThisFrame) return false;
+            if (_isSucceedThisFrame) return false;
 
             for (int i = 0; i < _manager.QuestsCount; i++)
             {
@@ -307,7 +307,7 @@ namespace Dango.Quest
         public bool CheckQuestDestinationSucceed()
         {
             //このフレームに別のクエストがクリアされていたら弾く
-            if (isSucceedThisFrame) return false;
+            if (_isSucceedThisFrame) return false;
 
             for (int i = 0; i < _manager.QuestsCount; i++)
             {
@@ -363,20 +363,23 @@ namespace Dango.Quest
             _manager.ChangeQuest(nextQuest);
             _manager.Player.GrowStab(quest.EnableDangoCountUp);
             _manager.Player.AddSatiety(quest.RewardTime);
-            _manager.CreateExpansionUIObj();
 
             ScoreManager.Instance.AddClearTime(ScoreManager.Instance.SetQuestTime());
             ScoreManager.Instance.AddClearQuest(quest);
+
             //このフレームで他の判定は行わないようにする処理
-            isSucceedThisFrame = true;
+            _isSucceedThisFrame = true;
             SetBoolAfterOneFrame(false).Forget();
 
             if (quest.IsKeyQuest)
             {
-                GameManager.GameClearFrag = true;
+                _manager.SetIsComplete();
+                return;
             }
 
             Logger.Log(quest.QuestName + " クエストクリア！");
+
+            _manager.CreateExpansionUIObj();
 
             //クエストを達成したときの演出
             _playerUIManager.EventText.TextData.SetText("団道達成");
@@ -384,7 +387,7 @@ namespace Dango.Quest
             
             await _playerUIManager.EventText.TextData.Fadeout(0.5f, 2f);
 
-            _playerUIManager.EventText.TextData.SetFontSize(_playerUIManager.defaultEventTextFontSize);
+            _playerUIManager.EventText.TextData.SetFontSize(_playerUIManager.DefaultEventTextFontSize);
         }
     }
 }

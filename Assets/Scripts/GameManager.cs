@@ -1,3 +1,4 @@
+using Cysharp.Threading.Tasks;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,8 +10,9 @@ using UnityEngine.Windows;
 [RequireComponent(typeof(GameStartManager))]
 internal class GameManager : MonoBehaviour
 {
-    public static bool GameClearFrag =false;
+    [SerializeField] IngameUIManager _ingameUIManager;
     [SerializeField] PlayerData _playerData;
+    bool _gameSucceed;
 
     #region statePattern
     interface IState
@@ -19,6 +21,7 @@ internal class GameManager : MonoBehaviour
         {
             Control = 0,
             GameOver = 1,
+            Succeed = 2,
 
             Max,
 
@@ -36,6 +39,7 @@ internal class GameManager : MonoBehaviour
      {
         new ControlState(),
         new GameOverState(),
+        new GameSucceedState(),
      };
 
     class ControlState : IState
@@ -53,6 +57,7 @@ internal class GameManager : MonoBehaviour
             if (parent._playerData != null)
             {
                 if (parent._playerData.GetSatiety() <= 0) return IState.E_State.GameOver;
+                if (parent._gameSucceed) return IState.E_State.Succeed;
             }
 
             return IState.E_State.Unchanged;
@@ -62,7 +67,23 @@ internal class GameManager : MonoBehaviour
     {
         public IState.E_State Initialize(GameManager parent)
         {
-            parent.FinishGame();
+            parent.GameOver();
+            return IState.E_State.Unchanged;
+        }
+        public IState.E_State Update(GameManager parent)
+        {
+            return IState.E_State.Unchanged;
+        }
+        public IState.E_State FixedUpdate(GameManager parent)
+        {
+            return IState.E_State.Unchanged;
+        }
+    }
+    class GameSucceedState : IState
+    {
+        public IState.E_State Initialize(GameManager parent)
+        {
+            parent.OnSucceed();
             return IState.E_State.Unchanged;
         }
         public IState.E_State Update(GameManager parent)
@@ -139,9 +160,22 @@ internal class GameManager : MonoBehaviour
         InputSystemManager.Instance.Input.SwitchCurrentActionMap("UI");
     }
 
-    private void FinishGame()
+    private void GameOver()
     {
         InputSystemManager.Instance.onPausePerformed -= OnPause;
         SceneSystem.Instance.Load(SceneSystem.Scenes.GameOver);
     }
+
+    private async void OnSucceed()
+    {
+        await _ingameUIManager.EraseUIs();
+        await UniTask.Delay(2000);
+        await _ingameUIManager.TextAnimation();
+        await UniTask.Delay(2500);
+
+        InputSystemManager.Instance.onPausePerformed -= OnPause;
+        SceneSystem.Instance.Load(SceneSystem.Scenes.Success);
+    }
+
+    public void SetGameSucceed() => _gameSucceed = true;
 }

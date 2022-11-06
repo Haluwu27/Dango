@@ -26,6 +26,8 @@ public class PlayerUIManager : MonoBehaviour
     private bool[] warningbool = new bool[3];
     public TextUIData EventText => eventText;
 
+    public float DefaultEventTextFontSize { get; } = 100f;
+
     public void SetTimeText(string text)
     {
         timeText.text = text;

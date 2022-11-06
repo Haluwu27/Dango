@@ -177,6 +177,7 @@ GameObject:
   - component: {fileID: 8567872266559936264}
   - component: {fileID: 8567872266559936265}
   - component: {fileID: 8567872266559936266}
+  - component: {fileID: 7157519990186228619}
   m_Layer: 5
   m_Name: PlayerUICanvas
   m_TagString: Untagged
@@ -268,7 +269,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 409db701efefdf94392b796a5bd3e286, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  timeText: {fileID: 0}
+  timeText: {fileID: 8567872267928951237}
   eventText: {fileID: 8567872267615947406}
   timeGage:
   - {fileID: 0}
@@ -281,9 +282,20 @@ MonoBehaviour:
   playerdata: {fileID: 0}
   ErasewithEatObj:
   - {fileID: 8567872267399664035}
-  - {fileID: 0}
-  - {fileID: 0}
-  defaultEventTextFontSize: 100
+  - {fileID: 8567872267099652521}
+  - {fileID: 8567872268030827688}
+--- !u!225 &7157519990186228619
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8567872266559936263}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &8567872266580057492
 GameObject:
   m_ObjectHideFlags: 0
@@ -319,7 +331,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -0.000061035, y: -18.242}
+  m_AnchoredPosition: {x: -0.000061035156, y: -18.242004}
   m_SizeDelta: {x: 1920, y: 1116.5}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &3035713768155793604
@@ -2172,6 +2184,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e905dc218b186654a99968480220f305, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  words: []
 --- !u!1 &8567872267943256821
 GameObject:
   m_ObjectHideFlags: 0

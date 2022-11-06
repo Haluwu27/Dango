@@ -46,6 +46,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7b60e1390068ee34f8a163294b083696, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _ingameUIManager: {fileID: 0}
   _playerData: {fileID: 0}
 --- !u!114 &2653417028807249935
 MonoBehaviour:
@@ -59,7 +60,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0a329b6b63e0aff4a80a830be67cb879, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cursor: 0
+  cursor: 1
 --- !u!114 &1775739581866841225
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -77,3 +78,5 @@ MonoBehaviour:
     type: 3}
   _playerUIManager: {fileID: 0}
   _questExpansionUIManager: {fileID: 0}
+  _questUIManager: {fileID: 0}
+  _gameManager: {fileID: 4920492317850513709}

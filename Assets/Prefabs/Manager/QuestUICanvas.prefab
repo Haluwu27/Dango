@@ -102,6 +102,7 @@ GameObject:
   - component: {fileID: 4697916570978808979}
   - component: {fileID: 2339542312536008214}
   - component: {fileID: 953833588922616217}
+  - component: {fileID: 3499569427569277736}
   m_Layer: 5
   m_Name: QuestUICanvas
   m_TagString: Untagged
@@ -190,6 +191,18 @@ MonoBehaviour:
   _icon: {fileID: 3501184472855966395}
   sprites:
   - {fileID: 21300000, guid: 2a1612b6e4be2e0478b8f26c6c336d69, type: 3}
+--- !u!225 &3499569427569277736
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2897639738632836298}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &2919468187656800566
 GameObject:
   m_ObjectHideFlags: 0
