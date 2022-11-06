@@ -16,6 +16,7 @@ class QuestManager : MonoBehaviour
     [SerializeField] PlayerUIManager _playerUIManager;
     [SerializeField] QuestExpansionUIManager _questExpansionUIManager;
     [SerializeField] QuestUIManager _questUIManager;
+    [SerializeField] GameManager _gameManager;
 
     private void Awake()
     {
@@ -63,6 +64,10 @@ class QuestManager : MonoBehaviour
 
     public int QuestsCount => _quests.Count;
     public PlayerData Player => _playerData;
-
     public List<QuestData> GetQuests => _quests;
+
+    public void SetIsComplete()
+    {
+        _gameManager.SetGameSucceed();
+    }
 }

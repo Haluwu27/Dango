@@ -10,13 +10,8 @@ public class AnimaEventScript : MonoBehaviour
     void Start()
     {
         p1 = transform.parent.GetComponent<Player1>();
+        if (eatCamera == null)
         eatCamera =transform.root.Find("CameraController").GetComponent<CameraController>();
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 
     public void EatAnima()

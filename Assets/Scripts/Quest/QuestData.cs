@@ -8,6 +8,7 @@ public abstract class QuestData
     QuestType _questType;
     string _questName;
     float _rewardTime;
+    float _clearTime;
     bool _enableDangoCountUp;
     bool _isKeyQuest;
 
@@ -20,12 +21,14 @@ public abstract class QuestData
         _enableDangoCountUp = enableDangoCountUp;
         _isKeyQuest = isKeyQuest;
         _nextQuestId.AddRange(nextQuestId);
+        _clearTime = 0;
     }
 
     public int Id => _id;
     public QuestType QuestType => _questType;
     public string QuestName => _questName;
     public float RewardTime => _rewardTime;
+    public float ClearTime => _clearTime;
     public bool EnableDangoCountUp => _enableDangoCountUp;
     public bool IsKeyQuest => _isKeyQuest;
 

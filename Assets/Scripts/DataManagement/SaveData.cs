@@ -18,4 +18,5 @@ public class SaveData
     public string b = "string";
     public double c = 3.14d;
     public bool d = false;
+    public bool Stage1Frag = false;
 }

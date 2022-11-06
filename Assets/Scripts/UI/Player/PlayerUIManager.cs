@@ -21,12 +21,12 @@ public class PlayerUIManager : MonoBehaviour
 
     private Image[] w_imgs;
 
-    [SerializeField] GameObject[] ErasewithEatObj = new GameObject[3];
+    [SerializeField] GameObject[] ErasewithEatObj = new GameObject[3];//食事した際にきえるUI 
 
     private bool[] warningbool = new bool[3];
     public TextUIData EventText => eventText;
 
-    public float defaultEventTextFontSize = 100f;
+    public float DefaultEventTextFontSize { get; } = 100f;
 
     public void SetTimeText(string text)
     {
@@ -54,7 +54,7 @@ public class PlayerUIManager : MonoBehaviour
     private void Update()
     {
         currentTime = time;
-
+        ScoreManager.Instance.AddTime(Time.deltaTime);
         Warning();
 
         for (int i = 0; i < timeGage.Length; i++)//ゲージの増減
@@ -72,7 +72,6 @@ public class PlayerUIManager : MonoBehaviour
         {
             if (time < warningTimes[i] && !warningbool[i])
             {
-                Logger.Log("下げる");
                 W_obj.gameObject.SetActive(true);
                 W_obj.sprite = Warningimgs[i];
                 warningbool[i] = true;
@@ -80,7 +79,6 @@ public class PlayerUIManager : MonoBehaviour
             else if (time >= warningTimes[i] && warningbool[i])//一段階上がった際の処理
             {
                 W_obj.gameObject.SetActive(true);
-                Logger.Log("上げる");
                 W_obj.sprite = Warningimgs[i];
                 warningbool[i] = false;
             }
