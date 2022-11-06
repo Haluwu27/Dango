@@ -173,6 +173,12 @@ public class ClearSceneScript : MonoBehaviour
         InputSystemManager.Instance.onChoicePerformed += OnChoice;
     }
 
+    private void OnDestroy()
+    {
+        InputSystemManager.Instance.onNavigatePerformed -= OnNavigate;
+        InputSystemManager.Instance.onChoicePerformed -= OnChoice;
+    }
+
     private void CreateBloks()
     {
         List<QuestData> dangoDatas = ScoreManager.Instance.GetClearQuest();

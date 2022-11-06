@@ -376,19 +376,17 @@ namespace Dango.Quest
                 _manager.SetIsComplete();
                 return;
             }
-
-            Logger.Log(quest.QuestName + " �N�G�X�g�N���A�I");
+ 
+            Logger.Log(quest.QuestName + "クエストクリア！");
 
             _manager.CreateExpansionUIObj();
 
             //�N�G�X�g��B�������Ƃ��̉��o
-            //_playerUIManager.EventText.TextData.SetText("�c���B��");
-            //_playerUIManager.EventText.TextData.SetFontSize(210f);
+            _playerUIManager.EventText.TextData.SetText("団道達成");
+            _playerUIManager.EventText.TextData.SetFontSize(210f);
 
             _playerUIManager.EventText.TextData.SetFontSize(_playerUIManager.DefaultEventTextFontSize);
-            //await _playerUIManager.EventText.TextData.Fadeout(0.5f, 2f);
-
-            //_playerUIManager.EventText.TextData.SetFontSize(_playerUIManager.defaultEventTextFontSize);
+            await _playerUIManager.EventText.TextData.Fadeout(0.5f, 2f);
         }
     }
 }
