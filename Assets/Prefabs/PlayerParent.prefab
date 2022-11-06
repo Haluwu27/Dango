@@ -56,6 +56,31 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1061649141422286778}
     m_Modifications:
+    - target: {fileID: 2267749163450171226, guid: 778aacd95f2f72d4eaff394bcf22a5d0,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1.25
+      objectReference: {fileID: 0}
+    - target: {fileID: 2267749163450171226, guid: 778aacd95f2f72d4eaff394bcf22a5d0,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 1.18
+      objectReference: {fileID: 0}
+    - target: {fileID: 2267749163450171226, guid: 778aacd95f2f72d4eaff394bcf22a5d0,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0.9940543
+      objectReference: {fileID: 0}
+    - target: {fileID: 2267749163450171226, guid: 778aacd95f2f72d4eaff394bcf22a5d0,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0.10888574
+      objectReference: {fileID: 0}
+    - target: {fileID: 2267749163450171226, guid: 778aacd95f2f72d4eaff394bcf22a5d0,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 12.502
+      objectReference: {fileID: 0}
     - target: {fileID: 2669896253534432883, guid: 778aacd95f2f72d4eaff394bcf22a5d0,
         type: 3}
       propertyPath: raycastDistance
@@ -222,19 +247,6 @@ MonoBehaviour:
   LayerMask:
     serializedVersion: 2
     m_Bits: 128
-  EatCam_PlayerCrevice: {fileID: 8258678661702331108}
---- !u!114 &8258678661702331108 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 8946123825271794085, guid: 778aacd95f2f72d4eaff394bcf22a5d0,
-    type: 3}
-  m_PrefabInstance: {fileID: 1061649141599716161}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 24931aca8b608644993d9a28292f19f3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &2245419032831560464
 PrefabInstance:
   m_ObjectHideFlags: 0

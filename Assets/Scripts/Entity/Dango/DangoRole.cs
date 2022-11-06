@@ -44,10 +44,10 @@ class DangoRole
     //静的な役名
     //注）この処理をインスタンス生成以下に書くと実行順的に役名がnullになります。
     public static readonly string POSROLE_MONOCOLOR = "単色役";
-    public static readonly string POSROLE_LINE_SYMMETRY = "線対称";
-    public static readonly string POSROLE_LOOP = "ループ";
-    public static readonly string POSROLE_DIVIDED_INTO_TWO = "二分割";
-    public static readonly string POSROLE_DIVIDED_INTO_THREE = "三分割";
+    public static readonly string POSROLE_LINE_SYMMETRY = "全天鏡面";
+    public static readonly string POSROLE_LOOP = "輪廻転生";
+    public static readonly string POSROLE_DIVIDED_INTO_TWO = "隣色鏡面";
+    public static readonly string POSROLE_DIVIDED_INTO_THREE = "三面華鏡";
 
     //インスタンス生成
     //多数生成すると、スタックオーバーフローを起こしたためシングルトンパターンで行います

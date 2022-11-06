@@ -8,7 +8,7 @@ class DangoRoleUI
 
     public static void OnGUIRoleName(string role_name)
     {
-        _currentRoleName = "「" + role_name + "」！";
+        _currentRoleName = "「" + role_name + "」";
     }
 
     public static void OnGUIReset()
