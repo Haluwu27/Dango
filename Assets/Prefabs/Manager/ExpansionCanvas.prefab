@@ -17,7 +17,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &7184158690998420966
 RectTransform:
   m_ObjectHideFlags: 0
@@ -198,6 +198,7 @@ GameObject:
   - component: {fileID: 7184158691382516826}
   - component: {fileID: 7184158691382516827}
   - component: {fileID: 7184158691382516825}
+  - component: {fileID: 6583143017589917140}
   m_Layer: 0
   m_Name: ExpansionCanvas
   m_TagString: Untagged
@@ -285,16 +286,19 @@ MonoBehaviour:
   times:
   - {fileID: 7184158690998420964}
   - {fileID: 0}
-  quests:
-  - {fileID: 0}
-  - {fileID: 0}
-  ExpansionQuestsNow:
-  - {fileID: 0}
-  - {fileID: 0}
-  ExpansionQuestsPast: {fileID: 0}
-  ExpansionQuestsFuture: []
-  oldQuesttext: {fileID: 0}
   set: 0
+--- !u!225 &6583143017589917140
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7184158691382516831}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &7184158691506955604
 GameObject:
   m_ObjectHideFlags: 0

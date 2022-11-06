@@ -870,6 +870,11 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 3
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: a1bb4c6ae44e6a64aabcfc45b4a26a4e,
+        type: 3}
+      propertyPath: m_TagString
+      value: Player
+      objectReference: {fileID: 0}
     - target: {fileID: 919703697595429177, guid: a1bb4c6ae44e6a64aabcfc45b4a26a4e,
         type: 3}
       propertyPath: m_Layer
@@ -1078,9 +1083,76 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 437285830519800413}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &779374474397810444 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: a1bb4c6ae44e6a64aabcfc45b4a26a4e,
+    type: 3}
+  m_PrefabInstance: {fileID: 437285830519800413}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &2669896253534432883
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 779374474397810444}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ae61ec24290696d489d9c8aafef64092, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  footTransform: {fileID: 1364733326565307387}
+  raycastDistance: 1
+  groundLayers:
+    serializedVersion: 2
+    m_Bits: 128
+  minFootstepInterval: 0.5
+--- !u!114 &4455526093197044745
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 779374474397810444}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ae61ec24290696d489d9c8aafef64092, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  footTransform: {fileID: 8487894720292590330}
+  raycastDistance: 1
+  groundLayers:
+    serializedVersion: 2
+    m_Bits: 128
+  minFootstepInterval: 0.5
+--- !u!114 &3677965581762852519
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 779374474397810444}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 807c0e77034a3ea44aaec3f092d88c33, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  eatCamera: {fileID: 0}
+--- !u!4 &1364733326565307387 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1504497630619513254, guid: a1bb4c6ae44e6a64aabcfc45b4a26a4e,
+    type: 3}
+  m_PrefabInstance: {fileID: 437285830519800413}
+  m_PrefabAsset: {fileID: 0}
 --- !u!95 &6303659095604953036 stripped
 Animator:
   m_CorrespondingSourceObject: {fileID: 5866666021909216657, guid: a1bb4c6ae44e6a64aabcfc45b4a26a4e,
+    type: 3}
+  m_PrefabInstance: {fileID: 437285830519800413}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &8487894720292590330 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8348128223624024231, guid: a1bb4c6ae44e6a64aabcfc45b4a26a4e,
     type: 3}
   m_PrefabInstance: {fileID: 437285830519800413}
   m_PrefabAsset: {fileID: 0}
@@ -1258,6 +1330,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   player: {fileID: 3952613918130635534}
   _capsuleCollider: {fileID: 1980415520476432920}
+  _floorManager: {fileID: 0}
 --- !u!1001 &1899943125068568432
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1371,6 +1444,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   player: {fileID: 3952613918130635534}
   _capsuleCollider: {fileID: 4184909323898648103}
+  _floorManager: {fileID: 0}
 --- !u!1001 &2467257173863230841
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1484,6 +1558,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   player: {fileID: 3952613918130635534}
   _capsuleCollider: {fileID: 3538604877463046799}
+  _floorManager: {fileID: 0}
 --- !u!1001 &3209044615148890257
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1597,6 +1672,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   player: {fileID: 3952613918130635534}
   _capsuleCollider: {fileID: 5624220454227160823}
+  _floorManager: {fileID: 0}
 --- !u!1001 &6453962639495160833
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1710,3 +1786,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   player: {fileID: 3952613918130635534}
   _capsuleCollider: {fileID: 600812266922468400}
+  _floorManager: {fileID: 0}

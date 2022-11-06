@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 8443876206453867140}
   - component: {fileID: 8443876206453867141}
   - component: {fileID: 8443876206453867138}
+  - component: {fileID: 3017290853926882597}
   m_Layer: 5
   m_Name: QuestExpansionCanvas
   m_TagString: Untagged
@@ -107,6 +108,18 @@ MonoBehaviour:
   _nextQuest: {fileID: 8443876207042070382}
   _nextQuestText: {fileID: 8443876207575119242}
   _canvas: {fileID: 8443876206453867140}
+--- !u!225 &3017290853926882597
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8443876206453867139}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &8443876206866904860
 GameObject:
   m_ObjectHideFlags: 0

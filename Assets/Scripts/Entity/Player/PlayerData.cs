@@ -359,7 +359,7 @@ class PlayerData : MonoBehaviour
         InputSystemManager.Instance.onFirePerformed += _playerRemoveDango.Remove;
         InputSystemManager.Instance.onAttackPerformed += OnAttack;
         InputSystemManager.Instance.onEatDangoPerformed += OnEatDango;
-        InputSystemManager.Instance.onEatDangoCanceled += () => _hasStayedEat = false;
+        InputSystemManager.Instance.onEatDangoCanceled += OnEatDangoCanceled;
         InputSystemManager.Instance.onJumpPerformed += _playerJump.OnStayJumping;
         InputSystemManager.Instance.onJumpCanceled += _playerJump.Jump;
         makerUI.SetActive(false);
@@ -383,7 +383,7 @@ class PlayerData : MonoBehaviour
         InputSystemManager.Instance.onFirePerformed -= _playerRemoveDango.Remove;
         InputSystemManager.Instance.onAttackPerformed -= OnAttack;
         InputSystemManager.Instance.onEatDangoPerformed -= OnEatDango;
-        InputSystemManager.Instance.onEatDangoCanceled -= () => _hasStayedEat = false;
+        InputSystemManager.Instance.onEatDangoCanceled -= OnEatDangoCanceled;
         InputSystemManager.Instance.onJumpPerformed -= _playerJump.OnStayJumping;
         InputSystemManager.Instance.onJumpCanceled -= _playerJump.Jump;
     }
@@ -441,13 +441,20 @@ class PlayerData : MonoBehaviour
         }
 
         SoundManager.Instance.PlaySE(Random.Range((int)SoundSource.VOISE_PRINCE_STAYEAT01, (int)SoundSource.VOISE_PRINCE_STAYEAT02 + 1));
+        SoundManager.Instance.PlaySE(SoundSource.SE5_PLAYER_STAY_EATDANGO);
         _hasStayedEat = true;
+    }
+
+    private void OnEatDangoCanceled()
+    {
+        _hasStayedEat = false;
+        SoundManager.Instance.StopSE(SoundSource.SE5_PLAYER_STAY_EATDANGO);
     }
 
     private void EatDango()
     {
         //SE
-        //GameManager.SoundManager.PlaySE(SoundSource.SE_PLAYER_EATDANGO);
+        SoundManager.Instance.PlaySE(SoundSource.SE6_CREATE_ROLE_CHARACTER_ANIMATION);
 
         _hasStayedEat = false;
 
@@ -478,14 +485,14 @@ class PlayerData : MonoBehaviour
     {
         InputSystemManager.Instance.onFirePerformed -= _playerRemoveDango.Remove;
         InputSystemManager.Instance.onEatDangoPerformed -= OnEatDango;
-        InputSystemManager.Instance.onEatDangoCanceled -= () => _hasStayedEat = false;
+        InputSystemManager.Instance.onEatDangoCanceled -= OnEatDangoCanceled;
     }
 
     private void OnJumpExit()
     {
         InputSystemManager.Instance.onFirePerformed += _playerRemoveDango.Remove;
         InputSystemManager.Instance.onEatDangoPerformed += OnEatDango;
-        InputSystemManager.Instance.onEatDangoCanceled += () => _hasStayedEat = false;
+        InputSystemManager.Instance.onEatDangoCanceled += OnEatDangoCanceled;
     }
 
 #if UNITY_EDITOR
@@ -621,10 +628,13 @@ class PlayerData : MonoBehaviour
         return _currentStabCount;
     }
 
-    public void EatAnima()
+    public async void EatAnima()
     {
         _animator.SetBool("IsEatingCharge", false);
         _playerUIManager.EatDangoUI_True();
+
+        await UniTask.Delay(5000);
+        DangoRoleUI.OnGUIReset();
     }
 
     #region GetterSetter

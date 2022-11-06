@@ -8,7 +8,7 @@ namespace Dango.Quest
     class QuestSucceedChecker
     {
         QuestManager _manager;
-        bool isSucceedThisFrame;
+        bool _isSucceedThisFrame;
 
         PlayerUIManager _playerUIManager;
 
@@ -16,7 +16,7 @@ namespace Dango.Quest
         {
             await UniTask.Yield();
 
-            isSucceedThisFrame = enable;
+            _isSucceedThisFrame = enable;
         }
 
         public QuestSucceedChecker(QuestManager manager, PlayerUIManager playerUIManager)
@@ -28,12 +28,12 @@ namespace Dango.Quest
         #region EatDango
         public bool CheckQuestEatDangoSucceed(QuestManager questManager, List<DangoColor> colors, bool createRole)
         {
-            //‚±‚ÌƒtƒŒ[ƒ€‚É•Ê‚ÌƒNƒGƒXƒg‚ªƒNƒŠƒA‚³‚ê‚Ä‚¢‚½‚ç’e‚­
-            if (isSucceedThisFrame) return false;
+            //ï¿½ï¿½ï¿½Ìƒtï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½É•Ê‚ÌƒNï¿½Gï¿½Xï¿½gï¿½ï¿½ï¿½Nï¿½ï¿½ï¿½Aï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ï¿½ï¿½eï¿½ï¿½
+            if (_isSucceedThisFrame) return false;
 
             for (int i = 0; i < questManager.QuestsCount; i++)
             {
-                //ƒLƒƒƒXƒg‰Â”\‚©‚ğŠm”Fi•s‰Â”\‚Èê‡ƒGƒ‰[‚ª‹N‚±‚é‚½‚ß‚±‚Ìˆ—‚Í•K{j
+                //ï¿½Lï¿½ï¿½ï¿½Xï¿½gï¿½Â”\ï¿½ï¿½ï¿½ï¿½ï¿½mï¿½Fï¿½iï¿½sï¿½Â”\ï¿½Èê‡ï¿½Gï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½Nï¿½ï¿½ï¿½é‚½ï¿½ß‚ï¿½ï¿½Ìï¿½ï¿½ï¿½ï¿½Í•Kï¿½{ï¿½j
                 if (questManager.GetQuest(i) is QuestEatDango questEa)
                 {
                     if (CheckQuestSucceed(questEa, colors, createRole)) return true;
@@ -45,14 +45,14 @@ namespace Dango.Quest
 
         private bool CheckQuestSucceed(QuestEatDango quest, List<DangoColor> colors, bool createRole)
         {
-            //–ğ‚Ì¬—§Ÿ‘æ‚Å’e‚­‚à‚Ì‚Í’e‚­
+            //ï¿½ï¿½ï¿½Ìï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Å’eï¿½ï¿½ï¿½ï¿½ï¿½Ì‚Í’eï¿½ï¿½
             if (createRole && !quest.AllowCountCreateRole || !createRole && !quest.AllowCountNoCreateRole)
             {
                 quest.SetIsPrebCreateRole(createRole);
                 return false;
             }
 
-            //F‚ğ”»’è‚µA³‚µ‚¢F‚È‚çH‚×‚½”‚ğ’Ç‰Á
+            //ï¿½Fï¿½ğ”»’è‚µï¿½Aï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Fï¿½È‚ï¿½Hï¿½×‚ï¿½ï¿½ï¿½ï¿½ï¿½Ç‰ï¿½
             foreach (var color in colors)
             {
                 if (!quest.ReadColors.Contains(color)) continue;
@@ -63,14 +63,14 @@ namespace Dango.Quest
             if (quest.IsPrebCreateRole != createRole) quest.AddContinueCount();
             else quest.ResetContinueCount();
 
-            //”»’è‚Ì‘O‚É¡‰ñ–ğ‚ğì‚Á‚½‚©‹L˜^
+            //ï¿½ï¿½ï¿½ï¿½Ì‘Oï¿½Éï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Lï¿½^
             quest.SetIsPrebCreateRole(createRole);
 
-            //w’è‰ñ”ì‚Á‚½‚©”»’è
+            //ï¿½wï¿½ï¿½ñ”ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
             if (!quest.IsAchievedEatCount()) return false;
             if (!quest.IsAchievedContinueCount()) return false;
 
-            //ğŒ‚·‚×‚ÄƒNƒŠƒA‚µ‚½ê‡AƒNƒGƒXƒg¬Œ÷‚Æ‚µ‚Ä•Ô‹p
+            //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×‚ÄƒNï¿½ï¿½ï¿½Aï¿½ï¿½ï¿½ï¿½ï¿½ê‡ï¿½Aï¿½Nï¿½Gï¿½Xï¿½gï¿½ï¿½ï¿½ï¿½ï¿½Æ‚ï¿½ï¿½Ä•Ô‹p
             QuestSucceed(quest);
             return true;
         }
@@ -79,12 +79,12 @@ namespace Dango.Quest
         #region CreateRole
         public bool CheckQuestCreateRoleSucceedEs(List<DangoColor> dangos, bool createRole, int currentMaxDango)
         {
-            //‚±‚ÌƒtƒŒ[ƒ€‚É•Ê‚ÌƒNƒGƒXƒg‚ªƒNƒŠƒA‚³‚ê‚Ä‚¢‚½‚ç’e‚­
-            if (isSucceedThisFrame) return false;
+            //ï¿½ï¿½ï¿½Ìƒtï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½É•Ê‚ÌƒNï¿½Gï¿½Xï¿½gï¿½ï¿½ï¿½Nï¿½ï¿½ï¿½Aï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ï¿½ï¿½eï¿½ï¿½
+            if (_isSucceedThisFrame) return false;
 
             for (int i = 0; i < _manager.QuestsCount; i++)
             {
-                //ƒLƒƒƒXƒg‰Â”\‚©‚ğŠm”Fi•s‰Â”\‚Èê‡ƒGƒ‰[‚ª‹N‚±‚é‚½‚ß‚±‚Ìˆ—‚Í•K{j
+                //ï¿½Lï¿½ï¿½ï¿½Xï¿½gï¿½Â”\ï¿½ï¿½ï¿½ï¿½ï¿½mï¿½Fï¿½iï¿½sï¿½Â”\ï¿½Èê‡ï¿½Gï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½Nï¿½ï¿½ï¿½é‚½ï¿½ß‚ï¿½ï¿½Ìï¿½ï¿½ï¿½ï¿½Í•Kï¿½{ï¿½j
                 if (_manager.GetQuest(i) is QuestCreateRole questCr)
                 {
                     if (CheckQuestSucceedEs(questCr, dangos, createRole, currentMaxDango)) return true;
@@ -95,12 +95,12 @@ namespace Dango.Quest
         }
         public bool CheckQuestCreateRoleSucceedSr(Role<int> role)
         {
-            //‚±‚ÌƒtƒŒ[ƒ€‚É•Ê‚ÌƒNƒGƒXƒg‚ªƒNƒŠƒA‚³‚ê‚Ä‚¢‚½‚ç’e‚­
-            if (isSucceedThisFrame) return false;
+            //ï¿½ï¿½ï¿½Ìƒtï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½É•Ê‚ÌƒNï¿½Gï¿½Xï¿½gï¿½ï¿½ï¿½Nï¿½ï¿½ï¿½Aï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ï¿½ï¿½eï¿½ï¿½
+            if (_isSucceedThisFrame) return false;
 
             for (int i = 0; i < _manager.QuestsCount; i++)
             {
-                //ƒLƒƒƒXƒg‰Â”\‚©‚ğŠm”Fi•s‰Â”\‚Èê‡ƒGƒ‰[‚ª‹N‚±‚é‚½‚ß‚±‚Ìˆ—‚Í•K{j
+                //ï¿½Lï¿½ï¿½ï¿½Xï¿½gï¿½Â”\ï¿½ï¿½ï¿½ï¿½ï¿½mï¿½Fï¿½iï¿½sï¿½Â”\ï¿½Èê‡ï¿½Gï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½Nï¿½ï¿½ï¿½é‚½ï¿½ß‚ï¿½ï¿½Ìï¿½ï¿½ï¿½ï¿½Í•Kï¿½{ï¿½j
                 if (_manager.GetQuest(i) is QuestCreateRole questCr)
                 {
                     if (CheckQuestSucceedSr(questCr, role)) return true;
@@ -111,12 +111,12 @@ namespace Dango.Quest
         }
         public bool CheckQuestCreateRoleSucceedIr(List<DangoColor> dangos)
         {
-            //‚±‚ÌƒtƒŒ[ƒ€‚É•Ê‚ÌƒNƒGƒXƒg‚ªƒNƒŠƒA‚³‚ê‚Ä‚¢‚½‚ç’e‚­
-            if (isSucceedThisFrame) return false;
+            //ï¿½ï¿½ï¿½Ìƒtï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½É•Ê‚ÌƒNï¿½Gï¿½Xï¿½gï¿½ï¿½ï¿½Nï¿½ï¿½ï¿½Aï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ï¿½ï¿½eï¿½ï¿½
+            if (_isSucceedThisFrame) return false;
 
             for (int i = 0; i < _manager.QuestsCount; i++)
             {
-                //ƒLƒƒƒXƒg‰Â”\‚©‚ğŠm”Fi•s‰Â”\‚Èê‡ƒGƒ‰[‚ª‹N‚±‚é‚½‚ß‚±‚Ìˆ—‚Í•K{j
+                //ï¿½Lï¿½ï¿½ï¿½Xï¿½gï¿½Â”\ï¿½ï¿½ï¿½ï¿½ï¿½mï¿½Fï¿½iï¿½sï¿½Â”\ï¿½Èê‡ï¿½Gï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½Nï¿½ï¿½ï¿½é‚½ï¿½ß‚ï¿½ï¿½Ìï¿½ï¿½ï¿½ï¿½Í•Kï¿½{ï¿½j
                 if (_manager.GetQuest(i) is QuestCreateRole questCr)
                 {
                     if (CheckQuestSucceedIc(questCr, dangos)) return true;
@@ -127,12 +127,12 @@ namespace Dango.Quest
         }
         public bool CheckQuestCreateRoleSucceedSm(Role<int> role)
         {
-            //‚±‚ÌƒtƒŒ[ƒ€‚É•Ê‚ÌƒNƒGƒXƒg‚ªƒNƒŠƒA‚³‚ê‚Ä‚¢‚½‚ç’e‚­
-            if (isSucceedThisFrame) return false;
+            //ï¿½ï¿½ï¿½Ìƒtï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½É•Ê‚ÌƒNï¿½Gï¿½Xï¿½gï¿½ï¿½ï¿½Nï¿½ï¿½ï¿½Aï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ï¿½ï¿½eï¿½ï¿½
+            if (_isSucceedThisFrame) return false;
 
             for (int i = 0; i < _manager.QuestsCount; i++)
             {
-                //ƒLƒƒƒXƒg‰Â”\‚©‚ğŠm”Fi•s‰Â”\‚Èê‡ƒGƒ‰[‚ª‹N‚±‚é‚½‚ß‚±‚Ìˆ—‚Í•K{j
+                //ï¿½Lï¿½ï¿½ï¿½Xï¿½gï¿½Â”\ï¿½ï¿½ï¿½ï¿½ï¿½mï¿½Fï¿½iï¿½sï¿½Â”\ï¿½Èê‡ï¿½Gï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½Nï¿½ï¿½ï¿½é‚½ï¿½ß‚ï¿½ï¿½Ìï¿½ï¿½ï¿½ï¿½Í•Kï¿½{ï¿½j
                 if (_manager.GetQuest(i) is QuestCreateRole questCr)
                 {
                     if (CheckQuestSucceedSm(questCr, role)) return true;
@@ -146,92 +146,92 @@ namespace Dango.Quest
         {
             foreach (var color in dangosDistinct)
             {
-                //w’èF‚ª‚ ‚Á‚½‚ç”²‚¯‚é
+                //ï¿½wï¿½ï¿½Fï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ç”²ï¿½ï¿½ï¿½ï¿½
                 if (quest.Establish.ReadColors.Contains(color)) return true;
             }
 
-            //‚º‚ñ‚Ô‚È‚©‚Á‚½‚ç’e‚­
+            //ï¿½ï¿½ï¿½ï¿½Ô‚È‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½eï¿½ï¿½
             return false;
         }
 
         private bool CheckQuestSucceedEs(QuestCreateRole quest, List<DangoColor> dangos, bool createRole, int currentMaxDango)
         {
-            //•s³‚ÈƒAƒNƒZƒX‚Å‚ ‚ê‚Î’e‚­
+            //ï¿½sï¿½ï¿½ï¿½ÈƒAï¿½Nï¿½Zï¿½Xï¿½Å‚ï¿½ï¿½ï¿½Î’eï¿½ï¿½
             if (quest.CRType != QuestCreateRole.CreateRoleType.EstablishRole) return false;
 
-            //H‚×‚½’cq‚ªƒNƒGƒXƒg“à—e‚Æˆê’v‚µ‚Ä‚¢‚é‚©”»’è
-            //–ğ‚Ì¬—§E”ñ¬—§‚Ìƒtƒ‰ƒO‚ªˆê’v‚µ‚Ä‚¢‚È‚¯‚ê‚Î’e‚­
+            //ï¿½Hï¿½×‚ï¿½ï¿½cï¿½qï¿½ï¿½ï¿½Nï¿½Gï¿½Xï¿½gï¿½ï¿½ï¿½eï¿½Æˆï¿½vï¿½ï¿½ï¿½Ä‚ï¿½ï¿½é‚©ï¿½ï¿½ï¿½ï¿½
+            //ï¿½ï¿½ï¿½Ìï¿½ï¿½ï¿½ï¿½Eï¿½ñ¬—ï¿½ï¿½Ìƒtï¿½ï¿½ï¿½Oï¿½ï¿½ï¿½ï¿½vï¿½ï¿½ï¿½Ä‚ï¿½ï¿½È‚ï¿½ï¿½ï¿½Î’eï¿½ï¿½
             if (createRole != quest.Establish.CreateRole)
             {
                 quest.ResetContinueCount();
                 return false;
             }
-            //Š®‘S–ğ‚Ì‚İ‚Ìê‡AŠ®‘S–ğ‚©”»’è
+            //ï¿½ï¿½ï¿½Sï¿½ï¿½ï¿½Ì‚İ‚Ìê‡ï¿½Aï¿½ï¿½ï¿½Sï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
             if (quest.Establish.OnlyPerfectRole && dangos.Count != currentMaxDango)
             {
                 quest.ResetContinueCount();
                 return false;
             }
-            //w’èF‚ª‚ ‚é‚©”»’è
+            //ï¿½wï¿½ï¿½Fï¿½ï¿½ï¿½ï¿½ï¿½é‚©ï¿½ï¿½ï¿½ï¿½
             if (!HasReadColor(quest, dangos.Distinct()))
             {
                 quest.ResetContinueCount();
                 return false;
             }
 
-            //ì‚Á‚½‰ñ”‚ğƒJƒEƒ“ƒg‚µ‚Äc
+            //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ñ”‚ï¿½ï¿½Jï¿½Eï¿½ï¿½ï¿½gï¿½ï¿½ï¿½Äc
             quest.AddMadeCount();
-            //‚³‚ç‚É˜A‘±‚µ‚½‰ñ”‚ğƒJƒEƒ“ƒg‚µ‚Äc
+            //ï¿½ï¿½ï¿½ï¿½É˜Aï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ñ”‚ï¿½ï¿½Jï¿½Eï¿½ï¿½ï¿½gï¿½ï¿½ï¿½Äc
             quest.AddContinueCount();
 
-            //w’è‰ñ”ì‚Á‚½‚©”»’è
+            //ï¿½wï¿½ï¿½ñ”ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
             if (!quest.IsAchievedMadeCount()) return false;
             if (!quest.IsAchievedContinueCount()) return false;
 
-            //ğŒ‚·‚×‚ÄƒNƒŠƒA‚µ‚½ê‡AƒNƒGƒXƒg¬Œ÷‚Æ‚µ‚Ä•Ô‹p
+            //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×‚ÄƒNï¿½ï¿½ï¿½Aï¿½ï¿½ï¿½ï¿½ï¿½ê‡ï¿½Aï¿½Nï¿½Gï¿½Xï¿½gï¿½ï¿½ï¿½ï¿½ï¿½Æ‚ï¿½ï¿½Ä•Ô‹p
             QuestSucceed(quest);
             return true;
         }
         private bool CheckQuestSucceedSr(QuestCreateRole quest, Role<int> role)
         {
-            //•s³‚ÈƒAƒNƒZƒX‚Å‚ ‚ê‚Î’e‚­
+            //ï¿½sï¿½ï¿½ï¿½ÈƒAï¿½Nï¿½Zï¿½Xï¿½Å‚ï¿½ï¿½ï¿½Î’eï¿½ï¿½
             if (quest.CRType != QuestCreateRole.CreateRoleType.SpecifyTheRole) return false;
 
-            //H‚×‚½’cq‚ªƒNƒGƒXƒg“à—e‚Æˆê’v‚µ‚Ä‚¢‚é‚©”»’è
-            //–ğ‚ªˆê’v‚µ‚Ä‚¢‚é‚©”»’è
+            //ï¿½Hï¿½×‚ï¿½ï¿½cï¿½qï¿½ï¿½ï¿½Nï¿½Gï¿½Xï¿½gï¿½ï¿½ï¿½eï¿½Æˆï¿½vï¿½ï¿½ï¿½Ä‚ï¿½ï¿½é‚©ï¿½ï¿½ï¿½ï¿½
+            //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½vï¿½ï¿½ï¿½Ä‚ï¿½ï¿½é‚©ï¿½ï¿½ï¿½ï¿½
             if (quest.SpecifyRole.RoleName != role.GetRolename()) return false;
 
-            //ì‚Á‚½‰ñ”‚ğƒJƒEƒ“ƒg‚µ‚Äc
+            //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ñ”‚ï¿½ï¿½Jï¿½Eï¿½ï¿½ï¿½gï¿½ï¿½ï¿½Äc
             quest.AddMadeCount();
 
-            //w’è‰ñ”ì‚Á‚½‚©”»’è
+            //ï¿½wï¿½ï¿½ñ”ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
             if (!quest.IsAchievedMadeCount()) return false;
 
-            //ğŒ‚·‚×‚ÄƒNƒŠƒA‚µ‚½ê‡AƒNƒGƒXƒg¬Œ÷‚Æ‚µ‚Ä•Ô‹p
+            //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×‚ÄƒNï¿½ï¿½ï¿½Aï¿½ï¿½ï¿½ï¿½ï¿½ê‡ï¿½Aï¿½Nï¿½Gï¿½Xï¿½gï¿½ï¿½ï¿½ï¿½ï¿½Æ‚ï¿½ï¿½Ä•Ô‹p
             QuestSucceed(quest);
             return true;
         }
         private bool CheckQuestSucceedIc(QuestCreateRole quest, List<DangoColor> colors)
         {
-            //•s³‚ÈƒAƒNƒZƒX‚Å‚ ‚ê‚Î’e‚­
+            //ï¿½sï¿½ï¿½ï¿½ÈƒAï¿½Nï¿½Zï¿½Xï¿½Å‚ï¿½ï¿½ï¿½Î’eï¿½ï¿½
             if (quest.CRType != QuestCreateRole.CreateRoleType.IncludeColor) return false;
 
-            //F‚Ì”‚ğ”»’è
+            //ï¿½Fï¿½Ìï¿½ï¿½ğ”»’ï¿½
             if (colors.Distinct().Count() != quest.IncludeColors.ColorCount) return false;
 
-            //ì‚Á‚½‰ñ”‚ğƒJƒEƒ“ƒg‚µ‚Äc
+            //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ñ”‚ï¿½ï¿½Jï¿½Eï¿½ï¿½ï¿½gï¿½ï¿½ï¿½Äc
             quest.AddMadeCount();
 
-            //w’è‰ñ”ì‚Á‚½‚©”»’è
+            //ï¿½wï¿½ï¿½ñ”ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
             if (!quest.IsAchievedMadeCount()) return false;
 
-            //ğŒ‚·‚×‚ÄƒNƒŠƒA‚µ‚½ê‡AƒNƒGƒXƒg¬Œ÷‚Æ‚µ‚Ä•Ô‹p
+            //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×‚ÄƒNï¿½ï¿½ï¿½Aï¿½ï¿½ï¿½ï¿½ï¿½ê‡ï¿½Aï¿½Nï¿½Gï¿½Xï¿½gï¿½ï¿½ï¿½ï¿½ï¿½Æ‚ï¿½ï¿½Ä•Ô‹p
             QuestSucceed(quest);
             return true;
         }
         private bool CheckQuestSucceedSm(QuestCreateRole quest, Role<int> role)
         {
-            //•s³‚ÈƒAƒNƒZƒX‚Å‚ ‚ê‚Î’e‚­
+            //ï¿½sï¿½ï¿½ï¿½ÈƒAï¿½Nï¿½Zï¿½Xï¿½Å‚ï¿½ï¿½ï¿½Î’eï¿½ï¿½
             if (quest.CRType != QuestCreateRole.CreateRoleType.CreateSameRole) return false;
 
             if (!quest.SameRole.IsEqualRole(role))
@@ -243,10 +243,10 @@ namespace Dango.Quest
 
             quest.AddContinueCount();
 
-            //w’è‰ñ”ì‚Á‚½‚©”»’è
+            //ï¿½wï¿½ï¿½ñ”ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
             if (!quest.IsAchievedContinueCount()) return false;
 
-            //ğŒ‚·‚×‚ÄƒNƒŠƒA‚µ‚½ê‡AƒNƒGƒXƒg¬Œ÷‚Æ‚µ‚Ä•Ô‹p
+            //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×‚ÄƒNï¿½ï¿½ï¿½Aï¿½ï¿½ï¿½ï¿½ï¿½ê‡ï¿½Aï¿½Nï¿½Gï¿½Xï¿½gï¿½ï¿½ï¿½ï¿½ï¿½Æ‚ï¿½ï¿½Ä•Ô‹p
             QuestSucceed(quest);
 
             return true;
@@ -256,12 +256,12 @@ namespace Dango.Quest
         #region PlayAction
         public bool CheckQuestPlayActionSucceed(QuestManager questManager, QuestPlayAction.PlayerAction action)
         {
-            //‚±‚ÌƒtƒŒ[ƒ€‚É•Ê‚ÌƒNƒGƒXƒg‚ªƒNƒŠƒA‚³‚ê‚Ä‚¢‚½‚ç’e‚­
-            if (isSucceedThisFrame) return false;
+            //ï¿½ï¿½ï¿½Ìƒtï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½É•Ê‚ÌƒNï¿½Gï¿½Xï¿½gï¿½ï¿½ï¿½Nï¿½ï¿½ï¿½Aï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ï¿½ï¿½eï¿½ï¿½
+            if (_isSucceedThisFrame) return false;
 
             for (int i = 0; i < questManager.QuestsCount; i++)
             {
-                //ƒLƒƒƒXƒg‰Â”\‚©‚ğŠm”Fi•s‰Â”\‚Èê‡ƒGƒ‰[‚ª‹N‚±‚é‚½‚ß‚±‚Ìˆ—‚Í•K{j
+                //ï¿½Lï¿½ï¿½ï¿½Xï¿½gï¿½Â”\ï¿½ï¿½ï¿½ï¿½ï¿½mï¿½Fï¿½iï¿½sï¿½Â”\ï¿½Èê‡ï¿½Gï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½Nï¿½ï¿½ï¿½é‚½ï¿½ß‚ï¿½ï¿½Ìï¿½ï¿½ï¿½ï¿½Í•Kï¿½{ï¿½j
                 if (questManager.GetQuest(i) is QuestPlayAction questPla)
                 {
                     if (CheckQuestSucceed(questPla, action)) return true;
@@ -273,12 +273,12 @@ namespace Dango.Quest
 
         private bool CheckQuestSucceed(QuestPlayAction quest, QuestPlayAction.PlayerAction action)
         {
-            //”»’è‚µ‚½‚¢ƒAƒNƒVƒ‡ƒ“‚ªˆÙ‚È‚Á‚½‚ç’e‚­
+            //ï¿½ï¿½ï¿½è‚µï¿½ï¿½ï¿½ï¿½ï¿½Aï¿½Nï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ù‚È‚ï¿½ï¿½ï¿½ï¿½ï¿½eï¿½ï¿½
             if (quest.Action != action) return false;
 
             quest.AddMadeCount();
 
-            //w’è‰ñ”ì‚Á‚½‚©”»’è
+            //ï¿½wï¿½ï¿½ñ”ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
             if (!quest.IsAchievedMadeCount()) return false;
 
             QuestSucceed(quest);
@@ -289,12 +289,12 @@ namespace Dango.Quest
         #region Destination
         public bool CheckQuestDestinationSucceed(FloorManager.Floor floor, bool inFloor)
         {
-            //‚±‚ÌƒtƒŒ[ƒ€‚É•Ê‚ÌƒNƒGƒXƒg‚ªƒNƒŠƒA‚³‚ê‚Ä‚¢‚½‚ç’e‚­
-            if (isSucceedThisFrame) return false;
+            //ï¿½ï¿½ï¿½Ìƒtï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½É•Ê‚ÌƒNï¿½Gï¿½Xï¿½gï¿½ï¿½ï¿½Nï¿½ï¿½ï¿½Aï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ï¿½ï¿½eï¿½ï¿½
+            if (_isSucceedThisFrame) return false;
 
             for (int i = 0; i < _manager.QuestsCount; i++)
             {
-                //ƒLƒƒƒXƒg‰Â”\‚©‚ğŠm”Fi•s‰Â”\‚Èê‡ƒGƒ‰[‚ª‹N‚±‚é‚½‚ß‚±‚Ìˆ—‚Í•K{j
+                //ï¿½Lï¿½ï¿½ï¿½Xï¿½gï¿½Â”\ï¿½ï¿½ï¿½ï¿½ï¿½mï¿½Fï¿½iï¿½sï¿½Â”\ï¿½Èê‡ï¿½Gï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½Nï¿½ï¿½ï¿½é‚½ï¿½ß‚ï¿½ï¿½Ìï¿½ï¿½ï¿½ï¿½Í•Kï¿½{ï¿½j
                 if (_manager.GetQuest(i) is QuestDestination questDest)
                 {
                     if (CheckQuestSucceed(questDest, floor, inFloor)) return true;
@@ -306,12 +306,12 @@ namespace Dango.Quest
 
         public bool CheckQuestDestinationSucceed()
         {
-            //‚±‚ÌƒtƒŒ[ƒ€‚É•Ê‚ÌƒNƒGƒXƒg‚ªƒNƒŠƒA‚³‚ê‚Ä‚¢‚½‚ç’e‚­
-            if (isSucceedThisFrame) return false;
+            //ï¿½ï¿½ï¿½Ìƒtï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½É•Ê‚ÌƒNï¿½Gï¿½Xï¿½gï¿½ï¿½ï¿½Nï¿½ï¿½ï¿½Aï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ï¿½ï¿½eï¿½ï¿½
+            if (_isSucceedThisFrame) return false;
 
             for (int i = 0; i < _manager.QuestsCount; i++)
             {
-                //ƒLƒƒƒXƒg‰Â”\‚©‚ğŠm”Fi•s‰Â”\‚Èê‡ƒGƒ‰[‚ª‹N‚±‚é‚½‚ß‚±‚Ìˆ—‚Í•K{j
+                //ï¿½Lï¿½ï¿½ï¿½Xï¿½gï¿½Â”\ï¿½ï¿½ï¿½ï¿½ï¿½mï¿½Fï¿½iï¿½sï¿½Â”\ï¿½Èê‡ï¿½Gï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½Nï¿½ï¿½ï¿½é‚½ï¿½ß‚ï¿½ï¿½Ìï¿½ï¿½ï¿½ï¿½Í•Kï¿½{ï¿½j
                 if (_manager.GetQuest(i) is QuestDestination questDest)
                 {
                     if (CheckQuestSucceed(questDest)) return true;
@@ -323,16 +323,16 @@ namespace Dango.Quest
 
         private bool CheckQuestSucceed(QuestDestination quest, FloorManager.Floor floor, bool inFloor)
         {
-            //‚Í‚¶‚ß‚ÉŒ»İ‚¢‚éFloor‚ğ“o˜^‚·‚é
+            //ï¿½Í‚ï¿½ï¿½ß‚ÉŒï¿½ï¿½İ‚ï¿½ï¿½ï¿½Floorï¿½ï¿½oï¿½^ï¿½ï¿½ï¿½ï¿½
             if (inFloor) quest.SetFloor(floor);
 
-            //–Ú“I’n‚Å‚È‚¯‚ê‚Î’e‚­
+            //ï¿½Ú“Iï¿½nï¿½Å‚È‚ï¿½ï¿½ï¿½Î’eï¿½ï¿½
             if (!quest.Floors.Contains(floor)) return false;
 
-            //•”‰®‚Ìo“ü‚è‚ğ‹L˜^
+            //ï¿½ï¿½ï¿½ï¿½ï¿½Ìoï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Lï¿½^
             quest.SetIsInFloor(inFloor);
 
-            //–Ú“I’n‚É‚Â‚­‚¾‚¯‚Å‚¢‚¢‚Ì‚©A‚Â‚¢‚ÄH‚×‚È‚¢‚Æ‚¢‚¯‚È‚¢‚Ì‚©”»’è
+            //ï¿½Ú“Iï¿½nï¿½É‚Â‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Å‚ï¿½ï¿½ï¿½ï¿½Ì‚ï¿½ï¿½Aï¿½Â‚ï¿½ï¿½ÄHï¿½×‚È‚ï¿½ï¿½Æ‚ï¿½ï¿½ï¿½ï¿½È‚ï¿½ï¿½Ì‚ï¿½ï¿½ï¿½ï¿½ï¿½
             if (quest.SucceedOnEat) return false;
 
             if (!quest.IsInFloor) return false;
@@ -342,7 +342,7 @@ namespace Dango.Quest
         }
         private bool CheckQuestSucceed(QuestDestination quest)
         {
-            //–Ú“I’n‚Å‚È‚¯‚ê‚Î’e‚­
+            //ï¿½Ú“Iï¿½nï¿½Å‚È‚ï¿½ï¿½ï¿½Î’eï¿½ï¿½
             if (!quest.Floors.Contains(quest.CurrentFloor)) return false;
 
             QuestSucceed(quest);
@@ -363,26 +363,30 @@ namespace Dango.Quest
             _manager.ChangeQuest(nextQuest);
             _manager.Player.GrowStab(quest.EnableDangoCountUp);
             _manager.Player.AddSatiety(quest.RewardTime);
-            _manager.CreateExpansionUIObj();
 
-            //‚±‚ÌƒtƒŒ[ƒ€‚Å‘¼‚Ì”»’è‚Ís‚í‚È‚¢‚æ‚¤‚É‚·‚éˆ—
-            isSucceedThisFrame = true;
+            ScoreManager.Instance.AddClearTime(ScoreManager.Instance.SetQuestTime());
+            ScoreManager.Instance.AddClearQuest(quest);
+
+            //ï¿½ï¿½ï¿½Ìƒtï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½Å‘ï¿½ï¿½Ì”ï¿½ï¿½ï¿½Ísï¿½ï¿½È‚ï¿½ï¿½æ‚¤ï¿½É‚ï¿½ï¿½éˆï¿½ï¿½
+            _isSucceedThisFrame = true;
             SetBoolAfterOneFrame(false).Forget();
 
             if (quest.IsKeyQuest)
             {
-                //TODO:S7‚É‘JˆÚ
+                _manager.SetIsComplete();
+                return;
             }
+ 
+            Logger.Log(quest.QuestName + "ã‚¯ã‚¨ã‚¹ãƒˆã‚¯ãƒªã‚¢ï¼");
 
-            Logger.Log(quest.QuestName + " ƒNƒGƒXƒgƒNƒŠƒAI");
+            _manager.CreateExpansionUIObj();
 
-            //ƒNƒGƒXƒg‚ğ’B¬‚µ‚½‚Æ‚«‚Ì‰‰o
-            _playerUIManager.EventText.TextData.SetText("’c“¹’B¬");
+            //ï¿½Nï¿½Gï¿½Xï¿½gï¿½ï¿½Bï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ‚ï¿½ï¿½Ì‰ï¿½ï¿½o
+            _playerUIManager.EventText.TextData.SetText("å›£é“é”æˆ");
             _playerUIManager.EventText.TextData.SetFontSize(210f);
-            
-            await _playerUIManager.EventText.TextData.Fadeout(0.5f, 2f);
 
-            _playerUIManager.EventText.TextData.SetFontSize(_playerUIManager.defaultEventTextFontSize);
+            _playerUIManager.EventText.TextData.SetFontSize(_playerUIManager.DefaultEventTextFontSize);
+            await _playerUIManager.EventText.TextData.Fadeout(0.5f, 2f);
         }
     }
 }

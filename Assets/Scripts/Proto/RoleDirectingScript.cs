@@ -20,7 +20,7 @@ public class RoleDirectingScript : MonoBehaviour
             imageObj[i].SetActive(false);
         }
     }
-
+    
     // Update is called once per frame
     void Update()
     {

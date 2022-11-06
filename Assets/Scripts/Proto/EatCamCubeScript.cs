@@ -5,10 +5,29 @@ using UnityEngine;
 public class EatCamCubeScript : MonoBehaviour
 {
     [SerializeField] LayerMask Mask;
-    public List<GameObject> objects = new List<GameObject>();
+
+    private List<Renderer> _rend = new();
+
+    private void OnDisable()
+    {
+        SetRendEnable(true);
+    }
+
     private void OnTriggerEnter(Collider col)
     {
-            objects.Add(col.gameObject);
-        
+        if (col.TryGetComponent(out Renderer rend))
+        {
+            _rend.Add(rend);
+            rend.enabled = false;
+        }
+    }
+
+    private void SetRendEnable(bool enable)
+    {
+        foreach (Renderer rend in _rend)
+        {
+            rend.enabled = enable;
+        }
+        if (enable) _rend.Clear();
     }
 }
