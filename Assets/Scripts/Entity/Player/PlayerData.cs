@@ -628,10 +628,13 @@ class PlayerData : MonoBehaviour
         return _currentStabCount;
     }
 
-    public void EatAnima()
+    public async void EatAnima()
     {
         _animator.SetBool("IsEatingCharge", false);
         _playerUIManager.EatDangoUI_True();
+
+        await UniTask.Delay(5000);
+        DangoRoleUI.OnGUIReset();
     }
 
     #region GetterSetter

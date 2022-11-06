@@ -139,7 +139,7 @@ class DangoRole
         }
 
         //役が存在するかチェック
-        bool enableRole = CheckPosRole(dangos, currentMaxDango, ref score);
+        bool enableRole = CheckPosRole(dangos, ref score);
 
         //EstablishRole系クエストのチェック
         QuestManager.Instance.SucceedChecker.CheckQuestCreateRoleSucceedEs(dangos, enableRole, currentMaxDango);
@@ -193,7 +193,7 @@ class DangoRole
             if (dangos.SequenceEqual(specialRoleList))
             {
                 // 表示
-                DangoRoleUI.OnGUIRoleName(specialRole.GetRolename(), specialRole.GetScore());
+                DangoRoleUI.OnGUIRoleName(specialRole.GetRolename());
 
                 //作った回数を増やし
                 specialRole.AddMadeCount();
@@ -232,7 +232,7 @@ class DangoRole
             if (_color.SequenceEqual(colorRoleList))
             {
                 // 表示
-                DangoRoleUI.OnGUIRoleName(colorRole.GetRolename(), colorRole.GetScore());
+                DangoRoleUI.OnGUIRoleName(colorRole.GetRolename());
 
                 //作った回数を増やし
                 colorRole.AddMadeCount();
@@ -254,7 +254,7 @@ class DangoRole
     /// <para>true : あり</para>
     /// <para>false : なし</para>
     /// </returns>
-    private bool CheckPosRole(List<DangoColor> dangos, int currentMaxDango, ref float score)
+    private bool CheckPosRole(List<DangoColor> dangos, ref float score)
     {
         //色に応じたインデックスを割り振った配列を作成
         var normalizeDangoList = new List<int>();
@@ -274,7 +274,7 @@ class DangoRole
             if (!normalizeDangoList.SequenceEqual(posRoleList)) continue;
 
             //表示
-            DangoRoleUI.OnGUIRoleName(posRole.GetRolename(), posRole.GetScore());
+            DangoRoleUI.OnGUIRoleName(posRole.GetRolename());
 
             //作った回数を増やし・・・
             posRole.AddMadeCount();
