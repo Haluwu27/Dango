@@ -22,6 +22,9 @@ public class StageData : MonoBehaviour
     private void Awake()
     {
         InputSystemManager.Instance.Input.SwitchCurrentActionMap("Player");
+
+        SoundManager.Instance.StopBGM();
+        SoundManager.Instance.PlayBGM(SoundSource.BGM1A_STAGE1 + (int)_stage);
     }
 
     public void Release()
