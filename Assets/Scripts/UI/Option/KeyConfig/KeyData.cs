@@ -81,7 +81,7 @@ namespace TM.Input.KeyConfig
             if (actionReference != null) actionReference.action.AddBinding(new InputBinding { path = ToGamepadKeyPass(_key) });
             _currentActionReference = actionReference;
 
-            Logger.Log("キーバインドを変更したよ！");
+            //Logger.Log("キーバインドを変更したよ！");
         }
 
         public string ToGamepadKeyPass(GamepadKey gamepadKey)
