@@ -367,7 +367,7 @@ namespace Dango.Quest
 
             ScoreManager.Instance.AddClearTime(ScoreManager.Instance.SetQuestTime());
             ScoreManager.Instance.AddClearQuest(quest);
-            //このフレームで判定は行わないようにする処理
+            //このフレームで他の判定は行わないようにする処理
             isSucceedThisFrame = true;
             SetBoolAfterOneFrame(false).Forget();
 
