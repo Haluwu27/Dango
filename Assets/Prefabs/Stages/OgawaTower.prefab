@@ -29649,9 +29649,9 @@ MonoBehaviour:
   - {x: -0.00000047683716, y: 0.0000019073486}
   - {x: -4, y: 0.000002861023}
   - {x: -3.999999, y: 16.000008}
-  - {x: -0.00000023841858, y: 16.000006}
+  - {x: -0.00000023841858, y: 16.000004}
   - {x: 0.00000071525574, y: 8.000002}
-  - {x: 4.000001, y: 0.000002861023}
+  - {x: 4.000001, y: 0.0000019073486}
   - {x: -0.000002861023, y: 0.0000019073486}
   - {x: -0.0000021457672, y: 8.000001}
   - {x: -0.00000047683716, y: 16.000006}
@@ -29697,12 +29697,12 @@ MonoBehaviour:
   - {x: 1, y: 0.00000005960465, z: -2.84217e-14, w: -1}
   - {x: 0.00000028684724, y: -1, z: -5.6843392e-14, w: -1}
   - {x: 0.00000022724265, y: -1, z: -0.00000017881389, w: -1}
-  - {x: 0.00000012852253, y: -1, z: -0.00000029802317, w: -1}
-  - {x: 0.000000089406996, y: -1, z: -0.00000023841855, w: -1}
-  - {x: 0.00000018129744, y: -1, z: -0.00000019868209, w: -1}
-  - {x: -0.00000005960467, y: 1, z: 7.1054246e-14, w: -1}
-  - {x: -0.00000011920926, y: 1, z: 5.6843405e-14, w: -1}
-  - {x: -0.00000007947288, y: 1, z: -0.00000007947281, w: -1}
+  - {x: 0.00000012852256, y: -1, z: -0.0000005364418, w: -1}
+  - {x: 0.00000008940703, y: -1, z: -0.0000007152559, w: -1}
+  - {x: 0.00000018129745, y: -1, z: -0.0000003576279, w: -1}
+  - {x: -0.000000059604666, y: 1, z: -0.000000119209204, w: -1}
+  - {x: -0.00000011920925, y: 1, z: -0.0000002384185, w: -1}
+  - {x: -0.00000007947287, y: 1, z: -0.00000015894565, w: -1}
   - {x: -0.000000119209275, y: 1, z: -0.00000023841855, w: -1}
   - {x: -0.00000005960469, y: 1, z: -0.00000011920925, w: -1}
   m_Colors: []
@@ -31890,52 +31890,52 @@ MonoBehaviour:
     - {fileID: 6488269432342368229}
     dangoInjections:
     - {fileID: 619418317100763444}
-    maxDangoCount: 5
+    maxDangoCount: 3
   - floorDatas:
     - {fileID: 1022734442741090350}
     dangoInjections:
     - {fileID: 4704684027706406173}
-    maxDangoCount: 5
+    maxDangoCount: 3
   - floorDatas:
     - {fileID: 1878550733550494384}
     dangoInjections:
     - {fileID: 207736083545615145}
-    maxDangoCount: 5
+    maxDangoCount: 2
   - floorDatas:
     - {fileID: 7510677685888130590}
     dangoInjections:
     - {fileID: 939708958996701318}
-    maxDangoCount: 5
+    maxDangoCount: 2
   - floorDatas:
     - {fileID: 8415960686139381164}
     dangoInjections:
     - {fileID: 4771954000292950234}
-    maxDangoCount: 5
+    maxDangoCount: 2
   - floorDatas:
     - {fileID: 3907087688502446906}
     dangoInjections:
     - {fileID: 1421281089527469321}
-    maxDangoCount: 5
+    maxDangoCount: 2
   - floorDatas:
     - {fileID: 8963553818895473248}
     dangoInjections:
     - {fileID: 9177198102647840682}
-    maxDangoCount: 5
+    maxDangoCount: 2
   - floorDatas:
     - {fileID: 47576636778927005}
     dangoInjections:
     - {fileID: 6941437850696576538}
-    maxDangoCount: 5
+    maxDangoCount: 2
   - floorDatas:
     - {fileID: 7244277277621728317}
     dangoInjections:
     - {fileID: 2041376698686770899}
-    maxDangoCount: 5
+    maxDangoCount: 2
   - floorDatas:
     - {fileID: 6072053194478887132}
     dangoInjections:
     - {fileID: 7158422789984083233}
-    maxDangoCount: 5
+    maxDangoCount: 3
 --- !u!1 &5232766135114477050 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 7561689862600589418, guid: a76006904b69c964d85cb1f48e7a4050,
