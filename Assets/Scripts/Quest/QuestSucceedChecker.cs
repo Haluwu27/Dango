@@ -375,14 +375,13 @@ namespace Dango.Quest
             }
 
             Logger.Log(quest.QuestName + " クエストクリア！");
-
             //クエストを達成したときの演出
-            _playerUIManager.EventText.TextData.SetText("団道達成");
-            _playerUIManager.EventText.TextData.SetFontSize(210f);
-            
-            await _playerUIManager.EventText.TextData.Fadeout(0.5f, 2f);
+            //_playerUIManager.EventText.TextData.SetText("団道達成");
+            //_playerUIManager.EventText.TextData.SetFontSize(210f);
 
-            _playerUIManager.EventText.TextData.SetFontSize(_playerUIManager.defaultEventTextFontSize);
+            //await _playerUIManager.EventText.TextData.Fadeout(0.5f, 2f);
+
+            //_playerUIManager.EventText.TextData.SetFontSize(_playerUIManager.defaultEventTextFontSize);
         }
     }
 }
