@@ -16,6 +16,9 @@ using System.Security.Cryptography;
 using Newtonsoft.Json;
 using LitJson;
 using System.Collections.Generic;
+using UnityEngine.InputSystem;
+using TM.Input.KeyConfig;
+using static TM.Input.KeyConfig.KeyData;
 
 public class DataManager : MonoBehaviour
 {
@@ -27,6 +30,19 @@ public class DataManager : MonoBehaviour
 
     public static ConfigData configData;
     public static SaveData saveData;
+    public static PreservationKeyConfigData keyConfigData;
+
+    [SerializeField] InputActionReference Jump;
+    [SerializeField] InputActionReference Attack;
+    [SerializeField] InputActionReference EatDango;
+    [SerializeField] InputActionReference Fire;
+    [SerializeField] InputActionReference ExpansionUI;
+
+    static readonly KeyData[] keyDatas = new KeyData[(int)GamepadKey.Max];
+    static InputActionReference[] actionReferencesTable;
+
+    public static KeyData GetKeyData(int index) => keyDatas[index];
+    public static KeyData GetKeyData(KeyData.GamepadKey index) => keyDatas[(int)index];
 
     public static bool _nowLoadConfigData = false;
 
@@ -37,9 +53,10 @@ public class DataManager : MonoBehaviour
 
     private static Dictionary<Language, LanguageData> _languageDataList = new();
 
-
     void Awake()
     {
+        InitKeyData();
+
         LoadConfigData();
         if (!NowLoadConfigData)
         {
@@ -47,6 +64,8 @@ public class DataManager : MonoBehaviour
         }
 
         LoadSaveData();
+        LoadInputData();
+
 
         //言語データは使用しないので不要
         //LoadLanguageData();
@@ -56,6 +75,17 @@ public class DataManager : MonoBehaviour
     {
         SaveConfigData();
         SaveSaveData();
+        SaveInputData();
+    }
+
+    private void InitKeyData()
+    {
+        actionReferencesTable = new InputActionReference[] { Attack, Jump, Attack, Jump, ExpansionUI, null, EatDango, Fire, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null };
+
+        for (int i = 0; i < (int)GamepadKey.Max; i++)
+        {
+            keyDatas[i] = new((GamepadKey)i, actionReferencesTable[i], ToGameAction);
+        }
     }
 
     /// <summary>
@@ -474,6 +504,133 @@ public class DataManager : MonoBehaviour
             }
             return _languageDataList[configData.language];
         }
+    }
+
+    /// <summary>
+    /// 入力データを保存する
+    /// </summary>
+    public static void SaveInputData()
+    {
+        List<int> actions = new();
+
+        //アクションデータをシリアライズして保存
+        for (int i = 0; i < (int)GamepadKey.Max; i++)
+        {
+            actions.Add((int)keyDatas[i].Action);
+        }
+
+        keyConfigData = new(actions.ToArray());
+
+        //シリアライズ用設定データ
+
+        //パターンA
+        JsonSerializerSettings settings = new()
+        {
+            Formatting = Formatting.Indented,
+        };
+
+        //パターンB
+        //LitJson.JsonWriter jwriter = new LitJson.JsonWriter();
+        //jwriter.PrettyPrint = true;
+        //jwriter.IndentValue = 4;
+
+        //シリアライズ実行
+
+        //パターンA
+        string dataString = JsonConvert.SerializeObject(keyConfigData, settings);
+
+        //パターンB
+        //JsonMapper.ToJson(configData,jwriter);
+        //string dataString = jwriter.ToString();
+
+        //ファイルパスを決定
+#if UNITY_EDITOR
+        string path = Directory.GetCurrentDirectory() + "\\Assets\\Resources";
+#else
+        string path = AppDomain.CurrentDomain.BaseDirectory.TrimEnd('\\');
+#endif
+
+        //ファイルがあるかチェック
+        if (!File.Exists(path + "/keyConfig.txt"))
+        {
+            Logger.Warn("キーコンフィグファイルが存在しないため、生成します");
+            File.Create(path + "/keyConfig.txt").Close();
+        }
+
+        //保存
+        using StreamWriter writer = new(path + "/keyConfig.txt", false);
+        writer.WriteLine(dataString);
+        writer.Flush();
+    }
+
+    /// <summary>
+    /// 入力データをロードする
+    /// </summary>
+    public void LoadInputData()
+    {
+        //データ初期化
+        keyConfigData = null;
+
+        //ファイルパスを決定
+#if UNITY_EDITOR
+        string path = Directory.GetCurrentDirectory() + "\\Assets\\Resources";
+#else
+        string path = AppDomain.CurrentDomain.BaseDirectory.TrimEnd('\\');
+#endif
+
+        //ファイルがあるかチェック
+        if (!File.Exists(path + "/keyConfig.txt"))
+        {
+            Logger.Warn("キーコンフィグファイルが存在しないため、生成します");
+            File.Create(path + "/keyConfig.txt").Close();
+            return;
+        }
+
+        string dataString;
+
+        using (StreamReader reader = new(path + "/keyConfig.txt", false))
+        {
+            dataString = reader.ReadToEnd();
+        }
+
+        //Jsonから読み込み
+
+        //パターンA
+        //configData = JsonUtility.FromJson<ConfigData>(dataString);
+
+        //パターンB(LitJson)
+        keyConfigData = JsonMapper.ToObject<PreservationKeyConfigData>(dataString);
+
+        //アクションデータをロード
+
+        for (int i = 0; i < (int)GamepadKey.Max; i++)
+        {
+            keyDatas[i].KeyBindingOverride(ToInputActionReference((GameAction)keyConfigData.keys[i]));
+        }
+    }
+
+    private InputActionReference ToInputActionReference(GameAction action)
+    {
+        return action switch
+        {
+            GameAction.Jump => Jump,
+            GameAction.Attack => Attack,
+            GameAction.Eat => EatDango,
+            GameAction.Remove => Fire,
+            GameAction.UIExpansion => ExpansionUI,
+            _ => null,
+        };
+    }
+
+    private GameAction ToGameAction(InputActionReference inputActionReference)
+    {
+        if (inputActionReference == Jump) return GameAction.Jump;
+        if (inputActionReference == Attack) return GameAction.Attack;
+        if (inputActionReference == Fire) return GameAction.Remove;
+        if (inputActionReference == ExpansionUI) return GameAction.UIExpansion;
+        if (inputActionReference == EatDango) return GameAction.Eat;
+
+        return GameAction.Unknown;
     }
 
     /*以下編集は非推奨*/

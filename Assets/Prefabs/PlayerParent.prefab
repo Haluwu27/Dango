@@ -56,11 +56,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1061649141422286778}
     m_Modifications:
-    - target: {fileID: 779374474397810444, guid: 778aacd95f2f72d4eaff394bcf22a5d0,
-        type: 3}
-      propertyPath: m_TagString
-      value: Player
-      objectReference: {fileID: 0}
     - target: {fileID: 3952613918130635532, guid: 778aacd95f2f72d4eaff394bcf22a5d0,
         type: 3}
       propertyPath: m_Name
@@ -126,21 +121,6 @@ PrefabInstance:
       propertyPath: playerCamera
       value: 
       objectReference: {fileID: 1061649141369810905}
-    - target: {fileID: 7644088380944789818, guid: 778aacd95f2f72d4eaff394bcf22a5d0,
-        type: 3}
-      propertyPath: m_Enabled
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7644088380944789818, guid: 778aacd95f2f72d4eaff394bcf22a5d0,
-        type: 3}
-      propertyPath: m_IsTrigger
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8334576500877392133, guid: 778aacd95f2f72d4eaff394bcf22a5d0,
-        type: 3}
-      propertyPath: m_Enabled
-      value: 1
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 778aacd95f2f72d4eaff394bcf22a5d0, type: 3}
 --- !u!4 &4062595608074469452 stripped

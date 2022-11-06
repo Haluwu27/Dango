@@ -59,7 +59,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0a329b6b63e0aff4a80a830be67cb879, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  startTime: 30
+  cursor: 0
 --- !u!114 &1775739581866841225
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -75,3 +75,5 @@ MonoBehaviour:
   _playerData: {fileID: 0}
   _expansionUIObj: {fileID: 3718130437075179934, guid: 19bfa4cc766660f4b9896439732ab93b,
     type: 3}
+  _playerUIManager: {fileID: 0}
+  _questExpansionUIManager: {fileID: 0}

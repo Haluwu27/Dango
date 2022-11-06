@@ -169,7 +169,7 @@ class DangoRole
         //CheckColorRole(ref score);//処理内部にソートを含むため、位置役より下に配置。
 
         //全体的な点数計算（この処理は役の有無に関わらず実行される）
-        score += (8 - _color.Count) * dangos.Count();
+        //score += (8 - _color.Count) * dangos.Count();
 
         return score;
     }

@@ -165,6 +165,35 @@ namespace TM.UI
                 SetAlpha(alpha);
             }
         }
+        public async UniTask Fadein(float endAlpha,float time, float waitTime)
+        {
+            await UniTask.Delay((int)(waitTime * 1000f));
+
+            endAlpha = Mathf.Clamp(endAlpha, 0, 1f);
+
+            if (time <= 0)
+            {
+                SetAlpha(endAlpha);
+                return;
+            }
+
+            float alpha = 0;
+
+            while (_image.color.a < endAlpha)
+            {
+                try
+                {
+                    await UniTask.Yield(PlayerLoopTiming.Update, _cts.Token);
+                }
+                catch (OperationCanceledException)//現状この例外の変数は使わない予定なので棄却しています。使う際は棄却をやめてください
+                {
+                    //キャンセル時の例外処理があればここ(別にエラーではない)
+                }
+
+                alpha += Time.deltaTime * endAlpha / time;
+                SetAlpha(alpha);
+            }
+        }
         public async UniTask Fadeout(float time, float waitTime = 0)
         {
             await UniTask.Delay((int)(waitTime * 1000f));
@@ -189,6 +218,35 @@ namespace TM.UI
                 }
 
                 alpha -= Time.deltaTime / time;
+                SetAlpha(alpha);
+            }
+        }
+        public async UniTask Fadeout(float endAlpha,float time, float waitTime)
+        {
+            await UniTask.Delay((int)(waitTime * 1000f));
+
+            endAlpha = Mathf.Clamp(endAlpha, 0, 1f);
+
+            if (time <= 0)
+            {
+                SetAlpha(endAlpha);
+                return;
+            }
+
+            float alpha = 1;
+
+            while (_image.color.a > endAlpha)
+            {
+                try
+                {
+                    await UniTask.Yield(PlayerLoopTiming.Update, _cts.Token);
+                }
+                catch (OperationCanceledException)//現状この例外の変数は使わない予定なので棄却しています。使う際は棄却をやめてください
+                {
+                    //キャンセル時の例外処理があればここ(別にエラーではない)
+                }
+
+                alpha -= Time.deltaTime * endAlpha / time;
                 SetAlpha(alpha);
             }
         }

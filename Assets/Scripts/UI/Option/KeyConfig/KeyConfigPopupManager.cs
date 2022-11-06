@@ -1,14 +1,12 @@
-using Cysharp.Threading.Tasks.Triggers;
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 namespace TM.Input.KeyConfig
 {
     public class KeyConfigPopupManager : MonoBehaviour
     {
+        [SerializeField] ImageUIData[] images;
         [SerializeField] TextUIData[] texts;
         [SerializeField] TextUIData selectName = default!;
         [SerializeField] KeyConfigManager keyConfigManager = default!;
@@ -22,35 +20,19 @@ namespace TM.Input.KeyConfig
         List<KeyData.GameAction> _actionDatas = new();
         KeyData.GameAction _currentAction;
         int _currentActionIndex;
+        int _settingActionIndex;
 
-        private void Start()
-        {
-            InputSystemManager.Instance.onNavigatePerformed += OnNavigateVertical;
-            InputSystemManager.Instance.onChoicePerformed += OnChoiced;
-        }
+        const float OFFSET = 300f;
 
-        public void OnChangeScene()
-        {
-            InputSystemManager.Instance.onNavigatePerformed -= OnNavigateVertical;
-            InputSystemManager.Instance.onChoicePerformed -= OnChoiced;
-        }
-
-        public void OnNavigateVertical()
+        public void OnNavigate()
         {
             if (!IsPopup) return;
 
             Vector2 axis = InputSystemManager.Instance.NavigateAxis;
 
-            if (axis == Vector2.up)
-            {
-                _currentActionIndex = (_currentActionIndex + 1) % _actionDatas.Count;
-                _currentAction = _actionDatas[_currentActionIndex];
-            }
-            if (axis == Vector2.down)
-            {
-                if (--_currentActionIndex < 0) _currentActionIndex = _actionDatas.Count - 1;
-                _currentAction = _actionDatas[_currentActionIndex];
-            }
+            if (!ChangeChoiceUtil.Choice(axis, ref _currentActionIndex, _actionDatas.Count, false, ChangeChoiceUtil.OptionDirection.Vertical)) return;
+            
+            ChangeCurrentAction();
             Logger.Log(_currentAction);
         }
 
@@ -58,10 +40,44 @@ namespace TM.Input.KeyConfig
         {
             if (!IsPopup) return;
 
-            keyConfigManager.Rebinding((int)_currentAction);
+            keyConfigManager.Rebinding(_currentAction);
+            _settingActionIndex = _currentActionIndex;
+            SetImagesColor();
         }
 
         public bool IsPopup => _canvas.enabled;
+
+        private void InitCurrentActionIndex()
+        {
+            for (int i = 0; i < _actionDatas.Count; i++)
+            {
+                if (_actionDatas[i] == keyConfigManager.Data.KeyData.Action)
+                {
+                    _currentActionIndex = i;
+                    _settingActionIndex = i;
+                    return;
+                }
+            }
+
+            _currentActionIndex = 0;
+        }
+
+        private void ChangeCurrentAction()
+        {
+            _currentAction = _actionDatas[_currentActionIndex];
+            SetImagesColor();
+        }
+
+        private void SetImagesColor()
+        {
+            foreach (var image in images)
+            {
+                image.ImageData.SetColor(Color.white);
+            }
+
+            images[_settingActionIndex].ImageData.SetColor(Color.cyan);
+            images[_currentActionIndex].ImageData.SetColor(Color.red);
+        }
 
         private void ResetTexts()
         {
@@ -86,49 +102,51 @@ namespace TM.Input.KeyConfig
                 num++;
             }
 
-            _currentAction = _actionDatas[0];
             selectName.TextData.SetText(keyConfigManager.Data.name);
         }
 
         public void OnCanvasEnabled()
         {
-            _canvas.enabled = true;
+            InputSystemManager.Instance.onNavigatePerformed += OnNavigate;
+            InputSystemManager.Instance.onChoicePerformed += OnChoiced;
+
             _action = keyConfigManager.Data.ConfigSelection;
+            
+            //テキストの変更
             ResetTexts();
             SetTexts();
 
-            //マジックナンバーやめましょう。
-            float x = keyConfigManager.Data.transform.localPosition.x > 0 ? -450f : 450f;
-            popup.localPosition=new Vector2(x,0);
+            //イメージ色の変更
+            InitCurrentActionIndex();
+            ChangeCurrentAction();
+
+            float x = keyConfigManager.Data.transform.localPosition.x > 0 ? -OFFSET : OFFSET;
+            popup.localPosition = popup.localPosition.SetX(x);
+
+            _canvas.enabled = true;
         }
 
         public void OnCanvasDisabled()
         {
+            InputSystemManager.Instance.onNavigatePerformed -= OnNavigate;
+            InputSystemManager.Instance.onChoicePerformed -= OnChoiced;
+
             _canvas.enabled = false;
         }
 
         private string ActionString(int num)
         {
-            //マジックナンバーであまりよくない処理です。そのうち修正すべきだと思います。
-
             return num switch
             {
-                0 => "移動",
-                1 => "回転",
-                2 => "ジャンプ",
-                3 => "突き刺し",
-                4 => "食べる",
-                5 => "取り外し",
-                6 => "ポーズ",
-                7 => "UI拡張",
-                //(int)KeyConfigData.GameAction.Move => DataManager.LanguageData.keyConfigMove,
-                //(int)KeyConfigData.GameAction.LookRotation => DataManager.LanguageData.keyConfigLookRotation,
-                //(int)KeyConfigData.GameAction.Jump => DataManager.LanguageData.keyConfigJump,
-                //(int)KeyConfigData.GameAction.Attack => DataManager.LanguageData.keyConfigAttack,
-                //(int)KeyConfigData.GameAction.Eat => DataManager.LanguageData.keyConfigEat,
-                //(int)KeyConfigData.GameAction.Remove => DataManager.LanguageData.keyConfigRemove,
-                //(int)KeyConfigData.GameAction.Pause => DataManager.LanguageData.keyConfigPause,
-                //(int)KeyConfigData.GameAction.UIExpansion => DataManager.LanguageData.keyConfigUIExpansion,
+                (int)KeyData.GameAction.Unknown => "未設定",
+                (int)KeyData.GameAction.Move => "移動",
+                (int)KeyData.GameAction.LookRotation => "回転",
+                (int)KeyData.GameAction.Jump => "ジャンプ",
+                (int)KeyData.GameAction.Attack => "突き刺し",
+                (int)KeyData.GameAction.Eat => "食べる",
+                (int)KeyData.GameAction.Remove => "取り外し",
+                (int)KeyData.GameAction.Pause => "ポーズ",
+                (int)KeyData.GameAction.UIExpansion => "UI拡張",
                 _ => throw new System.NotImplementedException(),
             };
         }

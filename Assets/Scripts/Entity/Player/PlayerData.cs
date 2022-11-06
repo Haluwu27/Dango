@@ -236,9 +236,6 @@ class PlayerData : MonoBehaviour
     #endregion
 
     #region メンバ変数
-    //スコアと満腹度のレート
-    const float SCORE_TIME_RATE = 0.2f;
-
     //StatePatternで各ステートに移動するフラグに使用
     private bool _hasAttacked = false;
     private bool _hasFalled = false;
@@ -276,14 +273,13 @@ class PlayerData : MonoBehaviour
 
     readonly DangoRole dangoRole = DangoRole.instance;
 
-    readonly PlayerStayEat _playerStayEat = new();
-
     //生成はAwakeで行っています。
     PlayerMove _playerMove;
     PlayerJump _playerJump;
     PlayerRemoveDango _playerRemoveDango;
     PlayerFallAction _playerFall;
     PlayerAttackAction _playerAttack;
+    PlayerStayEat _playerStayEat;
 
     //映像やアニメーションのイベントフラグ
     public static bool Event = false;
@@ -350,6 +346,7 @@ class PlayerData : MonoBehaviour
         _playerRemoveDango = new(_dangos, _dangoUISC, this, _animator);
         _playerMove = new(_animator);
         _playerJump = new(rb, OnJump, OnJumpExit, _animator);
+        _playerStayEat = new(this);
     }
 
     private void OnEnable()
@@ -362,7 +359,7 @@ class PlayerData : MonoBehaviour
         InputSystemManager.Instance.onFirePerformed += _playerRemoveDango.Remove;
         InputSystemManager.Instance.onAttackPerformed += OnAttack;
         InputSystemManager.Instance.onEatDangoPerformed += OnEatDango;
-        InputSystemManager.Instance.onEatDangoCanceled += () => _hasStayedEat = false;
+        InputSystemManager.Instance.onEatDangoCanceled += OnEatDangoCanceled;
         InputSystemManager.Instance.onJumpPerformed += _playerJump.OnStayJumping;
         InputSystemManager.Instance.onJumpCanceled += _playerJump.Jump;
         makerUI.SetActive(false);
@@ -386,7 +383,7 @@ class PlayerData : MonoBehaviour
         InputSystemManager.Instance.onFirePerformed -= _playerRemoveDango.Remove;
         InputSystemManager.Instance.onAttackPerformed -= OnAttack;
         InputSystemManager.Instance.onEatDangoPerformed -= OnEatDango;
-        InputSystemManager.Instance.onEatDangoCanceled -= () => _hasStayedEat = false;
+        InputSystemManager.Instance.onEatDangoCanceled -= OnEatDangoCanceled;
         InputSystemManager.Instance.onJumpPerformed -= _playerJump.OnStayJumping;
         InputSystemManager.Instance.onJumpCanceled -= _playerJump.Jump;
     }
@@ -444,13 +441,20 @@ class PlayerData : MonoBehaviour
         }
 
         SoundManager.Instance.PlaySE(Random.Range((int)SoundSource.VOISE_PRINCE_STAYEAT01, (int)SoundSource.VOISE_PRINCE_STAYEAT02 + 1));
+        SoundManager.Instance.PlaySE(SoundSource.SE5_PLAYER_STAY_EATDANGO);
         _hasStayedEat = true;
+    }
+
+    private void OnEatDangoCanceled()
+    {
+        _hasStayedEat = false;
+        SoundManager.Instance.StopSE(SoundSource.SE5_PLAYER_STAY_EATDANGO);
     }
 
     private void EatDango()
     {
         //SE
-        //GameManager.SoundManager.PlaySE(SoundSource.SE_PLAYER_EATDANGO);
+        SoundManager.Instance.PlaySE(SoundSource.SE6_CREATE_ROLE_CHARACTER_ANIMATION);
 
         _hasStayedEat = false;
 
@@ -460,14 +464,8 @@ class PlayerData : MonoBehaviour
         //演出関数の呼び出し
         _directing.Dirrecting(_dangos);
 
-        _playerUIManager.EventText.TextData.SetText("食べた！" + (int)score + "点！");
-
-
         //満腹度を上昇
-        //_satiety += score * SCORE_TIME_RATE;
-
-        //スコアを上昇
-        GameManager.GameScore += score * 100f;
+        _satiety += score;
 
         //串をクリア。
         _dangos.Clear();
@@ -487,14 +485,14 @@ class PlayerData : MonoBehaviour
     {
         InputSystemManager.Instance.onFirePerformed -= _playerRemoveDango.Remove;
         InputSystemManager.Instance.onEatDangoPerformed -= OnEatDango;
-        InputSystemManager.Instance.onEatDangoCanceled -= () => _hasStayedEat = false;
+        InputSystemManager.Instance.onEatDangoCanceled -= OnEatDangoCanceled;
     }
 
     private void OnJumpExit()
     {
         InputSystemManager.Instance.onFirePerformed += _playerRemoveDango.Remove;
         InputSystemManager.Instance.onEatDangoPerformed += OnEatDango;
-        InputSystemManager.Instance.onEatDangoCanceled += () => _hasStayedEat = false;
+        InputSystemManager.Instance.onEatDangoCanceled += OnEatDangoCanceled;
     }
 
 #if UNITY_EDITOR

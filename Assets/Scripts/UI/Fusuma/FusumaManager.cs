@@ -114,6 +114,8 @@ class FusumaManager : MonoBehaviour
 
     private void SetPos()
     {
+        if (_fusumas == null) return;
+
         _fusumas[0].transform.localPosition = _fusuma0Pos;
         _fusumas[1].transform.localPosition = _fusuma1Pos;
         _fusumas[2].transform.localPosition = _fusuma2Pos;

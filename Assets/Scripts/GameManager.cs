@@ -9,9 +9,7 @@ using UnityEngine.Windows;
 [RequireComponent(typeof(GameStartManager))]
 internal class GameManager : MonoBehaviour
 {
-    public static float GameScore { get; set; } = 0;
     public static bool GameClearFrag =false;
-
     [SerializeField] PlayerData _playerData;
 
     #region statePattern
@@ -143,17 +141,7 @@ internal class GameManager : MonoBehaviour
 
     private void FinishGame()
     {
-        int madeCount = 0;
-        var posRoles = DangoRole.instance.GetPosRoles();
-
-        foreach (var posRole in posRoles)
-        {
-            if (posRole.GetMadeCount() > 0)
-            {
-                madeCount++;
-            }
-        }
-
-        Logger.Log("–‘«“xF" + GameScore * madeCount);
+        InputSystemManager.Instance.onPausePerformed -= OnPause;
+        SceneSystem.Instance.Load(SceneSystem.Scenes.GameOver);
     }
 }

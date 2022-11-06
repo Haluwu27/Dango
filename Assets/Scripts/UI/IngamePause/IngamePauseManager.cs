@@ -40,6 +40,8 @@ public class IngamePauseManager : MonoBehaviour
     {
         //TODOÅFBGMÇâ∫Ç∞ÇÈ
         //TODOÅFÇ⁄Ç©ÇµÇì¸ÇÍÇÈ
+        Time.timeScale = 0;
+
         _currentIngameChoice = 0;
         _currentWarningChoice = 0;
 
@@ -55,6 +57,8 @@ public class IngamePauseManager : MonoBehaviour
 
     private void OnExit()
     {
+        Time.timeScale = 1f;
+
         InputSystemManager.Instance.onNavigatePerformed -= OnNavigate;
         InputSystemManager.Instance.onChoicePerformed -= OnChoicePerformed;
         InputSystemManager.Instance.onBackPerformed -= OnBack;
