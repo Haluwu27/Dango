@@ -516,26 +516,26 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 3a21f1e6f55ba9e428c4c585bdb3fd49, type: 3}
   - {fileID: 8300000, guid: 3a21f1e6f55ba9e428c4c585bdb3fd49, type: 3}
   SEClip:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 8300000, guid: 4e0bdb68c52d81e459c02762bde97dac, type: 3}
+  - {fileID: 8300000, guid: 4e0bdb68c52d81e459c02762bde97dac, type: 3}
+  - {fileID: 8300000, guid: 10999c238b2c7c9449cb46a56452d833, type: 3}
+  - {fileID: 8300000, guid: 10999c238b2c7c9449cb46a56452d833, type: 3}
+  - {fileID: 8300000, guid: 754061f8030e0064bba10877b1400d97, type: 3}
+  - {fileID: 8300000, guid: 2c1c937bcd2673e49bea6b7baa819c1b, type: 3}
   - {fileID: 8300000, guid: a51193c02a0b0f14dbf32efde24dd538, type: 3}
-  - {fileID: 0}
+  - {fileID: 8300000, guid: c80accd6b3705e74196bd650a79de8f4, type: 3}
   - {fileID: 8300000, guid: 47e190e8a12fafb4eb27367c5a83c376, type: 3}
   - {fileID: 8300000, guid: 86bd9b75329e37345a0be8b70a150f1e, type: 3}
   - {fileID: 8300000, guid: 9d320646db7b4fb4e8e0549d0bb54439, type: 3}
-  - {fileID: 0}
+  - {fileID: 8300000, guid: 2c1c937bcd2673e49bea6b7baa819c1b, type: 3}
   - {fileID: 8300000, guid: 2e7821a07cd9ab04fbc489cf117a05df, type: 3}
   - {fileID: 8300000, guid: f884590b7ecfd624fabd1f3297879090, type: 3}
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 8300000, guid: 3ac3f6baf189cd04daa83d7e6cc7b0f2, type: 3}
+  - {fileID: 8300000, guid: c80accd6b3705e74196bd650a79de8f4, type: 3}
   - {fileID: 8300000, guid: cae90ff0bf1abe4458788391cc2e5206, type: 3}
   - {fileID: 8300000, guid: 9c19f2f43ce7a1445a576126a5be0d48, type: 3}
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 8300000, guid: c80accd6b3705e74196bd650a79de8f4, type: 3}
+  - {fileID: 8300000, guid: c80accd6b3705e74196bd650a79de8f4, type: 3}
   - {fileID: 8300000, guid: bf62a5a2b464b104f92045e4153e1daf, type: 3}
   _audioMixer: {fileID: 24100000, guid: 86efab4fcdca0c74fb242dd7926f8cc6, type: 2}
 --- !u!114 &1271659320
