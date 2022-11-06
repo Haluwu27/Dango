@@ -29,7 +29,7 @@ namespace TM.Entity.Player
 
         private bool IsWaitingFallAttackAnimation()
         {
-            return !_animator.GetCurrentAnimatorStateInfo(0).IsName("FallAction");
+            return _animator.GetCurrentAnimatorStateInfo(0).IsName("FallActionLanding");
         }
 
         private bool IsWaitingOnGround()

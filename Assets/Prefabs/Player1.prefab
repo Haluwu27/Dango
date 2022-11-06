@@ -78,7 +78,6 @@ MonoBehaviour:
   Mask:
     serializedVersion: 2
     m_Bits: 128
-  objects: []
 --- !u!1 &143415277910200648
 GameObject:
   m_ObjectHideFlags: 0
@@ -138,14 +137,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 0, b: 0, a: 1}
-  m_RaycastTarget: 1
+  m_Color: {r: 0.4740572, g: 1, b: 0, a: 1}
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
+  m_Sprite: {fileID: 21300000, guid: 2a1612b6e4be2e0478b8f26c6c336d69, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -1107,6 +1106,19 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 128
   minFootstepInterval: 0.5
+--- !u!114 &3677965581762852519
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 779374474397810444}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 807c0e77034a3ea44aaec3f092d88c33, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  eatCamera: {fileID: 0}
 --- !u!114 &4455526093197044745
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1125,19 +1137,6 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 128
   minFootstepInterval: 0.5
---- !u!114 &3677965581762852519
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 779374474397810444}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 807c0e77034a3ea44aaec3f092d88c33, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  eatCamera: {fileID: 0}
 --- !u!4 &1364733326565307387 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1504497630619513254, guid: a1bb4c6ae44e6a64aabcfc45b4a26a4e,

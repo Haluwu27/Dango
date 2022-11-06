@@ -28,6 +28,9 @@ public class SpitManager : MonoBehaviour
         set
         {
             _capsuleCollider.enabled = value;
+            if (player.IsGround) _capsuleCollider.radius = 0.5f;
+            else _capsuleCollider.radius = 0.1f;
+
             _isSticking = value;
         }
     }
