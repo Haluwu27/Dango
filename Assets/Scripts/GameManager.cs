@@ -10,6 +10,7 @@ using UnityEngine.Windows;
 internal class GameManager : MonoBehaviour
 {
     public static float GameScore { get; set; } = 0;
+    public static bool GameClearFrag =false;
 
     [SerializeField] PlayerData _playerData;
 

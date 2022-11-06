@@ -364,14 +364,15 @@ namespace Dango.Quest
             _manager.Player.AddSatiety(quest.RewardTime);
             _manager.CreateExpansionUIObj();
 
+            ScoreManager.Instance.AddClearTime(ScoreManager.Instance.SetQuestTime());
+            ScoreManager.Instance.AddClearQuest(quest);
             //このフレームで判定は行わないようにする処理
             isSucceedThisFrame = true;
             SetBoolAfterOneFrame(false).Forget();
 
             if (quest.IsKeyQuest)
             {
-                SceneSystem.Instance.Load(SceneSystem.Scenes.Success);
-                //TODO:S7に遷移
+                GameManager.GameClearFrag = true;
             }
 
             Logger.Log(quest.QuestName + " クエストクリア！");

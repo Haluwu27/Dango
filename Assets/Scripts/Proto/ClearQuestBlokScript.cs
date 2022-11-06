@@ -19,6 +19,6 @@ public class ClearQuestBlokScript : MonoBehaviour
     public void SetText(QuestData data,float time)
     {
         nameText.TextData.SetText(data.QuestName);
-        timeText.TextData.SetText(time.ToString());
+        timeText.TextData.SetText(time.ToString("f1"));
     }
 }

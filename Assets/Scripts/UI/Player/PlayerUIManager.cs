@@ -21,7 +21,7 @@ public class PlayerUIManager : MonoBehaviour
 
     private Image[] w_imgs;
 
-    [SerializeField] GameObject[] ErasewithEatObj = new GameObject[3];
+    [SerializeField] GameObject[] ErasewithEatObj = new GameObject[3];//HŽ–‚µ‚½Û‚É‚«‚¦‚éUI 
 
     private bool[] warningbool = new bool[3];
     public TextUIData EventText => eventText;
@@ -52,7 +52,7 @@ public class PlayerUIManager : MonoBehaviour
     private void Update()
     {
         currentTime = time;
-
+        ScoreManager.Instance.AddTime(Time.deltaTime);
         Warning();
 
         for (int i = 0; i < timeGage.Length; i++)//ƒQ[ƒW‚Ì‘Œ¸
