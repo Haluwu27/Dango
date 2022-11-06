@@ -45,6 +45,8 @@ public class IngamePauseManager : MonoBehaviour
         _currentIngameChoice = 0;
         _currentWarningChoice = 0;
 
+        SceneSystem.Instance.Load(SceneSystem.Instance.CurrentIngameScene);
+
         InputSystemManager.Instance.onNavigatePerformed += OnNavigate;
         InputSystemManager.Instance.onChoicePerformed += OnChoicePerformed;
         InputSystemManager.Instance.onBackPerformed += OnBack;
@@ -118,6 +120,7 @@ public class IngamePauseManager : MonoBehaviour
             case IngameChoices.Settings:
                 SceneSystem.Instance.Load(SceneSystem.Scenes.Option);
                 SceneSystem.Instance.UnLoad(SceneSystem.Scenes.InGamePause, false);
+                SceneSystem.Instance.UnLoad(SceneSystem.Instance.CurrentIngameScene, false);
                 OnExit();
                 break;
 
@@ -174,7 +177,6 @@ public class IngamePauseManager : MonoBehaviour
         InputSystemManager.Instance.Input.SwitchCurrentActionMap("Player");
         OnExit();
 
-        //UnLoadだと効率悪いからcanvasの非アクティブにしたい。ただロード処理がなぁ。って感じ
         SceneSystem.Instance.UnLoad(SceneSystem.Scenes.InGamePause, false);
 
         ResetBGMAndBlur();
