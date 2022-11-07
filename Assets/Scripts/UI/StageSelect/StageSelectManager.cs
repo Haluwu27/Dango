@@ -62,11 +62,14 @@ public class StageSelectManager : MonoBehaviour
 
     private async void OnChoiced()
     {
+        if (_isChange) return;
         if (!_stages[(int)_currentStage].IsRelease)
         {
             SoundManager.Instance.PlaySE(SoundSource.SE7_CANT_STAB_DANGO);
             return;
         }
+
+        _isChange = true;
 
         SoundManager.Instance.PlaySE(SoundSource.SE17_UI_DECISION);
         await _fusumaManager.UniTaskClose();

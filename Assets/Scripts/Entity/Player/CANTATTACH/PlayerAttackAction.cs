@@ -34,6 +34,7 @@ namespace TM.Entity.Player
 
         private bool IsWaitingOnGround()
         {
+            Logger.Log("‚¤‚²‚¢‚Ä‚Ü‚·");
             //“Ë‚«h‚µ’†i‚à‚Æ‚É–ß‚é‘Ò‹@’†j‚È‚ç
             if (++_currentTime < ATTACK_FRAME)
             {
