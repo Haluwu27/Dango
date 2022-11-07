@@ -249,6 +249,7 @@ class PlayerData : MonoBehaviour
     [SerializeField] SpitManager spitManager = default!;
     [SerializeField] GameObject makerUI = default!;
     [SerializeField] GameObject rangeUI = default!;
+    [SerializeField] FootObjScript footObj = default!;
 
     //UI関連
     [SerializeField] RoleDirectingScript _directing;
@@ -371,6 +372,7 @@ class PlayerData : MonoBehaviour
         UpdateState();
         FallActionMaker();
         RangeUI();
+        Logger.Log(IsGround);
     }
 
     private void FixedUpdate()
@@ -579,8 +581,8 @@ class PlayerData : MonoBehaviour
 
     private void IsGrounded()
     {
-        var ray = new Ray(new(transform.position.x, transform.position.y + capsuleCollider.height / 2f, transform.position.z), Vector3.down);
-        IsGround = Physics.Raycast(ray, capsuleCollider.height / 1.5f);
+        //var ray = new Ray(new(transform.position.x, transform.position.y + capsuleCollider.height / 2f, transform.position.z), Vector3.down);
+        IsGround = footObj.GetIsGround(); /*Physics.Raycast(ray, capsuleCollider.height / 1.5f);*/
         _animator.SetBool(_isGroundHash, IsGround);
 
         Debug.DrawRay(new Vector3(transform.position.x,transform.position.y + capsuleCollider.height / 2f,transform.position.z), Vector3.down, Color.red);
