@@ -2,12 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class DangoUIScript : MonoBehaviour
 {
     [SerializeField] GameObject[] Objs;
     [SerializeField] Sprite[] DangoImags;
-
+    [SerializeField] TextMeshProUGUI Text;
+    [SerializeField] PlayerData PlayerData;
     private Image[] DangoImagObjs;
 
     private void Start()
@@ -18,6 +20,10 @@ public class DangoUIScript : MonoBehaviour
             DangoImagObjs[i] = Objs[i].GetComponent<Image>();
             Objs[i].SetActive(false);
         }
+    }
+    private void Update()
+    {
+        Text.text = PlayerData.GetMaxDango().ToString();
     }
     public void DangoUISet(List<DangoColor> dangos)
     {
