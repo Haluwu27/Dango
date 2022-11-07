@@ -7,26 +7,33 @@ public class CameraController : MonoBehaviour
 {
     [SerializeField] Camera MainCam;
     [SerializeField] Camera EatCam;
+    [SerializeField] GameObject EatCamCube;
     [SerializeField] LayerMask LayerMask;
 
     void Start()
     {
-        MainCam.gameObject.SetActive(true);
-        EatCam.gameObject.SetActive(false);
+        MainCam.enabled = true;
+
+        EatCam.enabled = false;
+        EatCamCube.SetActive(false);
     }
 
     public void OnEat()
     {
-        EatCam.gameObject.SetActive(true);
-        MainCam.gameObject.SetActive(false);
+        EatCam.enabled = true;
+        EatCamCube.SetActive(true);
+
+        MainCam.enabled = false;
 
         PlayerData.Event = true;
     }
 
     public void OffEat()
     {
-        MainCam.gameObject.SetActive(true);
-        EatCam.gameObject.SetActive(false);
+        MainCam.enabled = true;
+
+        EatCam.enabled = false;
+        EatCamCube.SetActive(false);
 
         PlayerData.Event = false;
     }

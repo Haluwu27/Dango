@@ -212,6 +212,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   eatCamera: {fileID: 4949754110901319488}
+--- !u!1 &1108401972024454032 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 133535671825098961, guid: 778aacd95f2f72d4eaff394bcf22a5d0,
+    type: 3}
+  m_PrefabInstance: {fileID: 1061649141599716161}
+  m_PrefabAsset: {fileID: 0}
 --- !u!20 &1203561250851844236 stripped
 Camera:
   m_CorrespondingSourceObject: {fileID: 2164072874612405197, guid: 778aacd95f2f72d4eaff394bcf22a5d0,
@@ -244,6 +250,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   MainCam: {fileID: 1061649141369810905}
   EatCam: {fileID: 1203561250851844236}
+  EatCamCube: {fileID: 1108401972024454032}
   LayerMask:
     serializedVersion: 2
     m_Bits: 128

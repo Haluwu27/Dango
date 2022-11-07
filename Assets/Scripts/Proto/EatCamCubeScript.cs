@@ -17,6 +17,9 @@ public class EatCamCubeScript : MonoBehaviour
     {
         if (col.TryGetComponent(out Renderer rend))
         {
+            //ƒtƒƒA‚Ìê‡‚Í’e‚­
+            if (col.GetComponent<FloorData>()) return;
+
             _rend.Add(rend);
             rend.enabled = false;
         }
