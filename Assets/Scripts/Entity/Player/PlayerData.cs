@@ -250,6 +250,7 @@ class PlayerData : MonoBehaviour
     [SerializeField] GameObject makerUI = default!;
     [SerializeField] GameObject rangeUI = default!;
     [SerializeField] FootObjScript footObj = default!;
+    [SerializeField] PlayerKusiScript kusiObj = default!;
 
     //UI関連
     [SerializeField] RoleDirectingScript _directing;
@@ -344,7 +345,7 @@ class PlayerData : MonoBehaviour
     {
         _playerAttack = new(_attackRangeImage, this, _animator);
         _playerFall = new(capsuleCollider, OnJump, OnJumpExit);
-        _playerRemoveDango = new(_dangos, _dangoUISC, this, _animator);
+        _playerRemoveDango = new(_dangos, _dangoUISC, this, _animator,kusiObj);
         _playerMove = new(_animator);
         _playerJump = new(rb, OnJump, OnJumpExit, _animator);
         _playerStayEat = new(this);
@@ -372,7 +373,6 @@ class PlayerData : MonoBehaviour
         UpdateState();
         FallActionMaker();
         RangeUI();
-        Logger.Log(IsGround);
     }
 
     private void FixedUpdate()
@@ -474,6 +474,10 @@ class PlayerData : MonoBehaviour
 
         //UI更新
         _dangoUISC.DangoUISet(_dangos);
+
+        //串の団子変更
+        kusiObj.SetDango(_dangos);
+
         //一部UIの非表示
         _playerUIManager.EatDangoUI_False();
     }

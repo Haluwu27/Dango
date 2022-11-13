@@ -837,7 +837,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 1893
+  m_VersionIndex: 2472
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -1540,7 +1540,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 1397
+  m_VersionIndex: 1976
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -2744,7 +2744,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 2152
+  m_VersionIndex: 2731
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -3103,7 +3103,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 1650
+  m_VersionIndex: 2229
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -24961,7 +24961,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 1246
+  m_VersionIndex: 1825
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -25477,7 +25477,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 1629
+  m_VersionIndex: 2208
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -25895,7 +25895,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 1165
+  m_VersionIndex: 1744
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -26835,7 +26835,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 2767
+  m_VersionIndex: 3349
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -27194,7 +27194,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 1114
+  m_VersionIndex: 1693
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -29774,7 +29774,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 2931
+  m_VersionIndex: 3510
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -30835,7 +30835,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 2656
+  m_VersionIndex: 3238
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -32685,6 +32685,48 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 5349642372761265462}
     m_Modifications:
+    - target: {fileID: 1025827715420559026, guid: e00667b9f080330498c4b7b845c69a76,
+        type: 3}
+      propertyPath: dangoData.Array.data[1]
+      value: 
+      objectReference: {fileID: 6403036692114857129, guid: 070b29b78fe0e7543aba61e4cd235917,
+        type: 3}
+    - target: {fileID: 1025827715420559026, guid: e00667b9f080330498c4b7b845c69a76,
+        type: 3}
+      propertyPath: dangoData.Array.data[2]
+      value: 
+      objectReference: {fileID: 601000137170305104, guid: 293d4a6b30cc3944cb2c8b4808470d7e,
+        type: 3}
+    - target: {fileID: 1025827715420559026, guid: e00667b9f080330498c4b7b845c69a76,
+        type: 3}
+      propertyPath: dangoData.Array.data[3]
+      value: 
+      objectReference: {fileID: 1092490999496011203, guid: 5af95ece69eea8b41801673e2ba7516f,
+        type: 3}
+    - target: {fileID: 1025827715420559026, guid: e00667b9f080330498c4b7b845c69a76,
+        type: 3}
+      propertyPath: dangoData.Array.data[4]
+      value: 
+      objectReference: {fileID: 5725407553387554074, guid: aeada2e7ff910f34f83d476c5e6875f2,
+        type: 3}
+    - target: {fileID: 1025827715420559026, guid: e00667b9f080330498c4b7b845c69a76,
+        type: 3}
+      propertyPath: dangoData.Array.data[5]
+      value: 
+      objectReference: {fileID: 1549228265997826346, guid: c8605210221ca9f4c9ef14e50cbd191d,
+        type: 3}
+    - target: {fileID: 1025827715420559026, guid: e00667b9f080330498c4b7b845c69a76,
+        type: 3}
+      propertyPath: dangoData.Array.data[6]
+      value: 
+      objectReference: {fileID: 3743063075843171441, guid: 849dfef022423bb4ca0478ca14d5a987,
+        type: 3}
+    - target: {fileID: 1025827715420559026, guid: e00667b9f080330498c4b7b845c69a76,
+        type: 3}
+      propertyPath: dangoData.Array.data[7]
+      value: 
+      objectReference: {fileID: 7570121363661589707, guid: 079b032da357e884eaed82393356728e,
+        type: 3}
     - target: {fileID: 1061649141369810906, guid: e00667b9f080330498c4b7b845c69a76,
         type: 3}
       propertyPath: parent
@@ -32749,6 +32791,21 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: PlayerParent
+      objectReference: {fileID: 0}
+    - target: {fileID: 2326004508121731945, guid: e00667b9f080330498c4b7b845c69a76,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3088105283329085280, guid: e00667b9f080330498c4b7b845c69a76,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0.101
+      objectReference: {fileID: 0}
+    - target: {fileID: 3088105283329085280, guid: e00667b9f080330498c4b7b845c69a76,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.187
       objectReference: {fileID: 0}
     - target: {fileID: 4062595608074469455, guid: e00667b9f080330498c4b7b845c69a76,
         type: 3}
