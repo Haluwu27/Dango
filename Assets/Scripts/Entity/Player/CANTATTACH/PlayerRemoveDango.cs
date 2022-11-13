@@ -11,6 +11,7 @@ namespace TM.Entity.Player
         DangoUIScript _dangoUIScript;
         PlayerData _playerData;
         Animator _animator;
+        PlayerKusiScript _kusiScript;
 
         const float ANIMATION_TIME = 1f;
         
@@ -26,12 +27,13 @@ namespace TM.Entity.Player
 
         public bool IsCoolDown => _isCoolDown;
 
-        public PlayerRemoveDango(List<DangoColor> dangos, DangoUIScript dangoUIScript, PlayerData playerData, Animator animator)
+        public PlayerRemoveDango(List<DangoColor> dangos, DangoUIScript dangoUIScript, PlayerData playerData, Animator animator,PlayerKusiScript kusit)
         {
             _dangos = dangos;
             _dangoUIScript = dangoUIScript;
             _playerData = playerData;
             _animator = animator;
+            _kusiScript = kusit;
         }
 
         //団子弾(取り外し)
@@ -63,6 +65,9 @@ namespace TM.Entity.Player
 
             //UI更新
             _dangoUIScript.DangoUISet(_dangos);
+
+            //串の団子変更
+            _kusiScript.SetDango(_dangos);
         }
 
         private async UniTask CoolTime()
