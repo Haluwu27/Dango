@@ -7,25 +7,27 @@ namespace TM.Entity.Player
 {
     class PlayerRemoveDango
     {
-        //ƒXƒe[ƒg‘JˆÚ—p
+        //ï¿½Xï¿½eï¿½[ï¿½gï¿½Jï¿½Ú—p
         bool _hasRemoveDango = false;
 
         List<DangoColor> _dangos;
         DangoUIScript _dangoUIScript;
         PlayerData _playerData;
         Animator _animator;
+        PlayerKusiScript _kusiScript;
 
-        //•‚—V—Í
+        //ï¿½ï¿½ï¿½Vï¿½ï¿½
         const float FLOATING_POWER = 3f;
 
         public bool HasRemoveDango => _hasRemoveDango;
 
-        public PlayerRemoveDango(List<DangoColor> dangos, DangoUIScript dangoUIScript, PlayerData playerData, Animator animator)
+        public PlayerRemoveDango(List<DangoColor> dangos, DangoUIScript dangoUIScript, PlayerData playerData, Animator animator,PlayerKusiScript kusit)
         {
             _dangos = dangos;
             _dangoUIScript = dangoUIScript;
             _playerData = playerData;
             _animator = animator;
+            _kusiScript = kusit;
         }
 
         public void OnPerformed()
@@ -40,34 +42,37 @@ namespace TM.Entity.Player
             _hasRemoveDango = false;
         }
 
-        //’cq’e(æ‚èŠO‚µ)
+        //ï¿½cï¿½qï¿½e(ï¿½ï¿½ï¿½Oï¿½ï¿½)
         public void Remove()
         {
-            //‹ø‚É‰½‚à‚È‚©‚Á‚½‚çÀs‚µ‚È‚¢B
+            //ï¿½ï¿½ï¿½É‰ï¿½ï¿½ï¿½ï¿½È‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½sï¿½ï¿½ï¿½È‚ï¿½ï¿½B
             if (_dangos.Count == 0) return;
 
-            //‹ó’†‚És‚¤ˆ—
+            //ï¿½ó’†ï¿½ï¿½Ésï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
             if (!_playerData.IsGround)
             {
                 _playerData.Rb.velocity = _playerData.Rb.velocity.SetY(FLOATING_POWER);
             }
 
-            //[Debug]‰½‚ªÁ‚¦‚½‚©‚í‚©‚é‚â‚Â
-            //¡‚Ü‚Å‚ÍAdangos[dangos.Count - 1]‚Æ‚µ‚È‚¯‚ê‚Î‚È‚è‚Ü‚¹‚ñ‚Å‚µ‚½‚ªA
-            //C#8.0ˆÈ~‚Å‚ÍˆÈ‰º‚Ì‚æ‚¤‚ÉÈ—ª‚Å‚«‚é‚æ‚¤‚Å‚·B
-            //–â‘è‚ÍA‚±‚ê‚ğ’m‚ç‚È‚¢l‚ª“Ç‚Ş‚Æ‚í‚¯‚ª•ª‚©‚ç‚È‚¢B
+            //[Debug]ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½í‚©ï¿½ï¿½ï¿½ï¿½
+            //ï¿½ï¿½ï¿½Ü‚Å‚ÍAdangos[dangos.Count - 1]ï¿½Æ‚ï¿½ï¿½È‚ï¿½ï¿½ï¿½Î‚È‚ï¿½Ü‚ï¿½ï¿½ï¿½Å‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½A
+            //C#8.0ï¿½È~ï¿½Å‚ÍˆÈ‰ï¿½ï¿½Ì‚æ‚¤ï¿½ÉÈ—ï¿½ï¿½Å‚ï¿½ï¿½ï¿½æ‚¤ï¿½Å‚ï¿½ï¿½B
+            //ï¿½ï¿½ï¿½ÍAï¿½ï¿½ï¿½ï¿½ï¿½mï¿½ï¿½È‚ï¿½ï¿½lï¿½ï¿½ï¿½Ç‚Ş‚Æ‚í‚¯ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È‚ï¿½ï¿½B
             Logger.Log(_dangos[^1]);
 
             //SE
             SoundManager.Instance.PlaySE(SoundSource.SE9_REMOVE_DANGO);
 
-            //Á‚·ˆ—B
+            //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½B
             _dangos.RemoveAt(_dangos.Count - 1);
 
-            //UIXV
+            //UIï¿½Xï¿½V
             _dangoUIScript.DangoUISet(_dangos);
 
             _hasRemoveDango = false;
+            
+            //ï¿½ï¿½ï¿½Ì’cï¿½qï¿½ÏX
+            _kusiScript.SetDango(_dangos);
         }
 
         public bool IsStayCoolTime()

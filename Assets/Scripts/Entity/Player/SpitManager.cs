@@ -9,6 +9,7 @@ public class SpitManager : MonoBehaviour
     DangoUIScript DangoUISC;
 
     [SerializeField] FloorManager _floorManager;
+    [SerializeField] PlayerKusiScript kusiScript;
 
     private void Awake()
     {
@@ -75,6 +76,9 @@ public class SpitManager : MonoBehaviour
 
             //UIの更新
             DangoUISC.DangoUISet(player.GetDangos());
+
+            //串の団子変更
+            kusiScript.SetDango(player.GetDangos());
 
             //刺せ無くする
             IsSticking = false;

@@ -437,6 +437,7 @@ class PlayerData : MonoBehaviour
     [SerializeField] GameObject makerUI = default!;
     [SerializeField] GameObject rangeUI = default!;
     [SerializeField] FootObjScript footObj = default!;
+    [SerializeField] PlayerKusiScript kusiObj = default!;
 
     //UI関連
     [SerializeField] RoleDirectingScript _directing;
@@ -530,7 +531,7 @@ class PlayerData : MonoBehaviour
 
         _playerAttack = new(_attackRangeImage, _animator);
         _playerFall = new(capsuleCollider, OnJump, OnJumpExit, _animationManager);
-        _playerRemoveDango = new(_dangos, _dangoUISC, this, _animator);
+        _playerRemoveDango = new(_dangos, _dangoUISC, this, _animator,kusiObj);
         _playerMove = new(_animationManager);
         _playerJump = new(rb, OnJump, OnJumpExit);
         _playerStayEat = new(this);
