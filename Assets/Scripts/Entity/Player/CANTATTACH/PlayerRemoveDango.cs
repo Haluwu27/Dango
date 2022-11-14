@@ -7,25 +7,19 @@ namespace TM.Entity.Player
 {
     class PlayerRemoveDango
     {
+        //ï¿½Xï¿½eï¿½[ï¿½gï¿½Jï¿½Ú—p
+        bool _hasRemoveDango = false;
+
         List<DangoColor> _dangos;
         DangoUIScript _dangoUIScript;
         PlayerData _playerData;
         Animator _animator;
         PlayerKusiScript _kusiScript;
 
-        const float ANIMATION_TIME = 1f;
-        
-        //•‚—V—Í
+        //ï¿½ï¿½ï¿½Vï¿½ï¿½
         const float FLOATING_POWER = 3f;
 
-        bool _isPressFire;
-        bool _isCoolDown;
-
-        int _dangoRemovingHash = Animator.StringToHash("DangoRemoving");
-        int _isPressFireTriggerHash = Animator.StringToHash("IsPressFireTrigger");
-        int _isReleaseFireTriggerHash = Animator.StringToHash("IsReleaseFireTrigger");
-
-        public bool IsCoolDown => _isCoolDown;
+        public bool HasRemoveDango => _hasRemoveDango;
 
         public PlayerRemoveDango(List<DangoColor> dangos, DangoUIScript dangoUIScript, PlayerData playerData, Animator animator,PlayerKusiScript kusit)
         {
@@ -36,72 +30,63 @@ namespace TM.Entity.Player
             _kusiScript = kusit;
         }
 
-        //’cq’e(æ‚èŠO‚µ)
-        public async void Remove()
+        public void OnPerformed()
         {
-            //‹ø‚É‰½‚à‚È‚©‚Á‚½‚çÀs‚µ‚È‚¢B
             if (_dangos.Count == 0) return;
 
-            await CoolTime();
+            _hasRemoveDango = true;
+        }
 
-            _isCoolDown = false;
+        public void OnCanceled()
+        {
+            _hasRemoveDango = false;
+        }
 
-            if (!_isPressFire) return;
+        //ï¿½cï¿½qï¿½e(ï¿½ï¿½ï¿½Oï¿½ï¿½)
+        public void Remove()
+        {
+            //ï¿½ï¿½ï¿½É‰ï¿½ï¿½ï¿½ï¿½È‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½sï¿½ï¿½ï¿½È‚ï¿½ï¿½B
+            if (_dangos.Count == 0) return;
 
-            //AN8BÄ¶
-            _animator.CrossFade(_dangoRemovingHash, 0f);
+            //ï¿½ó’†ï¿½ï¿½Ésï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+            if (!_playerData.IsGround)
+            {
+                _playerData.Rb.velocity = _playerData.Rb.velocity.SetY(FLOATING_POWER);
+            }
 
-            //[Debug]‰½‚ªÁ‚¦‚½‚©‚í‚©‚é‚â‚Â
-            //¡‚Ü‚Å‚ÍAdangos[dangos.Count - 1]‚Æ‚µ‚È‚¯‚ê‚Î‚È‚è‚Ü‚¹‚ñ‚Å‚µ‚½‚ªA
-            //C#8.0ˆÈ~‚Å‚ÍˆÈ‰º‚Ì‚æ‚¤‚ÉÈ—ª‚Å‚«‚é‚æ‚¤‚Å‚·B
-            //–â‘è‚ÍA‚±‚ê‚ğ’m‚ç‚È‚¢l‚ª“Ç‚Ş‚Æ‚í‚¯‚ª•ª‚©‚ç‚È‚¢B
+            //[Debug]ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½í‚©ï¿½ï¿½ï¿½ï¿½
+            //ï¿½ï¿½ï¿½Ü‚Å‚ÍAdangos[dangos.Count - 1]ï¿½Æ‚ï¿½ï¿½È‚ï¿½ï¿½ï¿½Î‚È‚ï¿½Ü‚ï¿½ï¿½ï¿½Å‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½A
+            //C#8.0ï¿½È~ï¿½Å‚ÍˆÈ‰ï¿½ï¿½Ì‚æ‚¤ï¿½ÉÈ—ï¿½ï¿½Å‚ï¿½ï¿½ï¿½æ‚¤ï¿½Å‚ï¿½ï¿½B
+            //ï¿½ï¿½ï¿½ÍAï¿½ï¿½ï¿½ï¿½ï¿½mï¿½ï¿½È‚ï¿½ï¿½lï¿½ï¿½ï¿½Ç‚Ş‚Æ‚í‚¯ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È‚ï¿½ï¿½B
             Logger.Log(_dangos[^1]);
 
             //SE
             SoundManager.Instance.PlaySE(SoundSource.SE9_REMOVE_DANGO);
 
-            //Á‚·ˆ—B
+            //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½B
             _dangos.RemoveAt(_dangos.Count - 1);
 
-            //UIXV
+            //UIï¿½Xï¿½V
             _dangoUIScript.DangoUISet(_dangos);
 
-            //‹ø‚Ì’cq•ÏX
+            _hasRemoveDango = false;
+            
+            //ï¿½ï¿½ï¿½Ì’cï¿½qï¿½ÏX
             _kusiScript.SetDango(_dangos);
         }
 
-        private async UniTask CoolTime()
+        public bool IsStayCoolTime()
         {
-            _isPressFire = InputSystemManager.Instance.IsPressFire;
+            if (!_animator.GetCurrentAnimatorStateInfo(0).IsName("AN8A")) return true;
 
-            if (!_playerData.IsGround)
-            {
-                //‹ó’†‚És‚¤ˆ—
-                _playerData.Rb.velocity = _playerData.Rb.velocity.SetY(FLOATING_POWER);
+            return _animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 1;
+        }
 
-                return;
-            }
+        public bool IsRemoveCoolTime()
+        {
+            if (!_animator.GetCurrentAnimatorStateInfo(0).IsName("AN8B")) return true;
 
-            _isCoolDown = true;
-
-            //AN8AÄ¶
-            _animator.SetTrigger(_isPressFireTriggerHash);
-
-            float time = ANIMATION_TIME;
-
-            while (time > 0)
-            {
-                if (!InputSystemManager.Instance.IsPressFire)
-                {
-                    _isPressFire = InputSystemManager.Instance.IsPressFire;
-                    _animator.SetTrigger(_isReleaseFireTriggerHash);
-                    return;
-                }
-
-                await UniTask.Yield();
-
-                time -= Time.deltaTime;
-            }
+            return _animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 1;
         }
     }
 }

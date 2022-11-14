@@ -13,24 +13,17 @@ namespace TM.Entity.Player
         const float RUN_SPEED_MAG = 10f;
         const float MIN_AXIS_VALUE = 0.1f;
 
-        Animator _animator;
+        AnimationManager _manager;
 
-        public PlayerMove(Animator animator)
+        public PlayerMove(AnimationManager manager)
         {
-            _animator = animator;
+            _manager = manager;
         }
 
-        public void Update(Rigidbody rb, Transform camera, bool isRemoveCoolDown, bool isStayJump)
+        public void Update(Rigidbody rb, Transform camera, bool isWalkState)
         {
-            //—Ž‰º’†‚Æ‚»‚Ì’…’n’†‚ÉˆÚ“®‚Å‚«‚È‚¢‚æ‚¤‚É‚·‚é
-            if (_animator.GetCurrentAnimatorStateInfo(0).IsName("FallAction") || _animator.GetCurrentAnimatorStateInfo(0).IsName("FallActionLanding")) return;
-
             //“ü—Í’l‚ð‘ã“ü
             Vector2 axis = InputSystemManager.Instance.MoveAxis;
-
-            //Animation
-            _animator.SetBool("IsDash", InputSystemManager.Instance.MoveAxis.magnitude > 0.5f && !isRemoveCoolDown);
-            _animator.SetBool("IsWalking", InputSystemManager.Instance.MoveAxis.magnitude > 0);
 
             if (axis.magnitude < MIN_AXIS_VALUE) return;
 
@@ -44,17 +37,26 @@ namespace TM.Entity.Player
             {
                 float mag = Mathf.Sqrt(rb.velocity.x * rb.velocity.x + rb.velocity.z * rb.velocity.z);
                 float speedMag = RUN_SPEED_MAG - mag;
-                rb.AddForce((isRemoveCoolDown || isStayJump ? 0.4f : 1) * speedMag * moveVec, ForceMode.Acceleration);
+                rb.AddForce((isWalkState ? 0.4f : 1) * speedMag * moveVec, ForceMode.Acceleration);
             }
 
             RotateToMoveVec(moveVec, rb);
+        }
+
+        public void Animation()
+        {
+            float mag = InputSystemManager.Instance.MoveAxis.magnitude;
+
+            if (mag > 0.5f) _manager.ChangeAnimation(AnimationManager.E_Animation.An2_Run, 0.2f);
+            else if (mag > 0) _manager.ChangeAnimation(AnimationManager.E_Animation.An10_Walk, 0.2f);
+            else _manager.ChangeAnimation(AnimationManager.E_Animation.An1_Idle, 0.2f); 
         }
 
         private void RotateToMoveVec(Vector3 moveVec, Rigidbody rb)
         {
             if (moveVec.magnitude == 0) return;
             Vector3 lookRot = new(moveVec.x, 0, moveVec.z);
-            rb.transform.localRotation = Quaternion.RotateTowards(rb.transform.rotation, Quaternion.LookRotation(lookRot), 5f);
+            rb.transform.localRotation = Quaternion.RotateTowards(rb.transform.rotation, Quaternion.LookRotation(lookRot), 10f);
         }
     }
 }

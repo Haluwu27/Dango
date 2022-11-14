@@ -21,12 +21,16 @@ namespace TM.Entity.Player
         Action _onFall;
         Action _onFallExit;
 
+        AnimationManager _animationManager;
+
         CapsuleCollider _collider;
-        public PlayerFallAction(CapsuleCollider collider, Action onFall, Action onFallExit)
+
+        public PlayerFallAction(CapsuleCollider collider, Action onFall, Action onFallExit, AnimationManager animationManager)
         {
             _collider = collider;
             _onFall = onFall;
             _onFallExit = onFallExit;
+            _animationManager = animationManager;
         }
 
         public bool ToFallAction(Vector3 playerPos, bool isGround)
@@ -36,12 +40,14 @@ namespace TM.Entity.Player
             Ray ray = new(playerPos, Vector3.down);
 
             //‹ß‚­‚É’n–Ê‚ª‚ ‚é‚©(player‚Ì”¼•ª‚Ì‘å‚«‚³)”»’è
-            return !Physics.Raycast(ray, _collider.height + _collider.height / 2f);
+            return !Physics.Raycast(ray, _collider.height + _collider.height / 2f, 8);
         }
 
         public bool FixedUpdate(Rigidbody rigidbody, SpitManager spitManager)
         {
             if (!IsFallAction) return false;
+
+            _animationManager.ChangeAnimation(AnimationManager.E_Animation.An7A_FallAction, 0.01f);
 
             if (--_currentTime > 0)
             {
@@ -52,11 +58,11 @@ namespace TM.Entity.Player
             //SEÄ¶
             SoundManager.Instance.PlaySE(_rand.Next((int)SoundSource.VOISE_PRINCE_FALL01, (int)SoundSource.VOISE_PRINCE_FALL02 + 1));
             SoundManager.Instance.PlaySE(SoundSource.SE10_FALLACTION);
-            
+
             //—‰ºh‚µˆ—(¿—Ê–³‹‚Å—Í‚ğ‰Á‚¦‚é)
             rigidbody.AddForce(Vector3.down * FALLACTION_FALL_POWER, ForceMode.VelocityChange);
             spitManager.IsSticking = true;
-            
+
             return true;
         }
 

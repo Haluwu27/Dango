@@ -8,8 +8,6 @@ namespace TM.Entity.Player
 {
     class PlayerJump
     {
-        //const float JUMP_POWER = 3.72f * 3.75f / 2.8f * (5f / 6f);
-
         static readonly float[] JUMP_POWER_TABLE = { 11f, 12.5f, 14.5f, 17f, 19f };
 
         Rigidbody _rb;
@@ -20,19 +18,12 @@ namespace TM.Entity.Player
 
         Action _onJump;
         Action _onJumpExit;
-        Animator _animator;
 
-        int an11TriggerHash;
-        int jumpingTriggerHash;
-
-        public PlayerJump(Rigidbody rigidbody, Action onJump, Action onJumpExit, Animator animator)
+        public PlayerJump(Rigidbody rigidbody, Action onJump, Action onJumpExit)
         {
             _rb = rigidbody;
             _onJump = onJump;
             _onJumpExit = onJumpExit;
-            _animator = animator;
-            an11TriggerHash = Animator.StringToHash("AN11Trigger");
-            jumpingTriggerHash = Animator.StringToHash("JumpingTrigger");
         }
 
         public void SetIsGround(bool isGround)
@@ -47,18 +38,15 @@ namespace TM.Entity.Player
 
         public void OnStayJumping()
         {
-            _animator.SetTrigger(an11TriggerHash);
             _isStayJump = true;
         }
 
         public async void Jump()
         {
-            _animator.ResetTrigger(an11TriggerHash);
+            _isStayJump = false;
 
             if (!_isGround) return;
             if (_isJumping) return;
-
-            _isStayJump = false;
 
             //SEの再生
             SoundManager.Instance.PlaySE(UnityEngine.Random.Range((int)SoundSource.VOISE_PRINCE_JUMP01, (int)SoundSource.VOISE_PRINCE_JUMP02 + 1));
@@ -66,21 +54,12 @@ namespace TM.Entity.Player
             SoundManager.Instance.PlaySE(SoundSource.SE19_JUMPCHARGE_START);
             SoundManager.Instance.PlaySE(SoundSource.SE20_JUMPCHARGE_LOOP);
 
-            //アニメーションの再生
-            _animator.SetTrigger(jumpingTriggerHash);
-
             //ベクトルを打ち消しジャンプ
             _isJumping = true;
             _onJump?.Invoke();
 
-
-            //旧来
-            //_rb.velocity = Vector3.zero.SetY(JUMP_POWER * _maxStabCount);
-
             //D5ごとにジャンプ力を個別にする
             _rb.velocity = Vector3.zero.SetY(JUMP_POWER_TABLE[_maxStabCount - 3]);
-
-            //_rb.AddForce(Vector3.up * (JUMP_POWER + _maxStabCount), ForceMode.Impulse);
 
             //自由落下まで待機
             await WaitVelocityYLessZero();
