@@ -8,11 +8,13 @@ namespace TM.Entity.Player
     {
         RoleDirectingScript _roleDirecting;
         PlayerUIManager _playerUIManager;
+        PlayerKusiScript _playerKusiScript;
 
-        public PlayerEat(RoleDirectingScript roleDirecting, PlayerUIManager playerUIManager)
+        public PlayerEat(RoleDirectingScript roleDirecting, PlayerUIManager playerUIManager,PlayerKusiScript kusiScript)
         {
             _roleDirecting = roleDirecting;
             _playerUIManager = playerUIManager;
+            _playerKusiScript = kusiScript;
         }
 
         public void EatDango(PlayerData parent)
@@ -34,6 +36,9 @@ namespace TM.Entity.Player
 
             //UI更新
             parent.GetDangoUIScript().DangoUISet(parent.GetDangos());
+
+            //串の団子変更
+            _playerKusiScript.SetDango(parent.GetDangos());
 
             //一部UIの非表示
             _playerUIManager.EatDangoUI_False();
