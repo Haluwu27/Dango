@@ -7,34 +7,40 @@ namespace TM.Entity.Player
 {
     class PlayerAttackAction
     {
+        public enum AttackPattern
+        {
+            NormalAttack,
+            FallAttack
+        }
+
         const int ATTACK_FRAME = 25;
         const float DEFAULT_HEIGHT = 60f;
 
         int _currentTime = 0;
         ImageUIData _coolDownImage;
-        PlayerData _playerData;
         Animator _animator;
 
-        public PlayerAttackAction(ImageUIData coolDownImage,PlayerData playerData,Animator animator)
+        public PlayerAttackAction(ImageUIData coolDownImage, Animator animator)
         {
             _coolDownImage = coolDownImage;
-            _playerData = playerData;
             _animator = animator;
         }
 
-        public bool FixedUpdate()
+        public bool FixedUpdate(AttackPattern attack)
         {
-            return _playerData.IsGround ? IsWaitingOnGround() : IsWaitingFallAttackAnimation();
+            return attack == AttackPattern.NormalAttack ? IsWaitingOnGround() : IsWaitingFallAttackAnimation();
         }
 
         private bool IsWaitingFallAttackAnimation()
         {
-            return _animator.GetCurrentAnimatorStateInfo(0).IsName("FallActionLanding");
+            var stateInfo = _animator.GetCurrentAnimatorStateInfo(0);
+
+            if (!stateInfo.IsName("AN7B")) return false;
+            return stateInfo.normalizedTime >= 0.7f;
         }
 
         private bool IsWaitingOnGround()
         {
-            Logger.Log("‚¤‚²‚¢‚Ä‚Ü‚·");
             //“Ë‚«h‚µ’†i‚à‚Æ‚É–ß‚é‘Ò‹@’†j‚È‚ç
             if (++_currentTime < ATTACK_FRAME)
             {

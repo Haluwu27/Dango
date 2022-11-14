@@ -17,11 +17,17 @@ class PlayerData : MonoBehaviour
     {
         public enum E_State
         {
-            Control = 0,
-            FallAction = 1,
-            AttackAction = 2,
-            StayEatDango = 3,
-            EatDango = 4,
+            Control,
+            Falling,
+            FallAction,
+            AttackAction,
+            StayEatDango,
+            EatDango,
+            StayJumping,
+            Jumping,
+            Landing,
+            StayRemoveDango,
+            RemoveDango,
 
             Max,
 
@@ -37,10 +43,16 @@ class PlayerData : MonoBehaviour
     private static readonly IState[] states = new IState[(int)IState.E_State.Max]
      {
         new ControlState(),
+        new FallingState(),
         new FallActionState(),
         new AttackActionState(),
         new StayEatDangoState(),
         new EatDangoState(),
+        new StayJumpingState(),
+        new JumpingState(),
+        new LandingState(),
+        new StayRemoveDangoState(),
+        new RemoveDangoState(),
      };
 
     class ControlState : IState
@@ -57,24 +69,54 @@ class PlayerData : MonoBehaviour
         }
         public IState.E_State FixedUpdate(PlayerData parent)
         {
-            parent._animator.SetFloat(parent._velocityYHash, parent.rb.velocity.y);
-
             if (parent._playerJump.IsJumping) return IState.E_State.Unchanged;
 
+            //MoveAnimation
+            parent._playerMove.Animation();
+
             //プレイヤーを動かす処理
-            parent._playerMove.Update(parent.rb, parent.playerCamera.transform, parent._playerRemoveDango.IsCoolDown, parent._playerJump.IsStayJump);
+            parent._playerMove.Update(parent.rb, parent.playerCamera.transform, false);
 
             //満腹度（制限時間）減らす処理
             parent.DecreaseSatiety();
 
-            //ジャンプ
-            parent._playerJump.SetIsGround(parent._isGround);
-            parent._playerJump.SetMaxStabCount(parent._currentStabCount);
-
             //ステートに移行。
+            if (parent._playerRemoveDango.HasRemoveDango) return IState.E_State.StayRemoveDango;
             if (parent._hasStayedEat) return IState.E_State.StayEatDango;
             if (parent._hasAttacked) return IState.E_State.AttackAction;
             if (parent._hasFalled) return IState.E_State.FallAction;
+            if (parent._playerJump.IsStayJump) return IState.E_State.StayJumping;
+            if (parent.rb.velocity.y < -0.1f && !parent.IsGround) return IState.E_State.Falling;
+
+            return IState.E_State.Unchanged;
+        }
+    }
+    class FallingState : IState
+    {
+        public IState.E_State Initialize(PlayerData parent)
+        {
+            parent._animationManager.ChangeAnimation(AnimationManager.E_Animation.An3_FreeFall, 0.1f);
+
+            return IState.E_State.Unchanged;
+        }
+        public IState.E_State Update(PlayerData parent)
+        {
+            return IState.E_State.Unchanged;
+        }
+        public IState.E_State FixedUpdate(PlayerData parent)
+        {
+            //プレイヤーを動かす処理
+            parent._playerMove.Update(parent.rb, parent.playerCamera.transform, true);
+
+            //満腹度（制限時間）減らす処理
+            parent.DecreaseSatiety();
+
+            //ステートに移行
+            if (parent._playerRemoveDango.HasRemoveDango) return IState.E_State.StayRemoveDango;
+            if (parent._hasStayedEat) return IState.E_State.StayEatDango;
+            if (parent.IsGround) return IState.E_State.Landing;
+            if (parent._hasFalled) return IState.E_State.FallAction;
+            if (parent._hasAttacked) return IState.E_State.AttackAction;
 
             return IState.E_State.Unchanged;
         }
@@ -83,7 +125,6 @@ class PlayerData : MonoBehaviour
     {
         public IState.E_State Initialize(PlayerData parent)
         {
-            parent._animator.SetTrigger(parent._fallActionTriggerHash);
             parent._hasFalled = false;
             parent._playerFall.IsFallAction = true;
             return IState.E_State.Unchanged;
@@ -94,9 +135,6 @@ class PlayerData : MonoBehaviour
         }
         public IState.E_State FixedUpdate(PlayerData parent)
         {
-            //移動
-            parent._playerMove.Update(parent.rb, parent.playerCamera.transform, parent._playerRemoveDango.IsCoolDown,parent._playerJump.IsStayJump);
-
             //制限時間減少
             parent.DecreaseSatiety();
 
@@ -110,15 +148,26 @@ class PlayerData : MonoBehaviour
     }
     class AttackActionState : IState
     {
+        PlayerAttackAction.AttackPattern pattern;
+
         public IState.E_State Initialize(PlayerData parent)
         {
             parent._hasAttacked = false;
             SoundManager.Instance.PlaySE(Random.Range((int)SoundSource.VOISE_PRINCE_ATTACK01, (int)SoundSource.VOISE_PRINCE_ATTACK02 + 1));
 
             //急降下アクション中なら団子の数の有無は無視して続行
-            if (parent._playerFall.IsFallAction) return IState.E_State.Unchanged;
+            if (parent._playerFall.IsFallAction)
+            {
+                pattern = PlayerAttackAction.AttackPattern.FallAttack;
+                return IState.E_State.Unchanged;
+            }
 
             if (!parent.CanStab()) return IState.E_State.Control;
+
+            pattern = PlayerAttackAction.AttackPattern.NormalAttack;
+
+            //仮置き仕様。突き刺し時前進する
+            parent.rb.AddForce(parent.transform.forward * 500f, ForceMode.Impulse);
 
             return IState.E_State.Unchanged;
         }
@@ -130,9 +179,8 @@ class PlayerData : MonoBehaviour
         {
             parent.DecreaseSatiety();
 
-            if (parent._playerAttack.FixedUpdate())
+            if (parent._playerAttack.FixedUpdate(pattern))
             {
-                parent._animator.SetBool(parent._isEndWalkHash, InputSystemManager.Instance.MoveAxis.magnitude > 0);
                 return IState.E_State.Control;
             }
 
@@ -145,8 +193,11 @@ class PlayerData : MonoBehaviour
         {
             parent._playerUIManager.EventText.TextData.SetText("食べチャージ中！");
             parent._playerStayEat.ResetCount();
-            //SE推奨
-            parent._animator.SetBool("IsEatingCharge", true);
+
+            SoundManager.Instance.PlaySE(Random.Range((int)SoundSource.VOISE_PRINCE_STAYEAT01, (int)SoundSource.VOISE_PRINCE_STAYEAT02 + 1));
+            SoundManager.Instance.PlaySE(SoundSource.SE5_PLAYER_STAY_EATDANGO);
+
+            parent._animationManager.ChangeAnimationEnforcement(AnimationManager.E_Animation.An4A_EatCharge, 0.1f);
 
             return IState.E_State.Unchanged;
         }
@@ -170,7 +221,6 @@ class PlayerData : MonoBehaviour
             if (!parent._hasStayedEat)
             {
                 parent.StartCoroutine(parent.ResetCameraView());
-                parent._animator.SetBool("IsEatingCharge", false);
                 return IState.E_State.Control;
             }
             return IState.E_State.Unchanged;
@@ -180,9 +230,11 @@ class PlayerData : MonoBehaviour
     {
         public IState.E_State Initialize(PlayerData parent)
         {
-            parent._animator.SetTrigger("EatingTrigger");
-            parent.EatDango();
-            return IState.E_State.Control;
+            parent._animationManager.ChangeAnimationEnforcement(AnimationManager.E_Animation.An4B_Eat, 0);
+            parent._playerEat.EatDango(parent);
+            parent._hasStayedEat = false;
+
+            return IState.E_State.Unchanged;
         }
         public IState.E_State Update(PlayerData parent)
         {
@@ -190,9 +242,144 @@ class PlayerData : MonoBehaviour
         }
         public IState.E_State FixedUpdate(PlayerData parent)
         {
+            return parent._playerEat.WaitAnimationComplete(parent._animator) ? IState.E_State.Control : IState.E_State.Unchanged;
+        }
+
+    }
+    class StayJumpingState : IState
+    {
+        public IState.E_State Initialize(PlayerData parent)
+        {
+            parent._animationManager.ChangeAnimation(AnimationManager.E_Animation.An11B_JumpCharge, 0.2f);
+
+            return IState.E_State.Unchanged;
+        }
+        public IState.E_State Update(PlayerData parent)
+        {
+            return IState.E_State.Unchanged;
+        }
+        public IState.E_State FixedUpdate(PlayerData parent)
+        {
+            if (InputSystemManager.Instance.MoveAxis.magnitude > 0) parent._animationManager.ChangeAnimation(AnimationManager.E_Animation.An11A_JumpCharge_Walk, 0.2f);
+            else parent._animationManager.ChangeAnimation(AnimationManager.E_Animation.An11B_JumpCharge, 0.2f);
+
+            //プレイヤーを動かす処理
+            parent._playerMove.Update(parent.rb, parent.playerCamera.transform, true);
+
+            //満腹度（制限時間）減らす処理
+            parent.DecreaseSatiety();
+
+            //ジャンプ
+            parent._playerJump.SetIsGround(parent._isGround);
+            parent._playerJump.SetMaxStabCount(parent._currentStabCount);
+
+            if (parent._playerJump.IsJumping && !parent._isGround) return IState.E_State.Jumping;
+            if (!parent._isGround) return IState.E_State.Falling;
+
             return IState.E_State.Unchanged;
         }
 
+    }
+    class JumpingState : IState
+    {
+        public IState.E_State Initialize(PlayerData parent)
+        {
+            parent._animationManager.ChangeAnimation(AnimationManager.E_Animation.An6_Jump, 0.06f);
+
+            return IState.E_State.Unchanged;
+        }
+        public IState.E_State Update(PlayerData parent)
+        {
+            return IState.E_State.Unchanged;
+        }
+        public IState.E_State FixedUpdate(PlayerData parent)
+        {
+            //満腹度（制限時間）減らす処理
+            parent.DecreaseSatiety();
+
+            if (parent.IsGround) return IState.E_State.Landing;
+            if (parent.rb.velocity.y < -0.1f && !parent.IsGround) return IState.E_State.Falling;
+
+            return IState.E_State.Unchanged;
+        }
+    }
+    class LandingState : IState
+    {
+        public IState.E_State Initialize(PlayerData parent)
+        {
+            parent._animationManager.ChangeAnimation(AnimationManager.E_Animation.An9_Landing, 0.2f);
+
+            return IState.E_State.Unchanged;
+        }
+        public IState.E_State Update(PlayerData parent)
+        {
+            return IState.E_State.Unchanged;
+        }
+        public IState.E_State FixedUpdate(PlayerData parent)
+        {
+            //満腹度（制限時間）減らす処理
+            parent.DecreaseSatiety();
+
+            if (parent._hasStayedEat) return IState.E_State.StayEatDango;
+            if (InputSystemManager.Instance.MoveAxis.magnitude > 0) return IState.E_State.Control;
+            if (parent._animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1f) return IState.E_State.Control;
+            if (parent._hasAttacked) return IState.E_State.AttackAction;
+            if (parent._playerJump.IsStayJump) return IState.E_State.StayJumping;
+
+            return IState.E_State.Unchanged;
+        }
+
+    }
+    class StayRemoveDangoState : IState
+    {
+        public IState.E_State Initialize(PlayerData parent)
+        {
+            if (!parent.IsGround) return IState.E_State.RemoveDango;
+
+            parent._animationManager.ChangeAnimation(AnimationManager.E_Animation.An8A_DangoRemoveCharge, 0.2f);
+
+            return IState.E_State.Unchanged;
+        }
+        public IState.E_State Update(PlayerData parent)
+        {
+            return IState.E_State.Unchanged;
+        }
+        public IState.E_State FixedUpdate(PlayerData parent)
+        {
+            //プレイヤーを動かす処理
+            parent._playerMove.Update(parent.rb, parent.playerCamera.transform, true);
+
+            //満腹度（制限時間）減らす処理
+            parent.DecreaseSatiety();
+
+            if (!parent._playerRemoveDango.HasRemoveDango) return IState.E_State.Control;
+
+            return parent._playerRemoveDango.IsStayCoolTime() ? IState.E_State.Unchanged : IState.E_State.RemoveDango;
+        }
+    }
+    class RemoveDangoState : IState
+    {
+        public IState.E_State Initialize(PlayerData parent)
+        {
+            parent._animationManager.ChangeAnimation(AnimationManager.E_Animation.An8B_DangoRemove, Time.fixedDeltaTime * 3);
+            parent._playerRemoveDango.Remove();
+
+            return IState.E_State.Unchanged;
+        }
+        public IState.E_State Update(PlayerData parent)
+        {
+            return IState.E_State.Unchanged;
+        }
+        public IState.E_State FixedUpdate(PlayerData parent)
+        {
+            //プレイヤーを動かす処理
+            parent._playerMove.Update(parent.rb, parent.playerCamera.transform, true);
+
+            //満腹度（制限時間）減らす処理
+            parent.DecreaseSatiety();
+
+            return parent._playerRemoveDango.IsRemoveCoolTime() ? IState.E_State.Unchanged : IState.E_State.Control;
+        }
     }
 
     private void InitState()
@@ -272,8 +459,6 @@ class PlayerData : MonoBehaviour
     const float EVENTTEXT_FLASH_TIME = 0.4f;
     const float EVENTTEXT_PRINT_TIME = 2.4f;
 
-    readonly DangoRole dangoRole = DangoRole.instance;
-
     //生成はAwakeで行っています。
     PlayerMove _playerMove;
     PlayerJump _playerJump;
@@ -281,17 +466,12 @@ class PlayerData : MonoBehaviour
     PlayerFallAction _playerFall;
     PlayerAttackAction _playerAttack;
     PlayerStayEat _playerStayEat;
+    PlayerEat _playerEat;
+
+    AnimationManager _animationManager;
 
     //映像やアニメーションのイベントフラグ
     public static bool Event = false;
-
-    //animatorのハッシュ値を取得（最適化の処理）
-    int _isGroundHash = Animator.StringToHash("IsGround");
-    int _attackTriggerHash = Animator.StringToHash("AttackTrigger");
-    int _velocityYHash = Animator.StringToHash("VelocityY");
-    int _fallActionTriggerHash = Animator.StringToHash("FallActionTrigger");
-    int _fallActionLandingTriggerHash = Animator.StringToHash("FallActionLandingTrigger");
-    int _isEndWalkHash = Animator.StringToHash("IsEndWalk");
 
     /// <summary>
     /// 満腹度、制限時間の代わり（単位:[sec]）
@@ -321,11 +501,15 @@ class PlayerData : MonoBehaviour
             if (value && _playerFall.IsFallAction)
             {
                 //AN7Bの再生もここ
-                _animator.SetTrigger(_fallActionLandingTriggerHash);
+                _animationManager.ChangeAnimation(AnimationManager.E_Animation.An7B_FallLanding, 0.2f);
 
                 SoundManager.Instance.PlaySE(SoundSource.SE11_FALLACTION_LANDING);
 
                 _playerFall.IsFallAction = false;
+            }
+            else if (value && !_isGround)
+            {
+                _animationManager.ChangeAnimation(AnimationManager.E_Animation.An9_Landing, 0.2f);
             }
 
             //空中時は摩擦をカット
@@ -342,22 +526,22 @@ class PlayerData : MonoBehaviour
 
     private void Awake()
     {
-        _playerAttack = new(_attackRangeImage, this, _animator);
-        _playerFall = new(capsuleCollider, OnJump, OnJumpExit);
-        _playerRemoveDango = new(_dangos, _dangoUISC, this, _animator);
-        _playerMove = new(_animator);
-        _playerJump = new(rb, OnJump, OnJumpExit, _animator);
-        _playerStayEat = new(this);
-    }
+        _animationManager = new(_animator);
 
-    private void OnEnable()
-    {
+        _playerAttack = new(_attackRangeImage, _animator);
+        _playerFall = new(capsuleCollider, OnJump, OnJumpExit, _animationManager);
+        _playerRemoveDango = new(_dangos, _dangoUISC, this, _animator);
+        _playerMove = new(_animationManager);
+        _playerJump = new(rb, OnJump, OnJumpExit);
+        _playerStayEat = new(this);
+        _playerEat = new(_directing, _playerUIManager);
         InitDangos();
     }
 
     private void Start()
     {
-        InputSystemManager.Instance.onFirePerformed += _playerRemoveDango.Remove;
+        InputSystemManager.Instance.onFirePerformed += _playerRemoveDango.OnPerformed;
+        InputSystemManager.Instance.onFireCanceled += _playerRemoveDango.OnCanceled;
         InputSystemManager.Instance.onAttackPerformed += OnAttack;
         InputSystemManager.Instance.onEatDangoPerformed += OnEatDango;
         InputSystemManager.Instance.onEatDangoCanceled += OnEatDangoCanceled;
@@ -372,7 +556,6 @@ class PlayerData : MonoBehaviour
         UpdateState();
         FallActionMaker();
         RangeUI();
-        Logger.Log(IsGround);
     }
 
     private void FixedUpdate()
@@ -382,7 +565,8 @@ class PlayerData : MonoBehaviour
 
     private void OnDestroy()
     {
-        InputSystemManager.Instance.onFirePerformed -= _playerRemoveDango.Remove;
+        InputSystemManager.Instance.onFirePerformed -= _playerRemoveDango.OnPerformed;
+        InputSystemManager.Instance.onFireCanceled -= _playerRemoveDango.OnCanceled;
         InputSystemManager.Instance.onAttackPerformed -= OnAttack;
         InputSystemManager.Instance.onEatDangoPerformed -= OnEatDango;
         InputSystemManager.Instance.onEatDangoCanceled -= OnEatDangoCanceled;
@@ -442,8 +626,6 @@ class PlayerData : MonoBehaviour
             return;
         }
 
-        SoundManager.Instance.PlaySE(Random.Range((int)SoundSource.VOISE_PRINCE_STAYEAT01, (int)SoundSource.VOISE_PRINCE_STAYEAT02 + 1));
-        SoundManager.Instance.PlaySE(SoundSource.SE5_PLAYER_STAY_EATDANGO);
         _hasStayedEat = true;
     }
 
@@ -453,31 +635,6 @@ class PlayerData : MonoBehaviour
         SoundManager.Instance.StopSE(SoundSource.SE5_PLAYER_STAY_EATDANGO);
     }
 
-    private void EatDango()
-    {
-        //SE
-        SoundManager.Instance.PlaySE(SoundSource.SE6_CREATE_ROLE_CHARACTER_ANIMATION);
-
-        _hasStayedEat = false;
-
-        //食べた団子の点数を取得
-        var score = dangoRole.CheckRole(_dangos, _currentStabCount);
-
-        //演出関数の呼び出し
-        _directing.Dirrecting(_dangos);
-
-        //満腹度を上昇
-        _satiety += score;
-
-        //串をクリア。
-        _dangos.Clear();
-
-        //UI更新
-        _dangoUISC.DangoUISet(_dangos);
-        //一部UIの非表示
-        _playerUIManager.EatDangoUI_False();
-    }
-
     private void ResetSpit()
     {
         spitManager.IsSticking = false;
@@ -485,14 +642,12 @@ class PlayerData : MonoBehaviour
 
     private void OnJump()
     {
-        InputSystemManager.Instance.onFirePerformed -= _playerRemoveDango.Remove;
         InputSystemManager.Instance.onEatDangoPerformed -= OnEatDango;
         InputSystemManager.Instance.onEatDangoCanceled -= OnEatDangoCanceled;
     }
 
     private void OnJumpExit()
     {
-        InputSystemManager.Instance.onFirePerformed += _playerRemoveDango.Remove;
         InputSystemManager.Instance.onEatDangoPerformed += OnEatDango;
         InputSystemManager.Instance.onEatDangoCanceled += OnEatDangoCanceled;
     }
@@ -562,7 +717,7 @@ class PlayerData : MonoBehaviour
         spitManager.IsSticking = true;
 
         //串の位置を変更（アニメーション推奨）
-        _animator.SetTrigger(_attackTriggerHash);
+        _animationManager.ChangeAnimationEnforcement(AnimationManager.E_Animation.An5_Thrust, Time.fixedDeltaTime * 3);
 
         return true;
     }
@@ -583,9 +738,8 @@ class PlayerData : MonoBehaviour
     {
         //var ray = new Ray(new(transform.position.x, transform.position.y + capsuleCollider.height / 2f, transform.position.z), Vector3.down);
         IsGround = footObj.GetIsGround(); /*Physics.Raycast(ray, capsuleCollider.height / 1.5f);*/
-        _animator.SetBool(_isGroundHash, IsGround);
 
-        Debug.DrawRay(new Vector3(transform.position.x,transform.position.y + capsuleCollider.height / 2f,transform.position.z), Vector3.down, Color.red);
+        Debug.DrawRay(new Vector3(transform.position.x, transform.position.y + capsuleCollider.height / 2f, transform.position.z), Vector3.down, Color.red);
     }
 
     /// <summary>
@@ -632,7 +786,6 @@ class PlayerData : MonoBehaviour
 
     public async void EatAnima()
     {
-        _animator.SetBool("IsEatingCharge", false);
         _playerUIManager.EatDangoUI_True();
 
         await UniTask.Delay(5000);
@@ -645,7 +798,7 @@ class PlayerData : MonoBehaviour
     public int SetMaxDango(int i) => _currentStabCount = i;
     public List<DangoColor> GetDangos() => _dangos;
     public void AddDangos(DangoColor d) => _dangos.Add(d);
-    public void ResetDangos()=>_dangos.Clear();
+    public void ResetDangos() => _dangos.Clear();
     public float GetSatiety() => _satiety;
     public void AddSatiety(float value) => _satiety += value;
     public DangoUIScript GetDangoUIScript() => _dangoUISC;

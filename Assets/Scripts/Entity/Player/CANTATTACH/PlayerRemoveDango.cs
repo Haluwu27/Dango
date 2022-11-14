@@ -7,24 +7,18 @@ namespace TM.Entity.Player
 {
     class PlayerRemoveDango
     {
+        //ステート遷移用
+        bool _hasRemoveDango = false;
+
         List<DangoColor> _dangos;
         DangoUIScript _dangoUIScript;
         PlayerData _playerData;
         Animator _animator;
 
-        const float ANIMATION_TIME = 1f;
-        
         //浮遊力
         const float FLOATING_POWER = 3f;
 
-        bool _isPressFire;
-        bool _isCoolDown;
-
-        int _dangoRemovingHash = Animator.StringToHash("DangoRemoving");
-        int _isPressFireTriggerHash = Animator.StringToHash("IsPressFireTrigger");
-        int _isReleaseFireTriggerHash = Animator.StringToHash("IsReleaseFireTrigger");
-
-        public bool IsCoolDown => _isCoolDown;
+        public bool HasRemoveDango => _hasRemoveDango;
 
         public PlayerRemoveDango(List<DangoColor> dangos, DangoUIScript dangoUIScript, PlayerData playerData, Animator animator)
         {
@@ -34,20 +28,29 @@ namespace TM.Entity.Player
             _animator = animator;
         }
 
+        public void OnPerformed()
+        {
+            if (_dangos.Count == 0) return;
+
+            _hasRemoveDango = true;
+        }
+
+        public void OnCanceled()
+        {
+            _hasRemoveDango = false;
+        }
+
         //団子弾(取り外し)
-        public async void Remove()
+        public void Remove()
         {
             //串に何もなかったら実行しない。
             if (_dangos.Count == 0) return;
 
-            await CoolTime();
-
-            _isCoolDown = false;
-
-            if (!_isPressFire) return;
-
-            //AN8B再生
-            _animator.CrossFade(_dangoRemovingHash, 0f);
+            //空中時に行う処理
+            if (!_playerData.IsGround)
+            {
+                _playerData.Rb.velocity = _playerData.Rb.velocity.SetY(FLOATING_POWER);
+            }
 
             //[Debug]何が消えたかわかるやつ
             //今までは、dangos[dangos.Count - 1]としなければなりませんでしたが、
@@ -63,40 +66,22 @@ namespace TM.Entity.Player
 
             //UI更新
             _dangoUIScript.DangoUISet(_dangos);
+
+            _hasRemoveDango = false;
         }
 
-        private async UniTask CoolTime()
+        public bool IsStayCoolTime()
         {
-            _isPressFire = InputSystemManager.Instance.IsPressFire;
+            if (!_animator.GetCurrentAnimatorStateInfo(0).IsName("AN8A")) return true;
 
-            if (!_playerData.IsGround)
-            {
-                //空中時に行う処理
-                _playerData.Rb.velocity = _playerData.Rb.velocity.SetY(FLOATING_POWER);
+            return _animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 1;
+        }
 
-                return;
-            }
+        public bool IsRemoveCoolTime()
+        {
+            if (!_animator.GetCurrentAnimatorStateInfo(0).IsName("AN8B")) return true;
 
-            _isCoolDown = true;
-
-            //AN8A再生
-            _animator.SetTrigger(_isPressFireTriggerHash);
-
-            float time = ANIMATION_TIME;
-
-            while (time > 0)
-            {
-                if (!InputSystemManager.Instance.IsPressFire)
-                {
-                    _isPressFire = InputSystemManager.Instance.IsPressFire;
-                    _animator.SetTrigger(_isReleaseFireTriggerHash);
-                    return;
-                }
-
-                await UniTask.Yield();
-
-                time -= Time.deltaTime;
-            }
+            return _animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 1;
         }
     }
 }
