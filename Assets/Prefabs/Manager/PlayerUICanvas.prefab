@@ -224,6 +224,8 @@ GameObject:
   - component: {fileID: 8567872266355125493}
   - component: {fileID: 8567872266355125495}
   - component: {fileID: 8567872266355125492}
+  - component: {fileID: 5658795086339306823}
+  - component: {fileID: 603832884914126320}
   m_Layer: 5
   m_Name: DangoImag
   m_TagString: Untagged
@@ -248,9 +250,9 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 460}
+  m_AnchoredPosition: {x: 0, y: 375}
   m_SizeDelta: {x: 180, y: 170}
-  m_Pivot: {x: 0.5, y: 0.5}
+  m_Pivot: {x: 0.5, y: 0}
 --- !u!222 &8567872266355125495
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -289,6 +291,40 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &5658795086339306823
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8567872266355125490}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 670e5710c094d0045b28405ac00b32db, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  stertPos: {x: 0, y: 700, z: 0}
+  endPos: {x: 0, y: 375, z: 0}
+--- !u!95 &603832884914126320
+Animator:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8567872266355125490}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 3a0499d8be2be2e46b0ff7eafd268306, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &8567872266424426158
 GameObject:
   m_ObjectHideFlags: 0
@@ -633,6 +669,8 @@ GameObject:
   - component: {fileID: 8567872266784897125}
   - component: {fileID: 8567872266784897127}
   - component: {fileID: 8567872266784897124}
+  - component: {fileID: 3326175425489435298}
+  - component: {fileID: 1404098692597173552}
   m_Layer: 5
   m_Name: DangoImag (2)
   m_TagString: Untagged
@@ -657,9 +695,9 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 160}
+  m_AnchoredPosition: {x: 0, y: 75}
   m_SizeDelta: {x: 180, y: 170}
-  m_Pivot: {x: 0.5, y: 0.5}
+  m_Pivot: {x: 0.5, y: 0}
 --- !u!222 &8567872266784897127
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -698,6 +736,40 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &3326175425489435298
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8567872266784897122}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 670e5710c094d0045b28405ac00b32db, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  stertPos: {x: 0, y: 700, z: 0}
+  endPos: {x: 0, y: 75, z: 0}
+--- !u!95 &1404098692597173552
+Animator:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8567872266784897122}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 3a0499d8be2be2e46b0ff7eafd268306, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &8567872266805251539
 GameObject:
   m_ObjectHideFlags: 0
@@ -709,6 +781,8 @@ GameObject:
   - component: {fileID: 8567872266805251538}
   - component: {fileID: 8567872266805251540}
   - component: {fileID: 8567872266805251541}
+  - component: {fileID: 1834124101645499390}
+  - component: {fileID: 5822305961526337430}
   m_Layer: 5
   m_Name: DangoImag (1)
   m_TagString: Untagged
@@ -733,9 +807,9 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 310}
+  m_AnchoredPosition: {x: 0, y: 224.99998}
   m_SizeDelta: {x: 180, y: 170}
-  m_Pivot: {x: 0.5, y: 0.5}
+  m_Pivot: {x: 0.5, y: 0}
 --- !u!222 &8567872266805251540
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -774,6 +848,40 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &1834124101645499390
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8567872266805251539}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 670e5710c094d0045b28405ac00b32db, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  stertPos: {x: 0, y: 700, z: 0}
+  endPos: {x: 0, y: 225, z: 0}
+--- !u!95 &5822305961526337430
+Animator:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8567872266805251539}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 3a0499d8be2be2e46b0ff7eafd268306, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &8567872266806521542
 GameObject:
   m_ObjectHideFlags: 0
@@ -1541,7 +1649,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
+  m_Sprite: {fileID: 21300000, guid: 1b217bf2f5e84ff4dbc85186cd6273e9, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -1564,13 +1672,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Objs:
-  - {fileID: 8567872266355125490}
-  - {fileID: 8567872266805251539}
-  - {fileID: 8567872266784897122}
-  - {fileID: 8567872267943256821}
-  - {fileID: 8567872268217409427}
-  - {fileID: 8567872267712956101}
   - {fileID: 8567872267470390906}
+  - {fileID: 8567872267712956101}
+  - {fileID: 8567872268217409427}
+  - {fileID: 8567872267943256821}
+  - {fileID: 8567872266784897122}
+  - {fileID: 8567872266805251539}
+  - {fileID: 8567872266355125490}
   DangoImags:
   - {fileID: 21300000, guid: 4785e93d27439e24b81e2b2a0c9925fd, type: 3}
   - {fileID: 21300000, guid: 0a2c17738a867924f8bd58096537c728, type: 3}
@@ -1668,6 +1776,8 @@ GameObject:
   - component: {fileID: 8567872267470390909}
   - component: {fileID: 8567872267470390911}
   - component: {fileID: 8567872267470390908}
+  - component: {fileID: 3688449544645756687}
+  - component: {fileID: 2309038899902141601}
   m_Layer: 5
   m_Name: DangoImag (6)
   m_TagString: Untagged
@@ -1692,9 +1802,9 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -440}
+  m_AnchoredPosition: {x: 0, y: -525}
   m_SizeDelta: {x: 180, y: 170}
-  m_Pivot: {x: 0.5, y: 0.5}
+  m_Pivot: {x: 0.5, y: 0}
 --- !u!222 &8567872267470390911
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1733,6 +1843,40 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &3688449544645756687
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8567872267470390906}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 670e5710c094d0045b28405ac00b32db, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  stertPos: {x: 0, y: 700, z: 0}
+  endPos: {x: 0, y: -525, z: 0}
+--- !u!95 &2309038899902141601
+Animator:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8567872267470390906}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 3a0499d8be2be2e46b0ff7eafd268306, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &8567872267545215317
 GameObject:
   m_ObjectHideFlags: 0
@@ -2073,6 +2217,8 @@ GameObject:
   - component: {fileID: 8567872267712956100}
   - component: {fileID: 8567872267712956102}
   - component: {fileID: 8567872267712956103}
+  - component: {fileID: 7767577871057394942}
+  - component: {fileID: 3157915422844859177}
   m_Layer: 5
   m_Name: DangoImag (5)
   m_TagString: Untagged
@@ -2097,9 +2243,9 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -290}
+  m_AnchoredPosition: {x: 0, y: -375.00003}
   m_SizeDelta: {x: 180, y: 170}
-  m_Pivot: {x: 0.5, y: 0.5}
+  m_Pivot: {x: 0.5, y: 0}
 --- !u!222 &8567872267712956102
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -2138,6 +2284,40 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &7767577871057394942
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8567872267712956101}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 670e5710c094d0045b28405ac00b32db, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  stertPos: {x: 0, y: 700, z: 0}
+  endPos: {x: 0, y: -375, z: 0}
+--- !u!95 &3157915422844859177
+Animator:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8567872267712956101}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 3a0499d8be2be2e46b0ff7eafd268306, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &8567872267842912958
 GameObject:
   m_ObjectHideFlags: 0
@@ -2416,6 +2596,8 @@ GameObject:
   - component: {fileID: 8567872267943256820}
   - component: {fileID: 8567872267943256822}
   - component: {fileID: 8567872267943256823}
+  - component: {fileID: 131412250511381873}
+  - component: {fileID: 7980649000914141594}
   m_Layer: 5
   m_Name: DangoImag (3)
   m_TagString: Untagged
@@ -2440,9 +2622,9 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 10}
+  m_AnchoredPosition: {x: 0, y: -75.000015}
   m_SizeDelta: {x: 180, y: 170}
-  m_Pivot: {x: 0.5, y: 0.5}
+  m_Pivot: {x: 0.5, y: 0}
 --- !u!222 &8567872267943256822
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -2481,6 +2663,40 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &131412250511381873
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8567872267943256821}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 670e5710c094d0045b28405ac00b32db, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  stertPos: {x: 0, y: 700, z: 0}
+  endPos: {x: 0, y: -75, z: 0}
+--- !u!95 &7980649000914141594
+Animator:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8567872267943256821}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 3a0499d8be2be2e46b0ff7eafd268306, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &8567872267987528497
 GameObject:
   m_ObjectHideFlags: 0
@@ -2748,6 +2964,8 @@ GameObject:
   - component: {fileID: 8567872268217409426}
   - component: {fileID: 8567872268217409428}
   - component: {fileID: 8567872268217409429}
+  - component: {fileID: 4002481661621828836}
+  - component: {fileID: 6484908683264618964}
   m_Layer: 5
   m_Name: DangoImag (4)
   m_TagString: Untagged
@@ -2772,9 +2990,9 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -140}
+  m_AnchoredPosition: {x: 0, y: -224.99997}
   m_SizeDelta: {x: 180, y: 170}
-  m_Pivot: {x: 0.5, y: 0.5}
+  m_Pivot: {x: 0.5, y: 0}
 --- !u!222 &8567872268217409428
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -2813,6 +3031,40 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &4002481661621828836
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8567872268217409427}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 670e5710c094d0045b28405ac00b32db, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  stertPos: {x: 0, y: 700, z: 0}
+  endPos: {x: 0, y: -225, z: 0}
+--- !u!95 &6484908683264618964
+Animator:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8567872268217409427}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 3a0499d8be2be2e46b0ff7eafd268306, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &8567872268266985930
 GameObject:
   m_ObjectHideFlags: 0

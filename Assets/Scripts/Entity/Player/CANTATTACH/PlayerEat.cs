@@ -36,6 +36,7 @@ namespace TM.Entity.Player
 
             //UI更新
             parent.GetDangoUIScript().DangoUISet(parent.GetDangos());
+            parent.GetDangoUIScript().ALLRemoveDango(parent.GetDangos());
 
             //串の団子変更
             _playerKusiScript.SetDango(parent.GetDangos());
