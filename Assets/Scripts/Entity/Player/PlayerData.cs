@@ -59,6 +59,8 @@ class PlayerData : MonoBehaviour
     {
         public IState.E_State Initialize(PlayerData parent)
         {
+            parent._faceAnimationController.ChangeFaceType(FaceAnimationController.FaceTypes.Default);
+
             //串の状態をリセット
             parent.ResetSpit();
             return IState.E_State.Unchanged;
@@ -230,6 +232,7 @@ class PlayerData : MonoBehaviour
     {
         public IState.E_State Initialize(PlayerData parent)
         {
+            parent._faceAnimationController.ChangeFaceType(FaceAnimationController.FaceTypes.Smile);
             parent._animationManager.ChangeAnimationEnforcement(AnimationManager.E_Animation.An4B_Eat, 0);
             parent._playerEat.EatDango(parent);
             parent._hasStayedEat = false;
@@ -453,6 +456,7 @@ class PlayerData : MonoBehaviour
     [SerializeField] PhysicMaterial _normal = default!;
 
     [SerializeField] ImageUIData _attackRangeImage = default!;
+    [SerializeField] FaceAnimationController _faceAnimationController = default!;
 
     //串を伸ばす処理
     readonly PlayerGrowStab _playerGrowStab = new();

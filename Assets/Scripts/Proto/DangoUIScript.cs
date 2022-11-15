@@ -69,7 +69,7 @@ public class DangoUIScript : MonoBehaviour
     {
         for (int i = dangos.Count; i < Objs.Length; i++)
         {
-            dangoAnimas[i].RemoveDango();
+            Objs[i].SetActive(false);
         }
     }
 
