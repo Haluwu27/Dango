@@ -261,6 +261,7 @@ class PlayerData : MonoBehaviour
     [SerializeField] PhysicMaterial _normal = default!;
 
     [SerializeField] ImageUIData _attackRangeImage = default!;
+    [SerializeField] FaceAnimationController _faceAnimationController;
 
     //串を伸ばす処理
     readonly PlayerGrowStab _playerGrowStab = new();
@@ -469,6 +470,9 @@ class PlayerData : MonoBehaviour
 
         //串をクリア。
         _dangos.Clear();
+
+        //顔の変更
+        _faceAnimationController.ChangeFaceType(FaceAnimationController.FaceTypes.Smile);
 
         //UI更新
         _dangoUISC.DangoUISet(_dangos);

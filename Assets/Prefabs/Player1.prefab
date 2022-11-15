@@ -27,8 +27,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 133535671825098961}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 0, y: -0, z: 1.5}
+  m_LocalScale: {x: 1, y: 0.5, z: 3.5}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2267749163450171226}
@@ -218,6 +218,7 @@ MonoBehaviour:
   _ice: {fileID: 13400000, guid: c0ef6cc3f7a19e34185f1ae9a241cf61, type: 2}
   _normal: {fileID: 13400000, guid: eadff661cf3eb09449ef0452d4507768, type: 2}
   _attackRangeImage: {fileID: 3749407156380008204}
+  _faceAnimationController: {fileID: 4592251508326418301}
 --- !u!54 &6013245353808961043
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -443,6 +444,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2267749163450171226}
   - component: {fileID: 2164072874612405197}
+  - component: {fileID: 4949754110901319488}
   m_Layer: 3
   m_Name: EatCam
   m_TagString: Untagged
@@ -509,6 +511,23 @@ Camera:
   m_OcclusionCulling: 1
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
+--- !u!114 &4949754110901319488
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5976948669579022757}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: db43d1668c0e3364c993de8006ce5ce8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  MainCam: {fileID: 0}
+  EatCam: {fileID: 2164072874612405197}
+  LayerMask:
+    serializedVersion: 2
+    m_Bits: 128
 --- !u!1 &6327859204016997052
 GameObject:
   m_ObjectHideFlags: 0
@@ -1101,11 +1120,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   footTransform: {fileID: 1364733326565307387}
-  raycastDistance: 1
+  raycastDistance: 0.1
   groundLayers:
     serializedVersion: 2
     m_Bits: 128
-  minFootstepInterval: 0.5
+  minFootstepInterval: 0.3
 --- !u!114 &3677965581762852519
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1118,7 +1137,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 807c0e77034a3ea44aaec3f092d88c33, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  eatCamera: {fileID: 0}
+  eatCamera: {fileID: 4949754110901319488}
 --- !u!114 &4455526093197044745
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1132,11 +1151,38 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   footTransform: {fileID: 8487894720292590330}
-  raycastDistance: 1
+  raycastDistance: 0.1
   groundLayers:
     serializedVersion: 2
     m_Bits: 128
-  minFootstepInterval: 0.5
+  minFootstepInterval: 0.3
+--- !u!114 &3894122830519647451
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 779374474397810444}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 807c0e77034a3ea44aaec3f092d88c33, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  eatCamera: {fileID: 4949754110901319488}
+--- !u!114 &4592251508326418301
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 779374474397810444}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eab5775c6f58c3c47bef4ae9c51ab320, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  faceMaterial: {fileID: 2100000, guid: cec8548ad716a604493774e9f952b04f, type: 2}
+  faceAtlasSize: {x: 1024, y: 1024}
 --- !u!4 &1364733326565307387 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1504497630619513254, guid: a1bb4c6ae44e6a64aabcfc45b4a26a4e,
