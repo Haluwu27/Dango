@@ -44,7 +44,6 @@ public class PlayerDangoAnima : MonoBehaviour
 
     private void Remove()
     {
-        Logger.Log("‚É‚±‚É‚±");
         if (rectTransform.localPosition.y < stertPos.y)
         {
             rectTransform.localPosition += new Vector3(0, removeSpeed * Time.deltaTime, 0);
