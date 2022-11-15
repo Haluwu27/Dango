@@ -43,7 +43,7 @@ public class FloorData : MonoBehaviour
 
     private void CreateInvertedMeshCollider()
     {
-        RemoveExistingColliders();
+        //RemoveExistingColliders();
         InvertMesh();
 
         GameObject obj = new();

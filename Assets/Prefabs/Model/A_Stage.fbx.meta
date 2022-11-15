@@ -1,54 +1,109 @@
 fileFormatVersion: 2
-guid: a76006904b69c964d85cb1f48e7a4050
+guid: 3252795346b8f3b4d89297faca73480c
 ModelImporter:
   serializedVersion: 21202
   internalIDToNameTable: []
   externalObjects:
   - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: CeilingG_M
+    second: {fileID: 2100000, guid: 77627a8b5c40a964c93c0686ac3d3d45, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: FloorBlackM
+    second: {fileID: 2100000, guid: 3203bd9e62d087e46962a76ddd078c1a, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: FloorTatamiM
+    second: {fileID: 2100000, guid: 4f1085a22510c4c4daf95b52f2ebefde, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Fusuma_m
+    second: {fileID: 2100000, guid: 720a9152dda6dee4faf30b8b7ffaf992, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: ProBuilderDefault
+    second: {fileID: 2100000, guid: 7037f45850b26544095e641f7e7ecf63, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Ranma_m
+    second: {fileID: 2100000, guid: b41961b9af1220e478896d69e109e303, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: ShelfM
+    second: {fileID: 2100000, guid: 22febdbb15048e449814f2bbe618eaaf, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: SikkuiM
+    second: {fileID: 2100000, guid: 1c4d3dec4639b7246af0df94037e32e7, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: That_FloorTatamiM
+    second: {fileID: 2100000, guid: 57b0b6108b58287478cf8df431ef71df, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Wall_m
+    second: {fileID: 2100000, guid: c7ebefb890910a24ea208788f6f213d2, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Window_ai
+    second: {fileID: 2100000, guid: f232c4b23d899574ea9956b37d26e1d4, type: 2}
+  - first:
       type: UnityEngine:Texture2D
       assembly: UnityEngine.CoreModule
       name: CeilingG_TX
-    second: {fileID: 2800000, guid: 6127b35c1c848e0488b8a29bcc1d666f, type: 3}
+    second: {fileID: 2800000, guid: cd5774d1f3e14e9478387340be58320f, type: 3}
   - first:
       type: UnityEngine:Texture2D
       assembly: UnityEngine.CoreModule
       name: FloorBlackTX
-    second: {fileID: 2800000, guid: 3db245c794f89ab44a2442fb586dbef3, type: 3}
+    second: {fileID: 2800000, guid: 209226bcf8b991048917790582d13495, type: 3}
   - first:
       type: UnityEngine:Texture2D
       assembly: UnityEngine.CoreModule
       name: FloorTatamiTX
-    second: {fileID: 2800000, guid: 9807417c3cfda8949befe4e46c6a1a21, type: 3}
+    second: {fileID: 2800000, guid: 57f63ff419acbd64ca9740978f0b4580, type: 3}
   - first:
       type: UnityEngine:Texture2D
       assembly: UnityEngine.CoreModule
       name: FusumaTX
-    second: {fileID: 2800000, guid: 0e7aea99877ff68469c05de3f3c365a0, type: 3}
+    second: {fileID: 2800000, guid: c6d06391bc0ed1641b479eaac786b893, type: 3}
   - first:
       type: UnityEngine:Texture2D
       assembly: UnityEngine.CoreModule
       name: KomonoTX
-    second: {fileID: 2800000, guid: 09c261afe14c84f4a89f6bbc05866f37, type: 3}
+    second: {fileID: 2800000, guid: 5e6c88de58d7fb043b25a271cbfe7b0d, type: 3}
   - first:
       type: UnityEngine:Texture2D
       assembly: UnityEngine.CoreModule
       name: RanmaTX
-    second: {fileID: 2800000, guid: 64cc7c3919c5c5a48a78f622498b11cf, type: 3}
+    second: {fileID: 2800000, guid: ff726e667cb5e7b42aa24baca5520fe7, type: 3}
   - first:
       type: UnityEngine:Texture2D
       assembly: UnityEngine.CoreModule
       name: Ranma_a
-    second: {fileID: 2800000, guid: 834caf2dac4dadc498a95acf8d91b7e1, type: 3}
+    second: {fileID: 2800000, guid: 844ba046c93480d458d6eda7abb987eb, type: 3}
   - first:
       type: UnityEngine:Texture2D
       assembly: UnityEngine.CoreModule
       name: WindowNM
-    second: {fileID: 2800000, guid: 64646e826caed2543b3d8835596b675b, type: 3}
+    second: {fileID: 2800000, guid: 7fe2118fc05ccaa44b58fb85591f4577, type: 3}
   - first:
       type: UnityEngine:Texture2D
       assembly: UnityEngine.CoreModule
       name: WindowTX
-    second: {fileID: 2800000, guid: 3a584088a5498e5468e7a71de514e633, type: 3}
+    second: {fileID: 2800000, guid: 23cdd857d86002945b7e94d1fae9eb3c, type: 3}
   materials:
     materialImportMode: 2
     materialName: 0
@@ -82,22 +137,22 @@ ModelImporter:
     lODScreenPercentages: []
     globalScale: 1
     meshCompression: 0
-    addColliders: 0
+    addColliders: 1
     useSRGBMaterialColor: 1
-    sortHierarchyByName: 1
-    importVisibility: 1
-    importBlendShapes: 1
-    importCameras: 1
-    importLights: 1
+    sortHierarchyByName: 0
+    importVisibility: 0
+    importBlendShapes: 0
+    importCameras: 0
+    importLights: 0
     nodeNameCollisionStrategy: 1
     fileIdsGeneration: 2
     swapUVChannels: 0
-    generateSecondaryUV: 0
+    generateSecondaryUV: 1
     useFileUnits: 1
     keepQuads: 0
     weldVertices: 1
-    bakeAxisConversion: 0
-    preserveHierarchy: 0
+    bakeAxisConversion: 1
+    preserveHierarchy: 1
     skinWeightsMode: 0
     maxBonesPerVertex: 4
     minBoneWeight: 0.001

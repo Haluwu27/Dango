@@ -154,6 +154,59 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!1 &2982685603018098627
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2621265545691925537}
+  - component: {fileID: 38215294996633075}
+  m_Layer: 3
+  m_Name: dangos
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2621265545691925537
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2982685603018098627}
+  m_LocalRotation: {x: -0.013883978, y: 0.7066441, z: -0.7073208, w: 0.012597263}
+  m_LocalPosition: {x: -0.1, y: 0, z: 0.4}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8589826438042570065}
+  m_RootOrder: 10
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &38215294996633075
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2982685603018098627}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8f753093a1a95844da4c3f6b2c5a58cc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dangoData:
+  - {fileID: 0}
+  - {fileID: 529666500012414795, guid: 7e6f49edec6cc214ab07dce2a5f177ad, type: 3}
+  - {fileID: 4539596197778243994, guid: bc69325e362d32649b4d5cac7cf4df1c, type: 3}
+  - {fileID: 8371433019234914923, guid: 14dfb1bf106f7644a90fdec9edefc9c5, type: 3}
+  - {fileID: 2425363439334282334, guid: 2d0d02b0b61ae0b48a53ae29b4ba57de, type: 3}
+  - {fileID: 1034476795072448092, guid: d8918266106a4214abb73d2a057bf979, type: 3}
+  - {fileID: 3348226780706873652, guid: 23870c0fa4a7be7429c39603a9c77897, type: 3}
+  - {fileID: 2481280014161332420, guid: f5abd88456b666746bfd7ee2e9efdac7, type: 3}
 --- !u!1 &3952613918130635532
 GameObject:
   m_ObjectHideFlags: 0
@@ -211,6 +264,8 @@ MonoBehaviour:
   spitManager: {fileID: 1542934558795306056}
   makerUI: {fileID: 5358551538224260221}
   rangeUI: {fileID: 6327859204016997052}
+  footObj: {fileID: 0}
+  kusiObj: {fileID: 38215294996633075}
   _directing: {fileID: 0}
   _playerUIManager: {fileID: 0}
   _dangoUISC: {fileID: 0}
@@ -1017,7 +1072,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Controller
       value: 
-      objectReference: {fileID: 9100000, guid: 9c9afdfe92a07694ea806c8d2401d353, type: 2}
+      objectReference: {fileID: 9100000, guid: ac915fdf02fe8804abef815de601ffb8, type: 2}
     - target: {fileID: 5866666021909216657, guid: a1bb4c6ae44e6a64aabcfc45b4a26a4e,
         type: 3}
       propertyPath: m_ApplyRootMotion
@@ -1119,12 +1174,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae61ec24290696d489d9c8aafef64092, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  footTransform: {fileID: 1364733326565307387}
-  raycastDistance: 0.1
-  groundLayers:
-    serializedVersion: 2
-    m_Bits: 128
-  minFootstepInterval: 0.3
 --- !u!114 &3677965581762852519
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1150,54 +1199,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae61ec24290696d489d9c8aafef64092, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  footTransform: {fileID: 8487894720292590330}
-  raycastDistance: 0.1
-  groundLayers:
-    serializedVersion: 2
-    m_Bits: 128
-  minFootstepInterval: 0.3
---- !u!114 &3894122830519647451
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 779374474397810444}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 807c0e77034a3ea44aaec3f092d88c33, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  eatCamera: {fileID: 4949754110901319488}
---- !u!114 &4592251508326418301
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 779374474397810444}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: eab5775c6f58c3c47bef4ae9c51ab320, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  faceMaterial: {fileID: 2100000, guid: cec8548ad716a604493774e9f952b04f, type: 2}
-  faceAtlasSize: {x: 1024, y: 1024}
---- !u!4 &1364733326565307387 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 1504497630619513254, guid: a1bb4c6ae44e6a64aabcfc45b4a26a4e,
-    type: 3}
-  m_PrefabInstance: {fileID: 437285830519800413}
-  m_PrefabAsset: {fileID: 0}
 --- !u!95 &6303659095604953036 stripped
 Animator:
   m_CorrespondingSourceObject: {fileID: 5866666021909216657, guid: a1bb4c6ae44e6a64aabcfc45b4a26a4e,
-    type: 3}
-  m_PrefabInstance: {fileID: 437285830519800413}
-  m_PrefabAsset: {fileID: 0}
---- !u!4 &8487894720292590330 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 8348128223624024231, guid: a1bb4c6ae44e6a64aabcfc45b4a26a4e,
     type: 3}
   m_PrefabInstance: {fileID: 437285830519800413}
   m_PrefabAsset: {fileID: 0}
@@ -1376,6 +1380,7 @@ MonoBehaviour:
   player: {fileID: 3952613918130635534}
   _capsuleCollider: {fileID: 1980415520476432920}
   _floorManager: {fileID: 0}
+  kusiScript: {fileID: 38215294996633075}
 --- !u!1001 &1899943125068568432
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1490,6 +1495,7 @@ MonoBehaviour:
   player: {fileID: 3952613918130635534}
   _capsuleCollider: {fileID: 4184909323898648103}
   _floorManager: {fileID: 0}
+  kusiScript: {fileID: 38215294996633075}
 --- !u!1001 &2467257173863230841
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1604,6 +1610,7 @@ MonoBehaviour:
   player: {fileID: 3952613918130635534}
   _capsuleCollider: {fileID: 3538604877463046799}
   _floorManager: {fileID: 0}
+  kusiScript: {fileID: 38215294996633075}
 --- !u!1001 &3209044615148890257
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1718,6 +1725,7 @@ MonoBehaviour:
   player: {fileID: 3952613918130635534}
   _capsuleCollider: {fileID: 5624220454227160823}
   _floorManager: {fileID: 0}
+  kusiScript: {fileID: 38215294996633075}
 --- !u!1001 &6453962639495160833
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1832,3 +1840,4 @@ MonoBehaviour:
   player: {fileID: 3952613918130635534}
   _capsuleCollider: {fileID: 600812266922468400}
   _floorManager: {fileID: 0}
+  kusiScript: {fileID: 38215294996633075}

@@ -2,12 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class DangoUIScript : MonoBehaviour
 {
     [SerializeField] GameObject[] Objs;
     [SerializeField] Sprite[] DangoImags;
-
+    [SerializeField] TextMeshProUGUI Text;
+    [SerializeField] PlayerData PlayerData;
     private Image[] DangoImagObjs;
 
     private void Start()
@@ -19,15 +21,17 @@ public class DangoUIScript : MonoBehaviour
             Objs[i].SetActive(false);
         }
     }
+    private void Update()
+    {
+        Text.text = PlayerData.GetMaxDango().ToString();
+    }
     public void DangoUISet(List<DangoColor> dangos)
     {
-        Logger.Log(dangos.Count);
         for (int i = 0; i < dangos.Count; i++)
         {
             //団子の種類をみてマテリアルに色を付ける、画像が出来たらimagを切り替える。
             //団子が刺さっていないものがあれば非アクティブに
             Objs[i].SetActive(true);
-            Logger.Log(dangos[i]);
             DangoImagObjs[i].sprite = DangoImags[(int)dangos[i] - 1];
             //DangoImagObjs[i].sprite = dangos[i] switch
             //{
