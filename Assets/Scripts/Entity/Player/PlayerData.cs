@@ -294,6 +294,9 @@ class PlayerData : MonoBehaviour
         }
         public IState.E_State FixedUpdate(PlayerData parent)
         {
+            //プレイヤーを動かす処理
+            parent._playerMove.Update(parent.rb, parent.playerCamera.transform, true);
+
             //満腹度（制限時間）減らす処理
             parent.DecreaseSatiety();
 
@@ -361,7 +364,6 @@ class PlayerData : MonoBehaviour
     {
         public IState.E_State Initialize(PlayerData parent)
         {
-            parent._animationManager.ChangeAnimation(AnimationManager.E_Animation.An8B_DangoRemove, Time.fixedDeltaTime * 3);
             parent._playerRemoveDango.Remove();
 
             return IState.E_State.Unchanged;
@@ -377,6 +379,7 @@ class PlayerData : MonoBehaviour
 
             //満腹度（制限時間）減らす処理
             parent.DecreaseSatiety();
+            parent._animationManager.ChangeAnimation(AnimationManager.E_Animation.An8B_DangoRemove, 0);
 
             return parent._playerRemoveDango.IsRemoveCoolTime() ? IState.E_State.Unchanged : IState.E_State.Control;
         }
