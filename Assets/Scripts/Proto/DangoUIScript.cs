@@ -11,7 +11,7 @@ public class DangoUIScript : MonoBehaviour
     [SerializeField] TextMeshProUGUI Text;
     [SerializeField] PlayerData PlayerData;
     private Image[] DangoImagObjs;
-    private PlayerDangoAnima[] dangoAnimas; 
+    private PlayerDangoAnima[] dangoAnimas;
 
     private void Start()
     {
@@ -62,7 +62,15 @@ public class DangoUIScript : MonoBehaviour
 
     public void RemoveDango(List<DangoColor> dangos)
     {
-            dangoAnimas[dangos.Count].RemoveDango();
+        dangoAnimas[dangos.Count].RemoveDango();
+    }
+
+    public void ALLRemoveDango(List<DangoColor> dangos)
+    {
+        for (int i = dangos.Count; i < Objs.Length; i++)
+        {
+            dangoAnimas[i].RemoveDango();
+        }
     }
 
 }
