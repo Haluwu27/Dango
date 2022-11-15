@@ -11,14 +11,16 @@ public class DangoUIScript : MonoBehaviour
     [SerializeField] TextMeshProUGUI Text;
     [SerializeField] PlayerData PlayerData;
     private Image[] DangoImagObjs;
+    private PlayerDangoAnima[] dangoAnimas; 
 
     private void Start()
     {
         DangoImagObjs = new Image[Objs.Length];
+        dangoAnimas = new PlayerDangoAnima[Objs.Length];
         for (int i = 0; i < Objs.Length; i++)
         {
             DangoImagObjs[i] = Objs[i].GetComponent<Image>();
-            Objs[i].SetActive(false);
+            dangoAnimas[i] = Objs[i].GetComponent<PlayerDangoAnima>();
         }
     }
     private void Update()
@@ -45,12 +47,22 @@ public class DangoUIScript : MonoBehaviour
                 DangoColor.Other => DangoImags[(int)DangoColor.Other],
                 _ => DangoImags[(int)DangoColor.Other],
             };
-            Logger.Log((int)dangos[i]);
         }
-        for (int i = dangos.Count; i < Objs.Length; i++)
-        {
-            Objs[i].SetActive(false);
-        }
+        //for (int i = dangos.Count; i < Objs.Length; i++)
+        //{
+        //    Objs[i].SetActive(false);
+        //}
+
+    }
+    public void AddDango(List<DangoColor> dangos)
+    {
+        if (dangos.Count - 1 >= 0)
+            dangoAnimas[dangos.Count - 1].AddDango();
+    }
+
+    public void RemoveDango(List<DangoColor> dangos)
+    {
+            dangoAnimas[dangos.Count].RemoveDango();
     }
 
 }

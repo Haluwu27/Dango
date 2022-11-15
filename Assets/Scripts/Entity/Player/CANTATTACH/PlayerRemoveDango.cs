@@ -68,6 +68,7 @@ namespace TM.Entity.Player
 
             //UI�X�V
             _dangoUIScript.DangoUISet(_dangos);
+            _dangoUIScript.RemoveDango(_dangos);
 
             _hasRemoveDango = false;
             
