@@ -80,7 +80,7 @@ public class DataManager : MonoBehaviour
 
     private void InitKeyData()
     {
-        actionReferencesTable = new InputActionReference[] { null, Attack, ExpansionUI, Jump, null, null, EatDango, Fire, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null };
+        actionReferencesTable = new InputActionReference[] { null, Attack, ExpansionUI, Jump, ExpansionUI, null, EatDango, Fire, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null };
 
         for (int i = 0; i < (int)GamepadKey.Max; i++)
         {
