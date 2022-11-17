@@ -50,6 +50,8 @@ public class PortraitScript : MonoBehaviour
         while (time < SLIDETIME)
         {
             await UniTask.Yield();
+            if (!_trans.root.gameObject.activeSelf) continue;
+
             time += Time.deltaTime;
 
             _trans.localPosition = Vector3.zero.SetX(OFFSET * (1f - EasingManager.EaseProgress(TM.Easing.EaseType.OutQuart, time, SLIDETIME, 0f, 0)));
@@ -68,6 +70,8 @@ public class PortraitScript : MonoBehaviour
         while (time < SLIDETIME)
         {
             await UniTask.Yield();
+            if (!_trans.root.gameObject.activeSelf) continue;
+
             time += Time.deltaTime;
 
             _trans.localPosition = Vector3.zero.SetX(OFFSET * EasingManager.EaseProgress(TM.Easing.EaseType.InQuart, time, SLIDETIME, 0f, 0));
@@ -95,10 +99,19 @@ public class PortraitScript : MonoBehaviour
         //イベント進行
         for (int i = 0; i < questTextData.TextDataIndex; i++)
         {
+            float time = 0;
+
             data = questTextData.GetQTextData(i);
 
             ChangeText(data.text);
-            await UniTask.Delay((int)(data.printTime * 1000));
+
+            while (time < data.printTime)
+            {
+                await UniTask.Yield();
+                if (!_trans.root.gameObject.activeSelf) continue;
+
+                time += Time.deltaTime;
+            }
         }
 
         await SlideOut();
