@@ -263,7 +263,7 @@ MonoBehaviour:
   capsuleCollider: {fileID: 7644088380944789818}
   playerCamera: {fileID: 0}
   spitManager: {fileID: 1542934558795306056}
-  makerUI: {fileID: 5358551538224260221}
+  makerUI: {fileID: 1961741039857682178}
   rangeUI: {fileID: 6327859204016997052}
   footObj: {fileID: 0}
   kusiObj: {fileID: 38215294996633075}
@@ -330,7 +330,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   faceMaterial: {fileID: 2100000, guid: cec8548ad716a604493774e9f952b04f, type: 2}
-  faceAtlasSize: {x: 1024, y: 1024}
 --- !u!1 &4132275001556721553
 GameObject:
   m_ObjectHideFlags: 0

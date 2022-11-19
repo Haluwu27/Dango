@@ -440,7 +440,7 @@ class PlayerData : MonoBehaviour
 
     //プレイヤーの能力
     [SerializeField] SpitManager spitManager = default!;
-    [SerializeField] GameObject makerUI = default!;
+    [SerializeField] Canvas makerUI = default!;
     [SerializeField] GameObject rangeUI = default!;
     [SerializeField] FootObjScript footObj = default!;
     [SerializeField] PlayerKusiScript kusiObj = default!;
@@ -466,6 +466,8 @@ class PlayerData : MonoBehaviour
 
     const float EVENTTEXT_FLASH_TIME = 0.4f;
     const float EVENTTEXT_PRINT_TIME = 2.4f;
+
+    int _mapLayer;
 
     //生成はAwakeで行っています。
     PlayerMove _playerMove;
@@ -534,15 +536,18 @@ class PlayerData : MonoBehaviour
 
     private void Awake()
     {
+        _mapLayer = LayerMask.NameToLayer("Map");
         _animationManager = new(_animator);
 
-        _playerAttack = new(_attackRangeImage, _animator);
-        _playerFall = new(capsuleCollider, OnJump, OnJumpExit, _animationManager);
+        _playerAttack = new(_attackRangeImage, _animator, spitManager);
+        _playerFall = new(capsuleCollider, OnJump, OnJumpExit, _animationManager, _mapLayer);
         _playerRemoveDango = new(_dangos, _dangoUISC, this, _animator, kusiObj);
         _playerMove = new(_animationManager);
         _playerJump = new(rb, OnJump, OnJumpExit);
         _playerStayEat = new(this);
         _playerEat = new(_directing, _playerUIManager, kusiObj);
+
+        makerUI.enabled = false;
         InitDangos();
     }
 
@@ -555,7 +560,6 @@ class PlayerData : MonoBehaviour
         InputSystemManager.Instance.onEatDangoCanceled += OnEatDangoCanceled;
         InputSystemManager.Instance.onJumpPerformed += _playerJump.OnStayJumping;
         InputSystemManager.Instance.onJumpCanceled += _playerJump.Jump;
-        makerUI.SetActive(false);
     }
 
     private void Update()
@@ -678,16 +682,29 @@ class PlayerData : MonoBehaviour
 
     private void FallActionMaker()
     {
-        var ray = new Ray(transform.position, Vector3.down);
-
-        if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity))
+        //地上なら確実に動作しない
+        if (IsGround)
         {
-            makerUI.transform.position = hit.point + new Vector3(0, 0.01f, 0);
-
-            //突き刺しできるようになったら有効化
-            makerUI.SetActive(!Physics.Raycast(ray, capsuleCollider.height + capsuleCollider.height / 2f));
+            makerUI.enabled = false;
+            return;
         }
 
+        Ray ray = new(transform.position, Vector3.down);
+
+        //描画しなくていいなら弾く
+        if (Physics.Raycast(ray, capsuleCollider.height + capsuleCollider.height / 2f, 1 << _mapLayer))
+        {
+            makerUI.enabled = false;
+            return;
+        }
+
+        if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, 1 << _mapLayer))
+        {
+            makerUI.transform.position = (hit.point + transform.forward.normalized * 0.313f).SetY(hit.point.y + 0.01f);
+
+            //突き刺しできるようになったら有効化
+            makerUI.enabled = true;
+        }
     }
 
     private void RangeUI()

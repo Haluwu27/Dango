@@ -10,7 +10,7 @@ namespace TM.Entity.Player
         PlayerUIManager _playerUIManager;
         PlayerKusiScript _playerKusiScript;
 
-        public PlayerEat(RoleDirectingScript roleDirecting, PlayerUIManager playerUIManager,PlayerKusiScript kusiScript)
+        public PlayerEat(RoleDirectingScript roleDirecting, PlayerUIManager playerUIManager, PlayerKusiScript kusiScript)
         {
             _roleDirecting = roleDirecting;
             _playerUIManager = playerUIManager;
