@@ -9,6 +9,7 @@ public class PortraitScript : MonoBehaviour
 {
     [SerializeField] Image img;
     [SerializeField] TextUIData text;
+    [SerializeField] Sprite[] facePatterns;
 
     bool _isChangePortrait;
 
@@ -24,15 +25,16 @@ public class PortraitScript : MonoBehaviour
         _trans.localPosition = Vector3.zero.SetX(OFFSET);
     }
 
-    public void ChangeText(string message)
+    public void ChangePortrait(PortraitTextData.PTextData data)
     {
-        if (string.IsNullOrEmpty(message))
+        if (string.IsNullOrEmpty(data.text))
         {
             text.TextData.SetText();
             return;
         }
 
-        text.TextData.SetText(message);
+        text.TextData.SetText(data.text);
+        img.sprite = facePatterns[(int)data.face];
     }
 
     public void ChangeImg(Sprite image)
@@ -89,7 +91,7 @@ public class PortraitScript : MonoBehaviour
 
         //ÉfÅ[É^èâä˙ê›íË
         PortraitTextData.PTextData data = questTextData.GetQTextData(0);
-        ChangeText(data.text);
+        ChangePortrait(data);
 
         await SlideIn();
 
@@ -103,7 +105,7 @@ public class PortraitScript : MonoBehaviour
 
             data = questTextData.GetQTextData(i);
 
-            ChangeText(data.text);
+            ChangePortrait(data);
 
             while (time < data.printTime)
             {

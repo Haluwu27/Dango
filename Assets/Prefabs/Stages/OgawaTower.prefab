@@ -31812,6 +31812,17 @@ PrefabInstance:
       propertyPath: text
       value: 
       objectReference: {fileID: 1309941828730088726}
+    - target: {fileID: 8567872267545215319, guid: ea25d6985a03e2943a1b915d2d2401a3,
+        type: 3}
+      propertyPath: facePatterns.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8567872267545215319, guid: ea25d6985a03e2943a1b915d2d2401a3,
+        type: 3}
+      propertyPath: facePatterns.Array.data[0]
+      value: 
+      objectReference: {fileID: 21300000, guid: f0784c1871ed3894f8ebe3f545590d5a,
+        type: 3}
     - target: {fileID: 8567872267615947404, guid: ea25d6985a03e2943a1b915d2d2401a3,
         type: 3}
       propertyPath: m_text
