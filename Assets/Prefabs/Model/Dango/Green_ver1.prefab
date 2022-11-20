@@ -184,6 +184,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _rend: {fileID: 4932151165688570698}
   _rigidbody: {fileID: 449092210163755878}
+  _animator: {fileID: 3272418059089151519}
 --- !u!135 &8518582424873372272
 SphereCollider:
   m_ObjectHideFlags: 0

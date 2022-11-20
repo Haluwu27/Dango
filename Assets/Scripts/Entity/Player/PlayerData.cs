@@ -541,9 +541,9 @@ class PlayerData : MonoBehaviour
 
         _playerAttack = new(_attackRangeImage, _animator, spitManager);
         _playerFall = new(capsuleCollider, OnJump, OnJumpExit, _animationManager, _mapLayer);
-        _playerRemoveDango = new(_dangos, _dangoUISC, this, _animator, kusiObj);
+        _playerRemoveDango = new(_dangos, _dangoUISC, this, _animator, kusiObj, spitManager);
         _playerMove = new(_animationManager);
-        _playerJump = new(rb, OnJump, OnJumpExit);
+        _playerJump = new(rb, OnJump, OnJumpExit, spitManager);
         _playerStayEat = new(this);
         _playerEat = new(_directing, _playerUIManager, kusiObj);
 
@@ -589,6 +589,9 @@ class PlayerData : MonoBehaviour
     //突き刺しボタン降下時処理
     private async void OnAttack()
     {
+        //ヒットストップ中受け付けない
+        if (spitManager.IsHitStop) return;
+
         //落下アクション中受け付けない。
         if (_playerFall.IsFallAction) return;
 
@@ -827,6 +830,8 @@ class PlayerData : MonoBehaviour
     public float GetSatiety() => _satiety;
     public void AddSatiety(float value) => _satiety += value;
     public DangoUIScript GetDangoUIScript() => _dangoUISC;
+    public Animator GetAnimator() => _animator;
+    public void SetIsMoveable(bool enable) => _playerMove.SetIsMoveable(enable);
 
     #endregion
 }
