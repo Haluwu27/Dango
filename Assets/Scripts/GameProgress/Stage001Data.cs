@@ -42,6 +42,7 @@ public class Stage001Data : StageData.IAddQuest, StageData.IPortrait
             questManager.Creater.CreateQuestDestination(11, FloorManager.Floor.floor11, false, "é“à‚ÌÅã‘w‚ÉŒü‚©‚¦", 0f, false, true,new(new PortraitTextData.PTextData()), 0),
         };
 
+        QuestData.Clear();
         QuestData.AddRange(quest);
         questManager.ChangeQuest(quest[0], quest[1]);
     }
