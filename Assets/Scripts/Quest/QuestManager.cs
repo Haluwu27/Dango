@@ -17,16 +17,19 @@ class QuestManager : MonoBehaviour
     [SerializeField] QuestExpansionUIManager _questExpansionUIManager;
     [SerializeField] QuestUIManager _questUIManager;
     [SerializeField] GameManager _gameManager;
+    [SerializeField] StageData _stageData;
+    [SerializeField] PortraitScript _portraitScript;
 
     private void Awake()
     {
         Instance = this;
-        SucceedChecker = new(this, _playerUIManager);
+        SucceedChecker = new(this, _playerUIManager,_portraitScript);
     }
 
     private void Start()
     {
-        Stage001Data.Instance.AddQuest();
+        StageData.IAddQuest addQuest = _stageData.CurrentStage;
+        addQuest.AddQuest();
     }
 
     //クエストの生成・クリア判定のやつ

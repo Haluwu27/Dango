@@ -1,6 +1,4 @@
-using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 
 namespace Dango.Quest
 {
@@ -18,8 +16,8 @@ namespace Dango.Quest
 
         List<DangoColor> _colors = new(); //Ç±ÇÃêFÇæÇØì«Ç›éÊÇÈ
 
-        public QuestEatDango(int id, int specifyCount, int continueCount, bool canCountCreateRole, bool canCountNoCreateRole, string questName, float rewardTime, bool enableDangoCountUp, bool isKeyQuest, int[] nextQuestId)
-            : base(id, QuestType.CreateRole, questName, rewardTime, enableDangoCountUp, isKeyQuest, nextQuestId)
+        public QuestEatDango(int id, int specifyCount, int continueCount, bool canCountCreateRole, bool canCountNoCreateRole, string questName, float rewardTime, bool enableDangoCountUp, bool isKeyQuest, PortraitTextData questTextData, int[] nextQuestId)
+            : base(id, QuestType.CreateRole, questName, rewardTime, enableDangoCountUp, isKeyQuest, questTextData, nextQuestId)
         {
             _specifyCount = specifyCount;
             _continueCount = continueCount;
@@ -29,8 +27,8 @@ namespace Dango.Quest
             for (DangoColor i = DangoColor.None + 1; i < DangoColor.Other; i++)
                 _colors.Add(i);
         }
-        public QuestEatDango(int id, List<DangoColor> colors, int specifyCount, int continueCount, bool canCountCreateRole, bool canCountNoCreateRole, string questName, float rewardTime, bool enableDangoCountUp, bool isKeyQuest, int[] nextQuestId)
-            : base(id, QuestType.CreateRole, questName, rewardTime, enableDangoCountUp, isKeyQuest, nextQuestId)
+        public QuestEatDango(int id, List<DangoColor> colors, int specifyCount, int continueCount, bool canCountCreateRole, bool canCountNoCreateRole, string questName, float rewardTime, bool enableDangoCountUp, bool isKeyQuest, PortraitTextData questTextData, int[] nextQuestId)
+            : base(id, QuestType.CreateRole, questName, rewardTime, enableDangoCountUp, isKeyQuest, questTextData, nextQuestId)
         {
             _specifyCount = specifyCount;
             _continueCount = continueCount;
@@ -39,8 +37,8 @@ namespace Dango.Quest
 
             _colors = colors;
         }
-        public QuestEatDango(int id, DangoColor[] colors, int specifyCount, int continueCount, bool canCountCreateRole, bool canCountNoCreateRole, string questName, float rewardTime, bool enableDangoCountUp, bool isKeyQuest, int[] nextQuestId)
-            : base(id, QuestType.CreateRole, questName, rewardTime, enableDangoCountUp, isKeyQuest, nextQuestId)
+        public QuestEatDango(int id, DangoColor[] colors, int specifyCount, int continueCount, bool canCountCreateRole, bool canCountNoCreateRole, string questName, float rewardTime, bool enableDangoCountUp, bool isKeyQuest, PortraitTextData questTextData, int[] nextQuestId)
+            : base(id, QuestType.CreateRole, questName, rewardTime, enableDangoCountUp, isKeyQuest, questTextData, nextQuestId)
         {
             _specifyCount = specifyCount;
             _continueCount = continueCount;
@@ -49,8 +47,8 @@ namespace Dango.Quest
 
             _colors.AddRange(colors);
         }
-        public QuestEatDango(int id, DangoColor color, int specifyCount, int continueCount, bool canCountCreateRole, bool canCountNoCreateRole, string questName, float rewardTime, bool enableDangoCountUp, bool isKeyQuest, int[] nextQuestId)
-            : base(id, QuestType.CreateRole, questName, rewardTime, enableDangoCountUp, isKeyQuest, nextQuestId)
+        public QuestEatDango(int id, DangoColor color, int specifyCount, int continueCount, bool canCountCreateRole, bool canCountNoCreateRole, string questName, float rewardTime, bool enableDangoCountUp, bool isKeyQuest, PortraitTextData questTextData, int[] nextQuestId)
+            : base(id, QuestType.CreateRole, questName, rewardTime, enableDangoCountUp, isKeyQuest, questTextData, nextQuestId)
         {
             _specifyCount = specifyCount;
             _continueCount = continueCount;
@@ -94,28 +92,28 @@ namespace Dango.Quest
         int _continueCount;         //òAë±ÇµÇƒçÏÇÈêî
         int _currentContinueCount;  //òAë±ÇµÇƒçÏÇ¡ÇΩêî
 
-        public QuestCreateRole(int id, EstablishRole establish, int specifyCount, int continueCount, string questName, float rewardTime, bool enableDangoCountUp, bool isKeyQuest, int[] nextQuestId) : base(id, QuestType.CreateRole, questName, rewardTime, enableDangoCountUp, isKeyQuest, nextQuestId)
+        public QuestCreateRole(int id, EstablishRole establish, int specifyCount, int continueCount, string questName, float rewardTime, bool enableDangoCountUp, bool isKeyQuest,PortraitTextData questTextData, int[] nextQuestId) : base(id, QuestType.CreateRole, questName, rewardTime, enableDangoCountUp, isKeyQuest,questTextData, nextQuestId)
         {
             _type = CreateRoleType.EstablishRole;
             _establishRole = establish;
             _specifyCount = specifyCount;
             _continueCount = continueCount;
         }
-        public QuestCreateRole(int id, SpecifyTheRole specifyTheRole, int specifyCount, int continueCount, string questName, float rewardTime, bool enableDangoCountUp, bool isKeyQuest, int[] nextQuestId) : base(id, QuestType.CreateRole, questName, rewardTime, enableDangoCountUp, isKeyQuest, nextQuestId)
+        public QuestCreateRole(int id, SpecifyTheRole specifyTheRole, int specifyCount, int continueCount, string questName, float rewardTime, bool enableDangoCountUp, bool isKeyQuest, PortraitTextData questTextData, int[] nextQuestId) : base(id, QuestType.CreateRole, questName, rewardTime, enableDangoCountUp, isKeyQuest, questTextData, nextQuestId)
         {
             _type = CreateRoleType.SpecifyTheRole;
             _specifyTheRole = specifyTheRole;
             _specifyCount = specifyCount;
             _continueCount = continueCount;
         }
-        public QuestCreateRole(int id, UseColorCount includeColor, int specifyCount, int continueCount, string questName, float rewardTime, bool enableDangoCountUp, bool isKeyQuest, int[] nextQuestId) : base(id, QuestType.CreateRole, questName, rewardTime, enableDangoCountUp, isKeyQuest, nextQuestId)
+        public QuestCreateRole(int id, UseColorCount includeColor, int specifyCount, int continueCount, string questName, float rewardTime, bool enableDangoCountUp, bool isKeyQuest, PortraitTextData questTextData, int[] nextQuestId) : base(id, QuestType.CreateRole, questName, rewardTime, enableDangoCountUp, isKeyQuest, questTextData, nextQuestId)
         {
             _type = CreateRoleType.IncludeColor;
             _includeColor = includeColor;
             _specifyCount = specifyCount;
             _continueCount = continueCount;
         }
-        public QuestCreateRole(int id, CreateSameRole createSameRole, int specifyCount, int continueCount, string questName, float rewardTime, bool enableDangoCountUp, bool isKeyQuest, int[] nextQuestId) : base(id, QuestType.CreateRole, questName, rewardTime, enableDangoCountUp, isKeyQuest, nextQuestId)
+        public QuestCreateRole(int id, CreateSameRole createSameRole, int specifyCount, int continueCount, string questName, float rewardTime, bool enableDangoCountUp, bool isKeyQuest, PortraitTextData questTextData, int[] nextQuestId) : base(id, QuestType.CreateRole, questName, rewardTime, enableDangoCountUp, isKeyQuest, questTextData, nextQuestId)
         {
             _type = CreateRoleType.CreateSameRole;
             _createSameRole = createSameRole;
@@ -236,7 +234,7 @@ namespace Dango.Quest
         int _specifyCount;
         int _madeCount;
 
-        public QuestPlayAction(int id, PlayerAction action, int specifyCount, string questName, float rewardTime, bool enableDangoCountUp, bool isKeyQuest, int[] nextQuestId) : base(id, QuestType.PlayAction, questName, rewardTime, enableDangoCountUp, isKeyQuest, nextQuestId)
+        public QuestPlayAction(int id, PlayerAction action, int specifyCount, string questName, float rewardTime, bool enableDangoCountUp, bool isKeyQuest, PortraitTextData questTextData,int[] nextQuestId) : base(id, QuestType.PlayAction, questName, rewardTime, enableDangoCountUp, isKeyQuest, questTextData, nextQuestId)
         {
             _action = action;
             _specifyCount = specifyCount;
@@ -255,12 +253,12 @@ namespace Dango.Quest
         bool _isInFloor;
         FloorManager.Floor _currentFloor;
 
-        public QuestDestination(int id, FloorManager.Floor floor, bool onEatSucceed, string questName, float rewardTime, bool enableDangoCountUp, bool isKeyQuest, int[] nextQuestId) : base(id, QuestType.Destination, questName, rewardTime, enableDangoCountUp, isKeyQuest, nextQuestId)
+        public QuestDestination(int id, FloorManager.Floor floor, bool onEatSucceed, string questName, float rewardTime, bool enableDangoCountUp, bool isKeyQuest,PortraitTextData questTextData, int[] nextQuestId) : base(id, QuestType.Destination, questName, rewardTime, enableDangoCountUp, isKeyQuest,questTextData, nextQuestId)
         {
             _floors.Add(floor);
             _onEatSucceed = onEatSucceed;
         }
-        public QuestDestination(int id, FloorManager.Floor[] floors, bool onEatSucceed, string questName, float rewardTime, bool enableDangoCountUp, bool isKeyQuest, int[] nextQuestId) : base(id, QuestType.Destination, questName, rewardTime, enableDangoCountUp, isKeyQuest, nextQuestId)
+        public QuestDestination(int id, FloorManager.Floor[] floors, bool onEatSucceed, string questName, float rewardTime, bool enableDangoCountUp, bool isKeyQuest, PortraitTextData questTextData, int[] nextQuestId) : base(id, QuestType.Destination, questName, rewardTime, enableDangoCountUp, isKeyQuest, questTextData, nextQuestId)
         {
             _floors.AddRange(floors);
             _onEatSucceed = onEatSucceed;
@@ -270,7 +268,7 @@ namespace Dango.Quest
         public FloorManager.Floor CurrentFloor => _currentFloor;
         public bool SucceedOnEat => _onEatSucceed;
         public bool IsInFloor => _isInFloor;
-        public void SetIsInFloor(bool enable)=>_isInFloor = enable;
+        public void SetIsInFloor(bool enable) => _isInFloor = enable;
         public void SetFloor(FloorManager.Floor floor) => _currentFloor = floor;
     }
 }
