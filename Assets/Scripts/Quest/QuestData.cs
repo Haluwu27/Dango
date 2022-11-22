@@ -11,9 +11,8 @@ public abstract class QuestData
     float _clearTime;
     bool _enableDangoCountUp;
     bool _isKeyQuest;
-    PortraitTextData _questTextData;
 
-    public QuestData(int id, QuestType questType, string questName, float rewardTime, bool enableDangoCountUp, bool isKeyQuest, PortraitTextData questTextData,int[] nextQuestId)
+    public QuestData(int id, QuestType questType, string questName, float rewardTime, bool enableDangoCountUp, bool isKeyQuest, int[] nextQuestId)
     {
         _id = id;
         _questType = questType;
@@ -23,7 +22,6 @@ public abstract class QuestData
         _isKeyQuest = isKeyQuest;
         _nextQuestId.AddRange(nextQuestId);
         _clearTime = 0;
-        _questTextData = questTextData;
     }
 
     public int Id => _id;
@@ -33,7 +31,6 @@ public abstract class QuestData
     public float ClearTime => _clearTime;
     public bool EnableDangoCountUp => _enableDangoCountUp;
     public bool IsKeyQuest => _isKeyQuest;
-    public PortraitTextData QuestTextDatas => _questTextData;
 
     public bool SetKeyQuest(bool b) => _isKeyQuest = b;
     public List<int> NextQuestId => _nextQuestId;
