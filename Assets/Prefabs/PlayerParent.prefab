@@ -126,7 +126,53 @@ PrefabInstance:
       propertyPath: MainCam
       value: 
       objectReference: {fileID: 1061649141369810905}
-    m_RemovedComponents: []
+    - target: {fileID: 8056984623146519727, guid: 778aacd95f2f72d4eaff394bcf22a5d0,
+        type: 3}
+      propertyPath: m_Pivot.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8056984623146519727, guid: 778aacd95f2f72d4eaff394bcf22a5d0,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1.6728
+      objectReference: {fileID: 0}
+    - target: {fileID: 8056984623146519727, guid: 778aacd95f2f72d4eaff394bcf22a5d0,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -94.999695
+      objectReference: {fileID: 0}
+    - target: {fileID: 8056984623146519727, guid: 778aacd95f2f72d4eaff394bcf22a5d0,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 8056984623146519727, guid: 778aacd95f2f72d4eaff394bcf22a5d0,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 8056984623146519727, guid: 778aacd95f2f72d4eaff394bcf22a5d0,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8056984623146519727, guid: 778aacd95f2f72d4eaff394bcf22a5d0,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8056984623146519727, guid: 778aacd95f2f72d4eaff394bcf22a5d0,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 67.99999
+      objectReference: {fileID: 0}
+    - target: {fileID: 8056984623146519727, guid: 778aacd95f2f72d4eaff394bcf22a5d0,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 90
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 4204185043973972227, guid: 778aacd95f2f72d4eaff394bcf22a5d0, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 778aacd95f2f72d4eaff394bcf22a5d0, type: 3}
 --- !u!4 &4062595608074469452 stripped
 Transform:
@@ -134,6 +180,30 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1061649141599716161}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &8725691394498840527 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8623371098390463630, guid: 778aacd95f2f72d4eaff394bcf22a5d0,
+    type: 3}
+  m_PrefabInstance: {fileID: 1061649141599716161}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &3342629360564194805
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8725691394498840527}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa4e22384c7f0ba488fbc26faa783f58, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  LookPos: {fileID: 0}
+  manager: {fileID: 0}
+  array:
+    floorDatas: []
+    dangoInjections: []
+    maxDangoCount: 0
 --- !u!1001 &2245419032831560464
 PrefabInstance:
   m_ObjectHideFlags: 0

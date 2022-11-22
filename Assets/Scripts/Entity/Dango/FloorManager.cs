@@ -62,4 +62,5 @@ public class FloorManager : MonoBehaviour
     }
 
     public FloorArray[] FloorArrays => floorArrays;
+
 }

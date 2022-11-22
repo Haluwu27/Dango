@@ -66,6 +66,8 @@ public class FloorData : MonoBehaviour
         _mesh = GetComponent<MeshFilter>().mesh;
         _mesh.triangles = _mesh.triangles.Reverse().ToArray();
     }
+
+    public Floor GetFllor => floor;
 }
 
 [Serializable]
