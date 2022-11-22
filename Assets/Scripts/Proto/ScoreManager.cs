@@ -18,10 +18,11 @@ public class ScoreManager
         
        return questTime = time - temp;
     }
+    
     public float GetTime() => time;
 
     public void ResetQuestTime() => questTime = 0;
-    public void AddTime(float a) => time += a;
+    public void AddTime() => time += Time.deltaTime;
     public void AddClearQuest(QuestData quest) => clearQuestData.Add(quest);
     public void AddClearTime(float time) => clearQuestTime.Add(time);
     public List<float> GetClearTime() => clearQuestTime;
