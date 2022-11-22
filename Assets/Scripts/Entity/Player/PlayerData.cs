@@ -439,7 +439,7 @@ class PlayerData : MonoBehaviour
     [SerializeField] Camera playerCamera = default!;
 
     //プレイヤーの能力
-    [SerializeField] SpitManager spitManager = default!;
+    SpitManager spitManager = default!;
     [SerializeField] Canvas makerUI = default!;
     [SerializeField] GameObject rangeUI = default!;
     [SerializeField] FootObjScript footObj = default!;
@@ -458,8 +458,7 @@ class PlayerData : MonoBehaviour
     [SerializeField] ImageUIData _attackRangeImage = default!;
     [SerializeField] FaceAnimationController _faceAnimationController = default!;
 
-    //串を伸ばす処理
-    readonly PlayerGrowStab _playerGrowStab = new();
+    [SerializeField] SpitManager[] _swords = new SpitManager[5];
 
     const float DEFAULT_CAMERA_VIEW = 60f;
     const float CAMERA_REMOVETIME = 0.3f;
@@ -477,6 +476,7 @@ class PlayerData : MonoBehaviour
     PlayerAttackAction _playerAttack;
     PlayerStayEat _playerStayEat;
     PlayerEat _playerEat;
+    PlayerGrowStab _playerGrowStab;
 
     AnimationManager _animationManager;
 
@@ -536,6 +536,8 @@ class PlayerData : MonoBehaviour
 
     private void Awake()
     {
+        spitManager = _swords[0];
+
         _mapLayer = LayerMask.NameToLayer("Map");
         _animationManager = new(_animator);
 
@@ -546,6 +548,7 @@ class PlayerData : MonoBehaviour
         _playerJump = new(rb, OnJump, OnJumpExit, spitManager);
         _playerStayEat = new(this);
         _playerEat = new(_directing, _playerUIManager, kusiObj);
+        _playerGrowStab = new();
 
         makerUI.enabled = false;
         InitDangos();
@@ -801,6 +804,9 @@ class PlayerData : MonoBehaviour
         if (!enable) return;
 
         _currentStabCount = _playerGrowStab.GrowStab(_currentStabCount);
+        _swords[_currentStabCount - 3].gameObject.SetActive(true);
+        _swords[_currentStabCount - 4].gameObject.SetActive(false);
+        spitManager = _swords[_currentStabCount - 3];
         _playerUIManager.EventText.TextData.SetText("させる団子の数が増えた！(" + _currentStabCount + "個)");
 
         //刺せる範囲表示の拡大。今串が伸びないのでコメントアウトしてます。
