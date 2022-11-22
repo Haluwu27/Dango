@@ -18,6 +18,8 @@ namespace TM.Entity.Player
 
         int _currentTime = FALLACTION_STAY_AIR_FRAME;
 
+        int _mapLayer;
+
         Action _onFall;
         Action _onFallExit;
 
@@ -25,12 +27,13 @@ namespace TM.Entity.Player
 
         CapsuleCollider _collider;
 
-        public PlayerFallAction(CapsuleCollider collider, Action onFall, Action onFallExit, AnimationManager animationManager)
+        public PlayerFallAction(CapsuleCollider collider, Action onFall, Action onFallExit, AnimationManager animationManager, int mapLayer)
         {
             _collider = collider;
             _onFall = onFall;
             _onFallExit = onFallExit;
             _animationManager = animationManager;
+            _mapLayer = mapLayer;
         }
 
         public bool ToFallAction(Vector3 playerPos, bool isGround)
@@ -40,7 +43,7 @@ namespace TM.Entity.Player
             Ray ray = new(playerPos, Vector3.down);
 
             //‹ß‚­‚É’n–Ê‚ª‚ ‚é‚©(player‚Ì”¼•ª‚Ì‘å‚«‚³)”»’è
-            return !Physics.Raycast(ray, _collider.height + _collider.height / 2f, 8);
+            return !Physics.Raycast(ray, _collider.height + _collider.height / 2f, 1 << _mapLayer);
         }
 
         public bool FixedUpdate(Rigidbody rigidbody, SpitManager spitManager)

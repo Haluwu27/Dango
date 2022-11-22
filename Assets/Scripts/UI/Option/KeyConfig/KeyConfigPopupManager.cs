@@ -33,7 +33,6 @@ namespace TM.Input.KeyConfig
             if (!ChangeChoiceUtil.Choice(axis, ref _currentActionIndex, _actionDatas.Count, false, ChangeChoiceUtil.OptionDirection.Vertical)) return;
             
             ChangeCurrentAction();
-            Logger.Log(_currentAction);
         }
 
         public void OnChoiced()
