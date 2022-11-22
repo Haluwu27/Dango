@@ -19,11 +19,14 @@ namespace TM.Entity.Player
         Action _onJump;
         Action _onJumpExit;
 
-        public PlayerJump(Rigidbody rigidbody, Action onJump, Action onJumpExit)
+        SpitManager _spitManager;
+
+        public PlayerJump(Rigidbody rigidbody, Action onJump, Action onJumpExit,SpitManager spitManager)
         {
             _rb = rigidbody;
             _onJump = onJump;
             _onJumpExit = onJumpExit;
+            _spitManager = spitManager;
         }
 
         public void SetIsGround(bool isGround)
@@ -38,6 +41,8 @@ namespace TM.Entity.Player
 
         public void OnStayJumping()
         {
+            if (_spitManager.IsHitStop) return;
+
             _isStayJump = true;
         }
 

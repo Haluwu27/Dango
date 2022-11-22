@@ -20,8 +20,8 @@ public class Stage001Data : StageData.IAddQuest, StageData.IPortrait
 
         List<QuestData> quest = new()
         {
-            questManager.Creater.CreateQuestCreateRole(0, new QuestCreateRole.EstablishRole(true, false), 1, 0, "何らかの役を成立させる", 30f, false, false,new(new PortraitTextData.PTextData(0,"おぉ、役が揃ったな！",2f),new(0,"この調子で頼むぜ！",2f)), 2, 3),
-            questManager.Creater.CreateQuestCreateRole(1, new QuestCreateRole.EstablishRole(false, false), 1, 0, "役を成立させずに団子を食べる", 15f, false, false,new(new PortraitTextData.PTextData(0,"やっぱ団子は美味いな！",2f),new(0,"次はキレイな順番で食ってみるか…",2f)), 2, 3),
+            questManager.Creater.CreateQuestCreateRole(0, new QuestCreateRole.EstablishRole(true, false), 1, 0, "何らかの役を成立させる", 30f, false, false,new(new PortraitTextData.PTextData(0,"おぉ、役が揃ったな！",2f,PortraitTextData.FacePatturn.Normal),new(0,"この調子で頼むぜ！",2f,PortraitTextData.FacePatturn.Normal)), 2, 3),
+            questManager.Creater.CreateQuestCreateRole(1, new QuestCreateRole.EstablishRole(false, false), 1, 0, "役を成立させずに団子を食べる", 15f, false, false,new(new PortraitTextData.PTextData(0,"やっぱ団子は美味いな！",2f,PortraitTextData.FacePatturn.Normal),new(0,"次はキレイな順番で食ってみるか…",2f,PortraitTextData.FacePatturn.Normal)), 2, 3),
 
             questManager.Creater.CreateQuestCreateRole(2, new QuestCreateRole.UseColorCount(2), 1, 0, "2色でできる役を作る", 15f, false, false,new(new PortraitTextData.PTextData()), 4, 5),
             questManager.Creater.CreateQuestCreateRole(3, new QuestCreateRole.UseColorCount(1), 1, 0, "1色でできる役を作る", 45f, false, false,new(new PortraitTextData.PTextData()), 4, 5),
@@ -42,12 +42,13 @@ public class Stage001Data : StageData.IAddQuest, StageData.IPortrait
             questManager.Creater.CreateQuestDestination(11, FloorManager.Floor.floor11, false, "城内の最上層に向かえ", 0f, false, true,new(new PortraitTextData.PTextData()), 0),
         };
 
+        QuestData.Clear();
         QuestData.AddRange(quest);
         questManager.ChangeQuest(quest[0], quest[1]);
     }
 
     public PortraitTextData GetPortraitQuest()
     {
-        return new(new PortraitTextData.PTextData(0, "団道を始めるぜ！", 2f), new(0, "まずはクエストの確認からだな…", 2f), new(0, "Lボタンを押してみようぜ！", 10f));
+        return new(new PortraitTextData.PTextData(0, "団道を始めるぜ！", 2f, PortraitTextData.FacePatturn.Normal), new(0, "まずはクエストの確認からだな…", 2f, PortraitTextData.FacePatturn.Normal), new(0, "Lボタンを押してみようぜ！", 10f, PortraitTextData.FacePatturn.Normal));
     }
 }
