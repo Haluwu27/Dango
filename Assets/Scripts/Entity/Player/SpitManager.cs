@@ -1,4 +1,3 @@
-using Cysharp.Threading.Tasks;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -12,9 +11,6 @@ public class SpitManager : MonoBehaviour
     [SerializeField] FloorManager _floorManager;
     [SerializeField] PlayerKusiScript kusiScript;
 
-    //ヒットストップの停止フレームです。左から3d5,4d5...7d5です
-    static readonly List<int> hitStopFrameTable = new() { 30, 30, 30, 30, 30 };
-
     private void Awake()
     {
         DangoUISC = player.GetDangoUIScript();
@@ -23,7 +19,6 @@ public class SpitManager : MonoBehaviour
 
     private bool _isSticking;
     private bool _isInWall;
-    private bool _isHitStop;
 
     /// <summary>
     /// 突き刺しボタンが押されたときにtrueになる。
@@ -34,19 +29,17 @@ public class SpitManager : MonoBehaviour
         set
         {
             _capsuleCollider.enabled = value;
-            if (player.IsGround) _capsuleCollider.radius = 0.1f;
-            else _capsuleCollider.radius = 0.5f;
+            if (player.IsGround) _capsuleCollider.radius = 0.5f;
+            else _capsuleCollider.radius = 0.1f;
 
             _isSticking = value;
         }
     }
 
-    public bool IsHitStop => _isHitStop;
-
-    private async void OnTriggerEnter(Collider other)
+    private void OnTriggerEnter(Collider other)
     {
         if (other.GetComponent<DangoData>() == null) return;
-
+        
         //刺せる状態ではないなら実行しない
         if (!IsSticking) return;
         if (_isInWall) return;
@@ -72,14 +65,8 @@ public class SpitManager : MonoBehaviour
             //SE
             SoundManager.Instance.PlaySE(SoundSource.SE14_STAB_DANGO);
 
-            //刺せ無くする
-            IsSticking = false;
-
-            //落下アクション中に行う処理・ヒットストップ前でないと急降下の難易度が上がってしまう
+            //落下アクション中に行う処理
             OnFallAction();
-
-            //ヒットストップ
-            await HitStop(dango);
 
             //団子を刺す
             player.AddDangos(dango.GetDangoColor());
@@ -89,10 +76,12 @@ public class SpitManager : MonoBehaviour
 
             //UIの更新
             DangoUISC.DangoUISet(player.GetDangos());
-            DangoUISC.AddDango(player.GetDangos());
 
             //串の団子変更
             kusiScript.SetDango(player.GetDangos());
+
+            //刺せ無くする
+            IsSticking = false;
         }
         else
         {
@@ -109,40 +98,6 @@ public class SpitManager : MonoBehaviour
             _isInWall = false;
             return;
         }
-    }
-
-    private async UniTask HitStop(DangoData dango)
-    {
-        _isHitStop = true;
-
-        float pSpeed = player.GetAnimator().speed;
-        float dSpeed = dango.Animator.speed;
-
-        Vector3 playerVelocity = player.Rb.velocity;
-
-        //アニメーションを一時停止
-        player.GetAnimator().speed = 0f;
-        dango.Animator.speed = 0f;
-
-        //移動を一時停止
-        player.Rb.velocity = Vector3.zero;
-        player.Rb.isKinematic = true;
-        player.SetIsMoveable(false);
-        dango.Rb.velocity = Vector3.zero;
-        dango.Rb.isKinematic = true;
-        dango.SetIsMoveable(false);
-
-        await UniTask.DelayFrame(hitStopFrameTable[player.GetCurrentStabCount() - 3]);
-
-        //移動やアニメーションを元に戻す
-        player.GetAnimator().speed = pSpeed;
-        player.Rb.isKinematic = false;
-        player.SetIsMoveable(true);
-        player.Rb.velocity = playerVelocity;
-        dango.Animator.speed = dSpeed;
-        dango.Rb.isKinematic = false;
-
-        _isHitStop = false;
     }
 
     private void OnFallAction()

@@ -27,8 +27,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 133535671825098961}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -0, z: 1.5}
-  m_LocalScale: {x: 1, y: 0.5, z: 3.5}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2267749163450171226}
@@ -220,7 +220,6 @@ GameObject:
   - component: {fileID: 6013245353808961043}
   - component: {fileID: 3193100650533338812}
   - component: {fileID: 7644088380944789818}
-  - component: {fileID: 1733316497972855404}
   m_Layer: 3
   m_Name: Player1
   m_TagString: Player
@@ -264,7 +263,7 @@ MonoBehaviour:
   capsuleCollider: {fileID: 7644088380944789818}
   playerCamera: {fileID: 0}
   spitManager: {fileID: 1542934558795306056}
-  makerUI: {fileID: 1961741039857682178}
+  makerUI: {fileID: 5358551538224260221}
   rangeUI: {fileID: 6327859204016997052}
   footObj: {fileID: 0}
   kusiObj: {fileID: 38215294996633075}
@@ -275,7 +274,6 @@ MonoBehaviour:
   _ice: {fileID: 13400000, guid: c0ef6cc3f7a19e34185f1ae9a241cf61, type: 2}
   _normal: {fileID: 13400000, guid: eadff661cf3eb09449ef0452d4507768, type: 2}
   _attackRangeImage: {fileID: 3749407156380008204}
-  _faceAnimationController: {fileID: 1733316497972855404}
 --- !u!54 &6013245353808961043
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -318,19 +316,6 @@ CapsuleCollider:
   m_Height: 1.5
   m_Direction: 1
   m_Center: {x: 0, y: 0.75, z: 0}
---- !u!114 &1733316497972855404
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3952613918130635532}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: eab5775c6f58c3c47bef4ae9c51ab320, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  faceMaterial: {fileID: 2100000, guid: cec8548ad716a604493774e9f952b04f, type: 2}
 --- !u!1 &4132275001556721553
 GameObject:
   m_ObjectHideFlags: 0
@@ -514,7 +499,6 @@ GameObject:
   m_Component:
   - component: {fileID: 2267749163450171226}
   - component: {fileID: 2164072874612405197}
-  - component: {fileID: 4949754110901319488}
   m_Layer: 3
   m_Name: EatCam
   m_TagString: Untagged
@@ -529,15 +513,15 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5976948669579022757}
-  m_LocalRotation: {x: -0, y: -0.9940543, z: 0.10888574, w: 0}
-  m_LocalPosition: {x: 0, y: 1.25, z: 1.18}
+  m_LocalRotation: {x: -0, y: -0.99813485, z: 0.06104851, w: 0}
+  m_LocalPosition: {x: 0, y: 1, z: 4}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4142225497063631158}
   m_Father: {fileID: 3952613918130635533}
   m_RootOrder: 3
-  m_LocalEulerAnglesHint: {x: 12.502, y: -180, z: 0}
+  m_LocalEulerAnglesHint: {x: 7, y: -180, z: 0}
 --- !u!20 &2164072874612405197
 Camera:
   m_ObjectHideFlags: 0
@@ -581,24 +565,6 @@ Camera:
   m_OcclusionCulling: 1
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
---- !u!114 &4949754110901319488
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5976948669579022757}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: db43d1668c0e3364c993de8006ce5ce8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  MainCam: {fileID: 0}
-  EatCam: {fileID: 2164072874612405197}
-  EatCamCube: {fileID: 133535671825098961}
-  LayerMask:
-    serializedVersion: 2
-    m_Bits: 128
 --- !u!1 &6327859204016997052
 GameObject:
   m_ObjectHideFlags: 0
@@ -1398,7 +1364,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 807c0e77034a3ea44aaec3f092d88c33, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  eatCamera: {fileID: 4949754110901319488}
+  eatCamera: {fileID: 0}
 --- !u!114 &4455526093197044745
 MonoBehaviour:
   m_ObjectHideFlags: 0

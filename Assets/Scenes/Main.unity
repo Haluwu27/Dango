@@ -536,7 +536,7 @@ MonoBehaviour:
   - {fileID: 8900919052169510685, guid: 05bcc92d13a39e0478d30f7d620a6304, type: 3}
   - {fileID: 5484892727869171512, guid: 14ae0c9e7fdd71a4090275e24139e518, type: 3}
   - {fileID: 0}
-  startScene: 6
+  startScene: 0
 --- !u!4 &1271659318
 Transform:
   m_ObjectHideFlags: 0

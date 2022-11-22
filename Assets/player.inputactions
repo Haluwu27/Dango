@@ -257,28 +257,6 @@
                 },
                 {
                     "name": "",
-                    "id": "1888e0c7-63e5-49f6-8f5a-0c09fd16f61d",
-                    "path": "<Gamepad>/buttonWest",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Gamepad",
-                    "action": "ExpansionUI",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "c8dc9a92-614b-4efc-9b8e-a095b497f79f",
-                    "path": "<Gamepad>/leftShoulder",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Gamepad",
-                    "action": "ExpansionUI",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
                     "id": "9a5ed80d-9ea6-4d48-8e60-75f8496bb10e",
                     "path": "<Mouse>/leftButton",
                     "interactions": "",
@@ -290,11 +268,33 @@
                 },
                 {
                     "name": "",
-                    "id": "1f1f3790-82c9-49c3-8598-3854c6191067",
+                    "id": "7bc0232c-b5c9-4cce-8dbf-ed92e8bd4b1d",
                     "path": "<Gamepad>/buttonEast",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
+                    "action": "Jump",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "1f1f3790-82c9-49c3-8598-3854c6191067",
+                    "path": "<Gamepad>/buttonWest",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Attack",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "e69dff57-dfd2-465b-9049-3586d82e36bb",
+                    "path": "<Gamepad>/buttonNorth",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
                     "action": "Attack",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -307,6 +307,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "Jump",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "820f0fc6-e89c-46ba-b440-9bb11a664f77",
+                    "path": "<Gamepad>/leftShoulder",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ExpansionUI",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
