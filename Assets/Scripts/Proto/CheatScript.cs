@@ -43,6 +43,7 @@ public class CheatScript : MonoBehaviour
         {
             player.AddDangos(c);
             uIScript.GetComponent<DangoUIScript>().DangoUISet(player.GetDangos());
+            uIScript.GetComponent<DangoUIScript>().AddDango(player.GetDangos());
         }
     }
 
@@ -50,5 +51,6 @@ public class CheatScript : MonoBehaviour
     {
         player.ResetDangos();
         uIScript.GetComponent<DangoUIScript>().DangoUISet(player.GetDangos());
+        uIScript.GetComponent<DangoUIScript>().ALLRemoveDango(player.GetDangos());
     }
 }

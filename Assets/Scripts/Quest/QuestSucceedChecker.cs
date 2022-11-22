@@ -11,6 +11,7 @@ namespace Dango.Quest
         bool _isSucceedThisFrame;
 
         PlayerUIManager _playerUIManager;
+        PortraitScript _portraitScript;
 
         private async UniTask SetBoolAfterOneFrame(bool enable)
         {
@@ -19,10 +20,11 @@ namespace Dango.Quest
             _isSucceedThisFrame = enable;
         }
 
-        public QuestSucceedChecker(QuestManager manager, PlayerUIManager playerUIManager)
+        public QuestSucceedChecker(QuestManager manager, PlayerUIManager playerUIManager, PortraitScript portraitScript)
         {
             _manager = manager;
             _playerUIManager = playerUIManager;
+            _portraitScript = portraitScript;
         }
 
         #region EatDango
@@ -371,12 +373,14 @@ namespace Dango.Quest
             _isSucceedThisFrame = true;
             SetBoolAfterOneFrame(false).Forget();
 
+           _portraitScript.ChangePortraitText(quest.QuestTextDatas).Forget();
+
             if (quest.IsKeyQuest)
             {
                 _manager.SetIsComplete();
                 return;
             }
- 
+
             Logger.Log(quest.QuestName + "クエストクリア！");
 
             _manager.CreateExpansionUIObj();
