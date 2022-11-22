@@ -54,7 +54,9 @@ public class PlayerUIManager : MonoBehaviour
     private void Update()
     {
         currentTime = time;
-        ScoreManager.Instance.AddTime(Time.deltaTime);
+        if(!PlayerData.Event)
+        ScoreManager.Instance.AddTime();
+
         Warning();
 
         for (int i = 0; i < timeGage.Length; i++)//ƒQ[ƒW‚Ì‘Œ¸
