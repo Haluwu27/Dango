@@ -19,11 +19,13 @@ namespace TM.Entity.Player
         int _currentTime = 0;
         ImageUIData _coolDownImage;
         Animator _animator;
+        SpitManager _spitManager;
 
-        public PlayerAttackAction(ImageUIData coolDownImage, Animator animator)
+        public PlayerAttackAction(ImageUIData coolDownImage, Animator animator, SpitManager spitManager)
         {
             _coolDownImage = coolDownImage;
             _animator = animator;
+            _spitManager = spitManager;
         }
 
         public bool FixedUpdate(AttackPattern attack)
@@ -35,7 +37,10 @@ namespace TM.Entity.Player
         {
             var stateInfo = _animator.GetCurrentAnimatorStateInfo(0);
 
+            if (stateInfo.IsName("AN1")) return true;
             if (!stateInfo.IsName("AN7B")) return false;
+
+            _spitManager.IsSticking = false;
             return stateInfo.normalizedTime >= 0.7f;
         }
 

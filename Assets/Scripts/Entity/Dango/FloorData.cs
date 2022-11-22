@@ -96,8 +96,6 @@ public class FloorArray
     public void RemoveDangoCount(int shotValue)
     {
         dangoCount--;
-        if (_floor == Floor.floor1)
-            Logger.Log(dangoCount);
 
         if (dangoCount >= maxDangoCount) return;
 

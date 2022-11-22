@@ -80,7 +80,7 @@ public class DataManager : MonoBehaviour
 
     private void InitKeyData()
     {
-        actionReferencesTable = new InputActionReference[] { Attack, Jump, Attack, Jump, ExpansionUI, null, EatDango, Fire, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null };
+        actionReferencesTable = new InputActionReference[] { null, Attack, ExpansionUI, Jump, ExpansionUI, null, EatDango, Fire, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null };
 
         for (int i = 0; i < (int)GamepadKey.Max; i++)
         {
@@ -624,11 +624,13 @@ public class DataManager : MonoBehaviour
 
     private GameAction ToGameAction(InputActionReference inputActionReference)
     {
-        if (inputActionReference == Jump) return GameAction.Jump;
-        if (inputActionReference == Attack) return GameAction.Attack;
-        if (inputActionReference == Fire) return GameAction.Remove;
-        if (inputActionReference == ExpansionUI) return GameAction.UIExpansion;
-        if (inputActionReference == EatDango) return GameAction.Eat;
+        if (inputActionReference == null) return GameAction.Unknown;
+
+        if (inputActionReference.ToString().Equals(Jump.ToString())) return GameAction.Jump;
+        if (inputActionReference.ToString().Equals(Attack.ToString())) return GameAction.Attack;
+        if (inputActionReference.ToString().Equals(Fire.ToString())) return GameAction.Remove;
+        if (inputActionReference.ToString().Equals(ExpansionUI.ToString())) return GameAction.UIExpansion;
+        if (inputActionReference.ToString().Equals(EatDango.ToString())) return GameAction.Eat;
 
         return GameAction.Unknown;
     }
