@@ -80,12 +80,12 @@ namespace TM.Input.KeyConfig
         {
            new KeyData.GamepadKey[] {KeyData.GamepadKey.LStick },                                       //Move
            new KeyData.GamepadKey[] {KeyData.GamepadKey.RStick },                                       //Look
-           new KeyData.GamepadKey[] {KeyData.GamepadKey.ButtonSouth},                                   //Jump
-           new KeyData.GamepadKey[] {KeyData.GamepadKey.ButtonEast },                                   //Attack
+           new KeyData.GamepadKey[] {KeyData.GamepadKey.ButtonSouth,KeyData.GamepadKey.ButtonEast },    //Jump
+           new KeyData.GamepadKey[] {KeyData.GamepadKey.ButtonNorth,KeyData.GamepadKey.ButtonWest },    //Attack
            new KeyData.GamepadKey[] {KeyData.GamepadKey.LTrigger },                                     //EatDango
            new KeyData.GamepadKey[] {KeyData.GamepadKey.RTrigger },                                     //Fire
            new KeyData.GamepadKey[] {KeyData.GamepadKey.Start,KeyData.GamepadKey.Select },              //Option
-           new KeyData.GamepadKey[] {KeyData.GamepadKey.L ,KeyData.GamepadKey.ButtonWest},              //UIExtra
+           new KeyData.GamepadKey[] {KeyData.GamepadKey.L },                                            //UIExtra
         };
 
         private void Awake()

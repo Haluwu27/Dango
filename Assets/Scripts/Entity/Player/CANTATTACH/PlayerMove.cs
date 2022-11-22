@@ -14,9 +14,6 @@ namespace TM.Entity.Player
         const float MIN_AXIS_VALUE = 0.1f;
 
         AnimationManager _manager;
-        bool _isMoveable = true;
-
-        public void SetIsMoveable(bool enable) => _isMoveable = enable;
 
         public PlayerMove(AnimationManager manager)
         {
@@ -25,8 +22,6 @@ namespace TM.Entity.Player
 
         public void Update(Rigidbody rb, Transform camera, bool isWalkState)
         {
-            if (!_isMoveable) return;
-
             //“ü—Í’l‚ð‘ã“ü
             Vector2 axis = InputSystemManager.Instance.MoveAxis;
 
@@ -54,7 +49,7 @@ namespace TM.Entity.Player
 
             if (mag > 0.5f) _manager.ChangeAnimation(AnimationManager.E_Animation.An2_Run, 0.2f);
             else if (mag > 0) _manager.ChangeAnimation(AnimationManager.E_Animation.An10_Walk, 0.2f);
-            else _manager.ChangeAnimation(AnimationManager.E_Animation.An1_Idle, 0.2f);
+            else _manager.ChangeAnimation(AnimationManager.E_Animation.An1_Idle, 0.2f); 
         }
 
         private void RotateToMoveVec(Vector3 moveVec, Rigidbody rb)

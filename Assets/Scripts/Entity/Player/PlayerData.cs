@@ -59,8 +59,6 @@ class PlayerData : MonoBehaviour
     {
         public IState.E_State Initialize(PlayerData parent)
         {
-            parent._faceAnimationController.ChangeFaceType(FaceAnimationController.FaceTypes.Default);
-
             //串の状態をリセット
             parent.ResetSpit();
             return IState.E_State.Unchanged;
@@ -232,7 +230,6 @@ class PlayerData : MonoBehaviour
     {
         public IState.E_State Initialize(PlayerData parent)
         {
-            parent._faceAnimationController.ChangeFaceType(FaceAnimationController.FaceTypes.Smile);
             parent._animationManager.ChangeAnimationEnforcement(AnimationManager.E_Animation.An4B_Eat, 0);
             parent._playerEat.EatDango(parent);
             parent._hasStayedEat = false;
@@ -297,9 +294,6 @@ class PlayerData : MonoBehaviour
         }
         public IState.E_State FixedUpdate(PlayerData parent)
         {
-            //プレイヤーを動かす処理
-            parent._playerMove.Update(parent.rb, parent.playerCamera.transform, true);
-
             //満腹度（制限時間）減らす処理
             parent.DecreaseSatiety();
 
@@ -367,6 +361,7 @@ class PlayerData : MonoBehaviour
     {
         public IState.E_State Initialize(PlayerData parent)
         {
+            parent._animationManager.ChangeAnimation(AnimationManager.E_Animation.An8B_DangoRemove, Time.fixedDeltaTime * 3);
             parent._playerRemoveDango.Remove();
 
             return IState.E_State.Unchanged;
@@ -382,7 +377,6 @@ class PlayerData : MonoBehaviour
 
             //満腹度（制限時間）減らす処理
             parent.DecreaseSatiety();
-            parent._animationManager.ChangeAnimation(AnimationManager.E_Animation.An8B_DangoRemove, 0);
 
             return parent._playerRemoveDango.IsRemoveCoolTime() ? IState.E_State.Unchanged : IState.E_State.Control;
         }
@@ -440,7 +434,7 @@ class PlayerData : MonoBehaviour
 
     //プレイヤーの能力
     [SerializeField] SpitManager spitManager = default!;
-    [SerializeField] Canvas makerUI = default!;
+    [SerializeField] GameObject makerUI = default!;
     [SerializeField] GameObject rangeUI = default!;
     [SerializeField] FootObjScript footObj = default!;
     [SerializeField] PlayerKusiScript kusiObj = default!;
@@ -456,7 +450,6 @@ class PlayerData : MonoBehaviour
     [SerializeField] PhysicMaterial _normal = default!;
 
     [SerializeField] ImageUIData _attackRangeImage = default!;
-    [SerializeField] FaceAnimationController _faceAnimationController = default!;
 
     //串を伸ばす処理
     readonly PlayerGrowStab _playerGrowStab = new();
@@ -466,8 +459,6 @@ class PlayerData : MonoBehaviour
 
     const float EVENTTEXT_FLASH_TIME = 0.4f;
     const float EVENTTEXT_PRINT_TIME = 2.4f;
-
-    int _mapLayer;
 
     //生成はAwakeで行っています。
     PlayerMove _playerMove;
@@ -536,18 +527,15 @@ class PlayerData : MonoBehaviour
 
     private void Awake()
     {
-        _mapLayer = LayerMask.NameToLayer("Map");
         _animationManager = new(_animator);
 
-        _playerAttack = new(_attackRangeImage, _animator, spitManager);
-        _playerFall = new(capsuleCollider, OnJump, OnJumpExit, _animationManager, _mapLayer);
-        _playerRemoveDango = new(_dangos, _dangoUISC, this, _animator, kusiObj, spitManager);
+        _playerAttack = new(_attackRangeImage, _animator);
+        _playerFall = new(capsuleCollider, OnJump, OnJumpExit, _animationManager);
+        _playerRemoveDango = new(_dangos, _dangoUISC, this, _animator, kusiObj);
         _playerMove = new(_animationManager);
-        _playerJump = new(rb, OnJump, OnJumpExit, spitManager);
+        _playerJump = new(rb, OnJump, OnJumpExit);
         _playerStayEat = new(this);
         _playerEat = new(_directing, _playerUIManager, kusiObj);
-
-        makerUI.enabled = false;
         InitDangos();
     }
 
@@ -560,6 +548,7 @@ class PlayerData : MonoBehaviour
         InputSystemManager.Instance.onEatDangoCanceled += OnEatDangoCanceled;
         InputSystemManager.Instance.onJumpPerformed += _playerJump.OnStayJumping;
         InputSystemManager.Instance.onJumpCanceled += _playerJump.Jump;
+        makerUI.SetActive(false);
     }
 
     private void Update()
@@ -589,9 +578,6 @@ class PlayerData : MonoBehaviour
     //突き刺しボタン降下時処理
     private async void OnAttack()
     {
-        //ヒットストップ中受け付けない
-        if (spitManager.IsHitStop) return;
-
         //落下アクション中受け付けない。
         if (_playerFall.IsFallAction) return;
 
@@ -685,29 +671,16 @@ class PlayerData : MonoBehaviour
 
     private void FallActionMaker()
     {
-        //地上なら確実に動作しない
-        if (IsGround)
-        {
-            makerUI.enabled = false;
-            return;
-        }
+        var ray = new Ray(transform.position, Vector3.down);
 
-        Ray ray = new(transform.position, Vector3.down);
-
-        //描画しなくていいなら弾く
-        if (Physics.Raycast(ray, capsuleCollider.height + capsuleCollider.height / 2f, 1 << _mapLayer))
+        if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity))
         {
-            makerUI.enabled = false;
-            return;
-        }
-
-        if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, 1 << _mapLayer))
-        {
-            makerUI.transform.position = (hit.point + transform.forward.normalized * 0.313f).SetY(hit.point.y + 0.01f);
+            makerUI.transform.position = hit.point + new Vector3(0, 0.01f, 0);
 
             //突き刺しできるようになったら有効化
-            makerUI.enabled = true;
+            makerUI.SetActive(!Physics.Raycast(ray, capsuleCollider.height + capsuleCollider.height / 2f));
         }
+
     }
 
     private void RangeUI()
@@ -830,8 +803,6 @@ class PlayerData : MonoBehaviour
     public float GetSatiety() => _satiety;
     public void AddSatiety(float value) => _satiety += value;
     public DangoUIScript GetDangoUIScript() => _dangoUISC;
-    public Animator GetAnimator() => _animator;
-    public void SetIsMoveable(bool enable) => _playerMove.SetIsMoveable(enable);
 
     #endregion
 }

@@ -95,7 +95,7 @@ BoxCollider:
   m_GameObject: {fileID: 1634823978114891857}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
@@ -111,20 +111,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9869d52441a7a784d9ce33a907e72152, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  shotMode: 0
-  colorChoice: 0
   spawner: {fileID: 1634823979475976651}
   defalutInjectionCount: 1
   defalutContinueFrame: 0
-  animationFrame: 40
-  shotWaitFrame: 10
-  animationWaitFrame: 10
+  waitFrame: 50
   shotPower: 20
   verticalRot: {x: -30, y: 30}
   horizontalRot: {x: -80, y: 80}
-  fixedAngles: []
-  floorManager: {fileID: 0}
-  _canShot: 1
 --- !u!1 &1634823979475976651
 GameObject:
   m_ObjectHideFlags: 0
