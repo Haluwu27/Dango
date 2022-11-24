@@ -89,8 +89,8 @@ public class FloorArray
     [SerializeField, Tooltip("エリアの定義")] FloorData[] floorDatas;
     [SerializeField, Tooltip("エリアに存在する団子射出装置")] DangoInjection[] dangoInjections;
     [SerializeField, Tooltip("エリアに存在できる最大の団子の数"), Min(0)] int maxDangoCount;
-    [SerializeField, Tooltip("救済供給可能D5")] E_D5 salvageableD5;
-    [SerializeField, Tooltip("はじめて侵入可能になるD5")] E_D5 intrudableD5;
+    [SerializeField, Tooltip("救済供給可のうD5")] E_D5 salvageableD5;
+    [SerializeField, Tooltip("はじめて侵入可のうになるD5")] E_D5 intrudableD5;
 
     int[] dangoCounts = new int[(int)DangoColor.Other - 1];
     int dangoCount;

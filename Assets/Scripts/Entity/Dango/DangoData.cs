@@ -118,13 +118,13 @@ public class DangoData : MonoBehaviour
 
             _canShotList.Add(list);
         }
-        
+
 #if UNITY_EDITOR
         //この処理はデバッグ用なためビルドには通しません
         //もし発射可能なフロアが存在しなかったら以降は行わない
         if (_canShotList.Count == 0)
         {
-            Logger.Warn("救済発射可能エリアがありません。設定を見直してください\n現在のD5：" + stabCount);
+            Logger.Warn("救済発射可のうエリアがありません。設定を見直してください。" + "\n" + "現在のD5：" + stabCount);
             return;
         }
 #endif
