@@ -49,7 +49,7 @@ public class FloorData : MonoBehaviour
         GameObject obj = new();
         obj.transform.parent = transform;
         obj.AddComponent<MeshCollider>().sharedMesh = _mesh;
-        obj.layer = 8;
+        obj.layer = LayerMask.NameToLayer("MapCollider");
         obj.transform.localPosition = Vector3.zero;
         obj.transform.localRotation = Quaternion.identity;
     }
@@ -71,19 +71,42 @@ public class FloorData : MonoBehaviour
 [Serializable]
 public class FloorArray
 {
+    [Flags]
+    enum E_D5
+    {
+        None = 0,
+
+        a3D5 = 1 << 1,
+        a4D5 = 1 << 2,
+        a5D5 = 1 << 3,
+        a6D5 = 1 << 4,
+        a7D5 = 1 << 5,
+
+        [InspectorName("")]
+        Max
+    }
+
     [SerializeField, Tooltip("エリアの定義")] FloorData[] floorDatas;
     [SerializeField, Tooltip("エリアに存在する団子射出装置")] DangoInjection[] dangoInjections;
     [SerializeField, Tooltip("エリアに存在できる最大の団子の数"), Min(0)] int maxDangoCount;
+    [SerializeField, Tooltip("救済供給可能D5")] E_D5 salvageableD5;
+    [SerializeField, Tooltip("はじめて侵入可能になるD5")] E_D5 intrudableD5;
 
+    int[] dangoCounts = new int[(int)DangoColor.Other - 1];
     int dangoCount;
-    Floor _floor;
+
+    DangoData _salvationDango;
 
     //重複しない乱数取得用
     List<int> _nums = new();
 
-    public void AddDangoCount()
+    public void AddDangoCount(DangoColor color)
     {
+        if (HasFlagIntrudableD5(1))
+            Logger.Log(floorDatas[0].name +":"+ color);
+
         dangoCount++;
+        dangoCounts[(int)color - 1]++;
 
         if (dangoCount < maxDangoCount) return;
 
@@ -93,9 +116,10 @@ public class FloorArray
         }
     }
 
-    public void RemoveDangoCount(int shotValue)
+    public void RemoveDangoCount(int shotValue, DangoColor color)
     {
         dangoCount--;
+        dangoCounts[(int)color - 1]--;
 
         if (dangoCount >= maxDangoCount) return;
 
@@ -112,7 +136,7 @@ public class FloorArray
             int index = UnityEngine.Random.Range(0, _nums.Count);
 
             //重複しないランダムな発射装置の発射フラグを立てる
-            DangoInjections[_nums[index]].SetCanShot(true);
+            if (dangoCount < maxDangoCount) DangoInjections[_nums[index]].SetCanShot(true);
 
             //今回取得した番号を選択肢から排除
             _nums.RemoveAt(index);
@@ -122,8 +146,41 @@ public class FloorArray
         _nums.Clear();
     }
 
-    public void SetFloor(Floor floor) => _floor = floor;
-    public Floor Floor => _floor;
+    public int[] DangoCounts => dangoCounts;
     public FloorData[] FloorDatas => floorDatas;
     public DangoInjection[] DangoInjections => dangoInjections;
+    public bool HasFlagSalvageableD5(int d5)
+    {
+        Logger.Assert(d5 is > 0 and <= 5);
+        return salvageableD5.HasFlag((E_D5)(1 << d5));
+    }
+    public bool HasFlagIntrudableD5(int d5)
+    {
+        Logger.Assert(d5 is > 0 and <= 5);
+
+        //判定しようとしている以下のフロアで侵入可能になっていたらそのフラグが立っていると同義
+        //ex.(4d5を判定・・・3d5で侵入可能フロアにも侵入できる）
+        for (int i = d5; i > 0; i--)
+        {
+            if (intrudableD5.HasFlag((E_D5)(1 << i))) return true;
+        }
+
+        return false;
+    }
+    public bool SetSalvationDango(DangoData dango)
+    {
+        if (dango == null)
+        {
+            _salvationDango = null;
+            return true;
+        }
+        if (_salvationDango is not null) return false;
+
+        _salvationDango = dango;
+        return true;
+    }
+    public bool AlreadyExistSavlationDango()
+    {
+        return _salvationDango is not null;
+    }
 }
