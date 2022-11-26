@@ -6,6 +6,7 @@ using TM.Easing.Management;
 using TMPro;
 using System;
 using static FloorManager;
+using System.Drawing;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -213,7 +214,7 @@ public class DangoInjection : MonoBehaviour
         if (--_continueFrame > 0) return false;
 
         //団子発射
-        if (!ShotDango()) return false;
+        if (!ShotDango(dangoColors[UnityEngine.Random.Range(0, dangoColors.Count)])) return false;
 
         //次の発射地点を決定
         NextLook();
@@ -221,28 +222,32 @@ public class DangoInjection : MonoBehaviour
         return true;
     }
 
-    private bool ShotDango()
+    private bool ShotDango(DangoColor color)
     {
         if (dangoColors.Count == 0) return false;
 
-        //選択した色の中からランダムに色を取得
-        //※ランダムなため確率を設定できるように変更推奨※
-        var color = dangoColors[UnityEngine.Random.Range(0, dangoColors.Count)];
+        EnforcementShot(color);
 
+        floorManager.FloorArrays[(int)_floor].AddDangoCount(color);
+
+        return --_injectionCount <= 0;
+    }
+
+    public DangoData EnforcementShot(DangoColor color)
+    {
         //オブジェクトプールから団子を取り出して設定。
         _poolManager.SetCreateColor(color);
         var dango = _poolManager.DangoPool[(int)color - 1].Get();
+        
         dango.SetDangoColor(color);
-
         dango.transform.position = spawner.transform.position;
         dango.Rb.AddForce(transform.forward.normalized * shotPower, ForceMode.Impulse);
-        _continueFrame = defalutContinueFrame;
         dango.SetFloor(_floor);
         dango.SetFloorManager(floorManager);
 
-        floorManager.FloorArrays[(int)_floor].AddDangoCount();
+        _continueFrame = defalutContinueFrame;
 
-        return --_injectionCount <= 0;
+        return dango;
     }
 
     private bool IsSmoothLookRotation()
@@ -288,6 +293,11 @@ public class DangoInjection : MonoBehaviour
         if (val < -180f) return val + 360f;
 
         return val;
+    }
+
+    public void SalvationShot(DangoColor color)
+    {
+        EnforcementShot(color);
     }
 
     public void SetFloor(Floor floor) => _floor = floor;

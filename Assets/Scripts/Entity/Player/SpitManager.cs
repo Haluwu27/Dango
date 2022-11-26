@@ -85,7 +85,7 @@ public class SpitManager : MonoBehaviour
             player.AddDangos(dango.GetDangoColor());
 
             //フィールドにある団子を消す
-            dango.ReleaseDangoPool();
+            dango.ReleaseDangoPool(player.GetCurrentStabCount());
 
             //UIの更新
             DangoUISC.DangoUISet(player.GetDangos());
@@ -132,7 +132,7 @@ public class SpitManager : MonoBehaviour
         dango.Rb.isKinematic = true;
         dango.SetIsMoveable(false);
 
-        await UniTask.DelayFrame(hitStopFrameTable[player.GetCurrentStabCount() - 3]);
+        await UniTask.DelayFrame(hitStopFrameTable[player.GetCurrentStabCount() - 3], PlayerLoopTiming.FixedUpdate);
 
         //移動やアニメーションを元に戻す
         player.GetAnimator().speed = pSpeed;

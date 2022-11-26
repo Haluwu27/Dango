@@ -46,15 +46,12 @@ namespace TM.Entity.Player
 
         private bool IsWaitingOnGround()
         {
-            //“Ë‚«h‚µ’†i‚à‚Æ‚É–ß‚é‘Ò‹@’†j‚È‚ç
-            if (++_currentTime < ATTACK_FRAME)
-            {
-                _coolDownImage.ImageData.SetHeight(DEFAULT_HEIGHT * _currentTime / ATTACK_FRAME);
-                return false;
-            }
+            var stateInfo = _animator.GetCurrentAnimatorStateInfo(0);
 
-            _coolDownImage.ImageData.SetHeight(DEFAULT_HEIGHT);
-            return true;
+            if (!stateInfo.IsName("AN5")) return false;
+
+            _coolDownImage.ImageData.SetHeight(DEFAULT_HEIGHT * _currentTime / ATTACK_FRAME);
+            return stateInfo.normalizedTime >= 0.9f;
         }
 
         public void ResetTime()

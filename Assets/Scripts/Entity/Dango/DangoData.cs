@@ -7,13 +7,6 @@ using UnityEngine;
 /// </summary>
 public class DangoData : MonoBehaviour
 {
-    //消去時間（10秒）
-    const int DELETE_FRAME = 500;
-    const float DELETE_MIN_SPEED = 0.1f;
-
-    //消去時間
-    int _frameCount = DELETE_FRAME;
-
     bool _isMoveable = true;
 
     //団子が持つ色データ
@@ -33,9 +26,22 @@ public class DangoData : MonoBehaviour
     //オブジェクトプールマネージャー
     DangoPoolManager _poolManager;
 
+    //救済団子が所属しているフロア
+    FloorArray _salvationFloor;
+    List<FloorArray> _canShotList = new();
+
+    static bool[] completedInitialization = new bool[5];
+
+
     private void Awake()
     {
         _poolManager = GameObject.Find("DangoPoolManager").GetComponent<DangoPoolManager>();
+    }
+
+    public void OnEnable()
+    {
+        //移動可能にする
+        _isMoveable = true;
     }
 
     private void FixedUpdate()
@@ -57,33 +63,78 @@ public class DangoData : MonoBehaviour
 
         //ここで回転処理でも作る
         if (_rigidbody.velocity.magnitude < 0.01f) transform.Rotate(0, Random.Range(90f, 270f), 0);
-
     }
 
-    //未使用
-    private void ReleaseDango()
+    public void ReleaseDangoPool(int stabCount)
     {
-        if (Rend == null || Rb == null) return;
+        //部屋の団子総数をへらす
+        _floorManager.FloorArrays[(int)_floor].RemoveDangoCount(1, _color);
 
-        //もし団子がカメラ外で、速度が一定値以下であれば
-        if (!Rend.isVisible && Rb.velocity.magnitude < DELETE_MIN_SPEED)
+        //この団子が救済団子であれば
+        if (_salvationFloor != null)
         {
-            if (--_frameCount <= 0) ReleaseDangoPool();
+            //部屋の登録情報を消す
+            _salvationFloor.SetSalvationDango(null);
+
+            //この団子の登録情報を消す
+            _salvationFloor = null;
+        }
+
+        if (completedInitialization[stabCount - 3])
+        {
+            //救済処理
+            Salvation(stabCount, _color);
         }
         else
         {
-            _frameCount = DELETE_FRAME;
+            for (DangoColor i = DangoColor.None + 1; i < DangoColor.Other - 1; i++)
+            {
+                Salvation(stabCount, i);
+            }
+            completedInitialization[stabCount - 3] = true;
         }
+        //プールに返却する
+        _poolManager.DangoPool[(int)_color - 1].Release(this);
     }
 
-    public void ReleaseDangoPool()
+    private void Salvation(int stabCount, DangoColor color)
     {
-        _isMoveable = true;
+        //侵入可能フロアのテーブルから、そのテーブルにある今回消えた色の個数を格納
+        for (int i = 0; i <= stabCount - 3; i++)
+        {
+            foreach (var d5 in _floorManager.IntrudableTable[stabCount - 3 - i])
+            {
+                //ひとつでも存在していたら以降は行わない
+                if (d5.DangoCounts[(int)color - 1] > 0) return;
+            }
+        }
 
-        //部屋の団子総数をへらす
-        _floorManager.FloorArrays[(int)_floor].RemoveDangoCount(1);
+        //救済ショットができるリストの追加
+        _canShotList.Clear();
 
-        _poolManager.DangoPool[(int)_color - 1].Release(this);
+        foreach (var list in _floorManager.SalvationTable[stabCount - 3])
+        {
+            if (list.AlreadyExistSavlationDango()) continue;
+
+            _canShotList.Add(list);
+        }
+
+#if UNITY_EDITOR
+        //この処理はデバッグ用なためビルドには通しません
+        //もし発射可能なフロアが存在しなかったら以降は行わない
+        if (_canShotList.Count == 0)
+        {
+            Logger.Warn("救済発射可のうエリアがありません。設定を見直してください。" + "\n" + "現在のD5：" + stabCount);
+            return;
+        }
+#endif
+
+        //発射可能なランダムなフロアを選択し、救済ショット
+        int rand = Random.Range(0, _canShotList.Count);
+        var salvationDango = _canShotList[rand].DangoInjections[0].EnforcementShot(color);
+        salvationDango._salvationFloor = _canShotList[rand];
+        _canShotList[rand].SetSalvationDango(salvationDango);
+        Logger.Log("救済発動" + color + "\n" + "フロア：" + _canShotList[rand].FloorDatas[0].name);
     }
 
     public DangoColor GetDangoColor() => _color;
