@@ -16,13 +16,14 @@ namespace TM.Entity.Player
         Animator _animator;
         PlayerKusiScript _kusiScript;
         SpitManager _spitManager;
+        PlayerUIManager _playerUIManager;
 
         //���V��
         const float FLOATING_POWER = 3f;
 
         public bool HasRemoveDango => _hasRemoveDango;
 
-        public PlayerRemoveDango(List<DangoColor> dangos, DangoUIScript dangoUIScript, PlayerData playerData, Animator animator,PlayerKusiScript kusit,SpitManager spitManager)
+        public PlayerRemoveDango(List<DangoColor> dangos, DangoUIScript dangoUIScript, PlayerData playerData, Animator animator,PlayerKusiScript kusit,SpitManager spitManager,PlayerUIManager playerUIManager)
         {
             _dangos = dangos;
             _dangoUIScript = dangoUIScript;
@@ -30,6 +31,7 @@ namespace TM.Entity.Player
             _animator = animator;
             _kusiScript = kusit;
             _spitManager = spitManager;
+            _playerUIManager = playerUIManager;
         }
 
         public void OnPerformed()
@@ -73,6 +75,9 @@ namespace TM.Entity.Player
             
             //串のUIをセット
             _kusiScript.SetDango(_dangos);
+
+            //MAX警告
+            _playerUIManager.MAXDangoSet(false);
         }
 
         public bool IsStayCoolTime()

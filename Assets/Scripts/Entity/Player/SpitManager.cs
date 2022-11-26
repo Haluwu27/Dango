@@ -11,6 +11,7 @@ public class SpitManager : MonoBehaviour
 
     [SerializeField] FloorManager _floorManager;
     [SerializeField] PlayerKusiScript kusiScript;
+    [SerializeField]PlayerUIManager _playerUIManager;
 
     //ヒットストップの停止フレームです。左から3d5,4d5...7d5です
     static readonly List<int> hitStopFrameTable = new() { 30, 30, 30, 30, 30 };
@@ -93,6 +94,13 @@ public class SpitManager : MonoBehaviour
 
             //串の団子変更
             kusiScript.SetDango(player.GetDangos());
+
+            //MAX警告
+            int maxCurrent = player.GetDangos().Count;
+            int current=player.GetCurrentStabCount();
+            if(maxCurrent==current)
+            _playerUIManager.MAXDangoSet(true);
+
         }
         else
         {

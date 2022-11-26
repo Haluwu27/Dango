@@ -539,7 +539,7 @@ class PlayerData : MonoBehaviour
 
         _playerAttack = new(_attackRangeImage, _animator, spitManager);
         _playerFall = new(capsuleCollider, OnJump, OnJumpExit, _animationManager, _mapLayer);
-        _playerRemoveDango = new(_dangos, _dangoUISC, this, _animator, kusiObj, spitManager);
+        _playerRemoveDango = new(_dangos, _dangoUISC, this, _animator, kusiObj, spitManager,_playerUIManager);
         _playerMove = new(_animationManager);
         _playerJump = new(rb, OnJump, OnJumpExit, spitManager);
         _playerStayEat = new(this);
