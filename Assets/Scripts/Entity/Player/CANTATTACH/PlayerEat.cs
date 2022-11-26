@@ -41,6 +41,8 @@ namespace TM.Entity.Player
             //‹ø‚Ì’cq•ÏX
             _playerKusiScript.SetDango(parent.GetDangos());
 
+            _playerUIManager.MAXDangoSet(false);
+
             //ˆê•”UI‚Ì”ñ•\¦
             _playerUIManager.EatDangoUI_False();
         }

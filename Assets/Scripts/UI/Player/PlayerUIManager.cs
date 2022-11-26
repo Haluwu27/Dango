@@ -12,6 +12,7 @@ public class PlayerUIManager : MonoBehaviour
     [SerializeField, Tooltip("制限時間残量警告画像")] Sprite[] Warningimgs;
     [SerializeField, Tooltip("制限時間残量警告オブジェクト")] Image W_obj;
     [SerializeField] PlayerData playerdata;
+    [SerializeField] GameObject MAXDangoOBJ;
 
     private float time { get { return playerdata.GetSatiety(); } }
     private float maxTime;
@@ -96,5 +97,13 @@ public class PlayerUIManager : MonoBehaviour
     {
         for (int i = 0; i < ErasewithEatObj.Length; i++)
             ErasewithEatObj[i].SetActive(true);
+    }
+
+    public void MAXDangoSet(bool Active)
+    {
+        if (Active)
+            MAXDangoOBJ.SetActive(true);
+        else
+            MAXDangoOBJ.SetActive(false);
     }
 }
