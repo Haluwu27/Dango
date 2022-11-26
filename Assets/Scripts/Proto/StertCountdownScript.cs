@@ -17,6 +17,7 @@ public class StertCountdownScript : MonoBehaviour
         animator = GetComponent<Animator>();
         animator.SetBool("stert", true);
         text.text = "3";
+        PlayerData.Event = true;
     }
 
     public void countDown()//アニメーションから呼び出し
@@ -25,7 +26,11 @@ public class StertCountdownScript : MonoBehaviour
         text.text = (a - i).ToString("0");
 
         if (i == a)
+        {
             text.text = "始め！";
+            PlayerData.Event = false;
+
+        }
         if (i > a)
         {
             text.text = "";

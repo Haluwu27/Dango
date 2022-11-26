@@ -26,6 +26,7 @@ namespace TM.Entity.Player
         public void Update(Rigidbody rb, Transform camera, bool isWalkState)
         {
             if (!_isMoveable) return;
+            if (PlayerData.Event) return;
 
             //“ü—Í’l‚ð‘ã“ü
             Vector2 axis = InputSystemManager.Instance.MoveAxis;

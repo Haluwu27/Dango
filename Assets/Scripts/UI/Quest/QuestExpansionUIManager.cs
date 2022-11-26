@@ -59,6 +59,7 @@ public class QuestExpansionUIManager : MonoBehaviour
     }    
     private void OnExpansionPerformed()
     {
+        if (PlayerData.Event) return;
         _canvas.enabled = true;
     }
     private void OnExpansionCanceled()

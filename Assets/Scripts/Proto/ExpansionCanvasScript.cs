@@ -28,6 +28,7 @@ namespace Dango.Quest.UI
         }
         public void OnExpansion()
         {
+            if (PlayerData.Event) return;
             Onset();
         }
         private void OnExpansionCancel()
