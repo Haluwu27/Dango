@@ -13,7 +13,8 @@ public class PlayerUIManager : MonoBehaviour
     [SerializeField, Tooltip("制限時間残量警告オブジェクト")] Image W_obj;
     [SerializeField] PlayerData playerdata;
     [SerializeField] GameObject MAXDangoOBJ;
-
+    [SerializeField] Animator[] TimegageAnima;
+    [SerializeField] TimeGageAnima[] timeGageAnimaText;
     private float time { get { return playerdata.GetSatiety(); } }
     private float maxTime;
     private float currentTime;
@@ -27,7 +28,11 @@ public class PlayerUIManager : MonoBehaviour
     private bool[] warningbool = new bool[3];
     public TextUIData EventText => eventText;
 
+    public bool Expansion;
+
     public float DefaultEventTextFontSize { get; } = 100f;
+
+    float temp=0;
 
     public void SetTimeText(string text)
     {
@@ -96,7 +101,12 @@ public class PlayerUIManager : MonoBehaviour
     public void EatDangoUI_True()
     {
         for (int i = 0; i < ErasewithEatObj.Length; i++)
+        {
+            if (i == 2 && Expansion) continue;
+
             ErasewithEatObj[i].SetActive(true);
+        }
+        TimeGageUpAnima();
     }
 
     public void MAXDangoSet(bool Active)
@@ -105,5 +115,22 @@ public class PlayerUIManager : MonoBehaviour
             MAXDangoOBJ.SetActive(true);
         else
             MAXDangoOBJ.SetActive(false);
+    }
+
+    public void ScoreCatch(float score)
+    {
+        temp += score;
+    }
+
+    public void TimeGageUpAnima()
+    {
+            Logger.Log("ふぉｒ－のそと");
+        for (int i = 0; i < timeGageAnimaText.Length; i++)
+        {
+            timeGageAnimaText[i].SetText(temp);
+            TimegageAnima[i].SetBool("Play",true);
+            Logger.Log("ふぉｒ－のなか");
+        }
+        temp = 0;
     }
 }

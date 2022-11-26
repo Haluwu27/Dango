@@ -365,6 +365,7 @@ namespace Dango.Quest
             _manager.ChangeQuest(nextQuest);
             _manager.Player.GrowStab(quest.EnableDangoCountUp);
             _manager.Player.AddSatiety(quest.RewardTime);
+            _playerUIManager.ScoreCatch(quest.RewardTime);
 
             ScoreManager.Instance.AddClearTime(ScoreManager.Instance.SetQuestTime());
             ScoreManager.Instance.AddClearQuest(quest);

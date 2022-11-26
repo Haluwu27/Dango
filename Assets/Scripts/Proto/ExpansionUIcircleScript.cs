@@ -22,6 +22,7 @@ namespace Dango.Quest.UI {
                 {
                     expansion.set = false;
                     expansion.OffSet();
+                    expansion.PlayerUI_Set();
                     Destroy(gameObject);
                 }
             }
@@ -32,6 +33,7 @@ namespace Dango.Quest.UI {
             {
                 expansion.Onset();
                 expansion.set = true;
+                expansion.PlayerUI_Set();
             }
         }
         private void OnTriggerExit(Collider col)//—£‚ê‚½‚ç”ñ•\Ž¦
@@ -40,6 +42,7 @@ namespace Dango.Quest.UI {
             {
                 expansion.set = false;
                 expansion.OffSet();
+                expansion.PlayerUI_Set();
                 Destroy(gameObject);
             }
         }
