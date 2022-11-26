@@ -10,6 +10,7 @@ namespace Dango.Quest.UI
     public class ExpansionCanvasScript : MonoBehaviour
     {
         [SerializeField] GameObject[] times = new GameObject[2];//Šg’£‘O‚Æ‚ ‚Æ
+        [SerializeField] PlayerUIManager uIManager;
         //[SerializeField] Animator timeAnima;
         //[SerializeField] Animator questAnima;
 
@@ -38,7 +39,7 @@ namespace Dango.Quest.UI
 
         public void Onset()
         {
-            if (!times[0].activeSelf)
+            if (!times[0].activeSelf )
             {
                 times[0].SetActive(true);
                 times[1].SetActive(false);
@@ -55,6 +56,10 @@ namespace Dango.Quest.UI
                 times[1].SetActive(true);
                 //quests[1].SetActive(true);
             }
+        }
+        public void PlayerUI_Set()
+        {
+            uIManager.Expansion = set;
         }
     }
 }

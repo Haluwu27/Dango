@@ -775,6 +775,7 @@ class PlayerData : MonoBehaviour
     /// </summary>
     private void DecreaseSatiety()
     {
+        if (Event) return;
         //満腹度を0.02秒(fixedUpdateの呼ばれる秒数)減らす
         _satiety -= Time.fixedDeltaTime;
     }
@@ -818,7 +819,6 @@ class PlayerData : MonoBehaviour
     public async void EatAnima()
     {
         _playerUIManager.EatDangoUI_True();
-
         await UniTask.Delay(5000);
         DangoRoleUI.OnGUIReset();
     }

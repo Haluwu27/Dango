@@ -30,6 +30,7 @@ namespace TM.Entity.Player
 
             //満腹度を上昇
             parent.AddSatiety(score);
+            _playerUIManager.ScoreCatch(score);
 
             //串をクリア。
             parent.ResetDangos();
