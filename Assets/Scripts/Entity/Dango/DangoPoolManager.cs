@@ -8,13 +8,13 @@ public class DangoPoolManager : MonoBehaviour
     [SerializeField] private DangoData[] dangoDatas;
     [SerializeField] private Transform parent = default!;
 
-    public ObjectPool<DangoData>[] DangoPool { get; private set; } = new ObjectPool<DangoData>[(int)DangoColor.Purple];
+    public ObjectPool<DangoData>[] DangoPool { get; private set; } = new ObjectPool<DangoData>[(int)DangoColor.Other - 1];
 
     int index;
 
     private void Awake()
     {
-        for (int poolIndex = 0; poolIndex < (int)DangoColor.Purple; poolIndex++)
+        for (int poolIndex = 0; poolIndex < DangoPool.Length; poolIndex++)
         {
             DangoPool[poolIndex] = new(OnCreateDango, OnTakeFromPool, OnReturnedToPool, OnDestroyPoolObject, true, 7 * 30, 7 * 150);
         }
@@ -26,11 +26,11 @@ public class DangoPoolManager : MonoBehaviour
         var dangoObj = Instantiate(dangoDatas[index]);
 
         //Žæ“¾‚µ‚½’cŽq‚©‚çDangoManager‚ðŽæ“¾
-        var dangoManager = dangoObj.GetComponent<DangoData>();
+        var dangoData = dangoObj.GetComponent<DangoData>();
 
-        dangoManager.transform.parent = parent;
+        dangoData.transform.parent = parent;
 
-        return dangoManager;
+        return dangoData;
     }
 
     private void OnTakeFromPool(DangoData dango)

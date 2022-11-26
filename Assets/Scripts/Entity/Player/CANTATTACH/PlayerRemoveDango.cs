@@ -57,7 +57,7 @@ namespace TM.Entity.Player
             }
 
             //[Debug]外した団子がわかるやつ
-            Logger.Log(_dangos[^1]);
+            //Logger.Log(_dangos[^1]);
 
             //SE
             SoundManager.Instance.PlaySE(SoundSource.SE9_REMOVE_DANGO);

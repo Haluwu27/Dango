@@ -517,10 +517,6 @@ class PlayerData : MonoBehaviour
 
                 _playerFall.IsFallAction = false;
             }
-            else if (value && !_isGround)
-            {
-                _animationManager.ChangeAnimation(AnimationManager.E_Animation.An9_Landing, 0.2f);
-            }
 
             //空中時は摩擦をカット
             capsuleCollider.sharedMaterial = value ? _normal : _ice;

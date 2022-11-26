@@ -13,6 +13,7 @@ public class Stage001Data : StageData.IAddQuest, StageData.IPortrait
     }
 
     public List<QuestData> QuestData = new();
+    static readonly List<DangoColor> stageDangoColors = new() { DangoColor.Red, DangoColor.Orange, DangoColor.Yellow, DangoColor.Green, DangoColor.Cyan, DangoColor.Blue, DangoColor.Purple };
 
     public void AddQuest()
     {
@@ -50,5 +51,10 @@ public class Stage001Data : StageData.IAddQuest, StageData.IPortrait
     public PortraitTextData GetPortraitQuest()
     {
         return new(new PortraitTextData.PTextData(0, "団道を始めるぜ！", 2f, PortraitTextData.FacePatturn.Normal), new(0, "まずはクエストの確認からだな…", 2f, PortraitTextData.FacePatturn.Normal), new(0, "Lボタンを押してみようぜ！", 10f, PortraitTextData.FacePatturn.Normal));
+    }
+
+    public bool IsContainsStageDangoColor(DangoColor color)
+    {
+        return stageDangoColors.Contains(color);
     }
 }

@@ -24368,51 +24368,71 @@ MonoBehaviour:
     dangoInjections:
     - {fileID: 619418317100763444}
     maxDangoCount: 5
+    salvageableD5: 0
+    intrudableD5: 0
   - floorDatas:
     - {fileID: 1022734442741090350}
     dangoInjections:
     - {fileID: 4704684027706406173}
     maxDangoCount: 5
+    salvageableD5: 0
+    intrudableD5: 0
   - floorDatas:
     - {fileID: 1878550733550494384}
     dangoInjections:
     - {fileID: 207736083545615145}
     maxDangoCount: 5
+    salvageableD5: 0
+    intrudableD5: 0
   - floorDatas:
     - {fileID: 7510677685888130590}
     dangoInjections:
     - {fileID: 939708958996701318}
     maxDangoCount: 5
+    salvageableD5: 0
+    intrudableD5: 0
   - floorDatas:
     - {fileID: 8415960686139381164}
     dangoInjections:
     - {fileID: 4771954000292950234}
     maxDangoCount: 5
+    salvageableD5: 0
+    intrudableD5: 0
   - floorDatas:
     - {fileID: 3907087688502446906}
     dangoInjections:
     - {fileID: 1421281089527469321}
     maxDangoCount: 5
+    salvageableD5: 0
+    intrudableD5: 0
   - floorDatas:
     - {fileID: 8963553818895473248}
     dangoInjections:
     - {fileID: 9177198102647840682}
     maxDangoCount: 5
+    salvageableD5: 0
+    intrudableD5: 0
   - floorDatas:
     - {fileID: 47576636778927005}
     dangoInjections:
     - {fileID: 6941437850696576538}
     maxDangoCount: 5
+    salvageableD5: 0
+    intrudableD5: 0
   - floorDatas:
     - {fileID: 7244277277621728317}
     dangoInjections:
     - {fileID: 2041376698686770899}
     maxDangoCount: 5
+    salvageableD5: 0
+    intrudableD5: 0
   - floorDatas:
     - {fileID: 6072053194478887132}
     dangoInjections:
     - {fileID: 7158422789984083233}
     maxDangoCount: 5
+    salvageableD5: 0
+    intrudableD5: 0
 --- !u!1 &3384409798785827717
 GameObject:
   m_ObjectHideFlags: 0
@@ -32713,6 +32733,11 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 7
       objectReference: {fileID: 0}
+    - target: {fileID: -7590029781497551417, guid: 3252795346b8f3b4d89297faca73480c,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: -6232348741647941002, guid: 3252795346b8f3b4d89297faca73480c,
         type: 3}
       propertyPath: m_Layer
@@ -32748,10 +32773,20 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 7
       objectReference: {fileID: 0}
+    - target: {fileID: 2515803782152194934, guid: 3252795346b8f3b4d89297faca73480c,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2581637482095360766, guid: 3252795346b8f3b4d89297faca73480c,
         type: 3}
       propertyPath: m_Layer
       value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 2581637482095360766, guid: 3252795346b8f3b4d89297faca73480c,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4290256592229227224, guid: 3252795346b8f3b4d89297faca73480c,
         type: 3}
@@ -32767,6 +32802,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Layer
       value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 8213731286768653189, guid: 3252795346b8f3b4d89297faca73480c,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8766413442718247281, guid: 3252795346b8f3b4d89297faca73480c,
         type: 3}
@@ -32805,55 +32845,77 @@ MonoBehaviour:
     dangoInjections:
     - {fileID: 619418317100763444}
     maxDangoCount: 3
+    salvageableD5: 2
+    intrudableD5: 2
   - floorDatas:
     - {fileID: 1022734442741090350}
     dangoInjections:
     - {fileID: 4704684027706406173}
     maxDangoCount: 3
+    salvageableD5: 2
+    intrudableD5: 6
   - floorDatas:
     - {fileID: 1878550733550494384}
     dangoInjections:
     - {fileID: 207736083545615145}
     maxDangoCount: 2
+    salvageableD5: 2
+    intrudableD5: 14
   - floorDatas:
     - {fileID: 7510677685888130590}
     dangoInjections:
     - {fileID: 939708958996701318}
     maxDangoCount: 2
+    salvageableD5: 2
+    intrudableD5: 14
   - floorDatas:
     - {fileID: 8415960686139381164}
     dangoInjections:
     - {fileID: 4771954000292950234}
     maxDangoCount: 2
+    salvageableD5: 2
+    intrudableD5: 14
   - floorDatas:
     - {fileID: 3907087688502446906}
     dangoInjections:
     - {fileID: 1421281089527469321}
     maxDangoCount: 2
+    salvageableD5: 2
+    intrudableD5: 30
   - floorDatas:
     - {fileID: 8963553818895473248}
     dangoInjections:
     - {fileID: 9177198102647840682}
     maxDangoCount: 2
+    salvageableD5: 30
+    intrudableD5: 2
   - floorDatas:
     - {fileID: 47576636778927005}
     dangoInjections:
     - {fileID: 6941437850696576538}
     maxDangoCount: 2
+    salvageableD5: 30
+    intrudableD5: 4
   - floorDatas:
     - {fileID: 7244277277621728317}
     dangoInjections:
     - {fileID: 2041376698686770899}
     maxDangoCount: 2
+    salvageableD5: -1
+    intrudableD5: 4
   - floorDatas:
     - {fileID: 6072053194478887132}
     dangoInjections:
     - {fileID: 7158422789984083233}
     maxDangoCount: 3
+    salvageableD5: -1
+    intrudableD5: 8
   - floorDatas:
     - {fileID: 2708635673554260727}
     dangoInjections: []
     maxDangoCount: 0
+    salvageableD5: 0
+    intrudableD5: 16
 --- !u!1001 &1435334208172137447
 PrefabInstance:
   m_ObjectHideFlags: 0
