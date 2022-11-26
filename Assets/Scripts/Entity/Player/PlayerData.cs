@@ -724,6 +724,7 @@ class PlayerData : MonoBehaviour
 
     private bool CanStab()
     {
+        if(Event)return false;
         //団子がこれ以上させないなら実行しない
         if (_dangos.Count >= _currentStabCount)
         {

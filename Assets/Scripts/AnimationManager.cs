@@ -46,12 +46,15 @@ public class AnimationManager
     public void ChangeAnimation(E_Animation anim, float fadeTime)
     {
         if (_currentAnimation == anim) return;
+        if (PlayerData.Event) return;
 
         ChangeAnimationEnforcement(anim, fadeTime);
     }
 
     public void ChangeAnimationEnforcement(E_Animation anim, float fadeTime)
     {
+        if (PlayerData.Event) return;
+
         _currentAnimation = anim;
 
         _anim.CrossFadeInFixedTime(_animHash[(int)anim], fadeTime);
