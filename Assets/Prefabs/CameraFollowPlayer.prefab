@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 1266330572475704521}
   - component: {fileID: 1266330572475704522}
   - component: {fileID: 267867265365309905}
+  - component: {fileID: 547155045770013873}
   m_Layer: 0
   m_Name: CameraFollowPlayer
   m_TagString: Untagged
@@ -97,6 +98,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 128
   EatCameraPos: {x: 0, y: 0, z: 0}
+  parent: {fileID: 0}
   state: 2
 --- !u!114 &267867265365309905
 MonoBehaviour:
@@ -111,3 +113,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _material: {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+--- !u!114 &547155045770013873
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1266330572475704523}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 25f94c2b4acff84468a835c21f4e7e2e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Post_Outline: {fileID: 4800000, guid: 22e7659ffbb6c5b44b61bb2de2f57e82, type: 3}
+  DrawSimple: {fileID: 4800000, guid: 6a5cb59c61e850440b9d5d25393b6ac6, type: 3}
+  outlineColor: {r: 0, g: 1, b: 0, a: 1}

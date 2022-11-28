@@ -56,6 +56,36 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1061649141422286778}
     m_Modifications:
+    - target: {fileID: 317423311485401231, guid: 778aacd95f2f72d4eaff394bcf22a5d0,
+        type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 7.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 317423311485401231, guid: 778aacd95f2f72d4eaff394bcf22a5d0,
+        type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 7.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2441634953052990453, guid: 778aacd95f2f72d4eaff394bcf22a5d0,
+        type: 3}
+      propertyPath: m_Height
+      value: 8.51
+      objectReference: {fileID: 0}
+    - target: {fileID: 2441634953052990453, guid: 778aacd95f2f72d4eaff394bcf22a5d0,
+        type: 3}
+      propertyPath: m_Radius
+      value: 3.75
+      objectReference: {fileID: 0}
+    - target: {fileID: 2441634953052990453, guid: 778aacd95f2f72d4eaff394bcf22a5d0,
+        type: 3}
+      propertyPath: m_Center.y
+      value: 0.53
+      objectReference: {fileID: 0}
+    - target: {fileID: 2441634953052990453, guid: 778aacd95f2f72d4eaff394bcf22a5d0,
+        type: 3}
+      propertyPath: m_Center.z
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3952613918130635532, guid: 778aacd95f2f72d4eaff394bcf22a5d0,
         type: 3}
       propertyPath: m_Name
@@ -268,6 +298,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 267867265365309905, guid: 306f682e3da8cda4d83aef30600b2d8a, type: 3}
+    - {fileID: 547155045770013873, guid: 306f682e3da8cda4d83aef30600b2d8a, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 306f682e3da8cda4d83aef30600b2d8a, type: 3}
 --- !u!4 &1061649141369810904 stripped
 Transform:
@@ -347,3 +378,18 @@ MonoBehaviour:
   m_BeforeTransparentBundles: []
   m_BeforeStackBundles: []
   m_AfterStackBundles: []
+--- !u!114 &7349765553699849429
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1061649141369810907}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 279666999b3e6e348b71addd4c6787d1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Post_Outline: {fileID: 4800000, guid: 3d600e76579fa9a4590f0e5e4e2490f1, type: 3}
+  DrawSimple: {fileID: 4800000, guid: bcffe8e5958db7e4da11776983e61ce5, type: 3}
+  outlineColor: {r: 0, g: 1, b: 0, a: 1}

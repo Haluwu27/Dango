@@ -102,8 +102,8 @@ public class FloorArray
 
     public void AddDangoCount(DangoColor color)
     {
-        if (HasFlagIntrudableD5(1))
-            Logger.Log(floorDatas[0].name +":"+ color);
+        //if (HasFlagIntrudableD5(1))
+        //    Logger.Log(floorDatas[0].name +":"+ color);
 
         dangoCount++;
         dangoCounts[(int)color - 1]++;
