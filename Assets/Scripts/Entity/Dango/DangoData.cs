@@ -32,7 +32,6 @@ public class DangoData : MonoBehaviour
 
     static bool[] completedInitialization = new bool[5];
 
-
     private void Awake()
     {
         _poolManager = GameObject.Find("DangoPoolManager").GetComponent<DangoPoolManager>();
@@ -42,6 +41,7 @@ public class DangoData : MonoBehaviour
     {
         //ˆÚ“®‰Â”\‚É‚·‚é
         _isMoveable = true;
+        gameObject.SetLayerIncludeChildren(0);
     }
 
     private void FixedUpdate()

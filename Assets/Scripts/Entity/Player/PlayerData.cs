@@ -154,8 +154,8 @@ class PlayerData : MonoBehaviour
 
         public IState.E_State Initialize(PlayerData parent)
         {
+            //移行フラグを折る
             parent._hasAttacked = false;
-            SoundManager.Instance.PlaySE(Random.Range((int)SoundSource.VOISE_PRINCE_ATTACK01, (int)SoundSource.VOISE_PRINCE_ATTACK02 + 1));
 
             //急降下アクション中なら団子の数の有無は無視して続行
             if (parent._playerFall.IsFallAction)
@@ -168,8 +168,8 @@ class PlayerData : MonoBehaviour
 
             pattern = PlayerAttackAction.AttackPattern.NormalAttack;
 
-            //仮置き仕様。突き刺し時前進する
-            parent.rb.AddForce(parent.transform.forward * 500f, ForceMode.Impulse);
+            parent._animationManager.ChangeAnimationEnforcement(AnimationManager.E_Animation.An5_Thrust, 0);
+            parent._playerAttack.WasPressedAttackButton(parent.rb);
 
             return IState.E_State.Unchanged;
         }
@@ -181,7 +181,7 @@ class PlayerData : MonoBehaviour
         {
             parent.DecreaseSatiety();
 
-            if (parent._playerAttack.FixedUpdate(pattern))
+            if (parent._playerAttack.ChangeState(pattern))
             {
                 return IState.E_State.Control;
             }
@@ -441,7 +441,6 @@ class PlayerData : MonoBehaviour
     //プレイヤーの能力
     SpitManager spitManager = default!;
     [SerializeField] Canvas makerUI = default!;
-    [SerializeField] GameObject rangeUI = default!;
     [SerializeField] FootObjScript footObj = default!;
     [SerializeField] PlayerKusiScript kusiObj = default!;
 
@@ -457,6 +456,8 @@ class PlayerData : MonoBehaviour
 
     [SerializeField] ImageUIData _attackRangeImage = default!;
     [SerializeField] FaceAnimationController _faceAnimationController = default!;
+
+    [SerializeField] PlayerSpitColliderManager _playerSpitCollider = default!;
 
     [SerializeField] SpitManager[] _swords = new SpitManager[5];
 
@@ -537,14 +538,16 @@ class PlayerData : MonoBehaviour
         _mapLayer = LayerMask.NameToLayer("Map");
         _animationManager = new(_animator);
 
-        _playerAttack = new(_attackRangeImage, _animator, spitManager);
+        _playerAttack = new(_animator, spitManager);
         _playerFall = new(capsuleCollider, OnJump, OnJumpExit, _animationManager, _mapLayer);
-        _playerRemoveDango = new(_dangos, _dangoUISC, this, _animator, kusiObj, spitManager,_playerUIManager);
+        _playerRemoveDango = new(_dangos, _dangoUISC, this, _animator, kusiObj, spitManager, _playerUIManager);
         _playerMove = new(_animationManager);
         _playerJump = new(rb, OnJump, OnJumpExit, spitManager);
         _playerStayEat = new(this);
         _playerEat = new(_directing, _playerUIManager, kusiObj);
         _playerGrowStab = new();
+
+        _playerSpitCollider.SetPlayerAttack(_playerAttack);
 
         makerUI.enabled = false;
         InitDangos();
@@ -566,7 +569,8 @@ class PlayerData : MonoBehaviour
         IsGrounded();
         UpdateState();
         FallActionMaker();
-        RangeUI();
+        _playerSpitCollider.SetRangeUIEnable(IsGround && !Event);
+        _playerAttack.Update(transform);
     }
 
     private void FixedUpdate()
@@ -709,22 +713,9 @@ class PlayerData : MonoBehaviour
         }
     }
 
-    private void RangeUI()
-    {
-        var ray = new Ray(transform.position, Vector3.down);
-        if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity))
-        {
-            rangeUI.transform.position = new Vector3(rangeUI.transform.position.x, hit.point.y + 0.01f, rangeUI.transform.position.z);
-        }
-
-        //空中でも出てると違和感あったので消します
-        rangeUI.SetActive(_isGround);
-        rangeUI.SetActive(!Event);
-    }
-
     private bool CanStab()
     {
-        if(Event)return false;
+        if (Event) return false;
         //団子がこれ以上させないなら実行しない
         if (_dangos.Count >= _currentStabCount)
         {
@@ -738,15 +729,8 @@ class PlayerData : MonoBehaviour
             return false;
         }
 
-        //刺す時間の内部でカウントしているTimeをリセット
-        _playerAttack.ResetTime();
-
         //突き刺せる状態にして
         spitManager.IsSticking = true;
-
-        //串の位置を変更（アニメーション推奨）
-        _animationManager.ChangeAnimationEnforcement(AnimationManager.E_Animation.An5_Thrust, Time.fixedDeltaTime * 3);
-
         return true;
     }
 
@@ -828,7 +812,13 @@ class PlayerData : MonoBehaviour
 
     public int SetMaxDango(int i) => _currentStabCount = i;
     public List<DangoColor> GetDangos() => _dangos;
-    public void AddDangos(DangoColor d) => _dangos.Add(d);
+    public void AddDangos(DangoColor d)
+    {
+        //団子が刺さったタイミングを通知
+        _playerAttack.SetHasStabDango();
+
+        _dangos.Add(d);
+    }
     public void ResetDangos() => _dangos.Clear();
     public float GetSatiety() => _satiety;
     public void AddSatiety(float value) => _satiety += value;

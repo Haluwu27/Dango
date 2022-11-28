@@ -14,7 +14,7 @@ public class SpitManager : MonoBehaviour
     [SerializeField]PlayerUIManager _playerUIManager;
 
     //ヒットストップの停止フレームです。左から3d5,4d5...7d5です
-    static readonly List<int> hitStopFrameTable = new() { 30, 30, 30, 30, 30 };
+    static readonly List<int> hitStopFrameTable = new() { 0, 0, 0, 0, 0 };
 
     private void Awake()
     {
@@ -121,6 +121,8 @@ public class SpitManager : MonoBehaviour
 
     private async UniTask HitStop(DangoData dango)
     {
+        if (hitStopFrameTable[player.GetCurrentStabCount() - 3] == 0) return;
+
         _isHitStop = true;
 
         float pSpeed = player.GetAnimator().speed;
