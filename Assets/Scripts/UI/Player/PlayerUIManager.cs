@@ -15,6 +15,8 @@ public class PlayerUIManager : MonoBehaviour
     [SerializeField] GameObject MAXDangoOBJ;
     [SerializeField] Animator[] TimegageAnima;
     [SerializeField] TimeGageAnima[] timeGageAnimaText;
+    [SerializeField] ImageUIData DontEatUIOBJ;
+    [SerializeField] Sprite dontEatSprite;
     private float time { get { return playerdata.GetSatiety(); } }
     private float maxTime;
     private float currentTime;
@@ -124,13 +126,16 @@ public class PlayerUIManager : MonoBehaviour
 
     public void TimeGageUpAnima()
     {
-            Logger.Log("Ç”ÇßÇíÅ|ÇÃÇªÇ∆");
         for (int i = 0; i < timeGageAnimaText.Length; i++)
         {
             timeGageAnimaText[i].SetText(temp);
             TimegageAnima[i].SetBool("Play",true);
-            Logger.Log("Ç”ÇßÇíÅ|ÇÃÇ»Ç©");
         }
         temp = 0;
+    }
+
+    public void DontEat()
+    {
+        DontEatUIOBJ.ImageData.SetSprite(dontEatSprite);
     }
 }
