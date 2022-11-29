@@ -111,7 +111,6 @@ GameObject:
   - component: {fileID: 1674524293050642630}
   - component: {fileID: 7514403896037196049}
   - component: {fileID: 5175889445463349631}
-  - component: {fileID: 553445135242460157}
   m_Layer: 0
   m_Name: Porple
   m_TagString: Untagged
@@ -184,17 +183,3 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &553445135242460157
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8474675940713244046}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 0
-  serializedVersion: 4
-  m_Convex: 1
-  m_CookingOptions: 30
-  m_Mesh: {fileID: -1717694237314715918, guid: 38b3f293dd0c1bb419ecd450562b7edb, type: 3}

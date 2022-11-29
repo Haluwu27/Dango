@@ -83,7 +83,7 @@ public class SpitManager : MonoBehaviour
             await HitStop(dango);
 
             //団子を刺す
-            player.AddDangos(dango.GetDangoColor());
+            player.AddDangos(dango);
 
             //フィールドにある団子を消す
             dango.ReleaseDangoPool(player.GetCurrentStabCount());

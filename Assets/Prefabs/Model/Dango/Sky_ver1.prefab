@@ -111,7 +111,6 @@ GameObject:
   - component: {fileID: 7559547155625071415}
   - component: {fileID: 173539551879783202}
   - component: {fileID: 7910076699673870259}
-  - component: {fileID: 7582374380189274898}
   m_Layer: 0
   m_Name: Sky
   m_TagString: Untagged
@@ -184,17 +183,3 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &7582374380189274898
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4190341172354815947}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 0
-  serializedVersion: 4
-  m_Convex: 1
-  m_CookingOptions: 30
-  m_Mesh: {fileID: -4031493933918164672, guid: cbc4b602e58240946b1f1a92f92418db, type: 3}

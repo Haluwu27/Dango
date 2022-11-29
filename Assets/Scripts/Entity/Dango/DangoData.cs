@@ -134,7 +134,7 @@ public class DangoData : MonoBehaviour
         var salvationDango = _canShotList[rand].DangoInjections[0].EnforcementShot(color);
         salvationDango._salvationFloor = _canShotList[rand];
         _canShotList[rand].SetSalvationDango(salvationDango);
-        Logger.Log("救済発動" + color + "\n" + "フロア：" + _canShotList[rand].FloorDatas[0].name);
+        //Logger.Log("救済発動" + color + "\n" + "フロア：" + _canShotList[rand].FloorDatas[0].name);
     }
 
     public DangoColor GetDangoColor() => _color;
