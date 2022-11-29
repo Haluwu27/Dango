@@ -52,6 +52,7 @@ namespace TM.Entity.Player
 
             if (!_isGround) return;
             if (_isJumping) return;
+            if (PlayerData.Event) return;
 
             //SEÇÃçƒê∂
             SoundManager.Instance.PlaySE(UnityEngine.Random.Range((int)SoundSource.VOISE_PRINCE_JUMP01, (int)SoundSource.VOISE_PRINCE_JUMP02 + 1));
