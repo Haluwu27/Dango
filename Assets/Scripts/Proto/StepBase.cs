@@ -25,7 +25,7 @@ public class StepBase : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (anima.GetCurrentAnimatorStateInfo(0).IsName("AN11B"))
+        if (anima.GetCurrentAnimatorStateInfo(0).IsName("AN11B")||anima.GetCurrentAnimatorStateInfo(0).IsName("AN11A"))
         {
             for (int i = 0; i < chaildSteps.Length; i++)
                 chaildSteps[i].OnSet();
