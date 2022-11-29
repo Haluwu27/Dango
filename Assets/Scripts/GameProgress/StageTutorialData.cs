@@ -21,12 +21,12 @@ public class StageTutorialData : StageData.IAddQuest, StageData.IPortrait
 
         List<QuestData> quest = new()
         {
-            questManager.Creater.CreateQuestPlayAction(0,QuestPlayAction.PlayerAction.Stab,1,"団子をさす",0,false,false,new(new PortraitTextData.PTextData(0,"お見事。刺した団子は画面右に表示されるからな",5f,PortraitTextData.FacePatturn.Normal),new(1,"次に集めた団子を食べてみろ。団子を集めて「食べる」ボタンだ",10f,PortraitTextData.FacePatturn.Normal)),1),
+            questManager.Creater.CreateQuestPlayAction(0,QuestPlayAction.PlayerAction.Stab,1,"団子をさす",0,false,false,new(new PortraitTextData.PTextData(0,"お見事。刺した団子は画面右に表示されるからな",5f,PortraitTextData.FacePatturn.Normal),new(1,"次に集めた団子を食べてみろ。団子を集めて『食べる』ボタンだ",10f,PortraitTextData.FacePatturn.Normal)),1),
 
             questManager.Creater.CreateQuestEatDango(1, 3, 0, true, true, "団子を3つ食べる", 0f, true, false,new(new PortraitTextData.PTextData(0,"くぅー美味い！良い調子だ",5f,PortraitTextData.FacePatturn.Normal)), 2,3),
 
-            questManager.Creater.CreateQuestCreateRole(2, new QuestCreateRole.EstablishRole(true, false), 1, 0, "規則正しく並べて「団結」を作れ", 0, false, false,new(new PortraitTextData.PTextData(0,"見事！団子は基本的に「団結」を作って食べた方が腹持ちがいい",10f,PortraitTextData.FacePatturn.Normal),new(0,"次は「高跳び」ボタンで高いところに行ってみるぞ",10f,PortraitTextData.FacePatturn.Normal)), 4),
-            questManager.Creater.CreateQuestCreateRole(3, new QuestCreateRole.EstablishRole(false, false), 1, 0, "ここにヒントを表示してみるといいかもな！", 0, false, false,new(new PortraitTextData.PTextData(0,"惜しいな、もうちょっと規則正しく並べてみろ！",8f,PortraitTextData.FacePatturn.Normal)), 2, 3),
+            questManager.Creater.CreateQuestCreateRole(2, new QuestCreateRole.EstablishRole(true, false), 1, 0, "規則正しく並べて『団結』を作れ", 0, false, false,new(new PortraitTextData.PTextData(0,"見事！団子は基本的に『団結』を作って食べた方が腹持ちがいい",10f,PortraitTextData.FacePatturn.Normal),new(0,"次は『高跳び』ボタンで高いところに行ってみるぞ",10f,PortraitTextData.FacePatturn.Normal)), 4),
+            questManager.Creater.CreateQuestCreateRole(3, new QuestCreateRole.EstablishRole(false, false), 1, 0, "ここにヒントを出してみるといいかもな！", 0, false, false,new(new PortraitTextData.PTextData(0,"惜しいな、もうちょっと規則正しく並べてみろ！",8f,PortraitTextData.FacePatturn.Normal)), 2, 3),
 
             questManager.Creater.CreateQuestDestination(4, FloorManager.Floor.floor2, false, "高台に向かえ", 30f, true, false,new(new PortraitTextData.PTextData()), 5),
 
