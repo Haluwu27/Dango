@@ -314,6 +314,7 @@ class PlayerData : MonoBehaviour
         public IState.E_State Initialize(PlayerData parent)
         {
             parent._animationManager.ChangeAnimation(AnimationManager.E_Animation.An9_Landing, 0.2f);
+            SoundManager.Instance.PlaySE(SoundSource.SE3_LANDING_HARD);
 
             return IState.E_State.Unchanged;
         }
@@ -462,9 +463,6 @@ class PlayerData : MonoBehaviour
 
     const float DEFAULT_CAMERA_VIEW = 60f;
     const float CAMERA_REMOVETIME = 0.3f;
-
-    const float EVENTTEXT_FLASH_TIME = 0.4f;
-    const float EVENTTEXT_PRINT_TIME = 2.4f;
 
     int _mapLayer;
 
