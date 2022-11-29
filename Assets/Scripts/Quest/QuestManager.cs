@@ -23,7 +23,7 @@ class QuestManager : MonoBehaviour
     private void Awake()
     {
         Instance = this;
-        SucceedChecker = new(this, _playerUIManager,_portraitScript);
+        SucceedChecker = new(this, _playerUIManager, _portraitScript, _stageData);
     }
 
     private void Start()

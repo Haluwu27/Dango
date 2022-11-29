@@ -76,6 +76,8 @@ public class SpitManager : MonoBehaviour
             //刺せ無くする
             IsSticking = false;
 
+            QuestManager.Instance.SucceedChecker.CheckQuestPlayActionSucceed(Dango.Quest.QuestPlayAction.PlayerAction.Stab);
+
             //落下アクション中に行う処理・ヒットストップ前でないと急降下の難易度が上がってしまう
             OnFallAction();
 
@@ -160,7 +162,7 @@ public class SpitManager : MonoBehaviour
         if (!player.PlayerFall.IsFallAction) return;
 
         //落下アクション○回しろ系クエストの判定
-        QuestManager.Instance.SucceedChecker.CheckQuestPlayActionSucceed(QuestManager.Instance, Dango.Quest.QuestPlayAction.PlayerAction.FallAttack);
+        QuestManager.Instance.SucceedChecker.CheckQuestPlayActionSucceed(Dango.Quest.QuestPlayAction.PlayerAction.FallAttack);
 
         Logger.Log("落下アクション中に刺した！");
     }

@@ -12,6 +12,7 @@ namespace Dango.Quest
 
         PlayerUIManager _playerUIManager;
         PortraitScript _portraitScript;
+        StageData _stageData;
 
         private async UniTask SetBoolAfterOneFrame(bool enable)
         {
@@ -20,11 +21,12 @@ namespace Dango.Quest
             _isSucceedThisFrame = enable;
         }
 
-        public QuestSucceedChecker(QuestManager manager, PlayerUIManager playerUIManager, PortraitScript portraitScript)
+        public QuestSucceedChecker(QuestManager manager, PlayerUIManager playerUIManager, PortraitScript portraitScript, StageData stageData)
         {
             _manager = manager;
             _playerUIManager = playerUIManager;
             _portraitScript = portraitScript;
+            _stageData = stageData;
         }
 
         #region EatDango
@@ -256,15 +258,15 @@ namespace Dango.Quest
         #endregion
 
         #region PlayAction
-        public bool CheckQuestPlayActionSucceed(QuestManager questManager, QuestPlayAction.PlayerAction action)
+        public bool CheckQuestPlayActionSucceed(QuestPlayAction.PlayerAction action)
         {
             //���̃t���[���ɕʂ̃N�G�X�g���N���A����Ă�����e��
             if (_isSucceedThisFrame) return false;
 
-            for (int i = 0; i < questManager.QuestsCount; i++)
+            for (int i = 0; i < _manager.QuestsCount; i++)
             {
                 //�L���X�g�\�����m�F�i�s�\�ȏꍇ�G���[���N���邽�߂��̏����͕K�{�j
-                if (questManager.GetQuest(i) is QuestPlayAction questPla)
+                if (_manager.GetQuest(i) is QuestPlayAction questPla)
                 {
                     if (CheckQuestSucceed(questPla, action)) return true;
                 }
@@ -359,7 +361,7 @@ namespace Dango.Quest
             List<QuestData> nextQuest = new();
             for (int i = 0; i < quest.NextQuestId.Count; i++)
             {
-                nextQuest.Add(Stage001Data.Instance.QuestData[quest.NextQuestId[i]]);
+                nextQuest.Add(_stageData.QuestData[quest.NextQuestId[i]]);
             }
 
             _manager.ChangeQuest(nextQuest);
@@ -374,7 +376,7 @@ namespace Dango.Quest
             _isSucceedThisFrame = true;
             SetBoolAfterOneFrame(false).Forget();
 
-           _portraitScript.ChangePortraitText(quest.QuestTextDatas).Forget();
+            _portraitScript.ChangePortraitText(quest.QuestTextDatas).Forget();
 
             if (quest.IsKeyQuest)
             {

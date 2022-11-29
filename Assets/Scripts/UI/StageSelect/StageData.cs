@@ -9,6 +9,8 @@ public enum Stage
     Stage2,
     Stage3,
     Stage4,
+
+    Tutorial,
 }
 
 public class StageData : MonoBehaviour
@@ -30,9 +32,12 @@ public class StageData : MonoBehaviour
     public Stage Stage => _stage;
 
     [SerializeField] PortraitScript _portraitScript;
+    [SerializeField] FusumaManager _fusumaManager;
 
     public IAddQuest CurrentStage { get; private set; }
     public IPortrait CurrentPortrait { get; private set; }
+
+    public List<QuestData> QuestData;
 
     private void Awake()
     {
@@ -42,7 +47,16 @@ public class StageData : MonoBehaviour
         {
             CurrentStage = Stage001Data.Instance;
             CurrentPortrait = Stage001Data.Instance;
+            QuestData = Stage001Data.Instance.QuestData;
         }
+        else if (Stage == Stage.Tutorial)
+        {
+            CurrentStage = StageTutorialData.Instance;
+            CurrentPortrait = StageTutorialData.Instance;
+            QuestData = StageTutorialData.Instance.QuestData;
+        }
+
+        if (_fusumaManager != null) _fusumaManager.Open();
     }
 
     private void Start()

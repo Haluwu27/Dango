@@ -422,7 +422,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 73b80209b524d4a48bc5ba2b928734f9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TimeGage: {fileID: 0}
+  uIData: {fileID: 7687195859771028298}
+  TimeGage: {fileID: 7745391727675044527}
 --- !u!114 &7687195859771028298
 MonoBehaviour:
   m_ObjectHideFlags: 0
