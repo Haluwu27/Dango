@@ -631,16 +631,14 @@ class PlayerData : MonoBehaviour
         //何らかの動作中で食べようとしても実行しない。
         if (_currentState is not (IState.E_State.Control or IState.E_State.StayEatDango))
         {
-            _playerUIManager.EventText.TextData.SetText("食べられないよ！");
-            _playerUIManager.EventText.TextData.FlashAlpha(EVENTTEXT_PRINT_TIME, EVENTTEXT_FLASH_TIME, 0);
+            _playerUIManager.DontEat();
             return;
         }
 
         //限界まで団子が刺さっていなかったら実行しない。
         if (_dangos.Count != _currentStabCount)
         {
-            _playerUIManager.EventText.TextData.SetText("食べられないよ！");
-            _playerUIManager.EventText.TextData.FlashAlpha(EVENTTEXT_PRINT_TIME, EVENTTEXT_FLASH_TIME, 0);
+            _playerUIManager.DontEat();
             return;
         }
 
