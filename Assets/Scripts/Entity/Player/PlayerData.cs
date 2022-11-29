@@ -454,7 +454,6 @@ class PlayerData : MonoBehaviour
     [SerializeField] PhysicMaterial _ice = default!;
     [SerializeField] PhysicMaterial _normal = default!;
 
-    [SerializeField] ImageUIData _attackRangeImage = default!;
     [SerializeField] FaceAnimationController _faceAnimationController = default!;
 
     [SerializeField] PlayerSpitColliderManager _playerSpitCollider = default!;
@@ -570,12 +569,12 @@ class PlayerData : MonoBehaviour
         UpdateState();
         FallActionMaker();
         _playerSpitCollider.SetRangeUIEnable(IsGround && !Event);
-        _playerAttack.Update(transform);
     }
 
     private void FixedUpdate()
     {
         FixedUpdateState();
+        _playerAttack.FixedUpdate(transform);
     }
 
     private void OnDestroy()
@@ -812,10 +811,20 @@ class PlayerData : MonoBehaviour
     public List<DangoColor> GetDangos() => _dangos;
     public void AddDangos(DangoColor d)
     {
+        Logger.Warn("団子を強制的に追加しました");
+
         //団子が刺さったタイミングを通知
         _playerAttack.SetHasStabDango();
 
         _dangos.Add(d);
+    }
+    public void AddDangos(DangoData dango)
+    {
+        //団子が刺さったタイミングを通知
+        _playerAttack.SetHasStabDango();
+        _playerAttack.RemoveTargetDango(dango);
+
+        _dangos.Add(dango.GetDangoColor());
     }
     public void ResetDangos() => _dangos.Clear();
     public float GetSatiety() => _satiety;

@@ -18,7 +18,7 @@ namespace TM.Entity.Player
         //どのくらいの角度をサーチするか。[単位:度数法]
         //この値だけでなく、UIの変更も必要。
         const float SEARCH_ANGLE = 30f;
-        
+
         //団子までたどり着く時間
         const float RUSH_TIME = 0.2f;
 
@@ -36,9 +36,13 @@ namespace TM.Entity.Player
             _spitManager = spitManager;
         }
 
-        public void Update(Transform transform)
+        public void FixedUpdate(Transform transform)
         {
-            if (_targetDangoList.Count == 0) return;
+            if (_targetDangoList.Count == 0)
+            {
+                _highlightDango = null;
+                return;
+            }
 
             float min = float.MaxValue;
             int index = -1;
@@ -53,34 +57,31 @@ namespace TM.Entity.Player
                 {
                     if (hit.collider.GetComponent<DangoData>() == null) continue;
                 }
+
                 float targetAngle = Vector3.Angle(transform.forward, vec);
+
+                Debug.DrawRay(transform.position, vec, Color.blue);
 
                 //サーチする角度より大きかったらやめる
                 if (targetAngle >= SEARCH_ANGLE) continue;
 
                 float distance = Vector3.Distance(transform.position, _targetDangoList[i].transform.position);
 
-                min = Mathf.Min(min, distance);
-                index = i;
+                if (distance < min)
+                {
+                    min = distance;
+                    index = i;
+                }
             }
 
             if (index == -1)
             {
-                if (_highlightDango != null)
-                {
-                    _highlightDango.gameObject.SetLayerIncludeChildren(0);
-                    _highlightDango = null;
-                }
+                ResetHighlightDango();
                 return;
             }
 
             //ハイライト表示
-            if (_highlightDango != _targetDangoList[index])
-            {
-                if (_highlightDango != null) _highlightDango.gameObject.SetLayerIncludeChildren(0);
-                _highlightDango = _targetDangoList[index];
-                _highlightDango.gameObject.SetLayerIncludeChildren(9);
-            }
+            SetHighlightDango(_targetDangoList[index]);
         }
 
         public bool ChangeState(AttackPattern attack)
@@ -136,6 +137,9 @@ namespace TM.Entity.Player
             //そっちに向いて
             rb.transform.LookAt(_highlightDango.transform.position.SetY(rb.position.y));
 
+            //ターゲット一覧から今の団子を消す。(乱入されて別の団子が刺さったときにこの団子が再度ターゲットされにくい)
+            ResetHighlightDango();
+
             //前進(距離/時間を第一引数とすれば良い)
             while (_animator.GetCurrentAnimatorStateInfo(0).normalizedTime <= 1f)
             {
@@ -152,14 +156,37 @@ namespace TM.Entity.Player
                 //上への運動を断ち切りたいため直接書き換え
                 rb.velocity = (rb.transform.forward.normalized * distance / RUSH_TIME).SetY(0);
             }
-
-            //ターゲット一覧から今の団子を消す。(乱入されて別の団子が刺さったときにこの団子が再度ターゲットされにくい)
-            _targetDangoList.Remove(_highlightDango);
         }
 
         public void SetHasStabDango()
         {
             _hasStabDango = true;
+        }
+
+        private void SetHighlightDango(DangoData dango)
+        {
+            //現在ハイライト中の団子と一致していたら弾く
+            if (_highlightDango == dango) return;
+
+            //ハイライト中の団子が既に存在していたらハイライトをやめる
+            if (_highlightDango != null) ResetHighlightDango();
+
+            //セット
+            _highlightDango = dango;
+            _highlightDango.gameObject.SetLayerIncludeChildren(9);
+        }
+
+        private void ResetHighlightDango()
+        {
+            if (_highlightDango == null) return;
+
+            _highlightDango.gameObject.SetLayerIncludeChildren(0);
+            _highlightDango = null;
+        }
+
+        public void RemoveTargetDango(DangoData dango)
+        {
+            _targetDangoList.Remove(dango);
         }
     }
 }
