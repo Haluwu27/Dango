@@ -112,6 +112,7 @@ public class PortraitScript : MonoBehaviour
             while (time < data.printTime)
             {
                 await UniTask.Yield();
+                if (_trans == null) return;
                 if (!_trans.root.gameObject.activeSelf) continue;
 
                 time += Time.deltaTime;

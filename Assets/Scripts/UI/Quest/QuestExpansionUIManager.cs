@@ -1,4 +1,5 @@
 using Cysharp.Threading.Tasks;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -33,23 +34,30 @@ public class QuestExpansionUIManager : MonoBehaviour
     {
         if (this == null) return;
 
-        _currentQuestTexts[0].TextData.SetText(QuestManager.Instance.GetQuest(0).QuestName);
-
-        QuestData questData = QuestManager.Instance.GetQuest(1);
-
-        if (questData == null)
+        try
         {
-            _currentQuests[1].gameObject.SetActive(false);
+            _currentQuestTexts[0].TextData.SetText(QuestManager.Instance.GetQuest(0).QuestName);
 
-            _currentQuests[0].ImageData.SetPositionY(0);
+            QuestData questData = QuestManager.Instance.GetQuest(1);
+
+            if (questData == null)
+            {
+                _currentQuests[1].gameObject.SetActive(false);
+
+                _currentQuests[0].ImageData.SetPositionY(0);
+            }
+            else
+            {
+                _currentQuestTexts[1].TextData.SetText(questData.QuestName);
+                _currentQuests[1].gameObject.SetActive(true);
+
+                _currentQuests[0].ImageData.SetPositionY(-60f);
+                _currentQuests[1].ImageData.SetPositionY(60f);
+            }
         }
-        else
+        catch (NullReferenceException)
         {
-            _currentQuestTexts[1].TextData.SetText(questData.QuestName);
-            _currentQuests[1].gameObject.SetActive(true);
-
-            _currentQuests[0].ImageData.SetPositionY(-60f);
-            _currentQuests[1].ImageData.SetPositionY(60f);
+            return;
         }
     }
 

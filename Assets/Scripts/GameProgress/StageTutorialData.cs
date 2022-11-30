@@ -21,7 +21,7 @@ public class StageTutorialData : StageData.IAddQuest, StageData.IPortrait
 
         List<QuestData> quest = new()
         {
-            questManager.Creater.CreateQuestPlayAction(0,QuestPlayAction.PlayerAction.Stab,1,"団子をさす",0,false,false,new(new PortraitTextData.PTextData(0,"お見事。刺した団子は画面右に表示されるからな",5f,PortraitTextData.FacePatturn.Normal),new(1,"次に集めた団子を食べてみろ。団子を集めて『食べる』ボタンだ",10f,PortraitTextData.FacePatturn.Normal)),1),
+            questManager.Creater.CreateQuestPlayAction(0,QuestPlayAction.PlayerAction.Stab,1,"団子をさす",0,false,false,new(new PortraitTextData.PTextData(0,"お見事。刺した団子は画面右に出てるからな",5f,PortraitTextData.FacePatturn.Normal),new(1,"次に集めた団子を食べてみろ。団子を集めて『食べる』ボタンだ",10f,PortraitTextData.FacePatturn.Normal)),1),
 
             questManager.Creater.CreateQuestEatDango(1, 3, 0, true, true, "団子を3つ食べる", 0f, true, false,new(new PortraitTextData.PTextData(0,"くぅー美味い！良い調子だ",5f,PortraitTextData.FacePatturn.Normal)), 2,3),
 
