@@ -492,6 +492,22 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: 0c999e64-0dae-4795-8db1-412961714063
     m_ActionName: UI/TabControl[/SwitchProControllerHID/leftShoulder,/SwitchProControllerHID/rightShoulder,/SwitchProControllerHID/leftTrigger,/SwitchProControllerHID/rightTrigger,/Keyboard/leftArrow,/Keyboard/rightArrow]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1271659316}
+        m_TargetAssemblyTypeName: InputSystemManager, Assembly-CSharp
+        m_MethodName: OnTutorialSkip
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 39f2efe6-c03f-40d1-a3c6-790edb7c47fe
+    m_ActionName: Player/TutorialSkip[/SwitchProControllerHID/leftShoulder,/SwitchProControllerHID/rightShoulder]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: UI
@@ -525,7 +541,7 @@ MonoBehaviour:
   debugScenes: 8
   _sceneRoots:
   - {fileID: 2063848576987206517, guid: 5e7a613d8ec67fe4cb6e39d2de87e6e2, type: 3}
-  - {fileID: 0}
+  - {fileID: 5368458931326357395, guid: 799ede41043bfa343bff27810f276b34, type: 3}
   - {fileID: 6535298415677513454, guid: 9dbe1186418d94440a714a05097a8f69, type: 3}
   - {fileID: 8938324373058968092, guid: 61348ae0d0c12004888b9fe92d7e6b05, type: 3}
   - {fileID: 344183956019978020, guid: 8ebb9094132f440468c6142680f2397d, type: 3}
@@ -536,7 +552,7 @@ MonoBehaviour:
   - {fileID: 8900919052169510685, guid: 05bcc92d13a39e0478d30f7d620a6304, type: 3}
   - {fileID: 5484892727869171512, guid: 14ae0c9e7fdd71a4090275e24139e518, type: 3}
   - {fileID: 0}
-  startScene: 6
+  startScene: 1
 --- !u!4 &1271659318
 Transform:
   m_ObjectHideFlags: 0

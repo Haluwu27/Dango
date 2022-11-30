@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TM.Easing.Management;
+using System;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -58,7 +59,7 @@ class FusumaManager : MonoBehaviour
 
         while (currentTime <= time)
         {
-            await UniTask.DelayFrame(1);
+            await UniTask.Yield();
             currentTime += Time.deltaTime;
             float d = EasingManager.EaseProgress(EASETYPE, currentTime, time, 0, 0);
 
@@ -77,7 +78,7 @@ class FusumaManager : MonoBehaviour
 
         while (currentTime <= time)
         {
-            await UniTask.DelayFrame(1);
+            await UniTask.Yield();
             currentTime += Time.deltaTime;
             float d = EasingManager.EaseProgress(EASETYPE, currentTime, time, 0, 0);
 
@@ -114,12 +115,21 @@ class FusumaManager : MonoBehaviour
 
     private void SetPos()
     {
-        if (_fusumas == null) return;
+        try
+        {
+            if (_fusumas == null) return;
 
-        _fusumas[0].transform.localPosition = _fusuma0Pos;
-        _fusumas[1].transform.localPosition = _fusuma1Pos;
-        _fusumas[2].transform.localPosition = _fusuma2Pos;
-        _fusumas[3].transform.localPosition = _fusuma3Pos;
+            _fusumas[0].transform.localPosition = _fusuma0Pos;
+            _fusumas[1].transform.localPosition = _fusuma1Pos;
+            _fusumas[2].transform.localPosition = _fusuma2Pos;
+            _fusumas[3].transform.localPosition = _fusuma3Pos;
+        }
+        catch(MissingReferenceException)
+        {
+            //UniTask実行中にゲームを終了したり、別画面に移行するとこのエラーを出す。
+            //進行上の問題はないが、エラーのため対処。
+            return;
+        }
     }
 }
 

@@ -12,19 +12,20 @@ namespace Dango.Quest
 
         PlayerUIManager _playerUIManager;
         PortraitScript _portraitScript;
+        StageData _stageData;
+        TutorialUIManager _tutorialUIManager;
 
-        private async UniTask SetBoolAfterOneFrame(bool enable)
-        {
-            await UniTask.Yield();
-
-            _isSucceedThisFrame = enable;
-        }
-
-        public QuestSucceedChecker(QuestManager manager, PlayerUIManager playerUIManager, PortraitScript portraitScript)
+        public QuestSucceedChecker(QuestManager manager, PlayerUIManager playerUIManager, PortraitScript portraitScript, StageData stageData)
         {
             _manager = manager;
             _playerUIManager = playerUIManager;
             _portraitScript = portraitScript;
+            _stageData = stageData;
+        }
+
+        ~QuestSucceedChecker()
+        {
+            InputSystemManager.Instance.onTutorialSkipPerformed -= CheckSkipQuest;
         }
 
         #region EatDango
@@ -256,15 +257,15 @@ namespace Dango.Quest
         #endregion
 
         #region PlayAction
-        public bool CheckQuestPlayActionSucceed(QuestManager questManager, QuestPlayAction.PlayerAction action)
+        public bool CheckQuestPlayActionSucceed(QuestPlayAction.PlayerAction action)
         {
             //���̃t���[���ɕʂ̃N�G�X�g���N���A����Ă�����e��
             if (_isSucceedThisFrame) return false;
 
-            for (int i = 0; i < questManager.QuestsCount; i++)
+            for (int i = 0; i < _manager.QuestsCount; i++)
             {
                 //�L���X�g�\�����m�F�i�s�\�ȏꍇ�G���[���N���邽�߂��̏����͕K�{�j
-                if (questManager.GetQuest(i) is QuestPlayAction questPla)
+                if (_manager.GetQuest(i) is QuestPlayAction questPla)
                 {
                     if (CheckQuestSucceed(questPla, action)) return true;
                 }
@@ -352,6 +353,31 @@ namespace Dango.Quest
         }
         #endregion
 
+        private async void CheckSkipQuest()
+        {
+            //チュートリアル以外でスキップは認めない
+            if (_stageData.Stage != Stage.Tutorial) return;
+
+            InputSystemManager.Instance.Input.SwitchCurrentActionMap("UI");
+
+            bool skip = false;
+
+            while (!InputSystemManager.Instance.IsPressChoice)
+            {
+                await UniTask.Yield();
+
+                if (InputSystemManager.Instance.NavigateAxis.magnitude <= 0.5f) continue;
+
+                skip = InputSystemManager.Instance.NavigateAxis.x > 0;
+            }
+
+            InputSystemManager.Instance.Input.SwitchCurrentActionMap("Player");
+
+            if (!skip) return;
+
+            QuestSucceed(_manager.GetQuest(0));
+        }
+
         private async void QuestSucceed(QuestData quest)
         {
             SoundManager.Instance.PlaySE(SoundSource.SE12_QUEST_SUCCEED);
@@ -359,7 +385,13 @@ namespace Dango.Quest
             List<QuestData> nextQuest = new();
             for (int i = 0; i < quest.NextQuestId.Count; i++)
             {
-                nextQuest.Add(Stage001Data.Instance.QuestData[quest.NextQuestId[i]]);
+                nextQuest.Add(_stageData.QuestData[quest.NextQuestId[i]]);
+            }
+
+            //チュートリアル限定処理
+            if (_tutorialUIManager != null)
+            {
+                _tutorialUIManager.ChangeNextGuide(quest.NextQuestId[0]);
             }
 
             _manager.ChangeQuest(nextQuest);
@@ -374,11 +406,14 @@ namespace Dango.Quest
             _isSucceedThisFrame = true;
             SetBoolAfterOneFrame(false).Forget();
 
-           _portraitScript.ChangePortraitText(quest.QuestTextDatas).Forget();
+            _portraitScript.ChangePortraitText(quest.QuestTextDatas).Forget();
 
             if (quest.IsKeyQuest)
             {
                 _manager.SetIsComplete();
+
+                //最後のクエストがクリアされたらスキップ禁止にする
+                InputSystemManager.Instance.onTutorialSkipPerformed -= CheckSkipQuest;
                 return;
             }
 
@@ -392,6 +427,26 @@ namespace Dango.Quest
 
             _playerUIManager.EventText.TextData.SetFontSize(_playerUIManager.DefaultEventTextFontSize);
             await _playerUIManager.EventText.TextData.Fadeout(0.5f, 2f);
+        }
+
+        private async UniTask SetBoolAfterOneFrame(bool enable)
+        {
+            await UniTask.Yield();
+
+            _isSucceedThisFrame = enable;
+        }
+
+        /// <summary>
+        /// インスタンス生成元のStartで呼ぶことを想定しています
+        /// </summary>
+        public void Init()
+        {
+            InputSystemManager.Instance.onTutorialSkipPerformed += CheckSkipQuest;
+        }
+
+        public void SetTutorialUIManager(TutorialUIManager manager)
+        {
+            _tutorialUIManager = manager;
         }
     }
 }

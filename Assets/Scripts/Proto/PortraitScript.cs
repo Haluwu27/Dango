@@ -19,13 +19,15 @@ public class PortraitScript : MonoBehaviour
     //transformのインスタンス取得
     Transform _trans;
 
+    public bool IsChangePortrait => _isChangePortrait;
+
     private void Awake()
     {
         _trans = transform;
         _trans.localPosition = Vector3.zero.SetX(OFFSET);
     }
 
-    public void ChangePortrait(PortraitTextData.PTextData data)
+    private void ChangePortrait(PortraitTextData.PTextData data)
     {
         if (string.IsNullOrEmpty(data.text))
         {
@@ -110,6 +112,7 @@ public class PortraitScript : MonoBehaviour
             while (time < data.printTime)
             {
                 await UniTask.Yield();
+                if (_trans == null) return;
                 if (!_trans.root.gameObject.activeSelf) continue;
 
                 time += Time.deltaTime;

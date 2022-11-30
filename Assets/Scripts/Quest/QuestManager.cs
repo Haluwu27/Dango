@@ -23,11 +23,12 @@ class QuestManager : MonoBehaviour
     private void Awake()
     {
         Instance = this;
-        SucceedChecker = new(this, _playerUIManager,_portraitScript);
+        SucceedChecker = new(this, _playerUIManager, _portraitScript, _stageData);
     }
 
     private void Start()
     {
+        SucceedChecker.Init();
         StageData.IAddQuest addQuest = _stageData.CurrentStage;
         addQuest.AddQuest();
     }
@@ -72,5 +73,10 @@ class QuestManager : MonoBehaviour
     public void SetIsComplete()
     {
         _gameManager.SetGameSucceed();
+    }
+
+    public void SetTutorialUIManager(TutorialUIManager manager)
+    {
+        SucceedChecker.SetTutorialUIManager(manager);
     }
 }

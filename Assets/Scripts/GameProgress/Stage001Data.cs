@@ -40,7 +40,8 @@ public class Stage001Data : StageData.IAddQuest, StageData.IPortrait
             questManager.Creater.CreateQuestCreateRole(9, new QuestCreateRole.EstablishRole(true,false,DangoColor.Orange), 2, 0, "橙色の団子を含んで役を2回作れ", 30f, true, false,new(new PortraitTextData.PTextData()), 11),
             questManager.Creater.CreateQuestCreateRole(10, new QuestCreateRole.EstablishRole(true,false,DangoColor.Green), 2, 0, "緑色の団子を含んで役を2回作れ", 30f, true, false,new(new PortraitTextData.PTextData()), 11),
 
-            questManager.Creater.CreateQuestDestination(11, FloorManager.Floor.floor11, false, "城内の最上層に向かえ", 0f, false, true,new(new PortraitTextData.PTextData()), 0),
+            questManager.Creater.CreateQuestDestination(11, FloorManager.Floor.floor11, false, "城内の最上層に向かえ", 0f, false, true,new(new PortraitTextData.PTextData()), 12),
+            questManager.Creater.CreateQuestDestination(12, FloorManager.Floor.Max, false, "クリア！", 0f, false, true,new(new PortraitTextData.PTextData()), 0),
         };
 
         QuestData.Clear();

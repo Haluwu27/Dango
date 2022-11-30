@@ -461,6 +461,8 @@ class PlayerData : MonoBehaviour
 
     [SerializeField] SpitManager[] _swords = new SpitManager[5];
 
+    [SerializeField] bool _allowReducedTimeLimit = true;
+
     const float DEFAULT_CAMERA_VIEW = 60f;
     const float CAMERA_REMOVETIME = 0.3f;
 
@@ -755,6 +757,10 @@ class PlayerData : MonoBehaviour
     private void DecreaseSatiety()
     {
         if (Event) return;
+        
+        //空腹度減少の許可
+        if (!_allowReducedTimeLimit) return;
+
         //満腹度を0.02秒(fixedUpdateの呼ばれる秒数)減らす
         _satiety -= Time.fixedDeltaTime;
     }

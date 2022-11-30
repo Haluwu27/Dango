@@ -228,6 +228,7 @@ namespace Dango.Quest
         public enum PlayerAction
         {
             FallAttack,
+            Stab,
         }
 
         PlayerAction _action;
