@@ -13,6 +13,7 @@ public class SaveData
 {
     //データに含む物が分からないので仮でこうなってます
     //後で色々付け足しといてください
+    public bool completedTutorial;
 
     public int a = 0;
     public string b = "string";

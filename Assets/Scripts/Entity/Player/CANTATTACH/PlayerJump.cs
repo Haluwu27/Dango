@@ -78,9 +78,16 @@ namespace TM.Entity.Player
 
         private async UniTask WaitVelocityYLessZero()
         {
-            while (_rb.velocity.y > 0)
+            try
             {
-                await UniTask.Yield();
+                while (_rb.velocity.y > 0)
+                {
+                    await UniTask.Yield();
+                }
+            }
+            catch (NullReferenceException)
+            {
+                return;
             }
         }
 

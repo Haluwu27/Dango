@@ -111,12 +111,6 @@ public class MenuManager : MonoBehaviour
             Logger.Log("メンテナンス中です");
             return;
         }
-        //TODO:S2解放したら消す
-        if (CurrentMenu == Menu.Tutorial)
-        {
-            Logger.Log("メンテナンス中です");
-            return;
-        }
 
         if (_isTransition) return;
         _isTransition = true;
@@ -283,6 +277,7 @@ public class MenuManager : MonoBehaviour
     private void ToTutorial()
     {
         SceneSystem.Instance.Load(SceneSystem.Scenes.Tutorial);
+        SceneSystem.Instance.SetIngameScene(SceneSystem.Scenes.Tutorial);
         Unload();
     }
     private void ToEx()

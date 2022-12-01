@@ -11,6 +11,7 @@ using UnityEngine.Windows;
 internal class GameManager : MonoBehaviour
 {
     [SerializeField] IngameUIManager _ingameUIManager;
+    [SerializeField] FusumaManager _fusumaManager;
     [SerializeField] PlayerData _playerData;
     bool _gameSucceed;
 
@@ -174,7 +175,27 @@ internal class GameManager : MonoBehaviour
         await UniTask.Delay(2500);
 
         InputSystemManager.Instance.onPausePerformed -= OnPause;
-        SceneSystem.Instance.Load(SceneSystem.Scenes.Success);
+
+        SceneSystem.Scenes nextScene = SceneSystem.Scenes.Success;
+
+        //チュートリアルをクリアした際は別処理
+        if (SceneSystem.Instance.CurrentIngameScene == SceneSystem.Scenes.Tutorial)
+        {
+            //セーブデータにチュートリアルをクリアしたことを記録
+            DataManager.saveData.completedTutorial = true;
+
+            Logger.Assert(_fusumaManager != null);
+
+            await _fusumaManager.UniTaskClose();
+
+            SceneSystem.Instance.UnLoad(SceneSystem.Instance.CurrentIngameScene, true);
+            InputSystemManager.Instance.Input.SwitchCurrentActionMap("UI");
+
+            //クリア画面には移行せず、メニューに戻る
+            nextScene = SceneSystem.Scenes.Menu;
+        }
+
+        SceneSystem.Instance.Load(nextScene);
     }
 
     public void SetGameSucceed() => _gameSucceed = true;
