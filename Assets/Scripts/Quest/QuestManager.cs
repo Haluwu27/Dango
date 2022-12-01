@@ -28,7 +28,6 @@ class QuestManager : MonoBehaviour
 
     private void Start()
     {
-        SucceedChecker.Init();
         StageData.IAddQuest addQuest = _stageData.CurrentStage;
         addQuest.AddQuest();
     }
@@ -73,10 +72,5 @@ class QuestManager : MonoBehaviour
     public void SetIsComplete()
     {
         _gameManager.SetGameSucceed();
-    }
-
-    public void SetTutorialUIManager(TutorialUIManager manager)
-    {
-        SucceedChecker.SetTutorialUIManager(manager);
     }
 }

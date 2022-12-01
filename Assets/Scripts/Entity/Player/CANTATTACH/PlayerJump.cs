@@ -85,7 +85,7 @@ namespace TM.Entity.Player
                     await UniTask.Yield();
                 }
             }
-            catch (NullReferenceException)
+            catch (MissingReferenceException)
             {
                 return;
             }
