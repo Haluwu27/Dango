@@ -10,6 +10,10 @@ public class IngameUIManager : MonoBehaviour
     [SerializeField] CanvasGroup[] _canvasGroups;
     [SerializeField] TextUIData[] _textUIDatas;
 
+    bool _duringEndProduction = false;
+
+    public bool DuringEndProduction => _duringEndProduction;
+
     private void Start()
     {
         foreach (var text in _textUIDatas)
@@ -20,6 +24,8 @@ public class IngameUIManager : MonoBehaviour
 
     public async UniTask EraseUIs()
     {
+        _duringEndProduction = true;
+
         float alpha = 1;
 
         while (alpha > 0)

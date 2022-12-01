@@ -13,7 +13,6 @@ namespace Dango.Quest
         PlayerUIManager _playerUIManager;
         PortraitScript _portraitScript;
         StageData _stageData;
-        TutorialUIManager _tutorialUIManager;
 
         public QuestSucceedChecker(QuestManager manager, PlayerUIManager playerUIManager, PortraitScript portraitScript, StageData stageData)
         {
@@ -21,11 +20,6 @@ namespace Dango.Quest
             _playerUIManager = playerUIManager;
             _portraitScript = portraitScript;
             _stageData = stageData;
-        }
-
-        ~QuestSucceedChecker()
-        {
-            InputSystemManager.Instance.onTutorialSkipPerformed -= CheckSkipQuest;
         }
 
         #region EatDango
@@ -353,28 +347,8 @@ namespace Dango.Quest
         }
         #endregion
 
-        private async void CheckSkipQuest()
+        public void QuestSkip()
         {
-            //チュートリアル以外でスキップは認めない
-            if (_stageData.Stage != Stage.Tutorial) return;
-
-            InputSystemManager.Instance.Input.SwitchCurrentActionMap("UI");
-
-            bool skip = false;
-
-            while (!InputSystemManager.Instance.IsPressChoice)
-            {
-                await UniTask.Yield();
-
-                if (InputSystemManager.Instance.NavigateAxis.magnitude <= 0.5f) continue;
-
-                skip = InputSystemManager.Instance.NavigateAxis.x > 0;
-            }
-
-            InputSystemManager.Instance.Input.SwitchCurrentActionMap("Player");
-
-            if (!skip) return;
-
             QuestSucceed(_manager.GetQuest(0));
         }
 
@@ -386,12 +360,6 @@ namespace Dango.Quest
             for (int i = 0; i < quest.NextQuestId.Count; i++)
             {
                 nextQuest.Add(_stageData.QuestData[quest.NextQuestId[i]]);
-            }
-
-            //チュートリアル限定処理
-            if (_tutorialUIManager != null)
-            {
-                _tutorialUIManager.ChangeNextGuide(quest.NextQuestId[0]);
             }
 
             _manager.ChangeQuest(nextQuest);
@@ -412,8 +380,6 @@ namespace Dango.Quest
             {
                 _manager.SetIsComplete();
 
-                //最後のクエストがクリアされたらスキップ禁止にする
-                InputSystemManager.Instance.onTutorialSkipPerformed -= CheckSkipQuest;
                 return;
             }
 
@@ -434,19 +400,6 @@ namespace Dango.Quest
             await UniTask.Yield();
 
             _isSucceedThisFrame = enable;
-        }
-
-        /// <summary>
-        /// インスタンス生成元のStartで呼ぶことを想定しています
-        /// </summary>
-        public void Init()
-        {
-            InputSystemManager.Instance.onTutorialSkipPerformed += CheckSkipQuest;
-        }
-
-        public void SetTutorialUIManager(TutorialUIManager manager)
-        {
-            _tutorialUIManager = manager;
         }
     }
 }
