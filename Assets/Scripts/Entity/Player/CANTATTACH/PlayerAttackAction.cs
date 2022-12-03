@@ -2,6 +2,7 @@ using Cysharp.Threading.Tasks;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -21,6 +22,8 @@ namespace TM.Entity.Player
 
         //団子までたどり着く時間
         const float RUSH_TIME = 0.2f;
+
+        const float ANIMATION_FLAME = 11f / 30f;
 
         Animator _animator;
         SpitManager _spitManager;
@@ -127,9 +130,14 @@ namespace TM.Entity.Player
             }
         }
 
-        public async void WasPressedAttackButton(Rigidbody rb)
+        public void WasPressedAttackButton(Rigidbody rb)
         {
-            if (_highlightDango is null) return;
+            if (_highlightDango is null)
+            {
+                //ノーターゲットでも前進する
+                RushStart(rb, 2f);
+                return;
+            }
             _hasStabDango = false;
 
             float distance = Vector3.Distance(_highlightDango.transform.position, rb.transform.position);
@@ -140,21 +148,61 @@ namespace TM.Entity.Player
             //ターゲット一覧から今の団子を消す。(乱入されて別の団子が刺さったときにこの団子が再度ターゲットされにくい)
             ResetHighlightDango();
 
-            //前進(距離/時間を第一引数とすれば良い)
-            while (_animator.GetCurrentAnimatorStateInfo(0).normalizedTime <= 1f)
+            //前進(距離を第二引数とすれば良い)
+            RushStart(rb, distance);
+        }
+
+        private async void RushStart(Rigidbody rb, float distance)
+        {
+            //別アニメーションが終わりきっていなければ終了まで待機
+            if (_animator.GetCurrentAnimatorStateInfo(0).normalizedTime > ANIMATION_FLAME)
             {
-                await UniTask.WaitForFixedUpdate();
-
-                //突進中に刺さったら急停止
-                if (_hasStabDango)
+                while (_animator.GetCurrentAnimatorStateInfo(0).normalizedTime > ANIMATION_FLAME)
                 {
-                    _hasStabDango = false;
-                    rb.velocity = Vector3.zero;
-                    break;
+                    await UniTask.Yield();
                 }
+            }
 
-                //上への運動を断ち切りたいため直接書き換え
-                rb.velocity = (rb.transform.forward.normalized * distance / RUSH_TIME).SetY(0);
+            //念のためのバグチェック
+            Logger.Assert(_animator.GetCurrentAnimatorStateInfo(0).normalizedTime <= ANIMATION_FLAME);
+
+            //前進するフレームまで待機
+            while (_animator.GetCurrentAnimatorStateInfo(0).normalizedTime <= ANIMATION_FLAME)
+            {
+                await UniTask.Yield();
+
+            }
+
+            //突き刺せる状態にして
+            _spitManager.IsSticking = true;
+
+            //上への運動を断ち切りたいため直接書き換え
+            rb.velocity = (rb.transform.forward.normalized * distance / RUSH_TIME).SetY(0);
+
+            //ここも突進中刺さったら停止を常にやる
+            OnRush(rb);
+        }
+
+        private async void OnRush(Rigidbody rigidbody)
+        {
+            try
+            {
+                while (_animator.GetCurrentAnimatorStateInfo(0).normalizedTime <= 1f)
+                {
+                    await UniTask.Yield();
+
+                    //突進中に刺さったら急停止
+                    if (_hasStabDango)
+                    {
+                        _hasStabDango = false;
+                        rigidbody.velocity = Vector3.zero;
+                        return;
+                    }
+                }
+            }
+            catch (MissingReferenceException)
+            {
+                return;
             }
         }
 
@@ -169,7 +217,7 @@ namespace TM.Entity.Player
             if (_highlightDango == dango) return;
 
             //ハイライト中の団子が既に存在していたらハイライトをやめる
-            if (_highlightDango != null) ResetHighlightDango();
+            ResetHighlightDango();
 
             //セット
             _highlightDango = dango;
@@ -186,7 +234,10 @@ namespace TM.Entity.Player
 
         public void RemoveTargetDango(DangoData dango)
         {
-            _targetDangoList.Remove(dango);
+            bool succees = _targetDangoList.Remove(dango);
+            Logger.Assert(succees);
         }
+
+        public void SetSpitManager(SpitManager spitManager) => _spitManager = spitManager;
     }
 }

@@ -1,6 +1,8 @@
+using Cysharp.Threading.Tasks;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TM.Easing.Management;
 
 /// <summary>
 /// 団子に関するマネージャークラス
@@ -18,6 +20,7 @@ public class DangoData : MonoBehaviour
     [SerializeField] Renderer _rend;
     [SerializeField] Rigidbody _rigidbody;
     [SerializeField] Animator _animator;
+    [SerializeField] Collider _collider;
 
     public Renderer Rend => _rend;
     public Rigidbody Rb => _rigidbody;
@@ -31,19 +34,35 @@ public class DangoData : MonoBehaviour
     List<FloorArray> _canShotList = new();
 
     StageData _stageData;
+    const float SCALE_ANIM_TIME = 0.2f;
 
     static bool[] completedInitialization = new bool[5];
+
+    Transform _parent;
+    Transform _childTrans;
 
     private void Awake()
     {
         _poolManager = GameObject.Find("DangoPoolManager").GetComponent<DangoPoolManager>();
+
+        _childTrans = transform.GetChild(0).GetChild(0);
     }
 
     public void OnEnable()
     {
         //移動可能にする
+        _collider.enabled = true;
+        _rigidbody.isKinematic = false;
         _isMoveable = true;
+        _animator.speed = 1f;
+        transform.localScale = Vector3.one;
+        transform.rotation = Quaternion.identity;
+
+        if (_parent != null) transform.parent = _parent;
+
         gameObject.SetLayerIncludeChildren(0);
+
+        Logger.Assert(gameObject.layer == 0);
     }
 
     private void FixedUpdate()
@@ -67,7 +86,7 @@ public class DangoData : MonoBehaviour
         if (_rigidbody.velocity.magnitude < 0.01f) transform.Rotate(0, Random.Range(90f, 270f), 0);
     }
 
-    public void ReleaseDangoPool(int stabCount)
+    private void ReleaseDangoPool(int stabCount)
     {
         //部屋の団子総数をへらす
         _floorManager.FloorArrays[(int)_floor].RemoveDangoCount(1, _color);
@@ -138,6 +157,61 @@ public class DangoData : MonoBehaviour
         salvationDango._salvationFloor = _canShotList[rand];
         _canShotList[rand].SetSalvationDango(salvationDango);
         //Logger.Log("救済発動" + color + "\n" + "フロア：" + _canShotList[rand].FloorDatas[0].name);
+    }
+
+    public async void StabAnimation(Animator playerAnimator, int stabCount, Transform parent)
+    {
+        _collider.enabled = false;
+        _rigidbody.isKinematic = true;
+
+        try
+        {
+            //playerのアニメーション終了まで待機
+            while (playerAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime < 1f)
+            {
+                //Logger.Assert(playerAnimator.GetCurrentAnimatorStateInfo(0).IsName("AN5") || playerAnimator.GetCurrentAnimatorStateInfo(0).IsName("AN7A"));
+                await UniTask.Yield();
+            }
+        }
+        catch (MissingReferenceException)
+        {
+            return;
+        }
+
+        //剣に追従させる
+        transform.localPosition = Vector3.zero;
+        _childTrans.localPosition = Vector3.zero;
+
+        _parent = transform.parent;
+
+        //親を変更
+        transform.parent = parent;
+
+        Vector3 scale = Vector3.one;
+        float value = 1f;
+        float currentTime = 0f;
+
+        try
+        {
+            while (value > 0.01f)
+            {
+                await UniTask.Yield();
+
+                currentTime += Time.deltaTime;
+                value = 1 - EasingManager.EaseProgress(TM.Easing.EaseType.OutCirc, currentTime, SCALE_ANIM_TIME, 0, 0);
+                scale.Set(value, value, value);
+                
+                transform.localPosition = Vector3.zero;
+                _childTrans.localPosition = Vector3.zero;
+                transform.localScale = scale;
+            }
+        }
+        catch (MissingReferenceException)
+        {
+            return;
+        }
+
+        ReleaseDangoPool(stabCount);
     }
 
     public DangoColor GetDangoColor() => _color;
