@@ -111,6 +111,8 @@ class PlayerData : MonoBehaviour
                 return;
             }
 
+            if (parent._currentState != IState.E_State.Falling) return;
+
             parent._animationManager.ChangeAnimation(AnimationManager.E_Animation.An3_FreeFall, 0.1f);
         }
 

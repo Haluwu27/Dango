@@ -18258,7 +18258,7 @@ MonoBehaviour:
     U8Canvas: {fileID: 8584274916207569338}
     ok: {fileID: 7417959493647898108}
     ng: {fileID: 8823754806761584069}
-  _stageData: {fileID: 0}
+  _stageData: {fileID: 6441814228180026030}
   _questManager: {fileID: 312651398876999161}
   _ingameUIManager: {fileID: 2705099970958109134}
 --- !u!225 &1204193423743387442
@@ -23115,10 +23115,10 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Action
+  m_text: 
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 02fe81c132b07c743ad1e63b793082e1, type: 2}
-  m_sharedMaterial: {fileID: 1192597377128128167, guid: 02fe81c132b07c743ad1e63b793082e1,
+  m_fontAsset: {fileID: 11400000, guid: 9c51b79433d044e46b4fe2e3b0746edb, type: 2}
+  m_sharedMaterial: {fileID: -2477921623451273995, guid: 9c51b79433d044e46b4fe2e3b0746edb,
     type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
