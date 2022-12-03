@@ -13,13 +13,15 @@ namespace Dango.Quest
         PlayerUIManager _playerUIManager;
         PortraitScript _portraitScript;
         StageData _stageData;
+        TutorialUIManager _tutorialUIManager;
 
-        public QuestSucceedChecker(QuestManager manager, PlayerUIManager playerUIManager, PortraitScript portraitScript, StageData stageData)
+        public QuestSucceedChecker(QuestManager manager, PlayerUIManager playerUIManager, PortraitScript portraitScript, StageData stageData, TutorialUIManager tutorialUIManager)
         {
             _manager = manager;
             _playerUIManager = playerUIManager;
             _portraitScript = portraitScript;
             _stageData = stageData;
+            _tutorialUIManager = tutorialUIManager;
         }
 
         #region EatDango
@@ -386,6 +388,11 @@ namespace Dango.Quest
             Logger.Log(quest.QuestName + "クエストクリア！");
 
             _manager.CreateExpansionUIObj();
+
+            if (_tutorialUIManager != null)
+            {
+                _tutorialUIManager.ChangeNextGuide(quest.NextQuestId[0]);
+            }
 
             //�N�G�X�g��B�������Ƃ��̉��o
             _playerUIManager.EventText.TextData.SetText("団道達成");

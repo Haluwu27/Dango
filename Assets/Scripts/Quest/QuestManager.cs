@@ -19,11 +19,12 @@ class QuestManager : MonoBehaviour
     [SerializeField] GameManager _gameManager;
     [SerializeField] StageData _stageData;
     [SerializeField] PortraitScript _portraitScript;
+    [SerializeField] TutorialUIManager _tutorialUIManager;
 
     private void Awake()
     {
         Instance = this;
-        SucceedChecker = new(this, _playerUIManager, _portraitScript, _stageData);
+        SucceedChecker = new(this, _playerUIManager, _portraitScript, _stageData, _tutorialUIManager);
     }
 
     //クエストの生成・クリア判定のやつ
