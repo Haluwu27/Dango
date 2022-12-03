@@ -47,12 +47,11 @@ public class PortraitScript : MonoBehaviour
     private async UniTask SlideIn()
     {
         float time = 0;
-
-        //ˆÊ’u‚Ì‰Šú‰»
-        _trans.localPosition = Vector3.zero.SetX(OFFSET);
-
         try
         {
+            //ˆÊ’u‚Ì‰Šú‰»
+            _trans.localPosition = Vector3.zero.SetX(OFFSET);
+
             while (time < SLIDETIME)
             {
                 await UniTask.Yield();
