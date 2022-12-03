@@ -63508,6 +63508,11 @@ PrefabInstance:
       propertyPath: TimeGage
       value: 
       objectReference: {fileID: 1839042362}
+    - target: {fileID: 8208465983929971838, guid: ea25d6985a03e2943a1b915d2d2401a3,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8339549326599362119, guid: ea25d6985a03e2943a1b915d2d2401a3,
         type: 3}
       propertyPath: m_IsActive
@@ -63758,6 +63763,12 @@ PrefabInstance:
       propertyPath: PlayerData
       value: 
       objectReference: {fileID: 1823400544899498257}
+    - target: {fileID: 8567872267399664037, guid: ea25d6985a03e2943a1b915d2d2401a3,
+        type: 3}
+      propertyPath: DangoImags.Array.data[6]
+      value: 
+      objectReference: {fileID: 21300000, guid: 8b060a164b1308f49a63e8c2f9510dad,
+        type: 3}
     - target: {fileID: 8567872267460679753, guid: ea25d6985a03e2943a1b915d2d2401a3,
         type: 3}
       propertyPath: m_AnchorMax.x
@@ -63787,6 +63798,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8567872267842912958, guid: ea25d6985a03e2943a1b915d2d2401a3,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8567872267928951233, guid: ea25d6985a03e2943a1b915d2d2401a3,
         type: 3}
