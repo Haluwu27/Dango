@@ -145,7 +145,7 @@ namespace Dango.Quest
             List<DangoColor> _readColors = new();   //‚±‚ÌF‚¾‚¯“Ç‚İæ‚é
             bool _isPrebCreateRole;             //’¼‘O‚É–ğ‚ğì‚Á‚ÄH‚×‚½‚©
 
-            static readonly DangoColor[] dangoColors = { DangoColor.Red, DangoColor.Orange, DangoColor.Yellow, DangoColor.Green, DangoColor.Cyan, DangoColor.Blue, DangoColor.Purple };
+            static readonly DangoColor[] dangoColors = { DangoColor.An, DangoColor.Beni, DangoColor.Mitarashi, DangoColor.Nori, DangoColor.Shiratama, DangoColor.Yomogi };
 
             public EstablishRole(bool createRole, bool onlyPerfectRole, params DangoColor[] colors)
             {

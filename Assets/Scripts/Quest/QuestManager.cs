@@ -26,12 +26,6 @@ class QuestManager : MonoBehaviour
         SucceedChecker = new(this, _playerUIManager, _portraitScript, _stageData);
     }
 
-    private void Start()
-    {
-        StageData.IAddQuest addQuest = _stageData.CurrentStage;
-        addQuest.AddQuest();
-    }
-
     //クエストの生成・クリア判定のやつ
     public QuestCreater Creater { get; private set; } = new();
     public QuestSucceedChecker SucceedChecker { get; private set; }

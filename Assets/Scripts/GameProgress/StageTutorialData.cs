@@ -4,18 +4,16 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class StageTutorialData : StageData.IAddQuest, StageData.IPortrait
+public class StageTutorialData : StageData
 {
-    public static StageTutorialData Instance = new();
+    static readonly List<DangoColor> stageDangoColors = new() { DangoColor.Beni, DangoColor.Shiratama, DangoColor.Yomogi };
 
-    private StageTutorialData()
+    protected override void Start()
     {
+        base.Start();
     }
 
-    public List<QuestData> QuestData = new();
-    static readonly List<DangoColor> stageDangoColors = new() { DangoColor.Red, DangoColor.Orange, DangoColor.Yellow, DangoColor.Green, DangoColor.Cyan, DangoColor.Blue, DangoColor.Purple };
-
-    public void AddQuest()
+    protected override void AddQuest()
     {
         QuestManager questManager = QuestManager.Instance;
 
@@ -39,13 +37,13 @@ public class StageTutorialData : StageData.IAddQuest, StageData.IPortrait
         questManager.ChangeQuest(quest[0]);
     }
 
-    public PortraitTextData GetPortraitQuest()
+    protected override PortraitTextData StartPortraitText()
     {
         return new(new(0, "団道の基本中の基本は、団子を刺して集めるところからだ。", 2f, PortraitTextData.FacePatturn.Normal), new(0, "『突き刺す』ボタンで団子を刺してみろ！", 2f, PortraitTextData.FacePatturn.Normal));
     }
 
-    public bool IsContainsStageDangoColor(DangoColor color)
+    public override List<DangoColor> FloorDangoColors()
     {
-        return stageDangoColors.Contains(color);
+        return stageDangoColors;
     }
 }

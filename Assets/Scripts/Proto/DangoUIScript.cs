@@ -37,14 +37,19 @@ public class DangoUIScript : MonoBehaviour
             //DangoImagObjs[i].sprite = DangoImags[(int)dangos[i] - 1];
             DangoImagObjs[i].sprite = dangos[i] switch
             {
-                DangoColor.Red => DangoImags[(int)DangoColor.Red],
-                DangoColor.Orange => DangoImags[(int)DangoColor.Orange],
-                DangoColor.Yellow => DangoImags[(int)DangoColor.Yellow],
-                DangoColor.Green => DangoImags[(int)DangoColor.Green],
-                DangoColor.Cyan => DangoImags[(int)DangoColor.Cyan],
-                DangoColor.Blue => DangoImags[(int)DangoColor.Blue],
-                DangoColor.Purple => DangoImags[(int)DangoColor.Purple],
-                DangoColor.Other => DangoImags[(int)DangoColor.Other],
+                //DangoColor.Red => DangoImags[(int)DangoColor.Red],
+                //DangoColor.Orange => DangoImags[(int)DangoColor.Orange],
+                //DangoColor.Yellow => DangoImags[(int)DangoColor.Yellow],
+                //DangoColor.Green => DangoImags[(int)DangoColor.Green],
+                //DangoColor.Cyan => DangoImags[(int)DangoColor.Cyan],
+                //DangoColor.Blue => DangoImags[(int)DangoColor.Blue],
+                //DangoColor.Purple => DangoImags[(int)DangoColor.Purple],
+                DangoColor.An => DangoImags[(int)DangoColor.An],
+                DangoColor.Beni => DangoImags[(int)DangoColor.Beni],
+                DangoColor.Mitarashi => DangoImags[(int)DangoColor.Mitarashi],
+                DangoColor.Nori => DangoImags[(int)DangoColor.Nori],
+                DangoColor.Shiratama => DangoImags[(int)DangoColor.Shiratama],
+                DangoColor.Yomogi => DangoImags[(int)DangoColor.Yomogi],
                 _ => DangoImags[(int)DangoColor.Other],
             };
         }
