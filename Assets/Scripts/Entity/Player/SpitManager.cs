@@ -11,10 +11,15 @@ public class SpitManager : MonoBehaviour
 
     [SerializeField] FloorManager _floorManager;
     [SerializeField] PlayerKusiScript kusiScript;
-    [SerializeField]PlayerUIManager _playerUIManager;
+    [SerializeField] PlayerUIManager _playerUIManager;
+    [SerializeField] Transform _dangoParent;
 
     //ヒットストップの停止フレームです。左から3d5,4d5...7d5です
     static readonly List<int> hitStopFrameTable = new() { 0, 0, 0, 0, 0 };
+
+    private bool _isSticking;
+    private bool _isInWall;
+    private bool _isHitStop;
 
     private void Awake()
     {
@@ -22,13 +27,6 @@ public class SpitManager : MonoBehaviour
         _capsuleCollider.enabled = false;
     }
 
-    private bool _isSticking;
-    private bool _isInWall;
-    private bool _isHitStop;
-
-    /// <summary>
-    /// 突き刺しボタンが押されたときにtrueになる。
-    /// </summary>
     public bool IsSticking
     {
         get => _isSticking;
@@ -87,8 +85,12 @@ public class SpitManager : MonoBehaviour
             //団子を刺す
             player.AddDangos(dango);
 
+            //団子のパラメータを調整
+            dango.Animator.speed = 0f;
+            dango.SetIsMoveable(false);
+
             //フィールドにある団子を消す
-            dango.ReleaseDangoPool(player.GetCurrentStabCount());
+            dango.StabAnimation(player.GetAnimator(), player.GetCurrentStabCount(), _dangoParent);
 
             //UIの更新
             DangoUISC.DangoUISet(player.GetDangos());
@@ -99,9 +101,9 @@ public class SpitManager : MonoBehaviour
 
             //MAX警告
             int maxCurrent = player.GetDangos().Count;
-            int current=player.GetCurrentStabCount();
-            if(maxCurrent==current)
-            _playerUIManager.MAXDangoSet(true);
+            int current = player.GetCurrentStabCount();
+            if (maxCurrent == current)
+                _playerUIManager.MAXDangoSet(true);
 
         }
         else

@@ -726,8 +726,6 @@ class PlayerData : MonoBehaviour
             return false;
         }
 
-        //突き刺せる状態にして
-        spitManager.IsSticking = true;
         return true;
     }
 
@@ -790,6 +788,7 @@ class PlayerData : MonoBehaviour
         _swords[_currentStabCount - 3].gameObject.SetActive(true);
         _swords[_currentStabCount - 4].gameObject.SetActive(false);
         spitManager = _swords[_currentStabCount - 3];
+        _playerAttack.SetSpitManager(spitManager);
         _playerUIManager.EventText.TextData.SetText("させる団子の数が増えた！(" + _currentStabCount + "個)");
 
         //刺せる範囲表示の拡大。今串が伸びないのでコメントアウトしてます。

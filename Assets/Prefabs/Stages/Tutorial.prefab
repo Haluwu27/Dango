@@ -20448,9 +20448,9 @@ MonoBehaviour:
   - {x: -0.00000047683716, y: 0.0000019073486}
   - {x: -4, y: 0.000002861023}
   - {x: -3.999999, y: 16.000008}
-  - {x: -0.00000023841858, y: 16.000004}
+  - {x: -0.00000023841858, y: 16.000006}
   - {x: 0.00000071525574, y: 8.000002}
-  - {x: 4.000001, y: 0.0000019073486}
+  - {x: 4.000001, y: 0.000002861023}
   - {x: -0.000002861023, y: 0.0000019073486}
   - {x: -0.0000021457672, y: 8.000001}
   - {x: -0.00000047683716, y: 16.000006}
@@ -20496,12 +20496,12 @@ MonoBehaviour:
   - {x: 1, y: 0.00000005960465, z: -2.84217e-14, w: -1}
   - {x: 0.00000028684724, y: -1, z: -5.6843392e-14, w: -1}
   - {x: 0.00000022724265, y: -1, z: -0.00000017881389, w: -1}
-  - {x: 0.00000012852256, y: -1, z: -0.0000005364418, w: -1}
-  - {x: 0.00000008940703, y: -1, z: -0.0000007152559, w: -1}
-  - {x: 0.00000018129745, y: -1, z: -0.0000003576279, w: -1}
-  - {x: -0.000000059604666, y: 1, z: -0.000000119209204, w: -1}
-  - {x: -0.00000011920925, y: 1, z: -0.0000002384185, w: -1}
-  - {x: -0.00000007947287, y: 1, z: -0.00000015894565, w: -1}
+  - {x: 0.00000012852253, y: -1, z: -0.00000029802317, w: -1}
+  - {x: 0.000000089406996, y: -1, z: -0.00000023841855, w: -1}
+  - {x: 0.00000018129744, y: -1, z: -0.00000019868209, w: -1}
+  - {x: -0.00000005960467, y: 1, z: 7.1054246e-14, w: -1}
+  - {x: -0.00000011920926, y: 1, z: 5.6843405e-14, w: -1}
+  - {x: -0.00000007947288, y: 1, z: -0.00000007947281, w: -1}
   - {x: -0.000000119209275, y: 1, z: -0.00000023841855, w: -1}
   - {x: -0.00000005960469, y: 1, z: -0.00000011920925, w: -1}
   m_Colors: []
@@ -65231,16 +65231,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: PlayerParent
       objectReference: {fileID: 0}
-    - target: {fileID: 1061649141422286779, guid: e00667b9f080330498c4b7b845c69a76,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 2004707160588375817, guid: e00667b9f080330498c4b7b845c69a76,
         type: 3}
       propertyPath: _floorManager
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 6052633392570364234}
     - target: {fileID: 2004707160588375817, guid: e00667b9f080330498c4b7b845c69a76,
         type: 3}
       propertyPath: _playerUIManager
@@ -65250,7 +65245,7 @@ PrefabInstance:
         type: 3}
       propertyPath: _floorManager
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 6052633392570364234}
     - target: {fileID: 2787775987244112997, guid: e00667b9f080330498c4b7b845c69a76,
         type: 3}
       propertyPath: _playerUIManager
@@ -65271,16 +65266,11 @@ PrefabInstance:
       propertyPath: _playerUIManager
       value: 
       objectReference: {fileID: 8349132723969158454}
-    - target: {fileID: 4062595608074469455, guid: e00667b9f080330498c4b7b845c69a76,
-        type: 3}
-      propertyPath: _allowReducedTimeLimit
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 5771212600328677441, guid: e00667b9f080330498c4b7b845c69a76,
         type: 3}
       propertyPath: _floorManager
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 6052633392570364234}
     - target: {fileID: 5771212600328677441, guid: e00667b9f080330498c4b7b845c69a76,
         type: 3}
       propertyPath: _playerUIManager
@@ -65290,22 +65280,17 @@ PrefabInstance:
         type: 3}
       propertyPath: _floorManager
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 6052633392570364234}
     - target: {fileID: 5827723486197683084, guid: e00667b9f080330498c4b7b845c69a76,
         type: 3}
       propertyPath: _playerUIManager
       value: 
       objectReference: {fileID: 8349132723969158454}
-    - target: {fileID: 6467350245475302541, guid: e00667b9f080330498c4b7b845c69a76,
-        type: 3}
-      propertyPath: m_ApplyRootMotion
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 8968484660200578913, guid: e00667b9f080330498c4b7b845c69a76,
         type: 3}
       propertyPath: _floorManager
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 6052633392570364234}
     - target: {fileID: 8968484660200578913, guid: e00667b9f080330498c4b7b845c69a76,
         type: 3}
       propertyPath: _playerUIManager
