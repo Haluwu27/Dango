@@ -44,12 +44,12 @@ public class DangoUIScript : MonoBehaviour
                 //DangoColor.Cyan => DangoImags[(int)DangoColor.Cyan],
                 //DangoColor.Blue => DangoImags[(int)DangoColor.Blue],
                 //DangoColor.Purple => DangoImags[(int)DangoColor.Purple],
-                DangoColor.An => DangoImags[(int)DangoColor.An],
-                DangoColor.Beni => DangoImags[(int)DangoColor.Beni],
-                DangoColor.Mitarashi => DangoImags[(int)DangoColor.Mitarashi],
-                DangoColor.Nori => DangoImags[(int)DangoColor.Nori],
-                DangoColor.Shiratama => DangoImags[(int)DangoColor.Shiratama],
-                DangoColor.Yomogi => DangoImags[(int)DangoColor.Yomogi],
+                DangoColor.An => DangoImags[(int)DangoColor.An - 1],
+                DangoColor.Beni => DangoImags[(int)DangoColor.Beni - 1],
+                DangoColor.Mitarashi => DangoImags[(int)DangoColor.Mitarashi - 1],
+                DangoColor.Nori => DangoImags[(int)DangoColor.Nori - 1],
+                DangoColor.Shiratama => DangoImags[(int)DangoColor.Shiratama - 1],
+                DangoColor.Yomogi => DangoImags[(int)DangoColor.Yomogi - 1],
                 _ => DangoImags[(int)DangoColor.Other],
             };
         }

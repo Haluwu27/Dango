@@ -95,9 +95,28 @@ class PlayerData : MonoBehaviour
     }
     class FallingState : IState
     {
+        private async void PlayAnimation(PlayerData parent)
+        {
+            parent._animationManager.ChangeAnimation(AnimationManager.E_Animation.AN3Start, 0.1f);
+
+            try
+            {
+                while (parent._animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 1f)
+                {
+                    await UniTask.Yield();
+                }
+            }
+            catch (MissingReferenceException)
+            {
+                return;
+            }
+
+            parent._animationManager.ChangeAnimation(AnimationManager.E_Animation.An3_FreeFall, 0.1f);
+        }
+
         public IState.E_State Initialize(PlayerData parent)
         {
-            parent._animationManager.ChangeAnimation(AnimationManager.E_Animation.An3_FreeFall, 0.1f);
+            PlayAnimation(parent);
 
             return IState.E_State.Unchanged;
         }
@@ -253,7 +272,7 @@ class PlayerData : MonoBehaviour
     {
         public IState.E_State Initialize(PlayerData parent)
         {
-            parent._animationManager.ChangeAnimation(AnimationManager.E_Animation.An11B_JumpCharge, 0.2f);
+            parent._animationManager.ChangeAnimation(AnimationManager.E_Animation.An11Start, 0.2f);
 
             return IState.E_State.Unchanged;
         }
@@ -263,9 +282,13 @@ class PlayerData : MonoBehaviour
         }
         public IState.E_State FixedUpdate(PlayerData parent)
         {
-            if (InputSystemManager.Instance.MoveAxis.magnitude > 0) parent._animationManager.ChangeAnimation(AnimationManager.E_Animation.An11A_JumpCharge_Walk, 0.2f);
-            else parent._animationManager.ChangeAnimation(AnimationManager.E_Animation.An11B_JumpCharge, 0.2f);
+            var stateInfo = parent._animator.GetCurrentAnimatorStateInfo(0);
 
+            if (stateInfo.IsName("AN11Start") && stateInfo.normalizedTime >= 1f)
+            {
+                if (InputSystemManager.Instance.MoveAxis.magnitude > 0) parent._animationManager.ChangeAnimation(AnimationManager.E_Animation.An11A_JumpCharge_Walk, 0.2f);
+                else parent._animationManager.ChangeAnimation(AnimationManager.E_Animation.An11B_JumpCharge, 0.2f);
+            }
             //プレイヤーを動かす処理
             parent._playerMove.Update(parent.rb, parent.playerCamera.transform, true);
 
@@ -755,7 +778,7 @@ class PlayerData : MonoBehaviour
     private void DecreaseSatiety()
     {
         if (Event) return;
-        
+
         //空腹度減少の許可
         if (!_allowReducedTimeLimit) return;
 
