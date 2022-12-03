@@ -9,7 +9,6 @@ public class TutorialUIManager : MonoBehaviour
     [SerializeField] U7 _u7;
     [SerializeField] U8 _u8;
 
-    [SerializeField] StageData _stageData;
     [SerializeField] QuestManager _questManager;
 
     [SerializeField]IngameUIManager _ingameUIManager;
