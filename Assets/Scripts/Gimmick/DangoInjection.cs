@@ -3,10 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using TM.Easing;
 using TM.Easing.Management;
-using TMPro;
 using System;
 using static FloorManager;
-using System.Drawing;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -17,17 +15,16 @@ public class DangoInjection : MonoBehaviour
     {
         [InspectorName("ëSéÊÇËè¡Çµ")]
         None = 0,
-
-        Red = 1 << 1,
-        Orange = 1 << 2,
-        Yellow = 1 << 3,
-        Green = 1 << 4,
-        Cyan = 1 << 5,
-        Blue = 1 << 6,
-        Purple = 1 << 7,
+       
+        An = 1 << 1,
+        Beni = 1 << 2,
+        Mitarashi = 1 << 3,
+        Nori = 1 << 4,
+        Shiratama = 1 << 5,
+        Yomogi = 1 << 6,
 
         [InspectorName("")]
-        All = 8,
+        All = 7,
         [InspectorName("ëSëIë")]
         SET_ALL = ~0,
     }

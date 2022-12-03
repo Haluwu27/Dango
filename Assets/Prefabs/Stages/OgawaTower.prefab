@@ -28020,6 +28020,7 @@ MonoBehaviour:
     maxDangoCount: 0
     salvageableD5: 32
     intrudableD5: 32
+  _stageData: {fileID: -2663837440296468270}
 --- !u!1 &4281612119185631336
 GameObject:
   m_ObjectHideFlags: 0
@@ -34217,7 +34218,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5349642372761265462}
-  - component: {fileID: 7116246767063242365}
+  - component: {fileID: -2663837440296468270}
   m_Layer: 0
   m_Name: OgawaTower
   m_TagString: Untagged
@@ -34270,7 +34271,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &7116246767063242365
+--- !u!114 &-2663837440296468270
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -34279,11 +34280,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 5368458931326357395}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aed3c1dca7c4c1d4f9e556b46f0eb6c7, type: 3}
+  m_Script: {fileID: 11500000, guid: 7fa524d60a2da704b85db4cfc1a08cdf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _isRelease: 1
-  _stage: 2
+  _stage: 0
   _portraitScript: {fileID: 8349132724862761835}
   _fusumaManager: {fileID: 0}
 --- !u!1 &5387058174052651111
@@ -63244,7 +63245,7 @@ PrefabInstance:
         type: 3}
       propertyPath: _stageData
       value: 
-      objectReference: {fileID: 7116246767063242365}
+      objectReference: {fileID: -2663837440296468270}
     - target: {fileID: 1775739581866841225, guid: f596f7fa4f031ba4eb2aaf1052d308c7,
         type: 3}
       propertyPath: _playerData

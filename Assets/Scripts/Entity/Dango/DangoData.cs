@@ -30,6 +30,8 @@ public class DangoData : MonoBehaviour
     FloorArray _salvationFloor;
     List<FloorArray> _canShotList = new();
 
+    StageData _stageData;
+
     static bool[] completedInitialization = new bool[5];
 
     private void Awake()
@@ -58,7 +60,7 @@ public class DangoData : MonoBehaviour
             //指定したスピードから現在の速度を引いて加速力を求める
             float currentSpeed = 10 - _rigidbody.velocity.magnitude;
             //調整された加速力で力を加える
-            _rigidbody.AddForce(transform.forward * currentSpeed);
+            _rigidbody.AddForce(transform.forward.normalized * currentSpeed, ForceMode.Acceleration);
         }
 
         //ここで回転処理でも作る
@@ -87,10 +89,11 @@ public class DangoData : MonoBehaviour
         }
         else
         {
-            for (DangoColor i = DangoColor.None + 1; i < DangoColor.Other - 1; i++)
+            foreach (var color in _stageData.FloorDangoColors())
             {
-                Salvation(stabCount, i);
+                Salvation(stabCount, color);
             }
+
             completedInitialization[stabCount - 3] = true;
         }
         //プールに返却する
@@ -146,6 +149,10 @@ public class DangoData : MonoBehaviour
 
     public FloorManager.Floor Floor => _floor;
     public void SetFloor(FloorManager.Floor floor) => _floor = floor;
-    public void SetFloorManager(FloorManager floorManager) => _floorManager = floorManager;
+    public void SetFloorManager(FloorManager floorManager)
+    {
+        _floorManager = floorManager;
+        _stageData = _floorManager.StageData;
+    }
     public void SetIsMoveable(bool enable) => _isMoveable = enable;
 }

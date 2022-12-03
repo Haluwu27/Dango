@@ -6,13 +6,12 @@ public enum DangoColor
 {
     None,
 
-    Red,
-    Orange,
-    Yellow,
-    Green,
-    Cyan,
-    Blue,
-    Purple,
+    An,
+    Beni,
+    Mitarashi,
+    Nori,
+    Shiratama,
+    Yomogi,
 
     Other,
 }

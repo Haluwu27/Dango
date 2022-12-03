@@ -1115,9 +1115,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _fusumaManager: {fileID: 7491481532425570027}
   _stages:
-  - {fileID: 3964160029132521654, guid: 4dbffbec4aa46c84aa6313057f9cb0ac, type: 3}
-  - {fileID: -2101380978544746806, guid: 52c3f3ebe7ca4c74c92936471ef71b94, type: 3}
-  - {fileID: 7116246767063242365, guid: 2b6a305dfbb92674ebe74cb54c707c67, type: 3}
+  - {fileID: -2663837440296468270, guid: 2b6a305dfbb92674ebe74cb54c707c67, type: 3}
+  - {fileID: -2663837440296468270, guid: 2b6a305dfbb92674ebe74cb54c707c67, type: 3}
+  - {fileID: -2663837440296468270, guid: 2b6a305dfbb92674ebe74cb54c707c67, type: 3}
   _stageSprites:
   - {fileID: 21300000, guid: 626b1fb16692a5f44b48228176ea1d4f, type: 3}
   - {fileID: 21300000, guid: 2ad41806f249a3f4c84d47dac979fe89, type: 3}
