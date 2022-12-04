@@ -42,12 +42,23 @@ public class StageTutorialData : StageData
                 2, 3),
 
             questManager.Creater.CreateQuestDestination(4, FloorManager.Floor.floor2, false, "高台に向かえ", 30f, true, false,new(
-                new PortraitTextData.PTextData()),
+                new PortraitTextData.PTextData(0,"良いじゃねぇか、その調子だ",5f,PortraitTextData.FacePatturn.Normal),
+                new PortraitTextData.PTextData(1,"ジャンプの高さは串の長さで決まる。串が伸びればより高いところに行けるって覚えておけ", 10f, PortraitTextData.FacePatturn.Normal),
+                new PortraitTextData.PTextData(2,"さて、次は少しテクニカルに団子を刺してみよう", 10f, PortraitTextData.FacePatturn.Normal),
+                new PortraitTextData.PTextData(3,"ジャンプや飛び降りなどで空中にいる状態で『突き刺す』ボタンを押してみろ", 10f, PortraitTextData.FacePatturn.Normal),
+                new PortraitTextData.PTextData(4,"その時に真下に団子があれば刺すことができるぜ", 10f, PortraitTextData.FacePatturn.Normal)),
                 5),
 
             questManager.Creater.CreateQuestPlayAction(5, QuestPlayAction.PlayerAction.FallAttack, 1, "急降下で団子を刺す", 0f, true, true,new(
-                new PortraitTextData.PTextData()),
-                6),
+                new PortraitTextData.PTextData(0,"やるねぇ！上手いぜ！", 5f, PortraitTextData.FacePatturn.Normal),
+                new PortraitTextData.PTextData(1,"おさらいするぜ", 5f, PortraitTextData.FacePatturn.Normal),
+                new PortraitTextData.PTextData(2,"団子を刺して集めて『団結』を作る、これが基本", 10f, PortraitTextData.FacePatturn.Normal),
+                new PortraitTextData.PTextData(3,"それを繰り返しながら、『団道』を達成していくのが遊び方だ", 10f, PortraitTextData.FacePatturn.Normal),
+                new PortraitTextData.PTextData(4,"他にも『団子外し』ボタンで串から団子を外したり", 10f, PortraitTextData.FacePatturn.Normal),
+                new PortraitTextData.PTextData(5,"『拡張表示』ボタンで現在の団道の確認をしたり", 10f, PortraitTextData.FacePatturn.Normal),
+                new PortraitTextData.PTextData(6,"色々できるから実際に試してみてくれ", 10f, PortraitTextData.FacePatturn.Normal),
+           　　 new PortraitTextData.PTextData(7,"以上！", 5f, PortraitTextData.FacePatturn.Normal)),
+            6),
 
             questManager.Creater.CreateQuestDestination(6, FloorManager.Floor.Max, false, "初心者指南完了！", 0f, false, true,new(
                 new PortraitTextData.PTextData()),
