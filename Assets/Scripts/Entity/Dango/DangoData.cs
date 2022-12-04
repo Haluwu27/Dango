@@ -88,9 +88,6 @@ public class DangoData : MonoBehaviour
 
     private void ReleaseDangoPool(int stabCount)
     {
-        //•”‰®‚Ì’cq‘”‚ğ‚Ö‚ç‚·
-        _floorManager.FloorArrays[(int)_floor].RemoveDangoCount(1, _color);
-
         //‚±‚Ì’cq‚ª‹~Ï’cq‚Å‚ ‚ê‚Î
         if (_salvationFloor != null)
         {
@@ -99,6 +96,11 @@ public class DangoData : MonoBehaviour
 
             //‚±‚Ì’cq‚Ì“o˜^î•ñ‚ğÁ‚·
             _salvationFloor = null;
+        }
+        else
+        {
+            //•”‰®‚Ì’cq‘”‚ğ‚Ö‚ç‚·
+            _floorManager.FloorArrays[(int)_floor].RemoveDangoCount(1, _color);
         }
 
         if (completedInitialization[stabCount - 3])
