@@ -7,10 +7,12 @@ using TMPro;
 public class DangoUIScript : MonoBehaviour
 {
     [SerializeField] GameObject[] Objs;
+    [SerializeField] GameObject reachObjs;
     [SerializeField] Sprite[] DangoImags;
     [SerializeField] TextMeshProUGUI Text;
     [SerializeField] PlayerData PlayerData;
     private Image[] DangoImagObjs;
+    private Image reachImag;
     private PlayerDangoAnima[] dangoAnimas;
 
     private void Start()
@@ -22,6 +24,7 @@ public class DangoUIScript : MonoBehaviour
             DangoImagObjs[i] = Objs[i].GetComponent<Image>();
             dangoAnimas[i] = Objs[i].GetComponent<PlayerDangoAnima>();
         }
+        reachImag = reachObjs.GetComponent<Image>();
     }
     private void Update()
     {
@@ -78,4 +81,24 @@ public class DangoUIScript : MonoBehaviour
         }
     }
 
+    public void ReachSet(DangoColor color, int current)
+    {
+        reachObjs.SetActive(true);
+        reachImag.sprite = color switch
+        {
+            DangoColor.An => DangoImags[(int)DangoColor.An - 1],
+            DangoColor.Beni => DangoImags[(int)DangoColor.Beni - 1],
+            DangoColor.Mitarashi => DangoImags[(int)DangoColor.Mitarashi - 1],
+            DangoColor.Nori => DangoImags[(int)DangoColor.Nori - 1],
+            DangoColor.Shiratama => DangoImags[(int)DangoColor.Shiratama - 1],
+            DangoColor.Yomogi => DangoImags[(int)DangoColor.Yomogi - 1],
+            _ => DangoImags[(int)DangoColor.Other],
+        };
+        reachObjs.GetComponent<RectTransform>().anchoredPosition = Objs[current - 1].GetComponent<RectTransform>().anchoredPosition;
+    }
+    public void ReachClose()
+    {
+        if (reachObjs.activeSelf)
+            reachObjs.SetActive(false);
+    }
 }

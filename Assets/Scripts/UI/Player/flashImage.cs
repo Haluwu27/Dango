@@ -2,13 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-public class DontEatScript : MonoBehaviour
+public class flashImage : MonoBehaviour
 {
     ImageUIData uIData;
     Image myImage;
     [SerializeField]float time=5;
     [SerializeField] float speed = 3;
+    [SerializeField] float Nomal = 1;
+    [SerializeField] bool infinity;
     float alpha;
+    float _time = 0;
     bool isFlash;
     // Start is called before the first frame update
     void Start()
@@ -22,23 +25,25 @@ public class DontEatScript : MonoBehaviour
     {
         if (myImage.sprite != null)
         {
-            time += Time.deltaTime;
+            _time += Time.deltaTime;
 
             if (isFlash)
                 alpha += Time.deltaTime * speed;
             else
                 alpha -= Time.deltaTime * speed;
 
-            if (alpha > 1f && isFlash)
+            if (alpha > Nomal && isFlash)
                 isFlash = false;
             else if (alpha < 0 && !isFlash)
                 isFlash = true;
             uIData.ImageData.SetAlpha(alpha);
         }
         else
-            time = 0;
+            _time = 0;
 
-        if (time >= 5)
+        if (infinity)
+            return;
+        else if (_time >= time)
         {
             uIData.ImageData.SetSprite(null);
             uIData.ImageData.SetAlpha(0);
