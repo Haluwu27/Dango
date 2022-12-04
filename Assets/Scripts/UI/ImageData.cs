@@ -14,6 +14,10 @@ namespace TM.UI
         Vector3 _vec3D = new();
         Vector2 _vec2D = new();
 
+        bool _isFlash;
+        bool _isContinueFlash;
+        float _flashCurrentTime = 0;
+
         //UniTaskのキャンセルに必要
         //キャンセルの際は、CancellationTokenSourceのCancelメソッドをコールすればよい
         /// 注意：このキャンセルは「例外扱い」です。例外名：OperationCanceledException 
@@ -138,6 +142,26 @@ namespace TM.UI
             _image.preserveAspect = enable;
         }
 
+        public async void FlashAlpha(float finishTime, float flashTime, float coolTime)
+        {
+            _flashCurrentTime = 0;
+            if (_isFlash) return;
+
+            _isFlash = true;
+            _isContinueFlash = true;
+
+            while (_flashCurrentTime < finishTime || finishTime == -1)
+            {
+                if (!_isContinueFlash) break;
+
+                await Fadein(flashTime, coolTime);
+                await Fadeout(flashTime, coolTime);
+                _flashCurrentTime += flashTime * 2f;
+            }
+
+            _isFlash = false;
+        }
+
         public async UniTask Fadein(float time, float waitTime = 0)
         {
             await UniTask.Delay((int)(waitTime * 1000f));
@@ -165,7 +189,7 @@ namespace TM.UI
                 SetAlpha(alpha);
             }
         }
-        public async UniTask Fadein(float endAlpha,float time, float waitTime)
+        public async UniTask Fadein(float endAlpha, float time, float waitTime)
         {
             await UniTask.Delay((int)(waitTime * 1000f));
 
@@ -221,7 +245,7 @@ namespace TM.UI
                 SetAlpha(alpha);
             }
         }
-        public async UniTask Fadeout(float endAlpha,float time, float waitTime)
+        public async UniTask Fadeout(float endAlpha, float time, float waitTime)
         {
             await UniTask.Delay((int)(waitTime * 1000f));
 
@@ -343,6 +367,11 @@ namespace TM.UI
 
                 SetPositionX(startPosX + (Mathf.Clamp01(progress) * moveValue));
             }
+        }
+
+        public void CancelFlash()
+        {
+            _isContinueFlash = false;
         }
 
         public void CancelUniTask()

@@ -18,6 +18,8 @@ public class PlayerUIManager : MonoBehaviour
     [SerializeField] ImageUIData DontEatUIOBJ;
     [SerializeField] Sprite dontEatSprite;
     [SerializeField] DangoUIScript dangoUIScript;
+    [SerializeField] ImageUIData dangoHighlight;
+
     private float time { get { return playerdata.GetSatiety(); } }
     private float maxTime;
     private float currentTime;
@@ -154,5 +156,15 @@ public class PlayerUIManager : MonoBehaviour
         }
         else
             dangoUIScript.ReachClose();
+    }
+
+    public void StartDangoHighlight()
+    {
+        dangoHighlight.ImageData.FlashAlpha(-1f, 0.2f, 0f);
+    }
+
+    public void CancelHighlight()
+    {
+        dangoHighlight.ImageData.CancelFlash();
     }
 }

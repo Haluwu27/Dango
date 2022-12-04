@@ -9,8 +9,6 @@ public class OperationManager : MonoBehaviour
 {
     enum OperationChoices
     {
-        None,
-
         CameraSensitivity,
         CameraReversalH,
         CameraReversalV,
@@ -28,7 +26,7 @@ public class OperationManager : MonoBehaviour
     [SerializeField] Image _methodOfOperation = default!;
     [SerializeField] Sprite[] _methodOfOperationSprites;
 
-    OperationChoices _choice = OperationChoices.None + 1;
+    OperationChoices _choice = OperationChoices.CameraSensitivity;
 
     const int MAX_ROTATIONSPEED = 20;
     const int MIN_ROTATIONSPEED = 1;
@@ -56,9 +54,9 @@ public class OperationManager : MonoBehaviour
 
         if (enable)
         {
-            _images[(int)_choice - 1].color = new Color32(176, 176, 176, 255);
-            _choice = OperationChoices.None + 1;
-            _images[(int)_choice - 1].color = Color.red;
+            _images[(int)_choice].color = new Color32(176, 176, 176, 255);
+            _choice = OperationChoices.CameraSensitivity;
+            _images[(int)_choice].color = Color.red;
         }
     }
 
@@ -91,8 +89,8 @@ public class OperationManager : MonoBehaviour
         if (!ChangeChoiceUtil.Choice(axis, ref _choice, OperationChoices.Max, false, ChangeChoiceUtil.OptionDirection.Vertical)) return;
 
         SetMethodOfOperation();
-        _images[(int)_choice - 1 + (int)axis.y].color = new Color32(176, 176, 176, 255);
-        _images[(int)_choice - 1].color = Color.red;
+        _images[(int)_choice + (int)axis.y].color = new Color32(176, 176, 176, 255);
+        _images[(int)_choice].color = Color.red;
         SoundManager.Instance.PlaySE(SoundSource.SE16_UI_SELECTION);
     }
 

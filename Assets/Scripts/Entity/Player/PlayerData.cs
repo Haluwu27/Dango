@@ -216,6 +216,7 @@ class PlayerData : MonoBehaviour
         {
             parent._playerUIManager.EventText.TextData.SetText("食べチャージ中！");
             parent._playerStayEat.ResetCount();
+            parent._playerUIManager.StartDangoHighlight();
 
             SoundManager.Instance.PlaySE(Random.Range((int)SoundSource.VOISE_PRINCE_STAYEAT01, (int)SoundSource.VOISE_PRINCE_STAYEAT02 + 1));
             SoundManager.Instance.PlaySE(SoundSource.SE5_PLAYER_STAY_EATDANGO);
@@ -238,12 +239,14 @@ class PlayerData : MonoBehaviour
             if (parent._playerStayEat.CanEat())
             {
                 parent.StartCoroutine(parent.ResetCameraView());
+                parent._playerUIManager.CancelHighlight();
                 return IState.E_State.EatDango;
             }
             //待機をやめたらコントロールに戻る
             if (!parent._hasStayedEat)
             {
                 parent.StartCoroutine(parent.ResetCameraView());
+                parent._playerUIManager.CancelHighlight();
                 return IState.E_State.Control;
             }
             return IState.E_State.Unchanged;
