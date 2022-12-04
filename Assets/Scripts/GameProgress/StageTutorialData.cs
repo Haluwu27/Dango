@@ -1,4 +1,4 @@
-using Dango.Quest;
+ï»¿using Dango.Quest;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
@@ -19,48 +19,48 @@ public class StageTutorialData : StageData
 
         List<QuestData> quest = new()
         {
-            questManager.Creater.CreateQuestPlayAction(0,QuestPlayAction.PlayerAction.Stab,1,"’cq‚ğh‚·",0,false,false,new(
-                new PortraitTextData.PTextData(0,"‚¨Œ©–Bh‚µ‚½’cq‚Í‰æ–Ê‰E‚Éo‚Ä‚é‚©‚ç‚È",5f,PortraitTextData.FacePatturn.Normal),
-                new(1,"Ÿ‚ÉW‚ß‚½’cq‚ğH‚×‚Ä‚İ‚ëB’cq‚ğW‚ß‚ÄwH‚×‚éxƒ{ƒ^ƒ“‚¾",10f,PortraitTextData.FacePatturn.Normal)),
+            questManager.Creater.CreateQuestPlayAction(0,QuestPlayAction.PlayerAction.Stab,1,"å›£å­ã‚’åˆºã™",0,false,false,new(
+                new PortraitTextData.PTextData(0,"ãŠè¦‹äº‹ã€‚åˆºã—ãŸå›£å­ã¯ç”»é¢å³ã«å‡ºã¦ã‚‹ã‹ã‚‰ãª",5f,PortraitTextData.FacePatturn.Normal),
+                new(1,"æ¬¡ã«é›†ã‚ãŸå›£å­ã‚’é£Ÿã¹ã¦ã¿ã‚ã€‚å›£å­ã‚’é›†ã‚ã¦ã€é£Ÿã¹ã‚‹ã€ãƒœã‚¿ãƒ³ã ",10f,PortraitTextData.FacePatturn.Normal)),
                 1),
 
-            questManager.Creater.CreateQuestEatDango(1, 3, 0, true, true, "’cq‚ğ3‚ÂH‚×‚é", 0f, true, false,new(
-                new PortraitTextData.PTextData(0,"‚­‚£[”ü–¡‚¢I—Ç‚¢’²q‚¾",5f,PortraitTextData.FacePatturn.Normal),
-                new(1,"—¬‹V‚ğˆÈ‚ÄA’cq‚ğH‚·A‚±‚ê‚ªw’c“¹x‚¾",5f,PortraitTextData.FacePatturn.Normal),
-                new(2, "w’c“¹x‚ğ’B¬‚·‚é‚ÆA• ‚ª–c‚ê‚é‚¾‚¯‚¶‚á‚È‚­A‹ø‚ªL‚Ñ‚½‚èAFX‚Æ‰¶Œb‚ª‚ ‚é", 10f, PortraitTextData.FacePatturn.Normal),
-                new(3, "‚³‚ÄA‚½‚¾H‚×‚é‚¾‚¯‚Á‚Ä‚Ì‚Í–¡‹C‚Ë‚¥AŸ‚Íw’cŒ‹x‚ğì‚Á‚Ä‚İ‚ë", 10f, PortraitTextData.FacePatturn.Normal),
-                new(4, "w’cŒ‹x‚É‚ÍFX‚Æí—Ş‚ª‚ ‚é‚ªAŠî–{“I‚É‚Í‹K‘¥³‚µ‚­•À‚×‚Ä‚â‚ê‚Î‚¢‚¢", 10f, PortraitTextData.FacePatturn.Normal)),
+            questManager.Creater.CreateQuestEatDango(1, 3, 0, true, true, "å›£å­ã‚’3ã¤é£Ÿã¹ã‚‹", 0f, true, false,new(
+                new PortraitTextData.PTextData(0,"ãã…ãƒ¼ç¾å‘³ã„ï¼è‰¯ã„èª¿å­ã ",5f,PortraitTextData.FacePatturn.Normal),
+                new(1,"æµå„€ã‚’ä»¥ã¦ã€å›£å­ã‚’é£Ÿã™ã€ã“ã‚ŒãŒã€å›£é“ã€ã ",5f,PortraitTextData.FacePatturn.Normal),
+                new(2, "ã€å›£é“ã€ã‚’é”æˆã™ã‚‹ã¨ã€è…¹ãŒè†¨ã‚Œã‚‹ã ã‘ã˜ã‚ƒãªãã€ä¸²ãŒä¼¸ã³ãŸã‚Šã€è‰²ã€…ã¨æ©æµãŒã‚ã‚‹", 10f, PortraitTextData.FacePatturn.Normal),
+                new(3, "ã•ã¦ã€ãŸã é£Ÿã¹ã‚‹ã ã‘ã£ã¦ã®ã¯å‘³æ°—ã­ã‡ã€æ¬¡ã¯ã€å›£çµã€ã‚’ä½œã£ã¦ã¿ã‚", 10f, PortraitTextData.FacePatturn.Normal),
+                new(4, "ã€å›£çµã€ã«ã¯è‰²ã€…ã¨ç¨®é¡ãŒã‚ã‚‹ãŒã€åŸºæœ¬çš„ã«ã¯è¦å‰‡æ­£ã—ãä¸¦ã¹ã¦ã‚„ã‚Œã°ã„ã„", 10f, PortraitTextData.FacePatturn.Normal)),
                 2,3),
 
-            questManager.Creater.CreateQuestCreateRole(2, new QuestCreateRole.EstablishRole(true, false), 1, 0, "‹K‘¥³‚µ‚­•À‚×‚Äw’cŒ‹x‚ğì‚ê", 0, false, false,new(
-                new PortraitTextData.PTextData(0,"Œ©–I’cq‚ÍŠî–{“I‚Éw’cŒ‹x‚ğì‚Á‚ÄH‚×‚½•û‚ª• ‚¿‚ª‚¢‚¢",10f,PortraitTextData.FacePatturn.Normal),
-                new(1,"Ÿ‚Íw‚’µ‚Ñxƒ{ƒ^ƒ“‚Å‚‚¢‚Æ‚±‚ë‚És‚Á‚Ä‚İ‚é‚¼",10f,PortraitTextData.FacePatturn.Normal)),
+            questManager.Creater.CreateQuestCreateRole(2, new QuestCreateRole.EstablishRole(true, false), 1, 0, "è¦å‰‡æ­£ã—ãä¸¦ã¹ã¦ã€å›£çµã€ã‚’ä½œã‚Œ", 0, false, false,new(
+                new PortraitTextData.PTextData(0,"è¦‹äº‹ï¼å›£å­ã¯åŸºæœ¬çš„ã«ã€å›£çµã€ã‚’ä½œã£ã¦é£Ÿã¹ãŸæ–¹ãŒè…¹æŒã¡ãŒã„ã„",10f,PortraitTextData.FacePatturn.Normal),
+                new(1,"æ¬¡ã¯ã€é«˜è·³ã³ã€ãƒœã‚¿ãƒ³ã§é«˜ã„ã¨ã“ã‚ã«è¡Œã£ã¦ã¿ã‚‹ã",10f,PortraitTextData.FacePatturn.Normal)),
                 4),
             
-            questManager.Creater.CreateQuestCreateRole(3, new QuestCreateRole.EstablishRole(false, false), 1, 0, "¦“¯‚¶‚à‚Ì‚¾‚¯‚ğW‚ß‚½‚èAü‘ÎÌ‚ğì‚Á‚Ä‚İ‚æ‚¤", 0, false, false,new(
-                new PortraitTextData.PTextData(0,"É‚µ‚¢‚ÈA‚à‚¤‚¿‚å‚Á‚Æ‹K‘¥³‚µ‚­•À‚×‚Ä‚İ‚ëI",8f,PortraitTextData.FacePatturn.Normal)),
+            questManager.Creater.CreateQuestCreateRole(3, new QuestCreateRole.EstablishRole(false, false), 1, 0, "â€»åŒã˜ã‚‚ã®ã ã‘ã‚’é›†ã‚ãŸã‚Šã€ç·šå¯¾ç§°ã‚’ä½œã£ã¦ã¿ã‚ˆã†", 0, false, false,new(
+                new PortraitTextData.PTextData(0,"æƒœã—ã„ãªã€ã‚‚ã†ã¡ã‚‡ã£ã¨è¦å‰‡æ­£ã—ãä¸¦ã¹ã¦ã¿ã‚ï¼",8f,PortraitTextData.FacePatturn.Normal)),
                 2, 3),
 
-            questManager.Creater.CreateQuestDestination(4, FloorManager.Floor.floor2, false, "‚‘ä‚ÉŒü‚©‚¦", 30f, true, false,new(
-                new PortraitTextData.PTextData(0,"—Ç‚¢‚¶‚á‚Ë‚¥‚©A‚»‚Ì’²q‚¾",5f,PortraitTextData.FacePatturn.Normal),
-                new PortraitTextData.PTextData(1,"ƒWƒƒƒ“ƒv‚Ì‚‚³‚Í‹ø‚Ì’·‚³‚ÅŒˆ‚Ü‚éB‹ø‚ªL‚Ñ‚ê‚Î‚æ‚è‚‚¢‚Æ‚±‚ë‚És‚¯‚é‚Á‚ÄŠo‚¦‚Ä‚¨‚¯", 10f, PortraitTextData.FacePatturn.Normal),
-                new PortraitTextData.PTextData(2,"‚³‚ÄAŸ‚Í­‚µƒeƒNƒjƒJƒ‹‚É’cq‚ğh‚µ‚Ä‚İ‚æ‚¤", 10f, PortraitTextData.FacePatturn.Normal),
-                new PortraitTextData.PTextData(3,"ƒWƒƒƒ“ƒv‚â”ò‚Ñ~‚è‚È‚Ç‚Å‹ó’†‚É‚¢‚éó‘Ô‚Åw“Ë‚«h‚·xƒ{ƒ^ƒ“‚ğ‰Ÿ‚µ‚Ä‚İ‚ë", 10f, PortraitTextData.FacePatturn.Normal),
-                new PortraitTextData.PTextData(4,"‚»‚Ì‚É^‰º‚É’cq‚ª‚ ‚ê‚Îh‚·‚±‚Æ‚ª‚Å‚«‚é‚º", 10f, PortraitTextData.FacePatturn.Normal)),
+            questManager.Creater.CreateQuestDestination(4, FloorManager.Floor.floor2, false, "é«˜å°ã«å‘ã‹ãˆ", 30f, true, false,new(
+                new PortraitTextData.PTextData(0,"è‰¯ã„ã˜ã‚ƒã­ã‡ã‹ã€ãã®èª¿å­ã ",5f,PortraitTextData.FacePatturn.Normal),
+                new PortraitTextData.PTextData(1,"ã‚¸ãƒ£ãƒ³ãƒ—ã®é«˜ã•ã¯ä¸²ã®é•·ã•ã§æ±ºã¾ã‚‹ã€‚ä¸²ãŒä¼¸ã³ã‚Œã°ã‚ˆã‚Šé«˜ã„ã¨ã“ã‚ã«è¡Œã‘ã‚‹ã£ã¦è¦šãˆã¦ãŠã‘", 10f, PortraitTextData.FacePatturn.Normal),
+                new PortraitTextData.PTextData(2,"ã•ã¦ã€æ¬¡ã¯å°‘ã—ãƒ†ã‚¯ãƒ‹ã‚«ãƒ«ã«å›£å­ã‚’åˆºã—ã¦ã¿ã‚ˆã†", 10f, PortraitTextData.FacePatturn.Normal),
+                new PortraitTextData.PTextData(3,"ã‚¸ãƒ£ãƒ³ãƒ—ã‚„é£›ã³é™ã‚Šãªã©ã§ç©ºä¸­ã«ã„ã‚‹çŠ¶æ…‹ã§ã€çªãåˆºã™ã€ãƒœã‚¿ãƒ³ã‚’æŠ¼ã—ã¦ã¿ã‚", 10f, PortraitTextData.FacePatturn.Normal),
+                new PortraitTextData.PTextData(4,"ãã®æ™‚ã«çœŸä¸‹ã«å›£å­ãŒã‚ã‚Œã°åˆºã™ã“ã¨ãŒã§ãã‚‹ãœ", 10f, PortraitTextData.FacePatturn.Normal)),
                 5),
 
-            questManager.Creater.CreateQuestPlayAction(5, QuestPlayAction.PlayerAction.FallAttack, 1, "‹}~‰º‚Å’cq‚ğh‚·", 0f, true, true,new(
-                new PortraitTextData.PTextData(0,"‚â‚é‚Ë‚¥Iãè‚¢‚ºI", 5f, PortraitTextData.FacePatturn.Normal),
-                new PortraitTextData.PTextData(1,"‚¨‚³‚ç‚¢‚·‚é‚º", 5f, PortraitTextData.FacePatturn.Normal),
-                new PortraitTextData.PTextData(2,"’cq‚ğh‚µ‚ÄW‚ß‚Äw’cŒ‹x‚ğì‚éA‚±‚ê‚ªŠî–{", 10f, PortraitTextData.FacePatturn.Normal),
-                new PortraitTextData.PTextData(3,"‚»‚ê‚ğŒJ‚è•Ô‚µ‚È‚ª‚çAw’c“¹x‚ğ’B¬‚µ‚Ä‚¢‚­‚Ì‚ª—V‚Ñ•û‚¾", 10f, PortraitTextData.FacePatturn.Normal),
-                new PortraitTextData.PTextData(4,"‘¼‚É‚àw’cqŠO‚µxƒ{ƒ^ƒ“‚Å‹ø‚©‚ç’cq‚ğŠO‚µ‚½‚è", 10f, PortraitTextData.FacePatturn.Normal),
-                new PortraitTextData.PTextData(5,"wŠg’£•\¦xƒ{ƒ^ƒ“‚ÅŒ»İ‚Ì’c“¹‚ÌŠm”F‚ğ‚µ‚½‚è", 10f, PortraitTextData.FacePatturn.Normal),
-                new PortraitTextData.PTextData(6,"FX‚Å‚«‚é‚©‚çÀÛ‚É‚µ‚Ä‚İ‚Ä‚­‚ê", 10f, PortraitTextData.FacePatturn.Normal),
-           @@ new PortraitTextData.PTextData(7,"ˆÈãI", 5f, PortraitTextData.FacePatturn.Normal)),
+            questManager.Creater.CreateQuestPlayAction(5, QuestPlayAction.PlayerAction.FallAttack, 1, "æ€¥é™ä¸‹ã§å›£å­ã‚’åˆºã™", 0f, true, true,new(
+                new PortraitTextData.PTextData(0,"ã‚„ã‚‹ã­ã‡ï¼ä¸Šæ‰‹ã„ãœï¼", 5f, PortraitTextData.FacePatturn.Normal),
+                new PortraitTextData.PTextData(1,"ãŠã•ã‚‰ã„ã™ã‚‹ãœ", 5f, PortraitTextData.FacePatturn.Normal),
+                new PortraitTextData.PTextData(2,"å›£å­ã‚’åˆºã—ã¦é›†ã‚ã¦ã€å›£çµã€ã‚’ä½œã‚‹ã€ã“ã‚ŒãŒåŸºæœ¬", 10f, PortraitTextData.FacePatturn.Normal),
+                new PortraitTextData.PTextData(3,"ãã‚Œã‚’ç¹°ã‚Šè¿”ã—ãªãŒã‚‰ã€ã€å›£é“ã€ã‚’é”æˆã—ã¦ã„ãã®ãŒéŠã³æ–¹ã ", 10f, PortraitTextData.FacePatturn.Normal),
+                new PortraitTextData.PTextData(4,"ä»–ã«ã‚‚ã€å›£å­å¤–ã—ã€ãƒœã‚¿ãƒ³ã§ä¸²ã‹ã‚‰å›£å­ã‚’å¤–ã—ãŸã‚Š", 10f, PortraitTextData.FacePatturn.Normal),
+                new PortraitTextData.PTextData(5,"ã€æ‹¡å¼µè¡¨ç¤ºã€ãƒœã‚¿ãƒ³ã§ç¾åœ¨ã®å›£é“ã®ç¢ºèªã‚’ã—ãŸã‚Š", 10f, PortraitTextData.FacePatturn.Normal),
+                new PortraitTextData.PTextData(6,"è‰²ã€…ã§ãã‚‹ã‹ã‚‰å®Ÿéš›ã«è©¦ã—ã¦ã¿ã¦ãã‚Œ", 10f, PortraitTextData.FacePatturn.Normal),
+           ã€€ã€€ new PortraitTextData.PTextData(7,"ä»¥ä¸Šï¼", 5f, PortraitTextData.FacePatturn.Normal)),
             6),
 
-            questManager.Creater.CreateQuestDestination(6, FloorManager.Floor.Max, false, "‰SÒw“ìŠ®—¹I", 0f, false, true,new(
+            questManager.Creater.CreateQuestDestination(6, FloorManager.Floor.Max, false, "åˆå¿ƒè€…æŒ‡å—å®Œäº†ï¼", 0f, false, true,new(
                 new PortraitTextData.PTextData()),
                 0),
         };
@@ -72,7 +72,7 @@ public class StageTutorialData : StageData
 
     protected override PortraitTextData StartPortraitText()
     {
-        return new(new(0, "’c“¹‚ÌŠî–{’†‚ÌŠî–{‚ÍA’cq‚ğh‚µ‚ÄW‚ß‚é‚Æ‚±‚ë‚©‚ç‚¾B", 2f, PortraitTextData.FacePatturn.Normal), new(0, "w“Ë‚«h‚·xƒ{ƒ^ƒ“‚Å’cq‚ğh‚µ‚Ä‚İ‚ëI", 2f, PortraitTextData.FacePatturn.Normal));
+        return new(new(0, "å›£é“ã®åŸºæœ¬ä¸­ã®åŸºæœ¬ã¯ã€å›£å­ã‚’åˆºã—ã¦é›†ã‚ã‚‹ã¨ã“ã‚ã‹ã‚‰ã ã€‚", 2f, PortraitTextData.FacePatturn.Normal), new(0, "ã€çªãåˆºã™ã€ãƒœã‚¿ãƒ³ã§å›£å­ã‚’åˆºã—ã¦ã¿ã‚ï¼", 2f, PortraitTextData.FacePatturn.Normal));
     }
 
     public override List<DangoColor> FloorDangoColors()
