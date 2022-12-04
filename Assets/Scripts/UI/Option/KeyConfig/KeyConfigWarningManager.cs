@@ -8,6 +8,7 @@ namespace TM.Input.KeyConfig
     {
         [SerializeField] Canvas _canvas;
         [SerializeField] TextUIData _textUIData;
+        [SerializeField] KeyConfigPopupManager _popupManager;
        
         public void SetEnable(bool enable)
         {
@@ -16,12 +17,12 @@ namespace TM.Input.KeyConfig
 
         public void SetText(List<KeyData.GameAction> gameActions)
         {
-            //string action = "";
-            //foreach (var gameAction in gameActions)
-            //{
-            //    action += gameAction.ToString();
-            //}
-            //_textUIData.TextData.SetText("ボタンが割り当てられていない機能があります。最低でも1つのボタンに割り当ててください。" + action);
+            string action = "";
+            foreach (var gameAction in gameActions)
+            {
+                action += _popupManager.ActionString((int)gameAction) + ", ";
+            }
+            _textUIData.TextData.SetText("ボタンに割り当てられていないアクションがあります。最低でも1つのボタンに割り当ててください。\n" + action);
         }
 
         public bool IsWarning => _canvas.enabled;
