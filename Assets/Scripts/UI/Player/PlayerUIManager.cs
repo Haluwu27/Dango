@@ -18,6 +18,7 @@ public class PlayerUIManager : MonoBehaviour
     [SerializeField] ImageUIData DontEatUIOBJ;
     [SerializeField] Sprite dontEatSprite;
     [SerializeField] DangoUIScript dangoUIScript;
+    [SerializeField] bool tutorial;
     private float time { get { return playerdata.GetSatiety(); } }
     private float maxTime;
     private float currentTime;
@@ -48,8 +49,11 @@ public class PlayerUIManager : MonoBehaviour
         maxTime = time;
         currentTime = maxTime;
 
-        for (int i = 0; i < timeGage.Length; i++)
-            timeGage[i].value = 1;
+        if (tutorial)
+        {
+            for (int i = 0; i < timeGage.Length; i++)
+                timeGage[i].value = 1;
+        }
         for (int i = 0; i < warningTimes.Length - 1; i++)
             warningTimes[i] = (int)maxTime - ((i + 1) * 10);//仮で初期値の2/3,1/3の値
 
@@ -69,9 +73,12 @@ public class PlayerUIManager : MonoBehaviour
 
         Warning();
 
-        for (int i = 0; i < timeGage.Length; i++)//ゲージの増減
-            timeGage[i].value = (float)currentTime / (float)maxTime;
-        SetTimeText("" + (int)time);
+        if (tutorial)
+        {
+            for (int i = 0; i < timeGage.Length; i++)//ゲージの増減
+                timeGage[i].value = (float)currentTime / (float)maxTime;
+            SetTimeText("" + (int)time);
+        }
     }
 
     private void Warning()
@@ -128,6 +135,7 @@ public class PlayerUIManager : MonoBehaviour
 
     public void TimeGageUpAnima()
     {
+        if(tutorial)
         for (int i = 0; i < timeGageAnimaText.Length; i++)
         {
             timeGageAnimaText[i].SetText(temp);

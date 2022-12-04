@@ -6,16 +6,19 @@ namespace Dango.Quest.UI {
     public class ExpansionUIcircleScript : MonoBehaviour
     {
         public ExpansionCanvasScript expansion;
+        private GameObject obj;
         float time = 0;
 
         private void Awake()
         {
-            expansion = GameObject.Find("ExpansionCanvas").GetComponent<ExpansionCanvasScript>();
+            obj = GameObject.Find("ExpansionCanvas");
+            if (obj != null)
+            expansion = obj.GetComponent<ExpansionCanvasScript>();
         }
         private void Update()
         {
             time += Time.deltaTime;
-
+            if(expansion!=null)
             if (expansion.set == true)
             {
                 if (time > 3f)
@@ -29,7 +32,8 @@ namespace Dango.Quest.UI {
         }
         private void OnTriggerStay(Collider col)//プレイヤーに当たったら拡張UI表示
         {
-            if (col.gameObject.CompareTag("Player"))
+            if (expansion != null)
+                if (col.gameObject.CompareTag("Player"))
             {
                 expansion.Onset();
                 expansion.set = true;
@@ -38,11 +42,14 @@ namespace Dango.Quest.UI {
         }
         private void OnTriggerExit(Collider col)//離れたら非表示
         {
-            if (col.gameObject.CompareTag("Player"))
+                if (col.gameObject.CompareTag("Player"))
             {
-                expansion.set = false;
-                expansion.OffSet();
-                expansion.PlayerUI_Set();
+                if (expansion != null)
+                {
+                    expansion.set = false;
+                    expansion.OffSet();
+                    expansion.PlayerUI_Set();
+                }
                 Destroy(gameObject);
             }
         }

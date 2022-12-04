@@ -25,7 +25,7 @@ public class TimeGageAnima : MonoBehaviour
     }
     private void OnDisable()
     {
-        if (uIData != null)
+        if (uIData != null&&TimeGage!=null)
         {
             uIData.TextData.SetText("");
             TimeGage.SetText();
