@@ -66,7 +66,7 @@ public class SpitManager : MonoBehaviour
             return;
         }
 
-        if (other.gameObject.TryGetComponent(out DangoData dango))
+        if (other.gameObject.TryGetComponent(out DangoData dango) && other.gameObject.layer ==  LayerMask.NameToLayer("Outline"))
         {
             //SE
             SoundManager.Instance.PlaySE(SoundSource.SE14_STAB_DANGO);
