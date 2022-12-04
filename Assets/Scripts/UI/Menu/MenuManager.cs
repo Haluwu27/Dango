@@ -28,6 +28,7 @@ public class MenuManager : MonoBehaviour
     [SerializeField] RectTransform tutorial;
     [SerializeField] RectTransform ex;
     [SerializeField] Image dandou;
+    [SerializeField] Sprite[] dandouSprites;
     [SerializeField] Image optionImage;
     [SerializeField] Sprite[] optionSprites;
     [SerializeField] Image tutorialImage;
@@ -175,7 +176,7 @@ public class MenuManager : MonoBehaviour
                 await Selecting(CurrentMenu, ex, SELECTTIME);
                 break;
             case Menu.StageSelect:
-                dandou.color = Color.red;
+                dandou.sprite = dandouSprites[1];
                 break;
             case Menu.Quit:
                 quitImage.color = Color.red;
@@ -219,7 +220,7 @@ public class MenuManager : MonoBehaviour
                 await NoSelecting(menu, ex, NOSELECTTIME);
                 break;
             case Menu.StageSelect:
-                dandou.color = Color.white;
+                dandou.sprite = dandouSprites[0];
                 break;
             case Menu.Quit:
                 quitImage.color = Color.white;

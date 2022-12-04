@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Rendering;
 using UnityEngine.UI;
 
 public class OperationManager : MonoBehaviour
@@ -10,7 +11,6 @@ public class OperationManager : MonoBehaviour
     {
         None,
 
-        UseController,
         CameraSensitivity,
         CameraReversalH,
         CameraReversalV,
@@ -22,18 +22,23 @@ public class OperationManager : MonoBehaviour
     [SerializeField] Canvas _canvas = default!;
     [SerializeField] Image[] _images;
 
+    [SerializeField] ImageUIData _cameraSensitivityImage;
+    [SerializeField] List<Sprite> _scaleSprites;
+
     [SerializeField] Image _methodOfOperation = default!;
     [SerializeField] Sprite[] _methodOfOperationSprites;
 
     OperationChoices _choice = OperationChoices.None + 1;
 
-    const int MAX_ROTATIONSPEED = 200;
-    const int MIN_ROTATIONSPEED = 10;
+    const int MAX_ROTATIONSPEED = 20;
+    const int MIN_ROTATIONSPEED = 1;
 
     private void Start()
     {
         InputSystemManager.Instance.onNavigatePerformed += OnNavigate;
         InputSystemManager.Instance.onChoicePerformed += OnChoice;
+
+        _cameraSensitivityImage.ImageData.SetSprite(_scaleSprites[DataManager.configData.cameraRotationSpeed / 10 - 1]);
     }
 
     public void OnChangeScene()
@@ -62,7 +67,7 @@ public class OperationManager : MonoBehaviour
         if (!_canvas.enabled) return;
 
         ChangeChoice(InputSystemManager.Instance.NavigateAxis);
-        CameraSensitivityChange(InputSystemManager.Instance.NavigateAxis.x);
+        CameraSensitivityChange(ref DataManager.configData.cameraRotationSpeed, InputSystemManager.Instance.NavigateAxis.x);
     }
 
     private void OnChoice()
@@ -72,9 +77,6 @@ public class OperationManager : MonoBehaviour
         //boolÇÃÇ›íÒé¶
         switch (_choice)
         {
-            case OperationChoices.UseController:
-                UseController();
-                break;
             case OperationChoices.CameraReversalV:
                 CameraReversalV();
                 break;
@@ -86,20 +88,7 @@ public class OperationManager : MonoBehaviour
 
     private void ChangeChoice(Vector2 axis)
     {
-        if (axis != Vector2.up && axis != Vector2.down) return;
-
-        if (axis == Vector2.up)
-        {
-            if (_choice <= OperationChoices.None + 1) return;
-
-            _choice--;
-        }
-        else if (axis == Vector2.down)
-        {
-            if (_choice >= OperationChoices.Max - 1) return;
-
-            _choice++;
-        }
+        if (!ChangeChoiceUtil.Choice(axis, ref _choice, OperationChoices.Max, false, ChangeChoiceUtil.OptionDirection.Vertical)) return;
 
         SetMethodOfOperation();
         _images[(int)_choice - 1 + (int)axis.y].color = new Color32(176, 176, 176, 255);
@@ -113,18 +102,11 @@ public class OperationManager : MonoBehaviour
 
         _methodOfOperation.sprite = _choice switch
         {
-            OperationChoices.UseController => _methodOfOperationSprites[1],
             OperationChoices.CameraSensitivity => _methodOfOperationSprites[2],
             OperationChoices.CameraReversalV => _methodOfOperationSprites[1],
             OperationChoices.CameraReversalH => _methodOfOperationSprites[1],
             _ => throw new System.NotImplementedException(),
         };
-    }
-
-    private void UseController()
-    {
-        DataManager.configData.gamepadInputEnabled ^= true;
-        Logger.Log(DataManager.configData.gamepadInputEnabled);
     }
 
     private void CameraReversalV()
@@ -139,14 +121,16 @@ public class OperationManager : MonoBehaviour
         Logger.Log(DataManager.configData.cameraHorizontalOrientation);
     }
 
-    private void CameraSensitivityChange(float vecX)
+    private void CameraSensitivityChange(ref int rotationSpeed, float axis)
     {
         if (_choice != OperationChoices.CameraSensitivity) return;
-        if (vecX != 1 && vecX != -1) return;
+        if (axis != 1 && axis != -1) return;
 
-        DataManager.configData.cameraRotationSpeed += (int)vecX * MIN_ROTATIONSPEED;
-        if (DataManager.configData.cameraRotationSpeed < MIN_ROTATIONSPEED) DataManager.configData.cameraRotationSpeed = MIN_ROTATIONSPEED;
-        else if (DataManager.configData.cameraRotationSpeed > MAX_ROTATIONSPEED) DataManager.configData.cameraRotationSpeed = MAX_ROTATIONSPEED;
-        Logger.Log(DataManager.configData.cameraRotationSpeed);
+        //10Çä|ÇØÇƒÇ¢ÇÈÇÃÇÕêîílÇ™í·Ç¢Ç∆ëÂç∑Ç™Ç»Ç¢ÇΩÇﬂÇÃï‚ê≥
+        rotationSpeed = Mathf.Clamp(rotationSpeed / 10 + (int)axis, MIN_ROTATIONSPEED, MAX_ROTATIONSPEED) * 10;
+
+        _cameraSensitivityImage.ImageData.SetSprite(_scaleSprites[(rotationSpeed / 10) - 1]);
+
+        //Logger.Log(rotationSpeed);
     }
 }

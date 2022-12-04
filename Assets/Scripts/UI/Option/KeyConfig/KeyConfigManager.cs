@@ -41,6 +41,8 @@ namespace TM.Input.KeyConfig
         //InputSystemのInputActions本体
         [SerializeField] InputActionAsset _asset;
 
+        [SerializeField] List<TextUIData> _currentActionTexts;
+
         //アクションリファレンス毎に設定するデータの全要素
         readonly ActionData[] _actionDatas = new ActionData[(int)KeyConfigData.GameAction.Max - 1];
         readonly List<KeyData.GameAction> _gameActions = new();
@@ -95,6 +97,15 @@ namespace TM.Input.KeyConfig
             for (int i = 0; i < (int)KeyConfigData.GameAction.Max - 1; i++)
             {
                 _actionDatas[i] = new((KeyData.GameAction)i, DefaultKeyTable[i], _asset, "Player");
+            }
+
+            for (int i = 0; i < _currentActionTexts.Count; i++)
+            {
+                if (DataManager.keyConfigData == null)
+                {
+                    DataManager.SaveInputData();
+                }
+                _currentActionTexts[i].TextData.SetText(_popupManager.ActionString(DataManager.keyConfigData.keys[i]));
             }
         }
 
@@ -201,12 +212,22 @@ namespace TM.Input.KeyConfig
             if (index == KeyData.GameAction.Unknown)
             {
                 _currentData.KeyData.KeyBindingOverride(null);
+                _currentActionTexts[(int)_currentData.KeyData.Key].TextData.SetText(_popupManager.ActionString(0));
                 return;
             }
 
             _actionDatas[(int)index - 1].Keys.Add(_currentData.KeyData.Key);
 
             _currentData.KeyData.KeyBindingOverride(_actionDatas[(int)index - 1].ActionReference);
+
+            if (_currentData.KeyData.Key < KeyData.GamepadKey.D_pad)
+            {
+                _currentActionTexts[(int)_currentData.KeyData.Key].TextData.SetText(_popupManager.ActionString((int)index));
+            }
+            else
+            {
+                _currentActionTexts[(int)_currentData.KeyData.Key - 13].TextData.SetText(_popupManager.ActionString((int)index));
+            }
         }
 
         public bool CheckHasKeyAllActions()
@@ -217,12 +238,12 @@ namespace TM.Input.KeyConfig
             _gameActions.Clear();
 
             //すべてのアクションに対して割り当てが存在しているかチェック
-            foreach (var actionData in _actionDatas)
+            for (int i = 0; i < _actionDatas.Length; i++)
             {
                 //割り当てがなかった場合
-                if (!actionData.HasKey())
+                if (!_actionDatas[i].HasKey())
                 {
-                    _gameActions.Add(actionData.Action);
+                    _gameActions.Add(_actionDatas[i].Action + 1);
                     hasKey = false;
                 }
             }
