@@ -31,7 +31,7 @@ namespace TM.Input.KeyConfig
             Vector2 axis = InputSystemManager.Instance.NavigateAxis;
 
             if (!ChangeChoiceUtil.Choice(axis, ref _currentActionIndex, _actionDatas.Count, false, ChangeChoiceUtil.OptionDirection.Vertical)) return;
-            
+
             ChangeCurrentAction();
         }
 
@@ -110,7 +110,7 @@ namespace TM.Input.KeyConfig
             InputSystemManager.Instance.onChoicePerformed += OnChoiced;
 
             _action = keyConfigManager.Data.ConfigSelection;
-            
+
             //テキストの変更
             ResetTexts();
             SetTexts();
@@ -133,7 +133,7 @@ namespace TM.Input.KeyConfig
             _canvas.enabled = false;
         }
 
-        private string ActionString(int num)
+        public string ActionString(int num)
         {
             return num switch
             {

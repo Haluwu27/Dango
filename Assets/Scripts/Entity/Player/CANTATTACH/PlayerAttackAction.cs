@@ -138,15 +138,17 @@ namespace TM.Entity.Player
                 RushStart(rb, 2f);
                 return;
             }
+
+            //ハイライトした団子だけに刺さるようにする
+            _highlightDango.SetIsMoveable(false);
+            _highlightDango.Rb.velocity = Vector3.zero;
+
             _hasStabDango = false;
 
             float distance = Vector3.Distance(_highlightDango.transform.position, rb.transform.position);
 
             //そっちに向いて
             rb.transform.LookAt(_highlightDango.transform.position.SetY(rb.position.y));
-
-            //ターゲット一覧から今の団子を消す。(乱入されて別の団子が刺さったときにこの団子が再度ターゲットされにくい)
-            ResetHighlightDango();
 
             //前進(距離を第二引数とすれば良い)
             RushStart(rb, distance);
@@ -196,6 +198,9 @@ namespace TM.Entity.Player
                     {
                         _hasStabDango = false;
                         rigidbody.velocity = Vector3.zero;
+
+                        //ターゲット一覧から今の団子を消す。
+                        ResetHighlightDango();
                         return;
                     }
                 }

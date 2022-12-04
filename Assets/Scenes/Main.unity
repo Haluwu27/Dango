@@ -580,15 +580,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1266d3b2d8adc0749a78c1bbd43cca03, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _debugSoundSource: 2
+  _debugSoundSource: 24
   _BGM: {fileID: 2112573776}
   _SEPrefab: {fileID: 3666380681918514816, guid: b87469c47a09e064c88f1afac9ad82f2,
     type: 3}
   BGMClip:
-  - {fileID: 8300000, guid: aebd12cbd6351684a9ba34799dbb5f05, type: 3}
-  - {fileID: 8300000, guid: aebd12cbd6351684a9ba34799dbb5f05, type: 3}
-  - {fileID: 8300000, guid: aebd12cbd6351684a9ba34799dbb5f05, type: 3}
-  - {fileID: 8300000, guid: aebd12cbd6351684a9ba34799dbb5f05, type: 3}
+  - {fileID: 8300000, guid: e2fb8be2c8678cc4090a4e9c8f022045, type: 3}
+  - {fileID: 8300000, guid: e2fb8be2c8678cc4090a4e9c8f022045, type: 3}
+  - {fileID: 8300000, guid: e2fb8be2c8678cc4090a4e9c8f022045, type: 3}
+  - {fileID: 8300000, guid: e2fb8be2c8678cc4090a4e9c8f022045, type: 3}
   - {fileID: 8300000, guid: c80accd6b3705e74196bd650a79de8f4, type: 3}
   - {fileID: 8300000, guid: c80accd6b3705e74196bd650a79de8f4, type: 3}
   - {fileID: 8300000, guid: 5b4f7b2b0652cb042acf413021357dc5, type: 3}

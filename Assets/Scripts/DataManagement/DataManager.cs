@@ -209,11 +209,7 @@ public class DataManager : MonoBehaviour
 #endif
 
         //ファイルがあるかチェック
-        if (File.Exists(path + "/config.txt"))
-        {
-            return true;
-        }
-        return false;
+        return File.Exists(path + "/config.txt");
     }
 
     /// <summary>
@@ -221,11 +217,7 @@ public class DataManager : MonoBehaviour
     /// </summary>
     public static bool HasLoadingConfigData()
     {
-        if (configData != null)
-        {
-            return true;
-        }
-        return false;
+        return configData != null;
     }
 
 
@@ -337,7 +329,6 @@ public class DataManager : MonoBehaviour
     /// </summary>
     public static bool HasSaveDataFile()
     {
-
         //ファイルパスを決定
 #if UNITY_EDITOR
         string path = Directory.GetCurrentDirectory() + "\\Assets\\Resources";
@@ -346,11 +337,7 @@ public class DataManager : MonoBehaviour
 #endif
 
         //ファイルがあるかチェック
-        if (File.Exists(path + "/save.dat"))
-        {
-            return true;
-        }
-        return false;
+        return File.Exists(path + "/save.dat");
     }
 
     /// <summary>
@@ -358,11 +345,7 @@ public class DataManager : MonoBehaviour
     /// </summary>
     public static bool HasLoadingSaveData()
     {
-        if (saveData != null)
-        {
-            return true;
-        }
-        return false;
+        return saveData != null;
     }
 
     /// <summary>

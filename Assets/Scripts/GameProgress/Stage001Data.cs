@@ -1,4 +1,4 @@
-using Dango.Quest;
+ï»¿using Dango.Quest;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class Stage001Data : StageData
 {
-    static readonly List<DangoColor> stageDangoColors = new() { DangoColor.An, DangoColor.Beni, DangoColor.Mitarashi, DangoColor.Nori, DangoColor.Shiratama, DangoColor.Yomogi };
+    static readonly List<DangoColor> stageDangoColors = new() {  DangoColor.Beni, DangoColor.Mitarashi, DangoColor.Nori, DangoColor.Shiratama, DangoColor.Yomogi };
 
     protected override void Start()
     {
@@ -21,27 +21,37 @@ public class Stage001Data : StageData
 
         List<QuestData> quest = new()
         {
-            questManager.Creater.CreateQuestCreateRole(0, new QuestCreateRole.EstablishRole(true, false), 1, 0, "‰½‚ç‚©‚Ì–ğ‚ğ¬—§‚³‚¹‚é", 30f, false, false,new(new PortraitTextData.PTextData(0,"‚¨‚§A–ğ‚ª‘µ‚Á‚½‚ÈI",2f,PortraitTextData.FacePatturn.Normal),new(0,"‚±‚Ì’²q‚Å—Š‚Ş‚ºI",2f,PortraitTextData.FacePatturn.Normal)), 2, 3),
-            questManager.Creater.CreateQuestCreateRole(1, new QuestCreateRole.EstablishRole(false, false), 1, 0, "–ğ‚ğ¬—§‚³‚¹‚¸‚É’cq‚ğH‚×‚é", 15f, false, false,new(new PortraitTextData.PTextData(0,"‚â‚Á‚Ï’cq‚Í”ü–¡‚¢‚ÈI",2f,PortraitTextData.FacePatturn.Normal),new(0,"Ÿ‚ÍƒLƒŒƒC‚È‡”Ô‚ÅH‚Á‚Ä‚İ‚é‚©c",2f,PortraitTextData.FacePatturn.Normal)), 2, 3),
+            questManager.Creater.CreateQuestCreateRole(0, new QuestCreateRole.EstablishRole(true, false), 1, 0, "ä½•ã‚‰ã‹ã®å›£çµã‚’æˆç«‹ã•ã›ã‚‹", 30f, false, false,new(
+                new PortraitTextData.PTextData(0,"å›£çµã‚’ä½œã£ãŸãªï¼",2f,PortraitTextData.FacePatturn.Normal),
+                new(0,"ãŠè…¹ã‚‚è†¨ã‚Œã¦ä¸€çŸ³äºŒé³¥ï¼ã“ã®èª¿å­ã§ã„ã“ã†ï¼",2f,PortraitTextData.FacePatturn.Normal)),
+                2),
+            questManager.Creater.CreateQuestCreateRole(1, new QuestCreateRole.EstablishRole(false, false), 1, 0, "å›£çµã‚’æˆç«‹ã•ã›ãšã«å›£å­ã‚’é£Ÿã¹ã‚‹", 15f, false, false,new(
+                new PortraitTextData.PTextData(0,"ç¾å‘³ã„ï¼ã‚„ã£ã±æ „éƒ½ã®å›£å­ã¯é•ã†ã­ã‡",2f,PortraitTextData.FacePatturn.Normal),
+                new(0,"æŠ˜è§’ãªã‚‰æ¬¡ã¯å›£çµã‚’ä½œã£ã¦é£Ÿã¹ã¦ã¿ã‚‹ã‹â€¦â€¦",2f,PortraitTextData.FacePatturn.Normal)),
+                2),
 
-            questManager.Creater.CreateQuestCreateRole(2, new QuestCreateRole.UseColorCount(2), 1, 0, "2F‚Å‚Å‚«‚é–ğ‚ğì‚é", 15f, false, false,new(new PortraitTextData.PTextData()), 4, 5),
-            questManager.Creater.CreateQuestCreateRole(3, new QuestCreateRole.UseColorCount(1), 1, 0, "1F‚Å‚Å‚«‚é–ğ‚ğì‚é", 45f, false, false,new(new PortraitTextData.PTextData()), 4, 5),
+            //D5ä¸Šæ˜‡
+            questManager.Creater.CreateQuestCreateRole(2, new QuestCreateRole.SpecifyTheRole("å…¨å¤©é¡é¢"), 0, 2, "ç·šå¯¾ç§°ã§å›£çµã‚’2å›ä½œã‚Œ", 30f, true, false, new(
+                new PortraitTextData.PTextData()),
+                3),
 
-            //D5ã¸
-            questManager.Creater.CreateQuestPlayAction(4, QuestPlayAction.PlayerAction.FallAttack, 3, "‹}~‰ºh‚µ‚Å3‰ñh‚·", 0f, true, false,new(new PortraitTextData.PTextData()), 6),
-            questManager.Creater.CreateQuestEatDango(5, DangoColor.Beni, 3, 0, true, true, "gF‚Ì’cq‚ğ3‚ÂH‚×‚é", 15f, true, false,new(new PortraitTextData.PTextData()), 6),
+            questManager.Creater.CreateQuestDestination(3, FloorManager.Floor.floor8, false, "ä¸Šã«å‘ã‹ãˆ", 30f, false, false, new(
+                new PortraitTextData.PTextData()),
+                4,5),
 
-            questManager.Creater.CreateQuestDestination(6, FloorManager.Floor.floor10, false, "é“à‚Ì’†‘w‚ÉŒü‚©‚¦", 30f, false, false,new(new PortraitTextData.PTextData()), 7, 8),
+            questManager.Creater.CreateQuestCreateRole(4, new QuestCreateRole.EstablishRole(true, false, DangoColor.Mitarashi), 2, 0, "ã¿ãŸã‚‰ã—å›£å­ã‚’å«ã‚“ã§å›£çµã‚’2å›ä½œã‚Œ", 30f, false, false, new(
+                new PortraitTextData.PTextData()),
+                6),
+            questManager.Creater.CreateQuestCreateRole(5, new QuestCreateRole.EstablishRole(true, false, DangoColor.Nori), 2, 0, "æµ·è‹”å›£å­ã‚’å«ã‚“ã§å›£çµã‚’2å›ä½œã‚Œ", 30f, false, false, new(
+                new PortraitTextData.PTextData()),
+                6),
 
-            questManager.Creater.CreateQuestCreateRole(7, new QuestCreateRole.SpecifyTheRole("—×F‹¾–Ê"), 2,0, "—×F‹¾–Ê‚ğ2‰ñì‚ê", 60f, true, false,new(new PortraitTextData.PTextData()), 9, 10),
-            questManager.Creater.CreateQuestCreateRole(8, new QuestCreateRole.SpecifyTheRole("—Ö‰ô“]¶"), 2, 0, "—Ö‰ô“]¶‚ğ2‰ñì‚ê", 60f, true, false,new(new PortraitTextData.PTextData()), 9, 10),
+            questManager.Creater.CreateQuestCreateRole(6, new QuestCreateRole.CreateSameRole(false),0,2,"ç•°ãªã‚‹å›£çµã‚’2å›é€£ç¶šã§ä½œã‚‹", 30f,true,false,new(
+                new PortraitTextData.PTextData()),
+                7),
 
-            //D5ã¸
-            questManager.Creater.CreateQuestCreateRole(9, new QuestCreateRole.EstablishRole(true,false,DangoColor.Mitarashi), 2, 0, "‚İ‚½‚ç‚µ’cq‚ğŠÜ‚ñ‚Å–ğ‚ğ2‰ñì‚ê", 30f, true, false,new(new PortraitTextData.PTextData()), 11),
-            questManager.Creater.CreateQuestCreateRole(10, new QuestCreateRole.EstablishRole(true,false,DangoColor.Yomogi), 2, 0, "—ÎF‚Ì’cq‚ğŠÜ‚ñ‚Å–ğ‚ğ2‰ñì‚ê", 30f, true, false,new(new PortraitTextData.PTextData()), 11),
-
-            questManager.Creater.CreateQuestDestination(11, FloorManager.Floor.floor11, false, "é“à‚ÌÅã‘w‚ÉŒü‚©‚¦", 0f, false, true,new(new PortraitTextData.PTextData()), 12),
-            questManager.Creater.CreateQuestDestination(12, FloorManager.Floor.Max, false, "ƒNƒŠƒAI", 0f, false, true,new(new PortraitTextData.PTextData()), 0),
+            questManager.Creater.CreateQuestDestination(7, FloorManager.Floor.floor9, false, "ä¸Šã«å‘ã‹ãˆ", 0f, false, true,new(new PortraitTextData.PTextData()), 8),
+            questManager.Creater.CreateQuestDestination(8, FloorManager.Floor.Max, false, "ã‚¯ãƒªã‚¢ï¼", 0f, false, true,new(new PortraitTextData.PTextData()), 0),
         };
 
         QuestData.Clear();
@@ -51,7 +61,7 @@ public class Stage001Data : StageData
 
     protected override PortraitTextData StartPortraitText()
     {
-        return new(new PortraitTextData.PTextData(0, "’c“¹‚ğn‚ß‚é‚ºI", 2f, PortraitTextData.FacePatturn.Normal), new(0, "‚Ü‚¸‚ÍƒNƒGƒXƒg‚ÌŠm”F‚©‚ç‚¾‚Èc", 2f, PortraitTextData.FacePatturn.Normal), new(0, "Lƒ{ƒ^ƒ“‚ğ‰Ÿ‚µ‚Ä‚İ‚æ‚¤‚ºI", 10f, PortraitTextData.FacePatturn.Normal));
+        return new(new PortraitTextData.PTextData(0, "å›£é“ã‚’å§‹ã‚ã‚‹ãœï¼", 2f, PortraitTextData.FacePatturn.Normal), new(0, "ã¾ãšã¯ã‚¯ã‚¨ã‚¹ãƒˆã®ç¢ºèªã‹ã‚‰ã ãªâ€¦", 2f, PortraitTextData.FacePatturn.Normal), new(0, "Lãƒœã‚¿ãƒ³ã‚’æŠ¼ã—ã¦ã¿ã‚ˆã†ãœï¼", 10f, PortraitTextData.FacePatturn.Normal));
     }
 
     public override List<DangoColor> FloorDangoColors()

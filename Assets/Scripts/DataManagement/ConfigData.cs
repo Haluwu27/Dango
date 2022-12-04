@@ -26,9 +26,6 @@ public class ConfigData
     //言語設定のデシリアライズ用
     public string languageString = "JP";
 
-    //ゲームパッドを使用するか
-    public bool gamepadInputEnabled = true;
-
     //セーブデータのファイルパス
     public string dataFilePath = "default";
 
