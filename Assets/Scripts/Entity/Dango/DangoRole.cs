@@ -43,7 +43,7 @@ class DangoRole
 
     //静的な役名
     //注）この処理をインスタンス生成以下に書くと実行順的に役名がnullになります。
-    public static readonly string POSROLE_MONOCOLOR = "単色役";
+    public static readonly string POSROLE_MONOCOLOR = "一統団結";
     public static readonly string POSROLE_LINE_SYMMETRY = "全天鏡面";
     public static readonly string POSROLE_LOOP = "輪廻転生";
     public static readonly string POSROLE_DIVIDED_INTO_TWO = "隣色鏡面";
