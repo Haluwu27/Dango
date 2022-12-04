@@ -81,26 +81,24 @@ public class DangoUIScript : MonoBehaviour
         }
     }
 
-    public void ReachSet(DangoColor color,int current)
+    public void ReachSet(DangoColor color, int current)
     {
         reachObjs.SetActive(true);
         reachImag.sprite = color switch
         {
-            DangoColor.Red => DangoImags[(int)DangoColor.Red],
-            DangoColor.Orange => DangoImags[(int)DangoColor.Orange],
-            DangoColor.Yellow => DangoImags[(int)DangoColor.Yellow],
-            DangoColor.Green => DangoImags[(int)DangoColor.Green],
-            DangoColor.Cyan => DangoImags[(int)DangoColor.Cyan],
-            DangoColor.Blue => DangoImags[(int)DangoColor.Blue],
-            DangoColor.Purple => DangoImags[(int)DangoColor.Purple],
-            DangoColor.Other => DangoImags[(int)DangoColor.Other],
+            DangoColor.An => DangoImags[(int)DangoColor.An - 1],
+            DangoColor.Beni => DangoImags[(int)DangoColor.Beni - 1],
+            DangoColor.Mitarashi => DangoImags[(int)DangoColor.Mitarashi - 1],
+            DangoColor.Nori => DangoImags[(int)DangoColor.Nori - 1],
+            DangoColor.Shiratama => DangoImags[(int)DangoColor.Shiratama - 1],
+            DangoColor.Yomogi => DangoImags[(int)DangoColor.Yomogi - 1],
             _ => DangoImags[(int)DangoColor.Other],
         };
-        reachObjs.GetComponent<RectTransform>().anchoredPosition = Objs[current-1].GetComponent<RectTransform>().anchoredPosition;
+        reachObjs.GetComponent<RectTransform>().anchoredPosition = Objs[current - 1].GetComponent<RectTransform>().anchoredPosition;
     }
     public void ReachClose()
     {
-        if(reachObjs.activeSelf)
-        reachObjs.SetActive(false);
+        if (reachObjs.activeSelf)
+            reachObjs.SetActive(false);
     }
 }

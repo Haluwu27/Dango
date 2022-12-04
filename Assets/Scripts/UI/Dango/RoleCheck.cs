@@ -9,10 +9,13 @@ public class RoleCheck
         if (ALLRole(dangos) != DangoColor.None)
             return ALLRole(dangos);
         if (RepetitionRole(dangos, current) != DangoColor.None)
+            Logger.Log("ÇÕÇ≥Çﬁñ");
             return RepetitionRole(dangos, current);
-        if(LoopRole(dangos,current)!=DangoColor.None)
+        if (LoopRole(dangos,current)!=DangoColor.None)
+            Logger.Log("ÉãÅ[Évñ");
             return LoopRole(dangos,current);
         if (SplitRole(dangos,current)!=DangoColor.None)
+            Logger.Log("ï™äÑñ");
             return  SplitRole(dangos,current);
         return DangoColor.None;
     }
@@ -34,7 +37,6 @@ public class RoleCheck
 
     private DangoColor RepetitionRole(List<DangoColor> dangos, int current)
     {
-
         switch (current)
         {
             case 3:
