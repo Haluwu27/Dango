@@ -95,9 +95,30 @@ class PlayerData : MonoBehaviour
     }
     class FallingState : IState
     {
+        private async void PlayAnimation(PlayerData parent)
+        {
+            parent._animationManager.ChangeAnimation(AnimationManager.E_Animation.AN3Start, 0.1f);
+
+            try
+            {
+                while (parent._animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 1f)
+                {
+                    await UniTask.Yield();
+                }
+            }
+            catch (MissingReferenceException)
+            {
+                return;
+            }
+
+            if (parent._currentState != IState.E_State.Falling) return;
+
+            parent._animationManager.ChangeAnimation(AnimationManager.E_Animation.An3_FreeFall, 0.1f);
+        }
+
         public IState.E_State Initialize(PlayerData parent)
         {
-            parent._animationManager.ChangeAnimation(AnimationManager.E_Animation.An3_FreeFall, 0.1f);
+            PlayAnimation(parent);
 
             return IState.E_State.Unchanged;
         }
@@ -253,7 +274,7 @@ class PlayerData : MonoBehaviour
     {
         public IState.E_State Initialize(PlayerData parent)
         {
-            parent._animationManager.ChangeAnimation(AnimationManager.E_Animation.An11B_JumpCharge, 0.2f);
+            parent._animationManager.ChangeAnimation(AnimationManager.E_Animation.An11Start, 0.2f);
 
             return IState.E_State.Unchanged;
         }
@@ -263,9 +284,13 @@ class PlayerData : MonoBehaviour
         }
         public IState.E_State FixedUpdate(PlayerData parent)
         {
-            if (InputSystemManager.Instance.MoveAxis.magnitude > 0) parent._animationManager.ChangeAnimation(AnimationManager.E_Animation.An11A_JumpCharge_Walk, 0.2f);
-            else parent._animationManager.ChangeAnimation(AnimationManager.E_Animation.An11B_JumpCharge, 0.2f);
+            var stateInfo = parent._animator.GetCurrentAnimatorStateInfo(0);
 
+            if (stateInfo.IsName("AN11Start") && stateInfo.normalizedTime >= 1f)
+            {
+                if (InputSystemManager.Instance.MoveAxis.magnitude > 0) parent._animationManager.ChangeAnimation(AnimationManager.E_Animation.An11A_JumpCharge_Walk, 0.2f);
+                else parent._animationManager.ChangeAnimation(AnimationManager.E_Animation.An11B_JumpCharge, 0.2f);
+            }
             //プレイヤーを動かす処理
             parent._playerMove.Update(parent.rb, parent.playerCamera.transform, true);
 
@@ -726,8 +751,6 @@ class PlayerData : MonoBehaviour
             return false;
         }
 
-        //突き刺せる状態にして
-        spitManager.IsSticking = true;
         return true;
     }
 
@@ -757,7 +780,7 @@ class PlayerData : MonoBehaviour
     private void DecreaseSatiety()
     {
         if (Event) return;
-        
+
         //空腹度減少の許可
         if (!_allowReducedTimeLimit) return;
 
@@ -790,6 +813,7 @@ class PlayerData : MonoBehaviour
         _swords[_currentStabCount - 3].gameObject.SetActive(true);
         _swords[_currentStabCount - 4].gameObject.SetActive(false);
         spitManager = _swords[_currentStabCount - 3];
+        _playerAttack.SetSpitManager(spitManager);
         _playerUIManager.EventText.TextData.SetText("させる団子の数が増えた！(" + _currentStabCount + "個)");
 
         //刺せる範囲表示の拡大。今串が伸びないのでコメントアウトしてます。

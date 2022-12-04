@@ -3,10 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using TM.Easing;
 using TM.Easing.Management;
-using TMPro;
 using System;
 using static FloorManager;
-using System.Drawing;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -18,16 +16,15 @@ public class DangoInjection : MonoBehaviour
         [InspectorName("全取り消し")]
         None = 0,
 
-        Red = 1 << 1,
-        Orange = 1 << 2,
-        Yellow = 1 << 3,
-        Green = 1 << 4,
-        Cyan = 1 << 5,
-        Blue = 1 << 6,
-        Purple = 1 << 7,
+        An = 1 << 1,
+        Beni = 1 << 2,
+        Mitarashi = 1 << 3,
+        Nori = 1 << 4,
+        Shiratama = 1 << 5,
+        Yomogi = 1 << 6,
 
         [InspectorName("")]
-        All = 8,
+        All = 7,
         [InspectorName("全選択")]
         SET_ALL = ~0,
     }
@@ -41,6 +38,8 @@ public class DangoInjection : MonoBehaviour
     [SerializeField, Tooltip("発射モード")] ShotMode shotMode;
     [SerializeField, Tooltip("出す色")] DangoColorChoice colorChoice;
     [SerializeField, Tooltip("団子の射出ポイント")] GameObject spawner = default!;
+    [SerializeField, Tooltip("全体")] Transform baseRotate;
+    [SerializeField, Tooltip("砲身")] Transform cannonAngle;
 
     [SerializeField, Tooltip("一度に発射する数"), Min(1)] private int defalutInjectionCount = 1;
     [SerializeField, Tooltip("2つ以上発射するときの間隔"), Min(0)] private int defalutContinueFrame = 0;
@@ -60,10 +59,10 @@ public class DangoInjection : MonoBehaviour
 
     private DangoPoolManager _poolManager = default!;
 
-    private Vector3 _nextLookAngle = default;
-    private Vector3 _lookedAngle = default;
-    private Vector3 _firstLookAngle = default;
-    private Vector3 _interpolatedVec = default;
+    private DangoInjectionFixed _nextLookAngle = new();
+    private DangoInjectionFixed _lookedAngle = new();
+    private DangoInjectionFixed _firstLookAngle = new();
+    private DangoInjectionFixed _interpolatedVec = new();
 
     private int _injectionCount = default;
     private int _continueFrame = default;
@@ -186,7 +185,8 @@ public class DangoInjection : MonoBehaviour
 
         //初期化
         _poolManager = GameObject.Find("DangoPoolManager").GetComponent<DangoPoolManager>();
-        _firstLookAngle = transform.rotation.eulerAngles;
+        _firstLookAngle.ba = baseRotate.localEulerAngles.y;
+        _firstLookAngle.ca = cannonAngle.localEulerAngles.y;
         NextLook();
 
         for (int i = 1; i < (int)DangoColorChoice.All; i++)
@@ -208,7 +208,8 @@ public class DangoInjection : MonoBehaviour
     private bool Injection()
     {
         //方向確定
-        transform.rotation = Quaternion.Euler(_nextLookAngle);
+        baseRotate.localRotation = Quaternion.Euler(baseRotate.localEulerAngles.SetY(_nextLookAngle.ba));
+        cannonAngle.localRotation = Quaternion.Euler(cannonAngle.localEulerAngles.SetY(_nextLookAngle.ca));
 
         //連続打ちのFRAMEを管理
         if (--_continueFrame > 0) return false;
@@ -238,7 +239,7 @@ public class DangoInjection : MonoBehaviour
         //オブジェクトプールから団子を取り出して設定。
         _poolManager.SetCreateColor(color);
         var dango = _poolManager.DangoPool[(int)color - 1].Get();
-        
+
         dango.SetDangoColor(color);
         dango.transform.position = spawner.transform.position;
         dango.Rb.AddForce(transform.forward.normalized * shotPower, ForceMode.Impulse);
@@ -254,7 +255,8 @@ public class DangoInjection : MonoBehaviour
     {
         var progress = EasingManager.EaseProgress(EaseType.OutBack, ++_currentAnimFrame, animationFrame, 1f, 0);
 
-        transform.rotation = Quaternion.Euler(_lookedAngle + (_interpolatedVec * progress));
+        cannonAngle.localRotation = Quaternion.Euler(cannonAngle.localEulerAngles.SetY(_lookedAngle.ca + (_interpolatedVec.ca * progress)));
+        baseRotate.localRotation = Quaternion.Euler(baseRotate.localEulerAngles.SetY(_lookedAngle.ba + (_interpolatedVec.ba * progress)));
 
         return _currentAnimFrame == animationFrame;
     }
@@ -262,10 +264,8 @@ public class DangoInjection : MonoBehaviour
     private void NextLook()
     {
         //現在の位置を入力
-        _lookedAngle = transform.rotation.eulerAngles;
-
-        //位置の補正
-        _lookedAngle.Set(Around(_lookedAngle.x), Around(_lookedAngle.y), Around(_lookedAngle.z));
+        _lookedAngle.ba = baseRotate.localEulerAngles.y;
+        _lookedAngle.ca = cannonAngle.localEulerAngles.y;
 
         //初期化
         _continueFrame = 0;
@@ -274,17 +274,20 @@ public class DangoInjection : MonoBehaviour
         //次の位置の抽選
         if (shotMode == ShotMode.Random)
         {
-            _nextLookAngle = _firstLookAngle + new Vector3(UnityEngine.Random.Range(verticalRot.x, verticalRot.y), UnityEngine.Random.Range(horizontalRot.x, horizontalRot.y), 0);
+            _nextLookAngle.ba = _firstLookAngle.ba + UnityEngine.Random.Range(horizontalRot.x, horizontalRot.y);
+            _nextLookAngle.ca = _firstLookAngle.ca + UnityEngine.Random.Range(verticalRot.x, verticalRot.y);
         }
         else
         {
             if (fixedAngles.Length == 0) return;
             int index = UnityEngine.Random.Range(0, fixedAngles.Length);
-            _nextLookAngle = _firstLookAngle.SetX(fixedAngles[index].CannonAngle).SetY(fixedAngles[index].BaseAngle);
+            _nextLookAngle.ba = _firstLookAngle.ba + fixedAngles[index].BaseAngle;
+            _nextLookAngle.ca = _firstLookAngle.ca + fixedAngles[index].CannonAngle;
         }
 
         //補間値を求める
-        _interpolatedVec = _nextLookAngle - _lookedAngle;
+        _interpolatedVec.ba = _nextLookAngle.ba - _lookedAngle.ba;
+        _interpolatedVec.ca = _nextLookAngle.ca - _lookedAngle.ca;
     }
 
     private float Around(float val)
@@ -320,7 +323,6 @@ public class DangoInjection : MonoBehaviour
         public void SetCannonAngle(float value) => _cannonAngle = value;
 
     }
-
 
 #if UNITY_EDITOR
     [CustomEditor(typeof(DangoInjection))]

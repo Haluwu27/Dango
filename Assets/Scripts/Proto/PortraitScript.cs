@@ -47,18 +47,24 @@ public class PortraitScript : MonoBehaviour
     private async UniTask SlideIn()
     {
         float time = 0;
-
-        //ˆÊ’u‚Ì‰Šú‰»
-        _trans.localPosition = Vector3.zero.SetX(OFFSET);
-
-        while (time < SLIDETIME)
+        try
         {
-            await UniTask.Yield();
-            if (!_trans.root.gameObject.activeSelf) continue;
+            //ˆÊ’u‚Ì‰Šú‰»
+            _trans.localPosition = Vector3.zero.SetX(OFFSET);
 
-            time += Time.deltaTime;
+            while (time < SLIDETIME)
+            {
+                await UniTask.Yield();
+                if (!_trans.root.gameObject.activeSelf) continue;
 
-            _trans.localPosition = Vector3.zero.SetX(OFFSET * (1f - EasingManager.EaseProgress(TM.Easing.EaseType.OutQuart, time, SLIDETIME, 0f, 0)));
+                time += Time.deltaTime;
+
+                _trans.localPosition = Vector3.zero.SetX(OFFSET * (1f - EasingManager.EaseProgress(TM.Easing.EaseType.OutQuart, time, SLIDETIME, 0f, 0)));
+            }
+        }
+        catch (MissingReferenceException)
+        {
+            return;
         }
 
         _trans.localPosition = Vector3.zero;
@@ -71,14 +77,21 @@ public class PortraitScript : MonoBehaviour
         //ˆÊ’u‚Ì‰Šú‰»
         _trans.localPosition = Vector3.zero;
 
-        while (time < SLIDETIME)
+        try
         {
-            await UniTask.Yield();
-            if (!_trans.root.gameObject.activeSelf) continue;
+            while (time < SLIDETIME)
+            {
+                await UniTask.Yield();
+                if (!_trans.root.gameObject.activeSelf) continue;
 
-            time += Time.deltaTime;
+                time += Time.deltaTime;
 
-            _trans.localPosition = Vector3.zero.SetX(OFFSET * EasingManager.EaseProgress(TM.Easing.EaseType.InQuart, time, SLIDETIME, 0f, 0));
+                _trans.localPosition = Vector3.zero.SetX(OFFSET * EasingManager.EaseProgress(TM.Easing.EaseType.InQuart, time, SLIDETIME, 0f, 0));
+            }
+        }
+        catch (MissingReferenceException)
+        {
+            return;
         }
 
         _trans.localPosition = Vector3.zero.SetX(OFFSET);
@@ -108,14 +121,20 @@ public class PortraitScript : MonoBehaviour
             data = questTextData.GetQTextData(i);
 
             ChangePortrait(data);
-
-            while (time < data.printTime)
+            try
             {
-                await UniTask.Yield();
-                if (_trans == null) return;
-                if (!_trans.root.gameObject.activeSelf) continue;
+                while (time < data.printTime)
+                {
+                    await UniTask.Yield();
+                    if (_trans == null) return;
+                    if (!_trans.root.gameObject.activeSelf) continue;
 
-                time += Time.deltaTime;
+                    time += Time.deltaTime;
+                }
+            }
+            catch (MissingReferenceException)
+            {
+                return;
             }
         }
 

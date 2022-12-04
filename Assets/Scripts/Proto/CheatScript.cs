@@ -9,6 +9,8 @@ public class CheatScript : MonoBehaviour
     [SerializeField] PlayerData player;
     [SerializeField] DangoUIScript uIScript;
     [SerializeField] TMP_Dropdown D5_dropdown;
+    [SerializeField] StageData stage;
+
     void Start()
     {
         
@@ -25,7 +27,7 @@ public class CheatScript : MonoBehaviour
         List<QuestData> nextQuest = new();
         for (int i = 0; i < quest[0].NextQuestId.Count; i++)
         {
-            nextQuest.Add(Stage001Data.Instance.QuestData[quest[0].NextQuestId[i]]);
+            nextQuest.Add(stage.QuestData[quest[0].NextQuestId[i]]);
         }
         QuestManager.Instance.ChangeQuest(nextQuest);
         quest[0].SetKeyQuest(true);

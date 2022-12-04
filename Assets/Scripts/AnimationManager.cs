@@ -21,6 +21,8 @@ public class AnimationManager
         An10_Walk,
         An11A_JumpCharge_Walk,
         An11B_JumpCharge,
+        An11Start,
+        AN3Start,
 
         Max,
     }
@@ -31,7 +33,7 @@ public class AnimationManager
 
     E_Animation _currentAnimation;
 
-    static readonly List<string> names = new() { "AN1", "AN2", "AN3", "AN4A", "AN4B", "AN5", "AN6", "AN7A", "AN7B", "AN8A", "AN8B", "AN9", "AN10", "AN11A", "AN11B" };
+    static readonly List<string> names = new() { "AN1", "AN2", "AN3", "AN4A", "AN4B", "AN5", "AN6", "AN7A", "AN7B", "AN8A", "AN8B", "AN9", "AN10", "AN11A", "AN11B","AN11Start","AN3Start" };
 
     public AnimationManager(Animator anim)
     {
