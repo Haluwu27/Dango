@@ -56,35 +56,56 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1061649141422286778}
     m_Modifications:
-    - target: {fileID: 317423311485401231, guid: 778aacd95f2f72d4eaff394bcf22a5d0,
+    - target: {fileID: 38215294996633075, guid: 778aacd95f2f72d4eaff394bcf22a5d0,
         type: 3}
-      propertyPath: m_SizeDelta.x
-      value: 7.5
+      propertyPath: dangoData.Array.size
+      value: 7
       objectReference: {fileID: 0}
-    - target: {fileID: 317423311485401231, guid: 778aacd95f2f72d4eaff394bcf22a5d0,
+    - target: {fileID: 38215294996633075, guid: 778aacd95f2f72d4eaff394bcf22a5d0,
         type: 3}
-      propertyPath: m_SizeDelta.y
-      value: 7.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 2441634953052990453, guid: 778aacd95f2f72d4eaff394bcf22a5d0,
+      propertyPath: dangoData.Array.data[1]
+      value: 
+      objectReference: {fileID: 3081571601659111096, guid: 40b08515ec5f65244914a9b0d38f9827,
         type: 3}
-      propertyPath: m_Height
-      value: 8.51
-      objectReference: {fileID: 0}
-    - target: {fileID: 2441634953052990453, guid: 778aacd95f2f72d4eaff394bcf22a5d0,
+    - target: {fileID: 38215294996633075, guid: 778aacd95f2f72d4eaff394bcf22a5d0,
         type: 3}
-      propertyPath: m_Radius
-      value: 3.75
-      objectReference: {fileID: 0}
-    - target: {fileID: 2441634953052990453, guid: 778aacd95f2f72d4eaff394bcf22a5d0,
+      propertyPath: dangoData.Array.data[2]
+      value: 
+      objectReference: {fileID: 5547320479219590247, guid: ebca6ebb02201ef40a7550ecf52cee11,
         type: 3}
-      propertyPath: m_Center.y
-      value: 0.53
-      objectReference: {fileID: 0}
-    - target: {fileID: 2441634953052990453, guid: 778aacd95f2f72d4eaff394bcf22a5d0,
+    - target: {fileID: 38215294996633075, guid: 778aacd95f2f72d4eaff394bcf22a5d0,
         type: 3}
-      propertyPath: m_Center.z
+      propertyPath: dangoData.Array.data[3]
+      value: 
+      objectReference: {fileID: 6788486569033950631, guid: 5be3bdce184cddf4295f1d44645ebae3,
+        type: 3}
+    - target: {fileID: 38215294996633075, guid: 778aacd95f2f72d4eaff394bcf22a5d0,
+        type: 3}
+      propertyPath: dangoData.Array.data[4]
+      value: 
+      objectReference: {fileID: 8893361853225958713, guid: 4dbc8f06240710448afd50059c680dd2,
+        type: 3}
+    - target: {fileID: 38215294996633075, guid: 778aacd95f2f72d4eaff394bcf22a5d0,
+        type: 3}
+      propertyPath: dangoData.Array.data[5]
+      value: 
+      objectReference: {fileID: 3585271020053658026, guid: 4c0a8c2149db5d0488b463f921547054,
+        type: 3}
+    - target: {fileID: 38215294996633075, guid: 778aacd95f2f72d4eaff394bcf22a5d0,
+        type: 3}
+      propertyPath: dangoData.Array.data[6]
+      value: 
+      objectReference: {fileID: 2647380038556009497, guid: e31d1bbb2153f124398b0ad398e597d7,
+        type: 3}
+    - target: {fileID: 1629350773469309473, guid: 778aacd95f2f72d4eaff394bcf22a5d0,
+        type: 3}
+      propertyPath: m_IsActive
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2326593828667610560, guid: 778aacd95f2f72d4eaff394bcf22a5d0,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3952613918130635532, guid: 778aacd95f2f72d4eaff394bcf22a5d0,
         type: 3}
@@ -151,12 +172,18 @@ PrefabInstance:
       propertyPath: playerCamera
       value: 
       objectReference: {fileID: 1061649141369810905}
+    - target: {fileID: 3952613918130635534, guid: 778aacd95f2f72d4eaff394bcf22a5d0,
+        type: 3}
+      propertyPath: _allowReducedTimeLimit
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4949754110901319488, guid: 778aacd95f2f72d4eaff394bcf22a5d0,
         type: 3}
       propertyPath: MainCam
       value: 
       objectReference: {fileID: 1061649141369810905}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 4455526093197044745, guid: 778aacd95f2f72d4eaff394bcf22a5d0, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 778aacd95f2f72d4eaff394bcf22a5d0, type: 3}
 --- !u!4 &4062595608074469452 stripped
 Transform:

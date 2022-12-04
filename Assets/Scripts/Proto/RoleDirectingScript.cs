@@ -30,7 +30,7 @@ public class RoleDirectingScript : MonoBehaviour
     public void Dirrecting(List<DangoColor> dangos)
     {
         //色は多分確定
-        ColorDirecting(dangos);
+        //ColorDirecting(dangos);
     }
 
     //色の演出
@@ -43,13 +43,14 @@ public class RoleDirectingScript : MonoBehaviour
                 imageObj[i].SetActive(true);
                 _images[i].color = color[i] switch
                 {
-                    DangoColor.Red => Color.red,
-                    DangoColor.Orange => new Color32(255, 155, 0, 255),
-                    DangoColor.Yellow => Color.yellow,
-                    DangoColor.Green => Color.green,
-                    DangoColor.Cyan => Color.cyan,
-                    DangoColor.Blue => Color.blue,
-                    DangoColor.Purple => new Color32(200, 0, 255, 255),
+                    //この演出が必要か見直し
+                    //DangoColor.None => throw new System.NotImplementedException(),
+                    //DangoColor.An => throw new System.NotImplementedException(),
+                    //DangoColor.Beni => throw new System.NotImplementedException(),
+                    //DangoColor.Mitarashi => throw new System.NotImplementedException(),
+                    //DangoColor.Nori => throw new System.NotImplementedException(),
+                    //DangoColor.Shiratama => throw new System.NotImplementedException(),
+                    //DangoColor.Yomogi => throw new System.NotImplementedException(),
                     DangoColor.Other => Color.gray,
                     _ => Color.white,
                 };

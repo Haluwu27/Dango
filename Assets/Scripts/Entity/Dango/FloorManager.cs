@@ -47,6 +47,7 @@ public class FloorManager : MonoBehaviour
 
     //二次元配列はシリアライズできないため、別クラスを用いて仮想的に二次元配列にしている。
     [SerializeField] FloorArray[] floorArrays = new FloorArray[(int)Floor.Max];
+    [SerializeField] StageData _stageData;
 
     //nd5で救済可能なフロア一覧
     List<FloorArray> s3d5 = new();
@@ -164,4 +165,5 @@ public class FloorManager : MonoBehaviour
     }
 
     public FloorArray[] FloorArrays => floorArrays;
+    public StageData StageData => _stageData;
 }

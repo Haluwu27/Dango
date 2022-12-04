@@ -9,47 +9,49 @@ public enum Stage
     Stage2,
     Stage3,
     Stage4,
+
+    Tutorial,
 }
 
 public class StageData : MonoBehaviour
 {
-    public interface IAddQuest
-    {
-        public void AddQuest();
-    }
-
-    public interface IPortrait
-    {
-        public PortraitTextData GetPortraitQuest();
-    }
-
     [SerializeField] bool _isRelease;
+    [SerializeField] Stage _stage;
+    [SerializeField] PortraitScript _portraitScript;
+    [SerializeField] FusumaManager _fusumaManager;
+
     public bool IsRelease => _isRelease;
 
-    [SerializeField] Stage _stage;
     public Stage Stage => _stage;
 
-    [SerializeField] PortraitScript _portraitScript;
+    public List<QuestData> QuestData = new();
 
-    public IAddQuest CurrentStage { get; private set; }
-    public IPortrait CurrentPortrait { get; private set; }
-
-    private void Awake()
+    protected virtual void Awake()
     {
         InputSystemManager.Instance.Input.SwitchCurrentActionMap("Player");
 
-        if (Stage == Stage.Stage3)
-        {
-            CurrentStage = Stage001Data.Instance;
-            CurrentPortrait = Stage001Data.Instance;
-        }
+        if (_fusumaManager != null) _fusumaManager.Open();
     }
 
-    private void Start()
+    protected virtual void Start()
     {
-        SoundManager.Instance.StopBGM();
-        SoundManager.Instance.PlayBGM(SoundSource.BGM1A_STAGE1 + (int)_stage);
-        _portraitScript.ChangePortraitText(CurrentPortrait.GetPortraitQuest()).Forget();
+        _portraitScript.ChangePortraitText(StartPortraitText()).Forget();
+        AddQuest();
+    }
+
+    protected virtual void AddQuest()
+    {
+        throw new System.NullReferenceException();
+    }
+
+    protected virtual PortraitTextData StartPortraitText()
+    {
+        return null;
+    }
+
+    public virtual List<DangoColor> FloorDangoColors()
+    {
+        return null;
     }
 
     public void Release()

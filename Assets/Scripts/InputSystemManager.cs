@@ -35,6 +35,8 @@ public class InputSystemManager : MonoBehaviour
     public CallBack onPauseCanceled;
     public CallBack onExpansionUIPerformed;
     public CallBack onExpansionUICanceled;
+    public CallBack onTutorialSkipPerformed;
+    public CallBack onTutorialSkipCanceled;
 
     Vector2 _moveAxis;
     Vector2 _lookAxis;
@@ -45,6 +47,7 @@ public class InputSystemManager : MonoBehaviour
     bool _isPressFire;
     bool _isPressPause;
     bool _isPressExpansionUI;
+    bool _isPressTutorialSkip;
 
     public void OnMove(InputAction.CallbackContext context)
     {
@@ -138,6 +141,7 @@ public class InputSystemManager : MonoBehaviour
             onPauseCanceled.SafeCall();
         }
     }
+
     public void OnExpansionUI(InputAction.CallbackContext context)
     {
         if (context.phase == InputActionPhase.Performed)
@@ -152,6 +156,20 @@ public class InputSystemManager : MonoBehaviour
         }
     }
 
+    public void OnTutorialSkip(InputAction.CallbackContext contect)
+    {
+        if (contect.phase == InputActionPhase.Performed)
+        {
+            _isPressTutorialSkip = true;
+            onTutorialSkipPerformed.SafeCall();
+        }        
+        else if (contect.phase == InputActionPhase.Canceled)
+        {
+            _isPressTutorialSkip = false;
+            onTutorialSkipCanceled.SafeCall();
+        }
+    }
+
     public Vector2 MoveAxis => _moveAxis;
     public Vector2 LookAxis => _lookAxis;
     public bool IsPressJump => _isPressJump;
@@ -161,6 +179,7 @@ public class InputSystemManager : MonoBehaviour
     public bool IsPressFire => _isPressFire;
     public bool IsPressPause => _isPressPause;
     public bool IsExpantionUI => _isPressExpansionUI;
+    public bool IsPressTutorialSkip => _isPressTutorialSkip;
     #endregion
 
     #region UI
