@@ -70,6 +70,7 @@ namespace TM.Entity.Player
             //UIのセット
             _dangoUIScript.DangoUISet(_dangos);
             _dangoUIScript.RemoveDango(_dangos);
+            _playerUIManager.SetReach();
 
             _hasRemoveDango = false;
             

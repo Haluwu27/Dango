@@ -8,6 +8,7 @@ public class CheatScript : MonoBehaviour
 {
     [SerializeField] PlayerData player;
     [SerializeField] DangoUIScript uIScript;
+    [SerializeField]PlayerUIManager playerUIManager;
     [SerializeField] TMP_Dropdown D5_dropdown;
     void Start()
     {
@@ -35,6 +36,7 @@ public class CheatScript : MonoBehaviour
         player.ResetDangos();
         player.SetMaxDango(D5_dropdown.value + 3);
         uIScript.GetComponent<DangoUIScript>().DangoUISet(player.GetDangos());
+        playerUIManager.SetReach();
     }
 
     public void Dangoset(DangoColor c)
@@ -44,6 +46,8 @@ public class CheatScript : MonoBehaviour
             player.AddDangos(c);
             uIScript.GetComponent<DangoUIScript>().DangoUISet(player.GetDangos());
             uIScript.GetComponent<DangoUIScript>().AddDango(player.GetDangos());
+            playerUIManager.SetReach();
+
         }
     }
 
@@ -52,5 +56,7 @@ public class CheatScript : MonoBehaviour
         player.ResetDangos();
         uIScript.GetComponent<DangoUIScript>().DangoUISet(player.GetDangos());
         uIScript.GetComponent<DangoUIScript>().ALLRemoveDango(player.GetDangos());
+        playerUIManager.SetReach();
+
     }
 }

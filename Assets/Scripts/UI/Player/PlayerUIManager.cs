@@ -17,11 +17,13 @@ public class PlayerUIManager : MonoBehaviour
     [SerializeField] TimeGageAnima[] timeGageAnimaText;
     [SerializeField] ImageUIData DontEatUIOBJ;
     [SerializeField] Sprite dontEatSprite;
+    [SerializeField] DangoUIScript dangoUIScript;
     private float time { get { return playerdata.GetSatiety(); } }
     private float maxTime;
     private float currentTime;
     private int[] warningTimes = new int[3];
 
+    RoleCheck roleCheck =new RoleCheck();
 
     private Image[] w_imgs;
 
@@ -137,5 +139,20 @@ public class PlayerUIManager : MonoBehaviour
     public void DontEat()
     {
         DontEatUIOBJ.ImageData.SetSprite(dontEatSprite);
+    }
+
+    public void SetReach()
+    {
+        if (playerdata.GetDangos().Count == playerdata.GetCurrentStabCount() - 1)
+        {
+            DangoColor color = roleCheck.GetReach(playerdata.GetDangos(), playerdata.GetCurrentStabCount());
+            if (color != DangoColor.None)
+            {
+                dangoUIScript.ReachSet(color, playerdata.GetCurrentStabCount());
+                Logger.Log("reachîªíËÅF" + color);
+            }
+        }
+        else
+            dangoUIScript.ReachClose();
     }
 }
