@@ -12,12 +12,13 @@ public class RoleEffect : MonoBehaviour
         
     }
 
-    void SetEffect()
+    public void RoleSetEffect(DangoColor color)
     {
         switch (DangoRoleUI.CurrentRoleName)
         {
             case "’PF–ğ":
                 SetEffect(Effects[0]);
+                ChangeColor(particle,color);
                 break;
             case "ü‘ÎÌ":
                 SetEffect(Effects[1]);
@@ -48,4 +49,17 @@ public class RoleEffect : MonoBehaviour
         particle =EffectObj.GetComponent<ParticleSystem>();
 
     }
-}
+    private void ChangeColor(ParticleSystem particleSystem,DangoColor color)
+    {
+        particleSystem.startColor = color switch
+        {
+            DangoColor.An => new Color(153, 37,58),
+            DangoColor.Beni => new Color(255, 200, 200),
+            DangoColor.Mitarashi => new Color(191, 110,66),
+            DangoColor.Nori => new Color(253, 166, 156),
+            DangoColor.Shiratama => new Color(252,252,252),
+            DangoColor.Yomogi => new Color(180, 212, 95),
+            _ => new Color(0,0,0),
+        };
+    }
+    }

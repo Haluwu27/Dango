@@ -8,6 +8,7 @@ public class RoleDirectingScript : MonoBehaviour
 {
     [SerializeField] TextMeshProUGUI roleText = default!;
     [SerializeField] GameObject[] imageObj;
+    [SerializeField] RoleEffect roleEffect;
     private Image[] _images;
 
     void Start()
@@ -31,6 +32,8 @@ public class RoleDirectingScript : MonoBehaviour
     {
         //色は多分確定
         //ColorDirecting(dangos);
+        roleEffect.RoleSetEffect(dangos[0]);
+
     }
 
     //色の演出

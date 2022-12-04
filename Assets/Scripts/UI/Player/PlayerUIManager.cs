@@ -50,7 +50,7 @@ public class PlayerUIManager : MonoBehaviour
         maxTime = time;
         currentTime = maxTime;
 
-        if(tutorial)
+        if(!tutorial)
         for (int i = 0; i < timeGage.Length; i++)
             timeGage[i].value = 1;
         for (int i = 0; i < warningTimes.Length - 1; i++)
@@ -72,7 +72,7 @@ public class PlayerUIManager : MonoBehaviour
 
         Warning();
 
-        if (tutorial)
+        if (!tutorial)
         {
             for (int i = 0; i < timeGage.Length; i++)//ƒQ[ƒW‚Ì‘Œ¸
                 timeGage[i].value = (float)currentTime / (float)maxTime;
@@ -134,7 +134,7 @@ public class PlayerUIManager : MonoBehaviour
 
     public void TimeGageUpAnima()
     {
-        if(tutorial)
+        if(!tutorial)
         for (int i = 0; i < timeGageAnimaText.Length; i++)
         {
             timeGageAnimaText[i].SetText(temp);

@@ -63832,6 +63832,11 @@ PrefabInstance:
       objectReference: {fileID: 4799845754959798504}
     - target: {fileID: 8567872266559936266, guid: ea25d6985a03e2943a1b915d2d2401a3,
         type: 3}
+      propertyPath: tutorial
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8567872266559936266, guid: ea25d6985a03e2943a1b915d2d2401a3,
+        type: 3}
       propertyPath: playerdata
       value: 
       objectReference: {fileID: 1823400544899498257}
@@ -64257,6 +64262,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 89243e05b6875914aa4b399c57a5a957, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &8349132725060890806 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8567872267615947402, guid: ea25d6985a03e2943a1b915d2d2401a3,
+    type: 3}
+  m_PrefabInstance: {fileID: 376368965615401532}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &2260986156322198272
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8349132725060890806}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 42326f25692bc1444b4a8ea896d220ad, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Effects: []
 --- !u!114 &8349132725236414623 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 8567872267842912931, guid: ea25d6985a03e2943a1b915d2d2401a3,
