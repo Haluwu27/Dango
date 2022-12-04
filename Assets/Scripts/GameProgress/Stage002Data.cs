@@ -4,9 +4,9 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class Stage001Data : StageData
+public class Stage002Data : StageData
 {
-    static readonly List<DangoColor> stageDangoColors = new() {  DangoColor.Beni, DangoColor.Mitarashi, DangoColor.Nori, DangoColor.Shiratama, DangoColor.Yomogi };
+    static readonly List<DangoColor> stageDangoColors = new() { DangoColor.An, DangoColor.Beni, DangoColor.Mitarashi, DangoColor.Nori, DangoColor.Shiratama, DangoColor.Yomogi };
 
     protected override void Start()
     {
@@ -21,10 +21,11 @@ public class Stage001Data : StageData
 
         List<QuestData> quest = new()
         {
-            questManager.Creater.CreateQuestCreateRole(0, new QuestCreateRole.EstablishRole(true, false), 1, 0, "何らかの役を成立させる", 30f, false, false,new(new PortraitTextData.PTextData(0,"おぉ、役が揃ったな！",2f,PortraitTextData.FacePatturn.Normal),new(0,"この調子で頼むぜ！",2f,PortraitTextData.FacePatturn.Normal)), 2),
-            questManager.Creater.CreateQuestCreateRole(1, new QuestCreateRole.EstablishRole(false, false), 1, 0, "役を成立させずに団子を食べる", 15f, false, false,new(new PortraitTextData.PTextData(0,"やっぱ団子は美味いな！",2f,PortraitTextData.FacePatturn.Normal),new(0,"次はキレイな順番で食ってみるか…",2f,PortraitTextData.FacePatturn.Normal)), 2),
+            questManager.Creater.CreateQuestCreateRole(0, new QuestCreateRole.EstablishRole(true, false), 1, 0, "何らかの役を成立させる", 30f, false, false,new(new PortraitTextData.PTextData(0,"おぉ、役が揃ったな！",2f,PortraitTextData.FacePatturn.Normal),new(0,"この調子で頼むぜ！",2f,PortraitTextData.FacePatturn.Normal)), 2, 3),
+            questManager.Creater.CreateQuestCreateRole(1, new QuestCreateRole.EstablishRole(false, false), 1, 0, "役を成立させずに団子を食べる", 15f, false, false,new(new PortraitTextData.PTextData(0,"やっぱ団子は美味いな！",2f,PortraitTextData.FacePatturn.Normal),new(0,"次はキレイな順番で食ってみるか…",2f,PortraitTextData.FacePatturn.Normal)), 2, 3),
 
             questManager.Creater.CreateQuestCreateRole(2, new QuestCreateRole.UseColorCount(2), 1, 0, "2色でできる役を作る", 15f, false, false,new(new PortraitTextData.PTextData()), 4, 5),
+            questManager.Creater.CreateQuestCreateRole(3, new QuestCreateRole.UseColorCount(1), 1, 0, "1色でできる役を作る", 45f, false, false,new(new PortraitTextData.PTextData()), 4, 5),
 
             //D5上昇
             questManager.Creater.CreateQuestPlayAction(4, QuestPlayAction.PlayerAction.FallAttack, 3, "急降下刺しで3回刺す", 0f, true, false,new(new PortraitTextData.PTextData()), 6),
