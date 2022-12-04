@@ -9,8 +9,6 @@ public class SoundSettingManager : MonoBehaviour
 {
     enum SoundChoices
     {
-        None,
-
         Master,
         SE,
         BGM,
@@ -24,7 +22,7 @@ public class SoundSettingManager : MonoBehaviour
     [SerializeField] List<ImageUIData> _soundScaleImages;
     [SerializeField] List<Sprite> _scaleSprites;
 
-    SoundChoices _choice = SoundChoices.None + 1;
+    SoundChoices _choice = SoundChoices.Master;
 
     List<int> _volumes = new();
 
@@ -57,9 +55,9 @@ public class SoundSettingManager : MonoBehaviour
 
         if (enable)
         {
-            _images[(int)_choice - 1].color = new Color32(176, 176, 176, 255);
-            _choice = SoundChoices.None + 1;
-            _images[(int)_choice - 1].color = Color.red;
+            _images[(int)_choice].color = new Color32(176, 176, 176, 255);
+            _choice = SoundChoices.Master;
+            _images[(int)_choice].color = Color.red;
         }
     }
 
@@ -77,8 +75,8 @@ public class SoundSettingManager : MonoBehaviour
     {
         if (!ChangeChoiceUtil.Choice(axis, ref _choice, SoundChoices.Max, false, ChangeChoiceUtil.OptionDirection.Vertical)) return;
 
-        _images[(int)_choice - 1 + (int)axis.y].color = new Color32(176, 176, 176, 255);
-        _images[(int)_choice - 1].color = Color.red;
+        _images[(int)_choice + (int)axis.y].color = new Color32(176, 176, 176, 255);
+        _images[(int)_choice].color = Color.red;
         SoundManager.Instance.PlaySE(SoundSource.SE16_UI_SELECTION);
     }
 
@@ -121,7 +119,7 @@ public class SoundSettingManager : MonoBehaviour
     private void ChangeAudioMixerDB(ref int volume, float axis, SoundChoices soundChoices)
     {
         volume = Mathf.Clamp(volume + (int)axis, 0, 10);
-        _soundScaleImages[(int)soundChoices - 1].ImageData.SetSprite(_scaleSprites[volume]);
+        _soundScaleImages[(int)soundChoices].ImageData.SetSprite(_scaleSprites[volume]);
 
         SoundManager.Instance.ChangeAudioMixerDB(AudioGroupName(_choice), ConvertVolume2dB(volume / 10f));
 

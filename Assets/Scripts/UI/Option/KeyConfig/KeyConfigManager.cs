@@ -105,7 +105,8 @@ namespace TM.Input.KeyConfig
                 {
                     DataManager.SaveInputData();
                 }
-                _currentActionTexts[i].TextData.SetText(_popupManager.ActionString(DataManager.keyConfigData.keys[i]));
+
+                _currentActionTexts[i].TextData.SetText(_popupManager.ActionString(DataManager.keyConfigData.keys[i >= (int)KeyData.GamepadKey.LStick ? i + 13 : i]));
             }
         }
 
@@ -212,7 +213,14 @@ namespace TM.Input.KeyConfig
             if (index == KeyData.GameAction.Unknown)
             {
                 _currentData.KeyData.KeyBindingOverride(null);
-                _currentActionTexts[(int)_currentData.KeyData.Key].TextData.SetText(_popupManager.ActionString(0));
+                if (_currentData.KeyData.Key < KeyData.GamepadKey.D_pad)
+                {
+                    _currentActionTexts[(int)_currentData.KeyData.Key].TextData.SetText(_popupManager.ActionString(0));
+                }
+                else
+                {
+                    _currentActionTexts[(int)_currentData.KeyData.Key - 13].TextData.SetText(_popupManager.ActionString(0));
+                }
                 return;
             }
 
