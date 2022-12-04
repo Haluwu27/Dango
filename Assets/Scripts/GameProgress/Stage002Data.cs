@@ -21,7 +21,7 @@ public class Stage002Data : StageData
 
         List<QuestData> quest = new()
         {
-            questManager.Creater.CreateQuestCreateRole(0, new QuestCreateRole.EstablishRole(true, false, DangoColor.Mitarashi), 2, 0, "みたらし団子を含んで団結を2回作れ", 30f, true, false, new(
+            questManager.Creater.CreateQuestCreateRole(0, new QuestCreateRole.EstablishRole(true, false, DangoColor.Mitarashi), 2, 0, "みたらし団子を含んで団結を2回作れ", 30f, false, false, new(
                 new PortraitTextData.PTextData()),
                 1),
 
@@ -59,7 +59,7 @@ public class Stage002Data : StageData
                 new PortraitTextData.PTextData()),
                 10),
 
-            questManager.Creater.CreateQuestDestination(10, FloorManager.Floor.floor11, false, "城内の最上層に向かえ", 0f, false, true,new(
+            questManager.Creater.CreateQuestDestination(10, FloorManager.Floor.floor11, false, "城内の上層に向かえ", 0f, false, true,new(
                 new PortraitTextData.PTextData()),
                 11),
             questManager.Creater.CreateQuestDestination(11, FloorManager.Floor.Max, false, "クリア！", 0f, false, true,new(new PortraitTextData.PTextData()), 0),
