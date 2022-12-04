@@ -858,6 +858,7 @@ class PlayerData : MonoBehaviour
     public float GetSatiety() => _satiety;
     public void AddSatiety(float value) => _satiety += value;
     public DangoUIScript GetDangoUIScript() => _dangoUISC;
+    public PlayerUIManager GetPlayerUIManager() => _playerUIManager;
     public Animator GetAnimator() => _animator;
     public void SetIsMoveable(bool enable) => _playerMove.SetIsMoveable(enable);
 

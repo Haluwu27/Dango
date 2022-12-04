@@ -95,6 +95,7 @@ public class SpitManager : MonoBehaviour
             //UIの更新
             DangoUISC.DangoUISet(player.GetDangos());
             DangoUISC.AddDango(player.GetDangos());
+            _playerUIManager.SetReach();
 
             //串の団子変更
             kusiScript.SetDango(player.GetDangos());
