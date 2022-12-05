@@ -4,9 +4,14 @@ using UnityEngine;
 
 public class RoleEffect : MonoBehaviour
 {
-    [SerializeField] GameObject[] Effects;
+    [SerializeField] GameObject onlyEffects;
+    [SerializeField] GameObject repetitionEffects;
+    [SerializeField] GameObject loopEffects;
+    [SerializeField] GameObject mirrorEffects;
+    [SerializeField] GameObject mirrorThreeEffects;
     private GameObject EffectObj;
     private ParticleSystem particle;
+    public Color color =Color.white;
     void Start()
     {
         
@@ -14,52 +19,67 @@ public class RoleEffect : MonoBehaviour
 
     public void RoleSetEffect(DangoColor color)
     {
+
         switch (DangoRoleUI.CurrentRoleName)
         {
-            case "単色役":
-                SetEffect(Effects[0]);
-                ChangeColor(particle,color);
+            case "「一統団結」":
+                onlyEffects.SetActive(true);
+                SetEffect(onlyEffects);
+                ChangeColor(color);
+                particle.Play();
                 break;
-            case "線対称":
-                SetEffect(Effects[1]);
+            case "「全天鏡面」":
+                repetitionEffects.SetActive(true);
+                SetEffect(repetitionEffects);
+                ChangeColor(DangoColor.None);
+                particle.Play();
                 break;
-            case "ループ":
-                SetEffect(Effects[2]);
+            case "「輪廻転生」":
+                loopEffects.SetActive(true);
+                SetEffect(loopEffects);
+                ChangeColor(DangoColor.None);
+                particle.Play();
                 break;
-            case "二分割":
-                SetEffect(Effects[3]);
+            case "「隣色鏡面」":
+                mirrorEffects.SetActive(true);
+                SetEffect(mirrorEffects);
+                ChangeColor(DangoColor.None);
+                particle.Play();
                 break;
-            case "三分割":
-                SetEffect(Effects[4]);
+            case "「三面華鏡」":
+                mirrorThreeEffects.SetActive(true);
+                SetEffect(mirrorThreeEffects);
+                ChangeColor(DangoColor.None);
+                particle.Play();
                 break;
         }
 }
     private void Update()
     {
-        if(particle!=null)
-        if (particle.isStopped) //パーティクルが終了したか判別
+        if (particle != null)
         {
-            Destroy(EffectObj);//パーティクル用ゲームオブジェクトを削除
+            var main = particle.main;
+            main.startColor = color;
         }
     }
     private void SetEffect(GameObject effect)
     {
         //エフェクトの表示
-        EffectObj = Instantiate(effect, this.transform.position, Quaternion.identity);
-        particle =EffectObj.GetComponent<ParticleSystem>();
+        particle =effect.GetComponent<ParticleSystem>();
 
     }
-    private void ChangeColor(ParticleSystem particleSystem,DangoColor color)
+    private void ChangeColor(DangoColor _color)
     {
-        particleSystem.startColor = color switch
+        var main = particle.main;
+        color = _color switch
         {
-            DangoColor.An => new Color(153, 37,58),
-            DangoColor.Beni => new Color(255, 200, 200),
-            DangoColor.Mitarashi => new Color(191, 110,66),
-            DangoColor.Nori => new Color(253, 166, 156),
-            DangoColor.Shiratama => new Color(252,252,252),
-            DangoColor.Yomogi => new Color(180, 212, 95),
-            _ => new Color(0,0,0),
+            DangoColor.An => new Color(0.58f, 0.145f, 0.227f),
+            DangoColor.Beni => new Color(1, 0.784f, 0.784f),
+            DangoColor.Mitarashi => new Color(0.745f, 0.431f, 0.258f),
+            DangoColor.Nori => new Color(1, 0.651f, 0.612f),
+            DangoColor.Shiratama => new Color(1,1,1),
+            DangoColor.Yomogi => new Color(0.706f, 0.831f, 0.372f),
+            DangoColor.None => Color.white,
         };
     }
     }
