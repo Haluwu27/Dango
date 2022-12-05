@@ -102,6 +102,11 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2164072874612405197, guid: 778aacd95f2f72d4eaff394bcf22a5d0,
+        type: 3}
+      propertyPath: m_CullingMask.m_Bits
+      value: 1023
+      objectReference: {fileID: 0}
     - target: {fileID: 2326593828667610560, guid: 778aacd95f2f72d4eaff394bcf22a5d0,
         type: 3}
       propertyPath: m_IsActive
@@ -182,6 +187,21 @@ PrefabInstance:
       propertyPath: MainCam
       value: 
       objectReference: {fileID: 1061649141369810905}
+    - target: {fileID: 8946123825271794085, guid: 778aacd95f2f72d4eaff394bcf22a5d0,
+        type: 3}
+      propertyPath: mapLayer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 8946123825271794085, guid: 778aacd95f2f72d4eaff394bcf22a5d0,
+        type: 3}
+      propertyPath: noneLayer
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 8946123825271794085, guid: 778aacd95f2f72d4eaff394bcf22a5d0,
+        type: 3}
+      propertyPath: None.m_Bits
+      value: 1024
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 4455526093197044745, guid: 778aacd95f2f72d4eaff394bcf22a5d0, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 778aacd95f2f72d4eaff394bcf22a5d0, type: 3}

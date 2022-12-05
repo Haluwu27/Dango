@@ -4,33 +4,40 @@ using UnityEngine;
 
 public class EatCamCubeScript : MonoBehaviour
 {
-    [SerializeField] LayerMask Mask;
+    [SerializeField] int mapLayer = 7;
+    [SerializeField] int noneLayer = 10;
 
-    private List<Renderer> _rend = new();
+    private List<GameObject> _obj = new();
 
     private void OnDisable()
     {
-        SetRendEnable(true);
+        SetLayer(true);
     }
 
     private void OnTriggerEnter(Collider col)
     {
-        if (col.TryGetComponent(out Renderer rend))
+        //if (((1<<col.gameObject.layer) & Mask.value) != 0)
+        if (col.gameObject.layer == mapLayer)
         {
-            //ƒtƒƒA‚Ìê‡‚Í’e‚­
-            if (col.GetComponent<FloorData>()) return;
-
-            _rend.Add(rend);
-            rend.enabled = false;
+            col.gameObject.layer = noneLayer;
+            _obj.Add(col.gameObject);
         }
     }
 
-    private void SetRendEnable(bool enable)
+    private void SetLayer(bool enable)
     {
-        foreach (Renderer rend in _rend)
+        foreach (GameObject obj in _obj)
         {
-            rend.enabled = enable;
+            obj.layer = mapLayer;
         }
-        if (enable) _rend.Clear();
+        if (enable) _obj.Clear();
     }
+    //private void SetRendEnable(bool enable)
+    //{
+    //    foreach (GameObject obj in _obj)
+    //    {
+    //        obj.enabled = enable;
+    //    }
+    //    if (enable) _obj.Clear();
+    //}
 }
