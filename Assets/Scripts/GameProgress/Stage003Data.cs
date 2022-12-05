@@ -21,7 +21,7 @@ public class Stage003Data : StageData
 
         List<QuestData> quest = new()
         {
-            questManager.Creater.CreateQuestCreateRole(0, new QuestCreateRole.CreateSameRole(false), 0, 4, "異なる団結を4回連続で作る", 0f, false, false, new(
+            questManager.Creater.CreateQuestCreateRole(0, new QuestCreateRole.CreateSameRole(false), 1, 4, "異なる団結を4回連続で作る", 0f, false, false, new(
                 new PortraitTextData.PTextData()),
                 1,2),
 
@@ -46,10 +46,10 @@ public class Stage003Data : StageData
                 new PortraitTextData.PTextData()),
                 6,7),
 
-            questManager.Creater.CreateQuestCreateRole(6, new QuestCreateRole.CreateSameRole(true), 0, 2, "同じ団結を2回連続で作る", 0f, false, false, new(
+            questManager.Creater.CreateQuestCreateRole(6, new QuestCreateRole.CreateSameRole(true), 1, 2, "同じ団結を2回連続で作る", 0f, false, false, new(
                 new PortraitTextData.PTextData()),
                 8),
-            questManager.Creater.CreateQuestCreateRole(7, new QuestCreateRole.CreateSameRole(false), 0, 2, "異なる団結を2回連続で作る", 0f, false, false, new(
+            questManager.Creater.CreateQuestCreateRole(7, new QuestCreateRole.CreateSameRole(false), 1, 2, "異なる団結を2回連続で作る", 0f, false, false, new(
                 new PortraitTextData.PTextData()),
                 8),
 
