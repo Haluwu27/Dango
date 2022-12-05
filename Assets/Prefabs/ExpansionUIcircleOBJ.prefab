@@ -122,6 +122,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e0bb7c55b218f1247981b30e6617a772, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  expansion: {fileID: 0}
 --- !u!136 &2081113941827130653
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -183,7 +184,7 @@ Canvas:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3718130437324634394}
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
   m_RenderMode: 2
   m_Camera: {fileID: 0}

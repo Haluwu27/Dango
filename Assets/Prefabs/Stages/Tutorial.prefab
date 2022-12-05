@@ -28945,110 +28945,110 @@ MonoBehaviour:
     dangoInjections:
     - {fileID: 806502365610869508}
     maxDangoCount: 3
-    salvageableD5: 15
+    salvageableD5: 30
     intrudableD5: 2
   - floorDatas:
     - {fileID: 5514911096930528505}
     dangoInjections:
     - {fileID: 7007047962803284342}
     maxDangoCount: 3
-    salvageableD5: 15
+    salvageableD5: 30
     intrudableD5: 2
   - floorDatas:
     - {fileID: 7824210671767507393}
     dangoInjections:
     - {fileID: 7173821180792412343}
     maxDangoCount: 3
-    salvageableD5: 15
+    salvageableD5: 30
     intrudableD5: 2
   - floorDatas:
     - {fileID: 8882868626673771606}
     dangoInjections: []
     maxDangoCount: 2
-    salvageableD5: 15
+    salvageableD5: 0
     intrudableD5: 2
   - floorDatas:
     - {fileID: 1859429526470974118}
     dangoInjections:
     - {fileID: 739853515186347331}
     maxDangoCount: 3
-    salvageableD5: 15
+    salvageableD5: 0
     intrudableD5: 2
   - floorDatas:
     - {fileID: 8221491615746907409}
     dangoInjections:
     - {fileID: 2095561814167135594}
     maxDangoCount: 3
-    salvageableD5: 15
+    salvageableD5: 0
     intrudableD5: 2
   - floorDatas:
     - {fileID: 7739800227505517448}
     dangoInjections:
     - {fileID: 439616408674722065}
     maxDangoCount: 2
-    salvageableD5: 15
+    salvageableD5: 0
     intrudableD5: 2
   - floorDatas:
     - {fileID: 5243356725909509832}
     dangoInjections:
     - {fileID: 5412883893935312947}
     maxDangoCount: 3
-    salvageableD5: 29
+    salvageableD5: 0
     intrudableD5: 4
   - floorDatas:
     - {fileID: 9027232153176807525}
     dangoInjections:
     - {fileID: 5150553709465400080}
     maxDangoCount: 3
-    salvageableD5: 29
+    salvageableD5: 0
     intrudableD5: 4
   - floorDatas:
     - {fileID: 6602863557503873091}
     dangoInjections:
     - {fileID: 5889259284758964388}
     maxDangoCount: 3
-    salvageableD5: 57
+    salvageableD5: 0
     intrudableD5: 8
   - floorDatas:
     - {fileID: 6860653311041538567}
     dangoInjections:
     - {fileID: 6603848109357224136}
     maxDangoCount: 3
-    salvageableD5: 48
+    salvageableD5: 0
     intrudableD5: 16
   - floorDatas:
     - {fileID: 1721303132177728187}
     dangoInjections:
     - {fileID: 7279169339217223623}
     maxDangoCount: 4
-    salvageableD5: 48
+    salvageableD5: 0
     intrudableD5: 16
   - floorDatas:
     - {fileID: 4268122974185110295}
     dangoInjections:
     - {fileID: 5136953064466094140}
     maxDangoCount: 2
-    salvageableD5: 48
+    salvageableD5: 0
     intrudableD5: 16
   - floorDatas:
     - {fileID: 2430287359847805781}
     dangoInjections:
     - {fileID: 8721561112311704036}
     maxDangoCount: 2
-    salvageableD5: 48
+    salvageableD5: 0
     intrudableD5: 16
   - floorDatas:
     - {fileID: 7752653260950903568}
     dangoInjections:
     - {fileID: 8119205089597374117}
     maxDangoCount: 2
-    salvageableD5: 48
+    salvageableD5: 0
     intrudableD5: 16
   - floorDatas:
     - {fileID: 4172698223946824416}
     dangoInjections: []
     maxDangoCount: 0
-    salvageableD5: 32
+    salvageableD5: 0
     intrudableD5: 32
   _stageData: {fileID: 6441814228180026030}
 --- !u!1 &4281612119185631336
