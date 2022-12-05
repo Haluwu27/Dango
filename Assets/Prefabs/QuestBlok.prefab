@@ -472,3 +472,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   nameText: {fileID: 3253652130817614808}
   timeText: {fileID: 5883242924356110743}
+  lineRenderer: {fileID: 0}
