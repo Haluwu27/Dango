@@ -62068,6 +62068,26 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8567872267126281885, guid: ea25d6985a03e2943a1b915d2d2401a3,
+        type: 3}
+      propertyPath: m_fontSize
+      value: 72
+      objectReference: {fileID: 0}
+    - target: {fileID: 8567872267126281885, guid: ea25d6985a03e2943a1b915d2d2401a3,
+        type: 3}
+      propertyPath: m_fontSizeBase
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 8567872267126281885, guid: ea25d6985a03e2943a1b915d2d2401a3,
+        type: 3}
+      propertyPath: m_enableAutoSizing
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8567872267126281885, guid: ea25d6985a03e2943a1b915d2d2401a3,
+        type: 3}
+      propertyPath: m_HorizontalAlignment
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 8567872267399664037, guid: ea25d6985a03e2943a1b915d2d2401a3,
         type: 3}
       propertyPath: PlayerData
