@@ -27,6 +27,7 @@ public class StertCountdownScript : MonoBehaviour
 
         if (i == a)
         {
+            SoundManager.Instance.PlaySE(SoundSource.SE6_CREATE_ROLE_CHARACTER_ANIMATION);
             text.text = "énÇﬂÅI";
             PlayerData.Event = false;
 

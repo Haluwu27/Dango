@@ -2,6 +2,7 @@ using Cysharp.Threading.Tasks;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TM.Easing.Management;
 using TM.Input.KeyConfig;
 using UnityEngine;
 using static TM.Input.KeyConfig.KeyData;
@@ -14,11 +15,12 @@ public class TutorialUIManager : MonoBehaviour
     [SerializeField] QuestManager _questManager;
 
     [SerializeField] IngameUIManager _ingameUIManager;
+    [SerializeField] TextUIData _firstText;
 
     private void Start()
     {
         _u7.SetText(0);
-
+        StartTextDirecting();
         InputSystemManager.Instance.onTutorialSkipPerformed += CheckSkipQuest;
     }
 
@@ -30,6 +32,44 @@ public class TutorialUIManager : MonoBehaviour
     public void ChangeNextGuide(int nextQuestID)
     {
         _u7.SetText(nextQuestID);
+    }
+
+    private async void StartTextDirecting()
+    {
+        _firstText.TextData.SetAlpha(0);
+        await _firstText.TextData.Fadein(1f);
+
+        SoundManager.Instance.PlaySE(SoundSource.SE6_CREATE_ROLE_CHARACTER_ANIMATION);
+
+        TextFontSizeAnimation();
+    }
+
+    private async void TextFontSizeAnimation()
+    {
+        float fontSize;
+        float time = 0;
+        float duration = 1.5f;
+
+        while (time < duration)
+        {
+            await UniTask.Yield();
+            time += Time.deltaTime;
+            fontSize = 110f + (30f * EasingManager.EaseProgress(TM.Easing.EaseType.Linear, time, duration, 0, 0));
+            _firstText.TextData.SetFontSize(fontSize);
+        }
+        time = 0;
+
+        _firstText.TextData.Fadeout(0.5f).Forget();
+
+        while (time < duration)
+        {
+            await UniTask.Yield();
+            time += Time.deltaTime;
+            fontSize = 140f + (105f * EasingManager.EaseProgress(TM.Easing.EaseType.OutBack, time, duration, 0, 0));
+            _firstText.TextData.SetFontSize(fontSize);
+        }
+
+        _firstText.TextData.SetFontSize(250);
     }
 
     private async void CheckSkipQuest()
