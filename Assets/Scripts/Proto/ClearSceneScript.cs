@@ -141,8 +141,10 @@ public class ClearSceneScript : MonoBehaviour
     [SerializeField] ImageUIData[] retryOrSelect;
     [SerializeField] FusumaManager _fusumaManager;
     [SerializeField] Canvas _canvas;
+    [SerializeField]flowchartScript _flowchartScript;
 
     Next _next;
+        List<GameObject> objs=new List<GameObject>();
     static readonly bool _canMoveTopToBottom = true;
 
     private async void Awake()
@@ -177,6 +179,7 @@ public class ClearSceneScript : MonoBehaviour
     {
         InputSystemManager.Instance.onNavigatePerformed -= OnNavigate;
         InputSystemManager.Instance.onChoicePerformed -= OnChoice;
+
     }
 
     private void CreateBloks()
@@ -188,7 +191,12 @@ public class ClearSceneScript : MonoBehaviour
         {
             GameObject obj = Instantiate(QuestBlokObj, QuestFlowChart.transform.position, Quaternion.identity, QuestFlowChart.transform);
             obj.GetComponent<ClearQuestBlokScript>().SetText(dangoDatas[i], dangoClearTime[i]);
+            objs.Add(obj);
+            if (i != 0)
+                _flowchartScript.posSet(objs[i - 1].transform.localPosition);
         }
+        ScoreManager.Instance.ResetClearTime();
+        ScoreManager.Instance.ResetClearQuest();
     }
 
     private void OnNavigate()

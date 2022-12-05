@@ -58,7 +58,7 @@ internal class GameManager : MonoBehaviour
             if (parent._playerData != null)
             {
                 if (parent._playerData.GetSatiety() <= 0) return IState.E_State.GameOver;
-                if (parent._gameSucceed) return IState.E_State.Succeed;
+                if (parent._gameSucceed&&PlayerData.IsClear) return IState.E_State.Succeed;
             }
 
             return IState.E_State.Unchanged;

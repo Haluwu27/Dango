@@ -375,6 +375,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1183327550806120491, guid: 139984326455d7d418512ca28e19f129,
+        type: 3}
+      propertyPath: m_Camera
+      value: 
+      objectReference: {fileID: 1144265451}
     - target: {fileID: 2186443413016659156, guid: 139984326455d7d418512ca28e19f129,
         type: 3}
       propertyPath: m_RootOrder
@@ -433,27 +438,12 @@ PrefabInstance:
     - target: {fileID: 3693121443165372631, guid: 139984326455d7d418512ca28e19f129,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -0.000034101307
+      value: -0.000040009887
       objectReference: {fileID: 0}
     - target: {fileID: 3751249657256485113, guid: 139984326455d7d418512ca28e19f129,
         type: 3}
       propertyPath: m_Name
       value: Success
-      objectReference: {fileID: 0}
-    - target: {fileID: 6234521751433744669, guid: 139984326455d7d418512ca28e19f129,
-        type: 3}
-      propertyPath: m_Spacing
-      value: 90
-      objectReference: {fileID: 0}
-    - target: {fileID: 6234521751433744669, guid: 139984326455d7d418512ca28e19f129,
-        type: 3}
-      propertyPath: m_Padding.m_Top
-      value: 30
-      objectReference: {fileID: 0}
-    - target: {fileID: 6234521751433744669, guid: 139984326455d7d418512ca28e19f129,
-        type: 3}
-      propertyPath: m_ChildAlignment
-      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6284741515895089278, guid: 139984326455d7d418512ca28e19f129,
         type: 3}
@@ -468,21 +458,6 @@ PrefabInstance:
     - target: {fileID: 6284741515895089278, guid: 139984326455d7d418512ca28e19f129,
         type: 3}
       propertyPath: m_AnchorMin.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8954340955360663028, guid: 139984326455d7d418512ca28e19f129,
-        type: 3}
-      propertyPath: m_AnchorMax.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8954340955360663028, guid: 139984326455d7d418512ca28e19f129,
-        type: 3}
-      propertyPath: m_AnchorMax.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8954340955360663028, guid: 139984326455d7d418512ca28e19f129,
-        type: 3}
-      propertyPath: m_SizeDelta.x
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []

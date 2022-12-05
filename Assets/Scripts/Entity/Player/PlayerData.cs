@@ -511,6 +511,8 @@ class PlayerData : MonoBehaviour
     //映像やアニメーションのイベントフラグ
     public static bool Event = false;
 
+    public static bool IsClear = false;
+
     /// <summary>
     /// 満腹度、制限時間の代わり（単位:[sec]）
     /// </summary>
@@ -589,6 +591,8 @@ class PlayerData : MonoBehaviour
         InputSystemManager.Instance.onEatDangoCanceled += OnEatDangoCanceled;
         InputSystemManager.Instance.onJumpPerformed += _playerJump.OnStayJumping;
         InputSystemManager.Instance.onJumpCanceled += _playerJump.Jump;
+        ScoreManager.Instance.ResetTime();
+
     }
 
     private void Update()
