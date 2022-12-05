@@ -99,6 +99,8 @@ public class PortraitScript : MonoBehaviour
 
     public async UniTask ChangePortraitText(PortraitTextData questTextData)
     {
+        
+        PlayerData.IsClear = false;
         //イベント進行終了まで待機
         while (_isChangePortrait) await UniTask.Yield();
 
@@ -142,5 +144,7 @@ public class PortraitScript : MonoBehaviour
 
         //進行中フラグをオフにする
         _isChangePortrait = false;
+        PlayerData.IsClear = true;
+        Logger.Log(PlayerData.IsClear);
     }
 }
